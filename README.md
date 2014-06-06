@@ -1,4 +1,4 @@
-swifter
+Swifter
 =======
 
 Tiny http server engine written in Swift ( https://developer.apple.com/swift/ ) programming language.
