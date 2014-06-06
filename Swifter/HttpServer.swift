@@ -7,7 +7,7 @@
 
 import Foundation
 
-/* HTTP stream parser */
+/* HTTP server */
 
 class HttpServer
 {
