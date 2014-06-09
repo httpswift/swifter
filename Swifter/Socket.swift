@@ -17,21 +17,18 @@ struct Socket {
             return (-1, "socket() failed \(errno) - \(strerror(errno))")
         }
         var value: Int32 = 1;
-        if ( setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &value, 4) == -1 ) {
+        if ( setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32))) == -1 ) {
             let error = "setsockopt(...) failed \(errno) - \(strerror(errno))"
             release(s)
             return (-1, error)
         }
         nosigpipe(s)
-        var addr: sockaddr_in = sockaddr_in(sin_len: sizeof(sockaddr_in).bridgeToObjectiveC().unsignedCharValue,
-            sin_family: sa_family_t(AF_INET),
-            sin_port: port,
-            sin_addr: in_addr(s_addr: inet_addr("0.0.0.0")),
-            sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
+        var addr: sockaddr_in = sockaddr_in(sin_len: __uint8_t(sizeof(sockaddr_in)), sin_family: sa_family_t(AF_INET),
+            sin_port: port, sin_addr: in_addr(s_addr: inet_addr("0.0.0.0")), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
         
         var sock_addr: sockaddr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
         memcpy(&sock_addr, &addr, UInt(sizeof(sockaddr_in)))
-        if ( bind(s, &sock_addr, sizeof(sockaddr_in).bridgeToObjectiveC().unsignedIntValue) == -1 ) {
+        if ( bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 ) {
             let error = "bind(...) failed \(errno) - \(strerror(errno))"
             release(s)
             return (-1, error)
@@ -61,11 +58,11 @@ struct Socket {
     static func nosigpipe(socket: CInt) {
         // prevents crashes when blocking calls are pending and the app is paused ( via Home button )
         var no_sig_pipe: Int32 = 1;
-        setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, 4);
+        setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, socklen_t(sizeof(Int32)));
     }
     
     static func release(socket: CInt) {
-        shutdown(socket, 2)
+        shutdown(socket, SHUT_RDWR)
         close(socket)
     }
 }
