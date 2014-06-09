@@ -45,7 +45,7 @@ class HttpServer
                         if let handler = self.handlers[path] {
                             let (status, response) = handler()
                             // no support for keep-alive for now so let's stay with HTTP 1.0
-                            Socket.writeString(socket, response: "HTTP/1.0 \(status) OK\r\n\r\n\(response)")
+                            Socket.writeString(socket, response: "HTTP/1.0 \(status)\r\n\r\n\(response)")
                         }
                     }
                     Socket.release(socket)

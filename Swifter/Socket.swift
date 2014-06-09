@@ -44,10 +44,9 @@ struct Socket {
     static func writeString(socket: CInt, response: String) {
         var sent = 0;
         let nsdata = response.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
-        let pointer = nsdata.bytes
+        let unsafePointer = UnsafePointer<UInt8>(nsdata.bytes)
         while ( sent < nsdata.length ) {
-            // TODO pointer + sent
-            let s = write(socket, pointer, UInt(nsdata.length - sent))
+            let s = write(socket, unsafePointer + sent, UInt(nsdata.length - sent))
             if ( s <= 0 ) {
                 return
             }

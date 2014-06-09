@@ -32,7 +32,11 @@ class HttpParser {
             }
             let headerTokens = split(headerLine, { $0 == ":" })
             if ( headerTokens.count >= 2 ) {
-                headers.updateValue(headerTokens[1], forKey: headerTokens[0])
+                let headerName = headerTokens[0]
+                let headerValue = headerTokens[1]
+                if ( !headerName.isEmpty && !headerValue.isEmpty ) {
+                    headers.updateValue(headerValue, forKey: headerName)
+                }
             }
         }
         return nil

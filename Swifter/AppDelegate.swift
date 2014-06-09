@@ -25,6 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return (200, "<html><body>Hello !</body></html>")
         }
         
+        server["/long"] = { () -> (CInt, String) in
+            var longResponse = ""
+            for k in 0..100000 {
+                longResponse += "(\(k)),"
+            }
+            return (200, longResponse)
+        }
+        
         server["/demo"] = { () -> (CInt, String) in
             return (200, "<html><body><center><h2>Hello Swift</h2>" +
                 "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
