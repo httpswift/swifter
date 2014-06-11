@@ -411,6 +411,7 @@
 				7C839B8C19422D00003A6950 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7C839B8D19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifterTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +420,7 @@
 				7C839B8F19422D00003A6950 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

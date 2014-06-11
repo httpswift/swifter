@@ -11,10 +11,15 @@ import Foundation
 
 class HttpServer
 {
-    var handlers: Dictionary<String, (Void -> (CInt, String))> = Dictionary()
+    enum Statuses {
+        static let OK = 200
+        static let NOT_FOUND = 404
+    }
+    
+    var handlers: Dictionary<String, (Void -> (Int, String))> = Dictionary()
     var acceptSocket: CInt = -1
     
-    subscript (path: String) -> ((Void -> (CInt, String))) {
+    subscript (path: String) -> ((Void -> (Int, String))) {
         get {
             return handlers[path]!
         }
@@ -41,11 +46,27 @@ class HttpServer
                 Socket.nosigpipe(socket)
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                     let parser = HttpParser()
-                    if let (path, headers) = parser.parseHttpHeader(socket) {
+                    while let (path, headers) = parser.parseHttpHeader(socket) {
                         if let handler = self.handlers[path] {
                             let (status, response) = handler()
-                            // no support for keep-alive for now so let's stay with HTTP 1.0
-                            Socket.writeString(socket, response: "HTTP/1.0 \(status)\r\n\r\n\(response)")
+                            Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(status)\r\n")
+                            let nsdata = response.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
+                            Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
+                            if parser.supportsKeepAlive(headers) {
+                                Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
+                            }
+                            Socket.writeStringUTF8(socket, string: "\r\n")
+                            Socket.writeStringUTF8(socket, string: response)
+                        } else {
+                            Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(Statuses.NOT_FOUND)\r\n")
+                            Socket.writeStringUTF8(socket, string: "Content-Length: 0\r\n")
+                            if parser.supportsKeepAlive(headers) {
+                                Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
+                            }
+                            Socket.writeStringUTF8(socket, string: "\r\n")
+                        }
+                        if !parser.supportsKeepAlive(headers) {
+                            break
                         }
                     }
                     Socket.release(socket)

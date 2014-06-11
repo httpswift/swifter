@@ -32,7 +32,10 @@ class HttpParser {
             }
             let headerTokens = split(headerLine, { $0 == ":" })
             if ( headerTokens.count >= 2 ) {
-                let headerName = headerTokens[0]
+                // RFC 2616 - "Hypertext Transfer Protocol -- HTTP/1.1", paragraph 4.2, "Message Headers":
+                // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."
+                // We can keep lower case version.
+                let headerName = headerTokens[0].lowercaseString
                 let headerValue = headerTokens[1]
                 if ( !headerName.isEmpty && !headerValue.isEmpty ) {
                     headers.updateValue(headerValue, forKey: headerName)
@@ -43,7 +46,7 @@ class HttpParser {
     }
     
     func parseLine(socket: CInt) -> String? {
-        // TODO - read more bytes than one
+        // TODO - read more bytes than one. It makes the server very slow.
         // TODO - check if there is a nicer way to manipulate bytes with Swift ( recv(...) -> String )
         var characters: String = ""
         var buff: UInt8[] = UInt8[](count: 1, repeatedValue: 0), n: Int = 1
@@ -56,7 +59,13 @@ class HttpParser {
         if ( n == -1 ) {
             return nil
         }
-        println("SOCKET LOG [\(socket)] -> \(characters)")
         return characters
+    }
+    
+    func supportsKeepAlive(headers: Dictionary<String, String>) -> Bool {
+        if let value = headers["connection"] {
+            return "keep-alive" == value.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).lowercaseString
+        }
+        return false
     }
 }

@@ -17,26 +17,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
         
-        server["/"] = { () -> (CInt, String) in
-            return (200, "<html><body>Hello Swift</body></html>")
+        server["/"] = { () -> (Int, String) in
+            return (HttpServer.Statuses.OK, "<html><body>Hello Swift</body></html>")
         }
         
-        server["/hello"] = { () -> (CInt, String) in
-            return (200, "<html><body>Hello !</body></html>")
+        server["/hello"] = { () -> (Int, String) in
+            return (HttpServer.Statuses.OK, "<html><body>Hello !</body></html>")
         }
         
-        server["/long"] = { () -> (CInt, String) in
+        server["/long"] = { () -> (Int, String) in
             var longResponse = ""
-            for k in 0..100000 {
-                longResponse += "(\(k)),"
+            for k in 0..1000 {
+                longResponse += "(\(k)),->"
             }
-            return (200, longResponse)
+            return (HttpServer.Statuses.OK, longResponse)
         }
         
-        server["/demo"] = { () -> (CInt, String) in
-            return (200, "<html><body><center><h2>Hello Swift</h2>" +
+        server["/demo"] = { () -> (Int, String) in
+            return (HttpServer.Statuses.OK, "<html><body><center><h2>Hello Swift</h2>" +
                 "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
-                            "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center></body></html>")
+                            "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center><iframe src=\"/demo2\"></iframe><iframe src=\"/hello\"></iframe></body></html>")
         }
         
         let (result, error) = server.start(8080)

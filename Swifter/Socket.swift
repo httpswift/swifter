@@ -23,10 +23,11 @@ struct Socket {
             return (-1, error)
         }
         nosigpipe(s)
-        var addr: sockaddr_in = sockaddr_in(sin_len: __uint8_t(sizeof(sockaddr_in)), sin_family: sa_family_t(AF_INET),
+        // Can't find htonl(...) function in Swift runtime so port value will be diffrent.
+        var addr = sockaddr_in(sin_len: __uint8_t(sizeof(sockaddr_in)), sin_family: sa_family_t(AF_INET),
             sin_port: port, sin_addr: in_addr(s_addr: inet_addr("0.0.0.0")), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
         
-        var sock_addr: sockaddr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        var sock_addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
         memcpy(&sock_addr, &addr, UInt(sizeof(sockaddr_in)))
         if ( bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 ) {
             let error = "bind(...) failed \(errno) - \(strerror(errno))"
@@ -41,9 +42,9 @@ struct Socket {
         return (s, nil)
     }
     
-    static func writeString(socket: CInt, response: String) {
+    static func writeStringUTF8(socket: CInt, string: String) {
         var sent = 0;
-        let nsdata = response.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
+        let nsdata = string.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
         let unsafePointer = UnsafePointer<UInt8>(nsdata.bytes)
         while ( sent < nsdata.length ) {
             let s = write(socket, unsafePointer + sent, UInt(nsdata.length - sent))
@@ -52,6 +53,7 @@ struct Socket {
             }
             sent += s
         }
+        return
     }
     
     static func nosigpipe(socket: CInt) {
