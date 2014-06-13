@@ -11,7 +11,7 @@ enum ResponseStatus {
     case OK(String)
     case NotFound
 
-    func numericValue() {
+    func numericValue() -> Int {
         switch self {
             case .OK(_):
                 return 200
@@ -20,7 +20,7 @@ enum ResponseStatus {
         }
     }
 
-    func textValue() {
+    func textValue() -> String {
         switch self {
             case .OK(let text):
                 return text
