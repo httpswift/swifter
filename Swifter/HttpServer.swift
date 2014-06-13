@@ -7,19 +7,38 @@
 
 import Foundation
 
-/* HTTP server */
+enum ResponseStatus {
+    case OK(String)
+    case NotFound
 
+    func numericValue() {
+        switch self {
+            case .OK(_):
+                return 200
+            case .NotFound:
+                return 404
+        }
+    }
+
+    func textValue() {
+        switch self {
+            case .OK(let text):
+                return text
+            case .NotFound:
+                return "Not found"
+        }
+    }
+}
+
+typealias Handler = Void -> ResponseStatus
+
+/* HTTP server */
 class HttpServer
 {
-    enum Statuses {
-        static let OK = 200
-        static let NOT_FOUND = 404
-    }
-    
-    var handlers: Dictionary<String, (Void -> (Int, String))> = Dictionary()
+    var handlers = Dictionary<String, Handler>()
     var acceptSocket: CInt = -1
     
-    subscript (path: String) -> ((Void -> (Int, String))) {
+    subscript (path: String) -> Handler {
         get {
             return handlers[path]!
         }
@@ -47,27 +66,32 @@ class HttpServer
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                     let parser = HttpParser()
                     while let (path, headers) = parser.parseHttpHeader(socket) {
+                        let keepAlive = parser.supportsKeepAlive(headers)
+
                         if let handler = self.handlers[path] {
-                            let (status, response) = handler()
-                            Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(status)\r\n")
-                            let nsdata = response.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
+                            let responseStatus = handler()
+                            let responseText = responseStatus.textValue()
+                            let nsdata =
+                                responseText
+                                    .bridgeToObjectiveC()
+                                    .dataUsingEncoding(NSUTF8StringEncoding)
+
+                            Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(responseStatus.numericValue())\r\n")
                             Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
-                            if parser.supportsKeepAlive(headers) {
+                            if keepAlive {
                                 Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
                             }
                             Socket.writeStringUTF8(socket, string: "\r\n")
-                            Socket.writeStringUTF8(socket, string: response)
+                            Socket.writeStringUTF8(socket, string: responseText)
                         } else {
-                            Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(Statuses.NOT_FOUND)\r\n")
+                            Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(ResponseStatus.NotFound.numericValue())\r\n")
                             Socket.writeStringUTF8(socket, string: "Content-Length: 0\r\n")
-                            if parser.supportsKeepAlive(headers) {
+                            if keepAlive {
                                 Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
                             }
                             Socket.writeStringUTF8(socket, string: "\r\n")
                         }
-                        if !parser.supportsKeepAlive(headers) {
-                            break
-                        }
+                        if !keepAlive { break }
                     }
                     Socket.release(socket)
                 });
