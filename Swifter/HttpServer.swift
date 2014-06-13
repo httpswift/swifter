@@ -66,6 +66,8 @@ class HttpServer
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), { () -> Void in
                     let parser = HttpParser()
                     while let (path, headers) = parser.parseHttpHeader(socket) {
+                        let keepAlive = parser.supportsKeepAlive(headers)
+
                         if let handler = self.handlers[path] {
                             let responseStatus = handler()
                             let responseText = responseStatus.textValue()
@@ -76,7 +78,7 @@ class HttpServer
 
                             Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(responseStatus.numericValue())\r\n")
                             Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
-                            if parser.supportsKeepAlive(headers) {
+                            if keepAlive {
                                 Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
                             }
                             Socket.writeStringUTF8(socket, string: "\r\n")
@@ -84,14 +86,12 @@ class HttpServer
                         } else {
                             Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(ResponseStatus.NotFound.numericValue())\r\n")
                             Socket.writeStringUTF8(socket, string: "Content-Length: 0\r\n")
-                            if parser.supportsKeepAlive(headers) {
+                            if keepAlive {
                                 Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
                             }
                             Socket.writeStringUTF8(socket, string: "\r\n")
                         }
-                        if !parser.supportsKeepAlive(headers) {
-                            break
-                        }
+                        if !keepAlive { break }
                     }
                     Socket.release(socket)
                 });
