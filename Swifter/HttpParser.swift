@@ -13,16 +13,18 @@ class HttpParser {
         return NSError.errorWithDomain("HttpParser", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
     
-    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, Dictionary<String, String>)? {
+    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, String, Dictionary<String, String>)? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
+            println(statusTokens)
             if ( statusTokens.count < 3 ) {
                 if error { error.memory = HttpParser.err("Invalid status line: \(statusLine)") }
                 return nil
             }
+            let method = statusTokens[0]
             let path = statusTokens[1]
             if let headers = nextHeaders(socket, error: error) {
-                return (path, headers)
+                return (path, method, headers)
             }
         }
         return nil

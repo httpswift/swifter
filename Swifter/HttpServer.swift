@@ -13,6 +13,7 @@ enum Response {
     case MovedPermanently(String)
     case BadRequest, Unauthorized, Forbidden, NotFound
     case InternalServerError
+    case Custom(Int,String)
 
     func statusCode() -> Int {
         switch self {
@@ -25,6 +26,7 @@ enum Response {
         case .Forbidden             : return 403
         case .NotFound              : return 404
         case .InternalServerError   : return 500
+        case .Custom(let code, _)   : return code
         }
     }
 
@@ -39,6 +41,7 @@ enum Response {
         case .Forbidden             : return "Forbidden"
         case .NotFound              : return "Not Found"
         case .InternalServerError   : return "Internal Server Error"
+        case .Custom(_,_)           : return "Custom"
         }
     }
     
@@ -86,25 +89,22 @@ class HttpServer
         if let socket = Socket.tcpForListen(port: listenPort, error: error) {
             acceptSocket = socket
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
-                while ( self.acceptSocket != -1 ) {
-                    if let socket = Socket.acceptClientSocket(self.acceptSocket) {
-                        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
-                            let parser = HttpParser()
-                            while let (path, headers) = parser.nextHttpRequest(socket) {
-                                let keepAlive = parser.supportsKeepAlive(headers)
-                                if let handler = self.handlers[path] {
-                                    HttpServer.writeResponse(socket, response: handler(), keepAlive: keepAlive)
-                                } else {
-                                    HttpServer.writeResponse(socket, response: Response.NotFound, keepAlive: keepAlive)
-                                }
-                                if !keepAlive { break }
+                while let socket = Socket.acceptClientSocket(self.acceptSocket) {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+                        let parser = HttpParser()
+                        while let (path, method, headers) = parser.nextHttpRequest(socket) {
+                            let keepAlive = parser.supportsKeepAlive(headers)
+                            if let handler = self.handlers[path] {
+                                HttpServer.writeResponse(socket, response: handler(), keepAlive: keepAlive)
+                            } else {
+                                HttpServer.writeResponse(socket, response: Response.NotFound, keepAlive: keepAlive)
                             }
-                            Socket.release(socket)
-                        });
-                    } else {
-                        self.releaseAcceptSocket()
-                    }
+                            if !keepAlive { break }
+                        }
+                        Socket.release(socket)
+                    });
                 }
+                self.releaseAcceptSocket()
             });
             return true
         }

@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 "<html><body><center><h2>Hello Swift</h2>" +
                 "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
                 "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center>" +
-                "<iframe src=\"/demo2\"></iframe><iframe src=\"/hello\"></iframe></body></html>"
+                "<iframe src=\"/routes\"></iframe><iframe src=\"/hello\"></iframe></body></html>"
             return .OK(demoPage)
         }
         
