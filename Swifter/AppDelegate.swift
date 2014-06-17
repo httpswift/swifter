@@ -20,11 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         server["/"] = {
             return .OK("<html><body>Hello Swift</body></html>")
         }
-        
-        server["/hello"] = {
-            return .OK("<html><body>Hello !</body></html>")
+        server["/redirect"] = {
+            return .MovedPermanently("http://www.google.com")
         }
-        
         server["/long"] = {
             var longResponse = ""
             for k in 0..1000 {
@@ -32,7 +30,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             return .OK(longResponse)
         }
-        
+        server["/routes"] = {
+            var listPage = "<html><body>Available services:<br><ul>"
+            for item in self.server.routes() {
+                listPage += "<li><a href=\"\(item)\">\(item)</a></li>"
+            }
+            listPage += "</ul></body></html>"
+            return .OK(listPage)
+        }
         server["/demo"] = {
             let demoPage =
                 "<html><body><center><h2>Hello Swift</h2>" +
@@ -42,7 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return .OK(demoPage)
         }
         
-        let (result, error) = server.start(8080)
+        var error: NSError?
+        if !server.start(error: &error) {
+            NSLog("Server start error: \(error)")
+        }
         
         return true
     }

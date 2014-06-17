@@ -11,16 +11,23 @@ import Foundation
 
 struct Socket {
     
-    static func tcpForListen(port: in_port_t) -> (CInt, String?) {
+    static func socketRecentError(reason:String) -> NSError {
+        let code = errno
+        return NSError.errorWithDomain("SOCKET", code: Int(code), userInfo:
+            [NSLocalizedFailureReasonErrorKey : reason, NSLocalizedDescriptionKey : String.fromCString(strerror(code))])
+    }
+    
+    static func tcpForListen(port: in_port_t = 8080, error:NSErrorPointer = nil) -> CInt? {
         let s = socket(AF_INET, SOCK_STREAM, 0)
         if ( s == -1 ) {
-            return (-1, "socket() failed \(errno) - \(strerror(errno))")
+            if error { error.memory = socketRecentError("socket(...) failed.") }
+            return nil
         }
         var value: Int32 = 1;
         if ( setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32))) == -1 ) {
-            let error = "setsockopt(...) failed \(errno) - \(strerror(errno))"
             release(s)
-            return (-1, error)
+            if error { error.memory = socketRecentError("setsockopt(...) failed.") }
+            return nil
         }
         nosigpipe(s)
         // Can't find htonl(...) function in Swift runtime so port value will be diffrent.
@@ -30,30 +37,42 @@ struct Socket {
         var sock_addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
         memcpy(&sock_addr, &addr, UInt(sizeof(sockaddr_in)))
         if ( bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 ) {
-            let error = "bind(...) failed \(errno) - \(strerror(errno))"
             release(s)
-            return (-1, error)
+            if error { error.memory = socketRecentError("bind(...) failed.") }
+            return nil
         }
         if ( listen(s, 20 /* max pending connection */ ) == -1 ) {
-            let error = "listen(...) failed \(errno) - \(strerror(errno))"
             release(s)
-            return (-1, error)
+            if error { error.memory = socketRecentError("listen(...) failed.") }
+            return nil
         }
-        return (s, nil)
+        return s
     }
     
-    static func writeStringUTF8(socket: CInt, string: String) {
+    static func writeStringUTF8(socket: CInt, string: String, error:NSErrorPointer = nil) -> Bool {
         var sent = 0;
         let nsdata = string.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
         let unsafePointer = UnsafePointer<UInt8>(nsdata.bytes)
         while ( sent < nsdata.length ) {
             let s = write(socket, unsafePointer + sent, UInt(nsdata.length - sent))
             if ( s <= 0 ) {
-                return
+                if error { error.memory = socketRecentError("write(...) failed.") }
+                return false
             }
             sent += s
         }
-        return
+        return true
+    }
+    
+    static func acceptClientSocket(socket: CInt, error:NSErrorPointer = nil) -> CInt? {
+        var addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)), len: socklen_t = 0
+        let clientSocket = accept(socket, &addr, &len)
+        if ( clientSocket != -1 ) {
+            Socket.nosigpipe(clientSocket)
+            return clientSocket
+        }
+        if error { error.memory = socketRecentError("accept(...) failed.") }
+        return nil
     }
     
     static func nosigpipe(socket: CInt) {

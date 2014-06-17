@@ -7,26 +7,30 @@
 
 import Foundation
 
-/* HTTP stream parser */
-
 class HttpParser {
     
-    func parseHttpHeader(socket: CInt) -> (String, Dictionary<String, String>)? {
-        if let statusLine = parseLine(socket) {
+    class func err(reason:String) -> NSError {
+        return NSError.errorWithDomain("HttpParser", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
+    }
+    
+    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, Dictionary<String, String>)? {
+        if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
-            if ( statusTokens.count >= 3 ) {
-                let path = statusTokens[1]
-                if let headers = parseHeaders(socket) {
-                    return (path, headers)
-                }
+            if ( statusTokens.count < 3 ) {
+                if error { error.memory = HttpParser.err("Invalid status line: \(statusLine)") }
+                return nil
+            }
+            let path = statusTokens[1]
+            if let headers = nextHeaders(socket, error: error) {
+                return (path, headers)
             }
         }
         return nil
     }
     
-    func parseHeaders(socket: CInt) -> Dictionary<String, String>? {
+    func nextHeaders(socket: CInt, error:NSErrorPointer) -> Dictionary<String, String>? {
         var headers = Dictionary<String, String>()
-        while let headerLine = parseLine(socket) {
+        while let headerLine = nextLine(socket, error: error) {
             if ( headerLine.isEmpty ) {
                 return headers
             }
@@ -45,7 +49,7 @@ class HttpParser {
         return nil
     }
     
-    func parseLine(socket: CInt) -> String? {
+    func nextLine(socket: CInt, error:NSErrorPointer) -> String? {
         // TODO - read more bytes than one. It makes the server very slow.
         // TODO - check if there is a nicer way to manipulate bytes with Swift ( recv(...) -> String )
         var characters: String = ""
@@ -57,6 +61,7 @@ class HttpParser {
             }
         } while ( n > 0 && buff[0] != 10 /* NL */ )
         if ( n == -1 ) {
+            if error { error.memory = Socket.socketRecentError("recv(...) failed.") }
             return nil
         }
         return characters
