@@ -7,62 +7,9 @@
 
 import Foundation
 
-enum Response {
-    
-    case OK(String), Created, Accepted
-    case MovedPermanently(String)
-    case BadRequest, Unauthorized, Forbidden, NotFound
-    case InternalServerError
-    case Custom(Int,String)
-
-    func statusCode() -> Int {
-        switch self {
-        case .OK(_)                 : return 200
-        case .Created               : return 201
-        case .Accepted              : return 202
-        case .MovedPermanently      : return 301
-        case .BadRequest            : return 400
-        case .Unauthorized          : return 401
-        case .Forbidden             : return 403
-        case .NotFound              : return 404
-        case .InternalServerError   : return 500
-        case .Custom(let code, _)   : return code
-        }
-    }
-
-    func reasonPhrase() -> String {
-        switch self {
-        case .OK(_)                 : return "OK"
-        case .Created               : return "Created"
-        case .Accepted              : return "Accepted"
-        case .MovedPermanently      : return "Moved Permanently"
-        case .BadRequest            : return "Bad Request"
-        case .Unauthorized          : return "Unauthorized"
-        case .Forbidden             : return "Forbidden"
-        case .NotFound              : return "Not Found"
-        case .InternalServerError   : return "Internal Server Error"
-        case .Custom(_,_)           : return "Custom"
-        }
-    }
-    
-    func headers() -> Dictionary<String, String> {
-        switch self {
-        case .MovedPermanently(let location) : return [ "Location" : location ]
-        default: return Dictionary()
-        }
-    }
-    
-    func body() -> String? {
-        switch self {
-            case .OK(let text)  : return text
-            default             : return nil
-        }
-    }
-}
-
 class HttpServer
 {
-    typealias Handler = Void -> Response
+    typealias Handler = (String, Dictionary<String,String>) -> HttpResponse
     
     var handlers = Dictionary<String, Handler>()
     var acceptSocket: CInt = -1
@@ -78,9 +25,7 @@ class HttpServer
     
     func routes() -> Array<String> {
         var results = Array<String>()
-        for (key,_) in handlers {
-            results.append(key)
-        }
+        for (key,_) in handlers { results.append(key) }
         return results
     }
     
@@ -95,9 +40,9 @@ class HttpServer
                         while let (path, method, headers) = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(headers)
                             if let handler = self.handlers[path] {
-                                HttpServer.writeResponse(socket, response: handler(), keepAlive: keepAlive)
+                                HttpServer.writeResponse(socket, response: handler(method, headers), keepAlive: keepAlive)
                             } else {
-                                HttpServer.writeResponse(socket, response: Response.NotFound, keepAlive: keepAlive)
+                                HttpServer.writeResponse(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)
                             }
                             if !keepAlive { break }
                         }
@@ -111,7 +56,7 @@ class HttpServer
         return false
     }
     
-    class func writeResponse(socket: CInt, response: Response, keepAlive: Bool) {
+    class func writeResponse(socket: CInt, response: HttpResponse, keepAlive: Bool) {
         Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         let messageBody = response.body()
         if let body = messageBody {

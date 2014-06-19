@@ -10,7 +10,7 @@ import Foundation
 class HttpParser {
     
     class func err(reason:String) -> NSError {
-        return NSError.errorWithDomain("HttpParser", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
+        return NSError.errorWithDomain("HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
     
     func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, String, Dictionary<String, String>)? {
@@ -63,7 +63,7 @@ class HttpParser {
             }
         } while ( n > 0 && buff[0] != 10 /* NL */ )
         if ( n == -1 ) {
-            if error { error.memory = Socket.socketRecentError("recv(...) failed.") }
+            if error { error.memory = Socket.socketLastError("recv(...) failed.") }
             return nil
         }
         return characters

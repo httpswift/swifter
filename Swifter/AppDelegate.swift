@@ -17,39 +17,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
         
-        server["/"] = {
-            return .OK("<html><body>Hello Swift</body></html>")
+        
+        var c: AnyClass?
+        server["/json"] = { (method, headers) in
+            return .OK(.JSON(["posts" : [[ "id" : 1, "message" : "hello world"],[ "id" : 2, "message" : "sample message"]], "new_updates" : false]))
         }
-        server["/redirect"] = {
+        server["/redirect"] = { (method, headers) in
             return .MovedPermanently("http://www.google.com")
         }
-        server["/long"] = {
+        server["/long"] = { (method, headers) in
             var longResponse = ""
-            for k in 0..1000 {
-                longResponse += "(\(k)),->"
-            }
-            return .OK(longResponse)
+            for k in 0..1000 { longResponse += "(\(k)),->" }
+            return .OK(.RAW(longResponse))
         }
-        server["/routes"] = {
+        server["/routes"] = { (method, headers) in
             var listPage = "<html><body>Available services:<br><ul>"
             for item in self.server.routes() {
                 listPage += "<li><a href=\"\(item)\">\(item)</a></li>"
             }
             listPage += "</ul></body></html>"
-            return .OK(listPage)
+            return .OK(.RAW(listPage))
         }
-        server["/demo"] = {
+        server["/demo"] = { (method, headers) in
             let demoPage =
                 "<html><body><center><h2>Hello Swift</h2>" +
                 "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
                 "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center>" +
                 "<iframe src=\"/routes\"></iframe><iframe src=\"/hello\"></iframe></body></html>"
-            return .OK(demoPage)
+            return .OK(.RAW(demoPage))
         }
         
         var error: NSError?
         if !server.start(error: &error) {
-            NSLog("Server start error: \(error)")
+            println("Server start error: \(error)")
         }
         
         return true
