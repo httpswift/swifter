@@ -17,8 +17,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
         
-        
-        var c: AnyClass?
+        server["/test"] = { (method, headers) in
+            var headersInfo = ""
+            for (name, value) in headers {
+                headersInfo += "\(name) : \(value)<br>"
+            }
+            let response = "<html><body>Method: \(method)<br>\(headersInfo)</body></html>"
+            return .OK(.RAW(response))
+        }
         server["/json"] = { (method, headers) in
             return .OK(.JSON(["posts" : [[ "id" : 1, "message" : "hello world"],[ "id" : 2, "message" : "sample message"]], "new_updates" : false]))
         }
@@ -30,7 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for k in 0..1000 { longResponse += "(\(k)),->" }
             return .OK(.RAW(longResponse))
         }
-        server["/routes"] = { (method, headers) in
+        server["/"] = { (method, headers) in
             var listPage = "<html><body>Available services:<br><ul>"
             for item in self.server.routes() {
                 listPage += "<li><a href=\"\(item)\">\(item)</a></li>"
@@ -42,16 +48,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let demoPage =
                 "<html><body><center><h2>Hello Swift</h2>" +
                 "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
-                "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center>" +
-                "<iframe src=\"/routes\"></iframe><iframe src=\"/hello\"></iframe></body></html>"
+                "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center></body></html>"
             return .OK(.RAW(demoPage))
         }
-        
         var error: NSError?
         if !server.start(error: &error) {
             println("Server start error: \(error)")
         }
-        
         return true
     }
 }
