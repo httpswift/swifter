@@ -50,18 +50,31 @@ class HttpParser {
         }
         return nil
     }
+
+    var recvBuffer: UInt8[] = UInt8[](count: 1024, repeatedValue: 0)
+    var recvBufferSize: Int = 0
+    var recvBufferOffset: Int = 0
+    
+    func nextUInt8(socket: CInt) -> Int {
+        if ( recvBufferSize == 0 || recvBufferSize == recvBufferOffset ) {
+            recvBufferOffset = 0
+            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), 0)
+            if ( recvBufferSize <= 0 ) { return recvBufferSize }
+        }
+        let returnValue = recvBuffer[recvBufferOffset]
+        recvBufferOffset++
+        return Int(returnValue)
+    }
     
     func nextLine(socket: CInt, error:NSErrorPointer) -> String? {
-        // TODO - read more bytes than one. It makes the server very slow.
-        // TODO - check if there is a nicer way to manipulate bytes with Swift ( recv(...) -> String )
         var characters: String = ""
-        var buff: UInt8[] = UInt8[](count: 1, repeatedValue: 0), n: Int = 1
+        var n = 0
         do {
-            n = recv(socket, &buff, 1, 0);
-            if ( n > 0 && buff[0] > 13 /* CR */ ) {
-                characters += Character(UnicodeScalar(UInt32(buff[0])))
+            n = nextUInt8(socket)
+            if ( n > 13 /* CR */ ) {
+                characters += Character(UnicodeScalar(n))
             }
-        } while ( n > 0 && buff[0] != 10 /* NL */ )
+        } while ( n > 0 && n != 10 /* NL */ );
         if ( n == -1 ) {
             if error { error.memory = Socket.socketLastError("recv(...) failed.") }
             return nil
