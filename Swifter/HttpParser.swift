@@ -51,7 +51,7 @@ class HttpParser {
         return nil
     }
 
-    var recvBuffer: UInt8[] = UInt8[](count: 1024, repeatedValue: 0)
+    var recvBuffer: [UInt8] = [UInt8](count: 1024, repeatedValue: 0)
     var recvBufferSize: Int = 0
     var recvBufferOffset: Int = 0
     
@@ -71,9 +71,7 @@ class HttpParser {
         var n = 0
         do {
             n = nextUInt8(socket)
-            if ( n > 13 /* CR */ ) {
-                characters += Character(UnicodeScalar(n))
-            }
+            if ( n > 13 /* CR */ ) { characters += Character(UnicodeScalar(n)) }
         } while ( n > 0 && n != 10 /* NL */ );
         if ( n == -1 ) {
             if error { error.memory = Socket.socketLastError("recv(...) failed.") }

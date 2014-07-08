@@ -12,9 +12,11 @@ import Foundation
 struct Socket {
     
     static func socketLastError(reason:String) -> NSError {
-        let code = errno
-        return NSError.errorWithDomain("SOCKET", code: Int(code), userInfo:
-            [NSLocalizedFailureReasonErrorKey : reason, NSLocalizedDescriptionKey : String.fromCString(strerror(code))])
+        let errorCode = errno
+        if let errorText = String.fromCString(CString(strerror(errorCode))) {
+            return NSError.errorWithDomain("SOCKET", code: Int(errorCode), userInfo: [NSLocalizedFailureReasonErrorKey : reason, NSLocalizedDescriptionKey : errorText])
+        }
+        return NSError.errorWithDomain("SOCKET", code: Int(errorCode), userInfo: nil)
     }
     
     static func tcpForListen(port: in_port_t = 8080, error:NSErrorPointer = nil) -> CInt? {
@@ -52,7 +54,7 @@ struct Socket {
     static func writeStringUTF8(socket: CInt, string: String, error:NSErrorPointer = nil) -> Bool {
         var sent = 0;
         let nsdata = string.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
-        let unsafePointer = UnsafePointer<UInt8>(nsdata.bytes)
+        let unsafePointer = ConstUnsafePointer<UInt8>(nsdata.bytes)
         while ( sent < nsdata.length ) {
             let s = write(socket, unsafePointer + sent, UInt(nsdata.length - sent))
             if ( s <= 0 ) {

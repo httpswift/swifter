@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         server["/long"] = { (method, headers) in
             var longResponse = ""
-            for k in 0..1000 { longResponse += "(\(k)),->" }
+            for k in 0..<1000 { longResponse += "(\(k)),->" }
             return .OK(.RAW(longResponse))
         }
         server["/"] = { (method, headers) in
