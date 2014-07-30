@@ -9,23 +9,55 @@ import Foundation
 
 class HttpServer
 {
-    typealias Handler = (String, Dictionary<String,String>) -> HttpResponse
+    typealias Handler = (String, String, Dictionary<String,String>) -> HttpResponse
     
-    var handlers = Dictionary<String, Handler>()
+    var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
     var acceptSocket: CInt = -1
     
-    subscript (path: String) -> Handler {
+    let matchingOptions = NSMatchingOptions(0)
+    let expressionOptions = NSRegularExpressionOptions(0)
+    
+    subscript (path: String) -> Handler? {
         get {
-            return handlers[path]!
+            for (expression, handler) in handlers {
+                let numberOfMatches: Int = expression.numberOfMatchesInString(path, options: matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
+                if ( numberOfMatches > 0 ) {
+                    return handler
+                }
+            }
+            return nil
         }
         set ( newValue ) {
-            self.handlers.updateValue(newValue, forKey: path)
+            if let regex: NSRegularExpression = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
+                if let newHandler = newValue {
+                    handlers += (expression: regex, handler: newHandler)
+                }
+            }
+        }
+    }
+    
+    subscript (path: String) -> String {
+        get {
+            return path
+        }
+        set ( directoryPath ) {
+            if let regex = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
+                handlers += (expression: regex, handler: { (method, path, headers) in
+                    if let result = regex.firstMatchInString(path, options: self.matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))) {
+                        let filesPath = directoryPath.stringByAppendingPathComponent(path.bridgeToObjectiveC().substringWithRange(result.rangeAtIndex(1)))
+                        if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
+                            return HttpResponse.OK(.RAW(fileBody))
+                        }
+                    }
+                    return HttpResponse.NotFound
+                })
+            }
         }
     }
     
     func routes() -> Array<String> {
-        var results = Array<String>()
-        for (key,_) in handlers { results.append(key) }
+        var results = [String]()
+        for (expression,_) in handlers { results += expression.pattern }
         return results
     }
     
@@ -39,8 +71,8 @@ class HttpServer
                         let parser = HttpParser()
                         while let (path, method, headers) = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(headers)
-                            if let handler = self.handlers[path] {
-                                HttpServer.writeResponse(socket, response: handler(method, headers), keepAlive: keepAlive)
+                            if let handler: Handler = self[path] {
+                                HttpServer.writeResponse(socket, response: handler(method, path, headers), keepAlive: keepAlive)
                             } else {
                                 HttpServer.writeResponse(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)
                             }
@@ -68,6 +100,7 @@ class HttpServer
         if keepAlive {
             Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
         }
+        //Socket.writeStringUTF8(socket, string: "Content-Type: text/html; charset=UTF-8\r\n")
         for (name, value) in response.headers() {
             Socket.writeStringUTF8(socket, string: "\(name): \(value)\r\n")
         }

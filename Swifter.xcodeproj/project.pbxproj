@@ -15,6 +15,7 @@
 		7C839B9319422D50003A6950 /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B9019422D50003A6950 /* HttpParser.swift */; };
 		7C839B9419422D50003A6950 /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B9119422D50003A6950 /* HttpServer.swift */; };
 		7C839B9519422D50003A6950 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B9219422D50003A6950 /* Socket.swift */; };
+		7C9D35DA1989ADA4008AC163 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7C9D35D91989ADA4008AC163 /* test.json */; };
 		7CF6E638195203E5003635F0 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF6E637195203E5003635F0 /* HttpResponse.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 		7C839B9019422D50003A6950 /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
 		7C839B9119422D50003A6950 /* HttpServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpServer.swift; sourceTree = "<group>"; };
 		7C839B9219422D50003A6950 /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
+		7C9D35D91989ADA4008AC163 /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		7CF6E637195203E5003635F0 /* HttpResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -83,6 +85,7 @@
 		7C839B7019422CFF003A6950 /* Swifter */ = {
 			isa = PBXGroup;
 			children = (
+				7C9D35D91989ADA4008AC163 /* test.json */,
 				7CF6E637195203E5003635F0 /* HttpResponse.swift */,
 				7C839B9019422D50003A6950 /* HttpParser.swift */,
 				7C839B9119422D50003A6950 /* HttpServer.swift */,
@@ -203,6 +206,7 @@
 			files = (
 				7C839B7919422CFF003A6950 /* Main.storyboard in Resources */,
 				7C839B7B19422CFF003A6950 /* Images.xcassets in Resources */,
+				7C9D35DA1989ADA4008AC163 /* test.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
