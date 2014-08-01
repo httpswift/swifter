@@ -13,7 +13,7 @@ struct Socket {
     
     static func socketLastError(reason:String) -> NSError {
         let errorCode = errno
-        if let errorText = String.fromCString(CString(strerror(errorCode))) {
+        if let errorText = String.fromCString(ConstUnsafePointer(strerror(errorCode))) {
             return NSError.errorWithDomain("SOCKET", code: Int(errorCode), userInfo: [NSLocalizedFailureReasonErrorKey : reason, NSLocalizedDescriptionKey : errorText])
         }
         return NSError.errorWithDomain("SOCKET", code: Int(errorCode), userInfo: nil)
