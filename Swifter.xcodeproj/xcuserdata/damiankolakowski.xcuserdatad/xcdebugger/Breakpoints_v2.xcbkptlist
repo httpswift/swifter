@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Swifter/Socket.swift"
-            timestampString = "426535422.067964"
+            timestampString = "428780536.031456"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "nosigpipe(_:)"
             landmarkType = "5">
          </BreakpointContent>
