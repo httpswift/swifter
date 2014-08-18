@@ -30,7 +30,7 @@ class HttpServer
         set ( newValue ) {
             if let regex: NSRegularExpression = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
                 if let newHandler = newValue {
-                    handlers += (expression: regex, handler: newHandler)
+                    handlers.append(expression: regex, handler: newHandler)
                 }
             }
         }
@@ -42,13 +42,13 @@ class HttpServer
         }
         set ( directoryPath ) {
             if let regex = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
-                handlers += (expression: regex, handler: { (method, path, headers) in
-                    if let result = regex.firstMatchInString(path, options: self.matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))) {
-                        let filesPath = directoryPath.stringByAppendingPathComponent(path.bridgeToObjectiveC().substringWithRange(result.rangeAtIndex(1)))
-                        if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
-                            return HttpResponse.OK(.RAW(fileBody))
-                        }
-                    }
+                handlers.append(expression: regex, handler: { (method, path, headers) in
+                    let result = regex.firstMatchInString(path, options: self.matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
+					let myPath: NSString = path
+					let filesPath = directoryPath.stringByAppendingPathComponent(myPath.substringWithRange(result.rangeAtIndex(1)))
+					if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
+						return HttpResponse.OK(.RAW(fileBody))
+					}
                     return HttpResponse.NotFound
                 })
             }
@@ -57,7 +57,7 @@ class HttpServer
     
     func routes() -> Array<String> {
         var results = [String]()
-        for (expression,_) in handlers { results += expression.pattern }
+        for (expression,_) in handlers { results.append(expression.pattern) }
         return results
     }
     
@@ -92,8 +92,9 @@ class HttpServer
         Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         let messageBody = response.body()
         if let body = messageBody {
-            let nsdata = body.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
-            Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
+			if let nsdata = body.dataUsingEncoding(NSUTF8StringEncoding) {
+				Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
+			}
         } else {
             Socket.writeStringUTF8(socket, string: "Content-Length: 0\r\n")
         }

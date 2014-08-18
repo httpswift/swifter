@@ -18,7 +18,7 @@ class HttpParser {
             let statusTokens = split(statusLine, { $0 == " " })
             println(statusTokens)
             if ( statusTokens.count < 3 ) {
-                if error { error.memory = HttpParser.err("Invalid status line: \(statusLine)") }
+                if error != nil { error.memory = HttpParser.err("Invalid status line: \(statusLine)") }
                 return nil
             }
             let method = statusTokens[0]
@@ -71,10 +71,10 @@ class HttpParser {
         var n = 0
         do {
             n = nextUInt8(socket)
-            if ( n > 13 /* CR */ ) { characters += Character(UnicodeScalar(n)) }
+            if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
         } while ( n > 0 && n != 10 /* NL */ );
         if ( n == -1 ) {
-            if error { error.memory = Socket.socketLastError("recv(...) failed.") }
+            if error != nil { error.memory = Socket.socketLastError("recv(...) failed.") }
             return nil
         }
         return characters

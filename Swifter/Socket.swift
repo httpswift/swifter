@@ -13,7 +13,7 @@ struct Socket {
         
     static func socketLastError(reason:String) -> NSError {
         let errorCode = errno
-        if let errorText = String.fromCString(ConstUnsafePointer(strerror(errorCode))) {
+        if let errorText = String.fromCString(UnsafePointer(strerror(errorCode))) {
             return NSError.errorWithDomain("SOCKET", code: Int(errorCode), userInfo: [NSLocalizedFailureReasonErrorKey : reason, NSLocalizedDescriptionKey : errorText])
         }
         return NSError.errorWithDomain("SOCKET", code: Int(errorCode), userInfo: nil)
@@ -22,13 +22,13 @@ struct Socket {
     static func tcpForListen(port: in_port_t = 8080, error:NSErrorPointer = nil) -> CInt? {
         let s = socket(AF_INET, SOCK_STREAM, 0)
         if ( s == -1 ) {
-            if error { error.memory = socketLastError("socket(...) failed.") }
+            if error != nil { error.memory = socketLastError("socket(...) failed.") }
             return nil
         }
         var value: Int32 = 1;
         if ( setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32))) == -1 ) {
             release(s)
-            if error { error.memory = socketLastError("setsockopt(...) failed.") }
+            if error != nil { error.memory = socketLastError("setsockopt(...) failed.") }
             return nil
         }
         nosigpipe(s)
@@ -39,12 +39,12 @@ struct Socket {
         memcpy(&sock_addr, &addr, UInt(sizeof(sockaddr_in)))
         if ( bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 ) {
             release(s)
-            if error { error.memory = socketLastError("bind(...) failed.") }
+            if error != nil { error.memory = socketLastError("bind(...) failed.") }
             return nil
         }
         if ( listen(s, 20 /* max pending connection */ ) == -1 ) {
             release(s)
-            if error { error.memory = socketLastError("listen(...) failed.") }
+            if error != nil { error.memory = socketLastError("listen(...) failed.") }
             return nil
         }
         return s
@@ -52,16 +52,18 @@ struct Socket {
     
     static func writeStringUTF8(socket: CInt, string: String, error:NSErrorPointer = nil) -> Bool {
         var sent = 0;
-        let nsdata = string.bridgeToObjectiveC().dataUsingEncoding(NSUTF8StringEncoding)
-        let unsafePointer = ConstUnsafePointer<UInt8>(nsdata.bytes)
-        while ( sent < nsdata.length ) {
-            let s = write(socket, unsafePointer + sent, UInt(nsdata.length - sent))
-            if ( s <= 0 ) {
-                if error { error.memory = socketLastError("write(\(string)) failed.") }
-                return false
-            }
-            sent += s
-        }
+        if let nsdata = string.dataUsingEncoding(NSUTF8StringEncoding)
+		{
+			let unsafePointer = UnsafePointer<UInt8>(nsdata.bytes)
+			while ( sent < nsdata.length ) {
+				let s = write(socket, unsafePointer + sent, UInt(nsdata.length - sent))
+				if ( s <= 0 ) {
+					if error != nil { error.memory = socketLastError("write(\(string)) failed.") }
+					return false
+				}
+				sent += s
+			}
+		}
         return true
     }
     
@@ -72,7 +74,7 @@ struct Socket {
             Socket.nosigpipe(clientSocket)
             return clientSocket
         }
-        if error { error.memory = socketLastError("accept(...) failed.") }
+        if error != nil { error.memory = socketLastError("accept(...) failed.") }
         return nil
     }
     
