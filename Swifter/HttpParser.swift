@@ -32,7 +32,7 @@ class HttpParser {
                     }
                     responseString += line
                 }
-				NSLog(responseString)
+				println(responseString)
 				let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
                 return (path, method, headers, responseData)
             }
@@ -66,10 +66,14 @@ class HttpParser {
     var recvBufferOffset: Int = 0
     
     func nextUInt8(socket: CInt) -> Int {
-        if ( recvBufferSize == 0 ) {
+        if ( recvBufferSize == 0 || recvBufferOffset == recvBuffer.count ) {
             recvBufferOffset = 0
-            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), MSG_EOF)
+            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), MSG_DONTWAIT)
             if ( recvBufferSize <= 0 ) { return recvBufferSize }
+			if recvBufferSize < recvBuffer.count
+			{
+				recvBuffer[recvBufferSize] = 0
+			}
         }
         let returnValue = recvBuffer[recvBufferOffset]
         recvBufferOffset++
@@ -82,7 +86,7 @@ class HttpParser {
         do {
             n = nextUInt8(socket)
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
-        } while ( n > 0 && n != 10 /* NL */);
+        } while ( n > 0 && n != 10 /* NL */)
         if ( n == -1 && characters.isEmpty ) {
             if error != nil { error.memory = Socket.socketLastError("recv(...) failed.") }
             return nil
