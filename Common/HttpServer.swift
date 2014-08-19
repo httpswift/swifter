@@ -44,8 +44,9 @@ class HttpServer
             if let regex = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
                 handlers.append(expression: regex, handler: { (method, path, headers) in
                     let result = regex.firstMatchInString(path, options: self.matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
-					let myPath: NSString = path
-					let filesPath = directoryPath.stringByAppendingPathComponent(myPath.substringWithRange(result.rangeAtIndex(1)))
+					let nsPath: NSString = path
+					let filesPath = directoryPath.stringByExpandingTildeInPath
+                        .stringByAppendingPathComponent(nsPath.substringWithRange(result.rangeAtIndex(1)))
 					if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
 						return HttpResponse.OK(.RAW(fileBody))
 					}
