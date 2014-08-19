@@ -246,13 +246,59 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Common/HttpServer.swift"
-            timestampString = "430108882.465714"
+            timestampString = "430111339.558837"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "46"
             endingLineNumber = "46"
             landmarkName = "HttpServer"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/HttpResponse.swift"
+            timestampString = "430110038.828632"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "data()"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwifterOSX.HttpResponseBody.data (SwifterOSX.HttpResponseBody)() -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "SwifterOSX"
+                  urlString = "file:///Users/damiankolakowski/Desktop/Swifter/Common/HttpResponse.swift"
+                  timestampString = "430110038.833456"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "3084">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "SwifterOSX.HttpResponseBody.data (SwifterOSX.HttpResponseBody)() -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "SwifterOSX"
+                  urlString = "file:///Users/damiankolakowski/Desktop/Swifter/Common/HttpResponse.swift"
+                  timestampString = "430110038.833645"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "35"
+                  endingLineNumber = "35"
+                  offsetFromSymbolStart = "3643">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

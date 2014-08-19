@@ -13,7 +13,7 @@ class HttpParser {
         return NSError.errorWithDomain("HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
     
-    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, String, Dictionary<String, String>)? {
+    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? { //(String, String, Dictionary<String, String>)? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
             println(statusTokens)
@@ -24,7 +24,7 @@ class HttpParser {
             let method = statusTokens[0]
             let path = statusTokens[1]
             if let headers = nextHeaders(socket, error: error) {
-                return (path, method, headers)
+                return HttpRequest(url: path, method: method, headers: headers)
             }
         }
         return nil
@@ -51,7 +51,7 @@ class HttpParser {
         return nil
     }
 
-    var recvBuffer: [UInt8] = [UInt8](count: 1024, repeatedValue: 0)
+    var recvBuffer = [UInt8](count: 1024, repeatedValue: 0)
     var recvBufferSize: Int = 0
     var recvBufferOffset: Int = 0
     

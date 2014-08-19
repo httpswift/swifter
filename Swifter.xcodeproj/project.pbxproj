@@ -22,6 +22,8 @@
 		7CA4815519A2EED00030B30D /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814D19A2EED00030B30D /* Socket.swift */; };
 		7CA4815819A2EF2B0030B30D /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
+		7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
+		7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -51,6 +53,7 @@
 		7CA4814C19A2EED00030B30D /* HttpServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpServer.swift; sourceTree = "<group>"; };
 		7CA4814D19A2EED00030B30D /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		7CA4815719A2EF2B0030B30D /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
+		7CA4815A19A2F6A60030B30D /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +125,7 @@
 		7CA4814919A2EED00030B30D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7CA4815A19A2F6A60030B30D /* HttpRequest.swift */,
 				7CA4814A19A2EED00030B30D /* HttpParser.swift */,
 				7CA4814B19A2EED00030B30D /* HttpResponse.swift */,
 				7CA4814C19A2EED00030B30D /* HttpServer.swift */,
@@ -234,6 +238,7 @@
 				7CA4815419A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */,
+				7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 				7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -247,6 +252,7 @@
 				7CA4815519A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815319A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
+				7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +426,7 @@
 				7CA4814019A2EA8D0030B30D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
