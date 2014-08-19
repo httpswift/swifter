@@ -9,7 +9,7 @@ import Foundation
 
 class HttpServer
 {
-    typealias Handler = (String, String, Dictionary<String,String>) -> HttpResponse
+    typealias Handler = (String, String, Dictionary<String,String>, NSData?) -> HttpResponse
     
     var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
     var acceptSocket: CInt = -1
@@ -42,7 +42,7 @@ class HttpServer
         }
         set ( directoryPath ) {
             if let regex = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
-                handlers.append(expression: regex, handler: { (method, path, headers) in
+                handlers.append(expression: regex, handler: { (method, path, headers, responseData) in
                     let result = regex.firstMatchInString(path, options: self.matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
 					let myPath: NSString = path
 					let filesPath = directoryPath.stringByAppendingPathComponent(myPath.substringWithRange(result.rangeAtIndex(1)))
@@ -69,10 +69,10 @@ class HttpServer
                 while let socket = Socket.acceptClientSocket(self.acceptSocket) {
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
                         let parser = HttpParser()
-                        while let (path, method, headers) = parser.nextHttpRequest(socket) {
+                        while let (path, method, headers, responseData) = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(headers)
                             if let handler: Handler = self[path] {
-                                HttpServer.writeResponse(socket, response: handler(method, path, headers), keepAlive: keepAlive)
+                                HttpServer.writeResponse(socket, response: handler(method, path, headers, responseData), keepAlive: keepAlive)
                             } else {
                                 HttpServer.writeResponse(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)
                             }

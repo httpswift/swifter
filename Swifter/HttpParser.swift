@@ -13,7 +13,7 @@ class HttpParser {
         return NSError.errorWithDomain("HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
     
-    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, String, Dictionary<String, String>)? {
+    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, String, Dictionary<String, String>, NSData?)? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
             println(statusTokens)
@@ -24,7 +24,17 @@ class HttpParser {
             let method = statusTokens[0]
             let path = statusTokens[1]
             if let headers = nextHeaders(socket, error: error) {
-                return (path, method, headers)
+				var responseString = ""
+                while let line = nextLine(socket, error: error)
+                {
+                    if line.isEmpty {
+                        break
+                    }
+                    responseString += line
+                }
+				NSLog(responseString)
+				let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                return (path, method, headers, responseData)
             }
         }
         return nil
@@ -56,9 +66,9 @@ class HttpParser {
     var recvBufferOffset: Int = 0
     
     func nextUInt8(socket: CInt) -> Int {
-        if ( recvBufferSize == 0 || recvBufferSize == recvBufferOffset ) {
+        if ( recvBufferSize == 0 ) {
             recvBufferOffset = 0
-            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), 0)
+            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), MSG_EOF)
             if ( recvBufferSize <= 0 ) { return recvBufferSize }
         }
         let returnValue = recvBuffer[recvBufferOffset]
@@ -72,8 +82,8 @@ class HttpParser {
         do {
             n = nextUInt8(socket)
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
-        } while ( n > 0 && n != 10 /* NL */ );
-        if ( n == -1 ) {
+        } while ( n > 0 && n != 10 /* NL */);
+        if ( n == -1 && characters.isEmpty ) {
             if error != nil { error.memory = Socket.socketLastError("recv(...) failed.") }
             return nil
         }
