@@ -16,32 +16,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let server: HttpServer = HttpServer()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
-        server["/resources/(.+)"] = NSBundle.mainBundle().resourcePath
-        server["/test"] = { (method, url, headers) in
+        if let resDir = NSBundle.mainBundle().resourcePath {
+            server["/resources/(.+)"] = resDir
+        }
+        server["/test"] = { request in
             var headersInfo = ""
-            for (name, value) in headers {
+            for (name, value) in request.headers {
                 headersInfo += "\(name) : \(value)<br>"
             }
-            let response = "<html><body>Url: \(url)<br>Method: \(method)<br>\(headersInfo)</body></html>"
+            let response = "<html><body>Url: \(request.url)<br>Method: \(request.method)<br>\(headersInfo)</body></html>"
             return .OK(.RAW(response))
         }
-        server["/json"] = { (method, url, headers) in
+        server["/json"] = { request in
             return .OK(.JSON(["posts" : [[ "id" : 1, "message" : "hello world"],[ "id" : 2, "message" : "sample message"]], "new_updates" : false]))
         }
-        server["/redirect"] = { (method, url, headers) in
+        server["/redirect"] = { request in
             return .MovedPermanently("http://www.google.com")
         }
-        server["/long"] = { (method, url, headers) in
+        server["/long"] = { request in
             var longResponse = ""
             for k in 0..<1000 { longResponse += "(\(k)),->" }
             return .OK(.RAW(longResponse))
         }
-        server["/demo"] = { (method, url, headers) in
+        server["/demo"] = { request in
             return .OK(.RAW("<html><body><center><h2>Hello Swift</h2>" +
                 "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
                 "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center></body></html>"))
         }
-        server["/"] = { (method, url, headers) in
+        server["/"] = { request in
             var listPage = "<html><body>Available services:<br><ul>"
             for item in self.server.routes() {
                 listPage += "<li><a href=\"\(item)\">\(item)</a></li>"

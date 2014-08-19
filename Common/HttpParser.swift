@@ -12,8 +12,8 @@ class HttpParser {
     class func err(reason:String) -> NSError {
         return NSError.errorWithDomain("HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
-    
-    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> (String, String, Dictionary<String, String>, NSData?)? {
+
+    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? { //(String, String, Dictionary<String, String>)? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
             println(statusTokens)
@@ -34,7 +34,7 @@ class HttpParser {
                 }
                 println(responseString)
                 let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-                return (path, method, headers, responseData)
+                return HttpRequest(url: path, method: method, headers: headers, responseData: responseData)
             }
         }
         return nil
@@ -61,7 +61,7 @@ class HttpParser {
         return nil
     }
 
-    var recvBuffer: [UInt8] = [UInt8](count: 1024, repeatedValue: 0)
+    var recvBuffer = [UInt8](count: 1024, repeatedValue: 0)
     var recvBufferSize: Int = 0
     var recvBufferOffset: Int = 0
     
