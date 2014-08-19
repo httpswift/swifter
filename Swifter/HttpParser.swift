@@ -24,7 +24,7 @@ class HttpParser {
             let method = statusTokens[0]
             let path = statusTokens[1]
             if let headers = nextHeaders(socket, error: error) {
-				var responseString = ""
+                var responseString = ""
                 while let line = nextLine(socket, error: error)
                 {
                     if line.isEmpty {
@@ -32,8 +32,8 @@ class HttpParser {
                     }
                     responseString += line
                 }
-				println(responseString)
-				let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                println(responseString)
+                let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
                 return (path, method, headers, responseData)
             }
         }
@@ -70,10 +70,10 @@ class HttpParser {
             recvBufferOffset = 0
             recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), MSG_DONTWAIT)
             if ( recvBufferSize <= 0 ) { return recvBufferSize }
-			if recvBufferSize < recvBuffer.count
-			{
-				recvBuffer[recvBufferSize] = 0
-			}
+            if recvBufferSize < recvBuffer.count
+            {
+                recvBuffer[recvBufferSize] = 0
+            }
         }
         let returnValue = recvBuffer[recvBufferOffset]
         recvBufferOffset++
