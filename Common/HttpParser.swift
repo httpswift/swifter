@@ -12,7 +12,7 @@ class HttpParser {
     class func err(reason:String) -> NSError {
         return NSError.errorWithDomain("HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
-    
+
     func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? { //(String, String, Dictionary<String, String>)? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
@@ -24,7 +24,17 @@ class HttpParser {
             let method = statusTokens[0]
             let path = statusTokens[1]
             if let headers = nextHeaders(socket, error: error) {
-                return HttpRequest(url: path, method: method, headers: headers)
+                var responseString = ""
+                while let line = nextLine(socket, error: error)
+                {
+                    if line.isEmpty {
+                        break
+                    }
+                    responseString += line
+                }
+                println(responseString)
+                let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                return HttpRequest(url: path, method: method, headers: headers, responseData: responseData)
             }
         }
         return nil
@@ -56,10 +66,14 @@ class HttpParser {
     var recvBufferOffset: Int = 0
     
     func nextUInt8(socket: CInt) -> Int {
-        if ( recvBufferSize == 0 || recvBufferSize == recvBufferOffset ) {
+        if ( recvBufferSize == 0 || recvBufferOffset == recvBuffer.count ) {
             recvBufferOffset = 0
-            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), 0)
+            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), MSG_DONTWAIT)
             if ( recvBufferSize <= 0 ) { return recvBufferSize }
+            if recvBufferSize < recvBuffer.count
+            {
+                recvBuffer[recvBufferSize] = 0
+            }
         }
         let returnValue = recvBuffer[recvBufferOffset]
         recvBufferOffset++
@@ -72,8 +86,8 @@ class HttpParser {
         do {
             n = nextUInt8(socket)
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
-        } while ( n > 0 && n != 10 /* NL */ );
-        if ( n == -1 ) {
+        } while ( n > 0 && n != 10 /* NL */)
+        if ( n == -1 && characters.isEmpty ) {
             if error != nil { error.memory = Socket.socketLastError("recv(...) failed.") }
             return nil
         }

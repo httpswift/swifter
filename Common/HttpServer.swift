@@ -44,12 +44,12 @@ class HttpServer
             if let regex = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
                 handlers.append(expression: regex, handler: { request in
                     let result = regex.firstMatchInString(request.url, options: self.matchingOptions, range: NSMakeRange(0, request.url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
-					let nsPath: NSString = request.url
-					let filesPath = directoryPath.stringByExpandingTildeInPath
+                    let nsPath: NSString = request.url
+                    let filesPath = directoryPath.stringByExpandingTildeInPath
                         .stringByAppendingPathComponent(nsPath.substringWithRange(result.rangeAtIndex(1)))
-					if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
-						return HttpResponse.OK(.RAW(fileBody))
-					}
+                    if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
+                        return HttpResponse.OK(.RAW(fileBody))
+                    }
                     return HttpResponse.NotFound
                 })
             }
@@ -93,9 +93,9 @@ class HttpServer
         Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         let messageBody = response.body()
         if let body = messageBody {
-			if let nsdata = body.dataUsingEncoding(NSUTF8StringEncoding) {
-				Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
-			}
+            if let nsdata = body.dataUsingEncoding(NSUTF8StringEncoding) {
+                Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
+            }
         } else {
             Socket.writeStringUTF8(socket, string: "Content-Length: 0\r\n")
         }
