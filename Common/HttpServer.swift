@@ -46,7 +46,7 @@ class HttpServer
                     let result = regex.firstMatchInString(request.url, options: self.matchingOptions, range: NSMakeRange(0, request.url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
                     let nsPath: NSString = request.url
                     let filesPath = directoryPath.stringByExpandingTildeInPath
-                        .stringByAppendingPathComponent(nsPath.substringWithRange(result.rangeAtIndex(1)))
+                        .stringByAppendingPathComponent(nsPath.substringWithRange(result!.rangeAtIndex(1)))
                     if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
                         return HttpResponse.OK(.RAW(fileBody))
                     }
