@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+  	<head>
+		<link rel="shortcut icon" href="/static/img/favicon.png" />
+    	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+		 
+		<link href="http://cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" />
+
+    	<title>Login</title>
+  	</head>
+	
+	<body>
+		<div class="container" style="width: 500px;">
+			<form class="form-horizontal" method="POST" action="/login">
+			  <div class="form-group">
+			    <label class="col-lg-4 control-label">Username:</label>
+			    <div class="col-lg-6">
+			      <input id="uname" class="form-control" name="uname" placeholder="Account">
+			    </div>
+			  </div>
+
+			  <div class="form-group">
+			    <label class="col-lg-4 control-label">Password:</label>
+			    <div class="col-lg-6">
+			      <input id="pwd" type="password" class="form-control" name="pwd" placeholder="Password">
+			    </div>
+			  </div>
+
+			  <div class="form-group">
+			    <div class="col-lg-offset-2 col-lg-10">
+			    	<a href="/login"><button type="submit" class="btn btn-default" onclick="return checkInput();">Login</button></a>
+			      	<button class="btn btn-default" onclick="return backToHome();">Go To Home</button>
+			      	<script type="text/javascript">
+				      	function backToHome() {
+				      		window.location.href = "/";
+				      		return false;
+				      	}
+
+				      	function checkInput() {
+				      		var uname = document.getElementById("uname");
+				      		if (uname.value.length == 0) {
+				      			alert("Please Input Your Account");
+				      			return false;
+				      		}
+
+				      		var pwd = document.getElementById("pwd");
+				      		if (pwd.value.length == 0) {
+				      			alert("Please Input Your Password");
+				      			return false;
+				      		}
+				      	}
+			      	</script>
+			    </div>
+			  </div>
+			</form>
+		</div>
+	</body>
+</html>

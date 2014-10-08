@@ -43,6 +43,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
                 "<h4>\(UIDevice().name), \(UIDevice().systemVersion)</h4></center></body></html>"))
         }
+        server["/login"] = { request in
+            println(">> request method:\(request.method.uppercaseString)")
+            var method = request.method.uppercaseString
+            if method == "GET" {
+                //TODO: should copy the file to document path of app's
+                //TODO: should not use the absolute path
+                if let html = String.stringWithContentsOfFile("/Users/wshan/Workspace/swifter/www/views/login.html", encoding: NSUTF8StringEncoding, error: nil){
+                    return .OK(.RAW(html))
+                }else{
+                    return .NotFound
+                }
+            }else if method == "POST"{
+                println(">> post data: \(NSString(data:request.responseData!,encoding:NSUTF8StringEncoding))")
+                return .MovedPermanently("http://github.com")
+            }
+            
+            return .NotFound
+        }
         server["/"] = { request in
             var listPage = "<html><body>Available services:<br><ul>"
             for item in self.server.routes() {
@@ -51,6 +69,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             listPage += "</ul></body></html>"
             return .OK(.RAW(listPage))
         }
+
+        
         var error: NSError?
         if !server.start(error: &error) {
             println("Server start error: \(error)")
