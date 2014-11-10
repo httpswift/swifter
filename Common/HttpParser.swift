@@ -67,7 +67,7 @@ class HttpParser {
     func nextUInt8(socket: CInt) -> Int {
         if ( recvBufferSize == 0 || recvBufferOffset == recvBuffer.count ) {
             recvBufferOffset = 0
-            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), MSG_DONTWAIT)
+            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), 0)
             if ( recvBufferSize <= 0 ) { return recvBufferSize }
             if recvBufferSize < recvBuffer.count
             {
