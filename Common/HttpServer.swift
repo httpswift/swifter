@@ -28,7 +28,7 @@ class HttpServer
             return nil
         }
         set ( newValue ) {
-            if let regex: NSRegularExpression = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
+            if let regex: NSRegularExpression = NSRegularExpression(pattern: path, options: expressionOptions, error: nil) {
                 if let newHandler = newValue {
                     handlers.append(expression: regex, handler: newHandler)
                 }
@@ -36,25 +36,25 @@ class HttpServer
         }
     }
     
-    subscript (path: String) -> String {
-        get {
-            return path
-        }
-        set ( directoryPath ) {
-            if let regex = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
-                handlers.append(expression: regex, handler: { request in
-                    let result = regex.firstMatchInString(request.url, options: self.matchingOptions, range: NSMakeRange(0, request.url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
-                    let nsPath: NSString = request.url
-                    let filesPath = directoryPath.stringByExpandingTildeInPath
-                        .stringByAppendingPathComponent(nsPath.substringWithRange(result!.rangeAtIndex(1)))
-                    if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
-                        return HttpResponse.OK(.RAW(fileBody))
-                    }
-                    return HttpResponse.NotFound
-                })
-            }
-        }
-    }
+//    subscript (asdasd: String) -> String {
+//        get {
+//            return asdasd
+//        }
+//        set ( directoryPath ) {
+//            if let regex = NSRegularExpression(pattern: asdasd, options: expressionOptions, error: nil) {
+//                handlers.append(expression: regex, handler: { request in
+//                    let result = regex.firstMatchInString(request.url, options: self.matchingOptions, range: NSMakeRange(0, request.url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
+//                    let nsPath: NSString = request.url
+//                    let filesPath = directoryPath.stringByExpandingTildeInPath
+//                        .stringByAppendingPathComponent(nsPath.substringWithRange(result!.rangeAtIndex(1)))
+//                    if let fileBody = String(contentsOfFile: filesPath, encoding: NSUTF8StringEncoding, error: nil) {
+//                        return HttpResponse.OK(.RAW(fileBody))
+//                    }
+//                    return HttpResponse.NotFound
+//                })
+//            }
+//        }
+//    }
     
     func routes() -> Array<String> {
         var results = [String]()

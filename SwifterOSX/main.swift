@@ -10,7 +10,7 @@ import Foundation
 
 let server: HttpServer = HttpServer()
 
-server["/resources/(.+)"] = "~/"
+//server["/resources/(.+)"] = "~/"
 
 server["/test"] = { request in
     var headersInfo = ""

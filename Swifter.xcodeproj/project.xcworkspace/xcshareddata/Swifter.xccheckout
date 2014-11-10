@@ -10,31 +10,31 @@
 	<string>Swifter</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>9BA50FC1-8933-46EC-8469-51B02ED36C86</key>
-		<string>ssh://github.com/glock45/swifter.git</string>
+		<key>75224C288D14A799245F99223249EF48FF5DC280</key>
+		<string>github.com:glock45/swifter.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Swifter.xcodeproj/project.xcworkspace</string>
+	<string>Swifter.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>9BA50FC1-8933-46EC-8469-51B02ED36C86</key>
+		<key>75224C288D14A799245F99223249EF48FF5DC280</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>ssh://github.com/glock45/swifter.git</string>
+	<string>github.com:glock45/swifter.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>9BA50FC1-8933-46EC-8469-51B02ED36C86</string>
+	<string>75224C288D14A799245F99223249EF48FF5DC280</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>9BA50FC1-8933-46EC-8469-51B02ED36C86</string>
+			<string>75224C288D14A799245F99223249EF48FF5DC280</string>
 			<key>IDESourceControlWCCName</key>
-			<string>Swifter</string>
+			<string>swifter</string>
 		</dict>
 	</array>
 </dict>

@@ -16,9 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let server: HttpServer = HttpServer()
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
-        if let resDir = NSBundle.mainBundle().resourcePath {
-            server["/resources/(.+)"] = resDir
-        }
+//        if let resDir = NSBundle.mainBundle().resourcePath {
+//            server["/resources/(.+)"] = resDir
+//        }
         server["/test"] = { request in
             var headersInfo = ""
             for (name, value) in request.headers {

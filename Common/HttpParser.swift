@@ -10,10 +10,10 @@ import Foundation
 class HttpParser {
     
     class func err(reason:String) -> NSError {
-        return NSError.errorWithDomain("HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
+        return NSError(domain: "HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
 
-    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? { //(String, String, Dictionary<String, String>)? {
+    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
             println(statusTokens)
@@ -24,17 +24,16 @@ class HttpParser {
             let method = statusTokens[0]
             let path = statusTokens[1]
             if let headers = nextHeaders(socket, error: error) {
-                var responseString = ""
-                while let line = nextLine(socket, error: error)
-                {
+                var requestBody = ""
+                while let line = nextLine(socket, error: error) {
                     if line.isEmpty {
                         break
                     }
-                    responseString += line
+                    requestBody += line
                 }
-                println(responseString)
-                let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-                return HttpRequest(url: path, method: method, headers: headers, responseData: responseData)
+                println(requestBody)
+                let body = requestBody.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                return HttpRequest(url: path, method: method, headers: headers, body: body)
             }
         }
         return nil

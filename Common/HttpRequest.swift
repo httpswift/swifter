@@ -12,5 +12,5 @@ struct HttpRequest {
     let url: String
     let method: String
     let headers: Dictionary<String, String>
-	let responseData: NSData?
+	let body: NSData?
 }
