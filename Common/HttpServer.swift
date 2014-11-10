@@ -7,33 +7,20 @@
 
 import Foundation
 
+
 class HttpServer
 {
     typealias Handler = HttpRequest -> HttpResponse
-    
     var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
     var acceptSocket: CInt = -1
     
     let matchingOptions = NSMatchingOptions(0)
     let expressionOptions = NSRegularExpressionOptions(0)
     
-    subscript (path: String) -> Handler? {
-        get {
-            for (expression, handler) in handlers {
-                let numberOfMatches: Int = expression.numberOfMatchesInString(path, options: matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
-                if ( numberOfMatches > 0 ) {
-                    return handler
-                }
-            }
-            return nil
-        }
-        set ( newValue ) {
-            if let regex: NSRegularExpression = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
-                if let newHandler = newValue {
-                    handlers.append(expression: regex, handler: newHandler)
-                }
-            }
-        }
+    var handler: HttpServerHandler
+    
+    init(){
+        self.handler = HttpServerHandler(handlers: self.handlers)
     }
     
     subscript (path: String) -> String {
@@ -41,13 +28,13 @@ class HttpServer
             return path
         }
         set ( directoryPath ) {
-            if let regex = NSRegularExpression.regularExpressionWithPattern(path, options: expressionOptions, error: nil) {
+            if let regex = NSRegularExpression(pattern:path, options: expressionOptions, error: nil) {
                 handlers.append(expression: regex, handler: { request in
                     let result = regex.firstMatchInString(request.url, options: self.matchingOptions, range: NSMakeRange(0, request.url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
                     let nsPath: NSString = request.url
                     let filesPath = directoryPath.stringByExpandingTildeInPath
                         .stringByAppendingPathComponent(nsPath.substringWithRange(result!.rangeAtIndex(1)))
-                    if let fileBody = String.stringWithContentsOfFile(filesPath, encoding: NSASCIIStringEncoding, error: nil) {
+                    if let fileBody = String(contentsOfFile: filesPath, encoding: NSASCIIStringEncoding, error: nil) {
                         return HttpResponse.OK(.RAW(fileBody))
                     }
                     return HttpResponse.NotFound
@@ -72,7 +59,7 @@ class HttpServer
                         let parser = HttpParser()
                         while let request = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(request.headers)
-                            if let handler: Handler = self[request.url] {
+                            if let handler: Handler = self.handler[request.url] {
                                 HttpServer.writeResponse(socket, response: handler(request), keepAlive: keepAlive)
                             } else {
                                 HttpServer.writeResponse(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)

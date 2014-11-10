@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		476066ED1A1133F300917D86 /* HttpServerHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 476066EC1A1133F300917D86 /* HttpServerHandler.swift */; };
 		7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7319422CFF003A6950 /* AppDelegate.swift */; };
 		7C839B7619422CFF003A6950 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7519422CFF003A6950 /* ViewController.swift */; };
 		7C839B7919422CFF003A6950 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C839B7719422CFF003A6950 /* Main.storyboard */; };
@@ -40,6 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		476066EC1A1133F300917D86 /* HttpServerHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpServerHandler.swift; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* Swifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C839B7219422CFF003A6950 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C839B7319422CFF003A6950 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 		7CA4814919A2EED00030B30D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				476066EC1A1133F300917D86 /* HttpServerHandler.swift */,
 				7CA4815A19A2F6A60030B30D /* HttpRequest.swift */,
 				7CA4814A19A2EED00030B30D /* HttpParser.swift */,
 				7CA4814B19A2EED00030B30D /* HttpResponse.swift */,
@@ -240,6 +243,7 @@
 				7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */,
 				7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 				7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */,
+				476066ED1A1133F300917D86 /* HttpServerHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
