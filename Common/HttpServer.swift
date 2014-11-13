@@ -36,6 +36,13 @@ class HttpServer
         }
     }
     
+//    Uncommenting this will cause following compilation errors:
+//
+//      Cannot invoke 'subscript' with an argument list of type '($T5, Builtin.RawPointer)'
+//      Cannot invoke 'subscript' with an argument list of type '($T5, Builtin.RawPointer)'
+//
+//    Swift stopped to support subscripts with multiple outputs.
+//
 //    subscript (asdasd: String) -> String {
 //        get {
 //            return asdasd

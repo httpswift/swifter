@@ -39,7 +39,7 @@ class HttpParser {
         return nil
     }
     
-    func nextHeaders(socket: CInt, error:NSErrorPointer) -> Dictionary<String, String>? {
+    private func nextHeaders(socket: CInt, error:NSErrorPointer) -> Dictionary<String, String>? {
         var headers = Dictionary<String, String>()
         while let headerLine = nextLine(socket, error: error) {
             if ( headerLine.isEmpty ) {
@@ -64,7 +64,7 @@ class HttpParser {
     var recvBufferSize: Int = 0
     var recvBufferOffset: Int = 0
     
-    func nextUInt8(socket: CInt) -> Int {
+    private func nextUInt8(socket: CInt) -> Int {
         if ( recvBufferSize == 0 || recvBufferOffset == recvBuffer.count ) {
             recvBufferOffset = 0
             recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), 0)
@@ -79,7 +79,7 @@ class HttpParser {
         return Int(returnValue)
     }
     
-    func nextLine(socket: CInt, error:NSErrorPointer) -> String? {
+    private func nextLine(socket: CInt, error:NSErrorPointer) -> String? {
         var characters: String = ""
         var n = 0
         do {
