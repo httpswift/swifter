@@ -73,7 +73,7 @@ class HttpServer
                         while let request = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(request.headers)
                             if let (expression, handler) = self.findHandler(request.url) {
-                                let capturedUrlsGroups = self.captureGroups(expression, value: request.url)
+                                let capturedUrlsGroups = self.captureExpressionGroups(expression, value: request.url)
                                 let updatedRequest = HttpRequest(url: request.url, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups)
                                 HttpServer.writeResponse(socket, response: handler(updatedRequest), keepAlive: keepAlive)
                             } else {
@@ -97,7 +97,7 @@ class HttpServer
         }).first
     }
     
-    func captureGroups(expression: NSRegularExpression, value: String) -> [String] {
+    func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {
         var capturedGroups = [String]()
         if let result = expression.firstMatchInString(value, options: matchingOptions, range: NSMakeRange(0, value.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))) {
             let nsValue: NSString = value
