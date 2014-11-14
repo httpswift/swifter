@@ -13,14 +13,13 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    let server = demoServer()
+    var server: HttpServer?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: NSDictionary?) -> Bool {
-        if let resDir = NSBundle.mainBundle().resourcePath {
-            server["/resources/(.+)"] = HttpHandlers.directory(resDir)
-        }
+        let server = demoServer(NSBundle.mainBundle().resourcePath)
+        self.server = server
         var error: NSError?
-        if !server.start(error: &error) {
+        if server.start(error: &error) {
             println("Server start error: \(error)")
         }
         return true

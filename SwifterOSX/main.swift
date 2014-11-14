@@ -8,9 +8,7 @@
 
 import Foundation
 
-let server = demoServer()
-
-server["/resources/(.+)"] = HttpHandlers.directory("~/")
+let server = demoServer("~/")
 
 var error: NSError?
 

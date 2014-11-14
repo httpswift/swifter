@@ -8,8 +8,11 @@
 
 import Foundation
 
-func demoServer() -> HttpServer {
+func demoServer(publicDir: String?) -> HttpServer {
     let server = HttpServer()
+    if let publicDir = publicDir {
+        server["/resources/(.+)"] = HttpHandlers.directory(publicDir)
+    }
     server["/test"] = { request in
         var headersInfo = ""
         for (name, value) in request.headers {
