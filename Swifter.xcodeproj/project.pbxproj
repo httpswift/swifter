@@ -26,6 +26,8 @@
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
 		7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
+		7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
+		7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -57,6 +59,7 @@
 		7CA4814D19A2EED00030B30D /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		7CA4815719A2EF2B0030B30D /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		7CA4815A19A2F6A60030B30D /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
+		7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +143,7 @@
 				7CA4815A19A2F6A60030B30D /* HttpRequest.swift */,
 				7CA4814A19A2EED00030B30D /* HttpParser.swift */,
 				7CA4814B19A2EED00030B30D /* HttpResponse.swift */,
+				7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */,
 				7CA4814C19A2EED00030B30D /* HttpServer.swift */,
 				7CA4814D19A2EED00030B30D /* Socket.swift */,
 			);
@@ -247,6 +251,7 @@
 			files = (
 				7C6A510E1A149859004924B5 /* ActiveRecord.swift in Sources */,
 				7CA4815019A2EED00030B30D /* HttpResponse.swift in Sources */,
+				7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7C839B7619422CFF003A6950 /* ViewController.swift in Sources */,
 				7CA4815419A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */,
@@ -266,6 +271,7 @@
 				7C6A510F1A149859004924B5 /* ActiveRecord.swift in Sources */,
 				7CA4815319A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
+				7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,9 +8,9 @@
 
 import Foundation
 
-let server: HttpServer = HttpServer()
+let server = HttpServer()
 
-//server["/resources/(.+)"] = "~/"
+server["/resources/(.+)"] = HttpHandlers.directory("~/")
 
 server["/test"] = { request in
     var headersInfo = ""

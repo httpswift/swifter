@@ -33,7 +33,7 @@ class HttpParser {
                 }
                 println(requestBody)
                 let body = requestBody.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-                return HttpRequest(url: path, method: method, headers: headers, body: body)
+                return HttpRequest(url: path, method: method, headers: headers, body: body, capturedUrlGroups: [])
             }
         }
         return nil

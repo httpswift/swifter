@@ -19,12 +19,6 @@ class HttpServer
     
     subscript (path: String) -> Handler? {
         get {
-            for (expression, handler) in handlers {
-                let numberOfMatches: Int = expression.numberOfMatchesInString(path, options: matchingOptions, range: NSMakeRange(0, path.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
-                if ( numberOfMatches > 0 ) {
-                    return handler
-                }
-            }
             return nil
         }
         set ( newValue ) {
@@ -52,8 +46,7 @@ class HttpServer
 //                handlers.append(expression: regex, handler: { request in
 //                    let result = regex.firstMatchInString(request.url, options: self.matchingOptions, range: NSMakeRange(0, request.url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
 //                    let nsPath: NSString = request.url
-//                    let filesPath = directoryPath.stringByExpandingTildeInPath
-//                        .stringByAppendingPathComponent(nsPath.substringWithRange(result!.rangeAtIndex(1)))
+//                    let filesPath = directoryPath.stringByExpandingTildeInPath.stringByAppendingPathComponent(nsPath.substringWithRange(result!.rangeAtIndex(1)))
 //                    if let fileBody = String(contentsOfFile: filesPath, encoding: NSUTF8StringEncoding, error: nil) {
 //                        return HttpResponse.OK(.RAW(fileBody))
 //                    }
@@ -79,8 +72,10 @@ class HttpServer
                         let parser = HttpParser()
                         while let request = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(request.headers)
-                            if let handler: Handler = self[request.url] {
-                                HttpServer.writeResponse(socket, response: handler(request), keepAlive: keepAlive)
+                            if let (expression, handler) = self.findHandler(request.url) {
+                                let capturedUrlsGroups = self.captureGroups(expression, value: request.url)
+                                let updatedRequest = HttpRequest(url: request.url, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups)
+                                HttpServer.writeResponse(socket, response: handler(updatedRequest), keepAlive: keepAlive)
                             } else {
                                 HttpServer.writeResponse(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)
                             }
@@ -94,6 +89,23 @@ class HttpServer
             return true
         }
         return false
+    }
+    
+    func findHandler(url:String) -> (NSRegularExpression, Handler)? {
+        return filter(self.handlers, { (expression: NSRegularExpression, handler) -> Bool in
+            return expression.numberOfMatchesInString(url, options: self.matchingOptions, range: NSMakeRange(0, url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))) > 0
+        }).first
+    }
+    
+    func captureGroups(expression: NSRegularExpression, value: String) -> [String] {
+        var capturedGroups = [String]()
+        if let result = expression.firstMatchInString(value, options: matchingOptions, range: NSMakeRange(0, value.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))) {
+            let nsValue: NSString = value
+            for var i = 1 ; i < result.numberOfRanges ; ++i {
+                capturedGroups.append(nsValue.substringWithRange(result.rangeAtIndex(i)))
+            }
+        }
+        return capturedGroups
     }
     
     class func writeResponse(socket: CInt, response: HttpResponse, keepAlive: Bool) {

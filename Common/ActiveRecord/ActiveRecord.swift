@@ -31,6 +31,12 @@ class SwifterActiveRecord /* Probbaly we will use generics and not follow Ruby's
         return results
     }
     
+    //func findBy(
+    
+    func all() -> Array<String> {
+        return []
+    }
+    
     func commit(error: NSErrorPointer) -> Bool {
         //TODO commit changes to DB.
         return false

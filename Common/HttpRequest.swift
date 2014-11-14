@@ -13,4 +13,5 @@ struct HttpRequest {
     let method: String
     let headers: Dictionary<String, String>
 	let body: NSData?
+    var capturedUrlGroups: [String]
 }
