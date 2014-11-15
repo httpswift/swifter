@@ -10,10 +10,10 @@ import Foundation
 class HttpParser {
     
     class func err(reason:String) -> NSError {
-        return NSError.errorWithDomain("HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
+        return NSError(domain: "HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
     }
 
-    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? { //(String, String, Dictionary<String, String>)? {
+    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
             println(statusTokens)
@@ -24,23 +24,22 @@ class HttpParser {
             let method = statusTokens[0]
             let path = statusTokens[1]
             if let headers = nextHeaders(socket, error: error) {
-                var responseString = ""
-                while let line = nextLine(socket, error: error)
-                {
+                var requestBody = ""
+                while let line = nextLine(socket, error: error) {
                     if line.isEmpty {
                         break
                     }
-                    responseString += line
+                    requestBody += line
                 }
-                println(responseString)
-                let responseData = responseString.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-                return HttpRequest(url: path, method: method, headers: headers, responseData: responseData)
+                println(requestBody)
+                let body = requestBody.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
+                return HttpRequest(url: path, method: method, headers: headers, body: body, capturedUrlGroups: [])
             }
         }
         return nil
     }
     
-    func nextHeaders(socket: CInt, error:NSErrorPointer) -> Dictionary<String, String>? {
+    private func nextHeaders(socket: CInt, error:NSErrorPointer) -> Dictionary<String, String>? {
         var headers = Dictionary<String, String>()
         while let headerLine = nextLine(socket, error: error) {
             if ( headerLine.isEmpty ) {
@@ -65,10 +64,10 @@ class HttpParser {
     var recvBufferSize: Int = 0
     var recvBufferOffset: Int = 0
     
-    func nextUInt8(socket: CInt) -> Int {
+    private func nextUInt8(socket: CInt) -> Int {
         if ( recvBufferSize == 0 || recvBufferOffset == recvBuffer.count ) {
             recvBufferOffset = 0
-            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), MSG_DONTWAIT)
+            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), 0)
             if ( recvBufferSize <= 0 ) { return recvBufferSize }
             if recvBufferSize < recvBuffer.count
             {
@@ -80,7 +79,7 @@ class HttpParser {
         return Int(returnValue)
     }
     
-    func nextLine(socket: CInt, error:NSErrorPointer) -> String? {
+    private func nextLine(socket: CInt, error:NSErrorPointer) -> String? {
         var characters: String = ""
         var n = 0
         do {

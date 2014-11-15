@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C6A510E1A149859004924B5 /* ActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6A510D1A149859004924B5 /* ActiveRecord.swift */; };
+		7C6A510F1A149859004924B5 /* ActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6A510D1A149859004924B5 /* ActiveRecord.swift */; };
 		7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7319422CFF003A6950 /* AppDelegate.swift */; };
 		7C839B7619422CFF003A6950 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7519422CFF003A6950 /* ViewController.swift */; };
 		7C839B7919422CFF003A6950 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C839B7719422CFF003A6950 /* Main.storyboard */; };
@@ -24,6 +26,10 @@
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
 		7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
+		7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
+		7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
+		7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
+		7CB102DE1A1680EA00CBA3B4 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7C6A510D1A149859004924B5 /* ActiveRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveRecord.swift; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* Swifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C839B7219422CFF003A6950 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C839B7319422CFF003A6950 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -54,6 +61,8 @@
 		7CA4814D19A2EED00030B30D /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		7CA4815719A2EF2B0030B30D /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		7CA4815A19A2F6A60030B30D /* HttpRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRequest.swift; sourceTree = "<group>"; };
+		7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
+		7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +83,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7C6A510C1A149843004924B5 /* ActiveRecord */ = {
+			isa = PBXGroup;
+			children = (
+				7C6A510D1A149859004924B5 /* ActiveRecord.swift */,
+			);
+			path = ActiveRecord;
+			sourceTree = "<group>";
+		};
 		7C839B6519422CFF003A6950 = {
 			isa = PBXGroup;
 			children = (
@@ -125,11 +142,14 @@
 		7CA4814919A2EED00030B30D /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7C6A510C1A149843004924B5 /* ActiveRecord */,
 				7CA4815A19A2F6A60030B30D /* HttpRequest.swift */,
 				7CA4814A19A2EED00030B30D /* HttpParser.swift */,
 				7CA4814B19A2EED00030B30D /* HttpResponse.swift */,
+				7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */,
 				7CA4814C19A2EED00030B30D /* HttpServer.swift */,
 				7CA4814D19A2EED00030B30D /* Socket.swift */,
+				7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -233,7 +253,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C6A510E1A149859004924B5 /* ActiveRecord.swift in Sources */,
 				7CA4815019A2EED00030B30D /* HttpResponse.swift in Sources */,
+				7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */,
+				7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */,
 				7C839B7619422CFF003A6950 /* ViewController.swift in Sources */,
 				7CA4815419A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */,
@@ -248,10 +271,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CA4815119A2EED00030B30D /* HttpResponse.swift in Sources */,
+				7CB102DE1A1680EA00CBA3B4 /* DemoServer.swift in Sources */,
 				7CA4814F19A2EED00030B30D /* HttpParser.swift in Sources */,
 				7CA4815519A2EED00030B30D /* Socket.swift in Sources */,
+				7C6A510F1A149859004924B5 /* ActiveRecord.swift in Sources */,
 				7CA4815319A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
+				7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,7 +332,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				METAL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
