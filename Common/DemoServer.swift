@@ -45,6 +45,36 @@ func demoServer(publicDir: String?) -> HttpServer {
             "<img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br>" +
             "</center></body></html>"))
     }
+    server["/login"] = { request in
+        println(">> request method:\(request.method.uppercaseString)")
+        var method = request.method.uppercaseString
+        if method == "GET" {
+            if let rootDir = publicDir{
+                if let html = String(contentsOfFile:"\(rootDir)/login.html", encoding: NSUTF8StringEncoding, error: nil){
+                    return .OK(.RAW(html))
+                }else{
+                    return .NotFound
+                }
+            }
+        }else if method == "POST"{
+            println(">> post data: \(NSString(data:request.body!,encoding:NSUTF8StringEncoding))")
+            var html = "<html><body>"
+            let body = NSString(data: request.body!, encoding: NSUTF8StringEncoding)
+            if let parameters = body?.componentsSeparatedByString("&"){
+                if let email = parameters[0] as? String{
+                    html += "\(email)<br>"
+                }
+                if let password = parameters[1] as? String{
+                    html += "\(password)"
+                }
+            }
+            html += "</body></html>"
+            return .OK(.RAW(html))
+            //return .MovedPermanently("http://github.com")
+        }
+        
+        return .NotFound
+    }
     server["/"] = { request in
         var listPage = "<html><body>Available services:<br><ul>"
         for item in server.routes() {
