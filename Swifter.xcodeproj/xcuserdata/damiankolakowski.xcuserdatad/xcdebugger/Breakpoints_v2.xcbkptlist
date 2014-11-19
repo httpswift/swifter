@@ -358,57 +358,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Common/ActiveRecord/ActiveRecord.swift"
-            timestampString = "437582232.832834"
+            timestampString = "437737235.228186"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "15"
-            endingLineNumber = "15"
-            landmarkName = "SwifterActiveRecord"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.SwifterActiveRecord.deinit"
-                  moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/ActiveRecord.swift"
-                  timestampString = "437665731.59783"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "15"
-                  endingLineNumber = "15"
-                  offsetFromSymbolStart = "8">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.SwifterActiveRecord.__deallocating_deinit"
-                  moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/ActiveRecord.swift"
-                  timestampString = "437665731.598002"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "15"
-                  endingLineNumber = "15"
-                  offsetFromSymbolStart = "12">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/ActiveRecord.swift"
-            timestampString = "437665027.659897"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "46"
-            endingLineNumber = "46">
+            startingLineNumber = "45"
+            endingLineNumber = "45"
+            landmarkName = "commit(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

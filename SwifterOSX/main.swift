@@ -12,6 +12,8 @@ let server = demoServer("~/")
 
 var error: NSError?
 
+let person = Person()
+
 if !server.start(error: &error) {
     println("Server start error: \(error)")
 } else {

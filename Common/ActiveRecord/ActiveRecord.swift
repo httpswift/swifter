@@ -12,41 +12,43 @@ struct SwifterActiveRecordField {
     let name: String?
 }
 
-class SwifterActiveRecord /* Probbaly we will use generics and not follow Ruby's approach based on subclassing. Methods like find() and get() need to return a correct types. */ {
+class SwifterActiveRecord<T: NSObject> {
     
     init() {
-        let properties = listProperties()
-        // TODO migrate properties scheme to DB scheme.
+        let properties = scheme()
     }
     
-    private func listProperties() -> [SwifterActiveRecordField]? {
-        // Extract public properties so we will know
+    private func scheme() -> [SwifterActiveRecordField] {
         var results = [SwifterActiveRecordField]()
         let classInfoDump = reflect(self)
         for var index = 1; index < classInfoDump.count; ++index {
             let field = classInfoDump[index]
             results.append(SwifterActiveRecordField(name: field.0))
-            print("\(field.1.valueType)")
         }
         return results
     }
     
-    //func findBy(
+    class func find(T -> Bool) -> [T] {
+        return []
+    }
     
-    func all() -> Array<String> {
+    class func all() -> Array<String> {
         return []
     }
     
     func commit(error: NSErrorPointer) -> Bool {
-        //TODO commit changes to DB.
         return false
     }
 }
 
 // An example model class.
 
-class Person: SwifterActiveRecord {
-    var firstName: String?
-    var lastName: String?
-    var age: UInt?
+class Person: NSObject {
+    var firstName: String? = "firstName"
+    var lastName: String? = "lastName"
+    var age: UInt? = 1
 }
+
+let peopleWithNameFoo = SwifterActiveRecord<Person>.find({ $0.firstName == "Foo" })
+
+
