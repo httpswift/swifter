@@ -22,11 +22,11 @@ func demoServer(publicDir: String?) -> HttpServer {
         return .OK(.RAW(response))
     }
     server["/params/(.+)/(.+)"] = { request in
-        var capturedGroupsIngo = ""
+        var capturedGroups = ""
         for (index, group) in enumerate(request.capturedUrlGroups) {
-            capturedGroupsIngo += "Expression group \(index) : \(group)<br>"
+            capturedGroups += "Expression group \(index) : \(group)<br>"
         }
-        let response = "<html><body>Url: \(request.url)<br>Method: \(request.method)<br>\(capturedGroupsIngo)</body></html>"
+        let response = "<html><body>Url: \(request.url)<br>Method: \(request.method)<br>\(capturedGroups)</body></html>"
         return .OK(.RAW(response))
     }
     server["/json"] = { request in
