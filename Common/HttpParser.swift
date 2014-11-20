@@ -23,20 +23,49 @@ class HttpParser {
             }
             let method = statusTokens[0]
             let path = statusTokens[1]
+            let urlParams = extractUrlParams(path)
+            // TODO extract query parameters
             if let headers = nextHeaders(socket, error: error) {
-                var requestBody = ""
-                while let line = nextLine(socket, error: error) {
-                    if line.isEmpty {
-                        break
-                    }
-                    requestBody += line
+                // TODO detect content-type and handle:
+                // 'application/x-www-form-urlencoded' -> Dictionary
+                // 'multipart' -> Dictionary
+                if let contentSize = headers["content-length"]?.toInt() {
+                    let body = nextBody(socket, size: contentSize, error: error)
+                    return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [])
                 }
-                println(requestBody)
-                let body = requestBody.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-                return HttpRequest(url: path, method: method, headers: headers, body: body, capturedUrlGroups: [])
+                return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [])
             }
         }
         return nil
+    }
+    
+    private func extractUrlParams(url: String) -> [(String, String)] {
+        var result = [(String, String)]()
+        let tokens = url.componentsSeparatedByString("?")
+        if tokens.count >= 2 {
+            for pair in tokens[1].componentsSeparatedByString("&") {
+                let keyAndValue = pair.componentsSeparatedByString("=")
+                if keyAndValue.count >= 2 {
+                    result.append((keyAndValue[0], keyAndValue[1]))
+                }
+            }
+        }
+        return result
+    }
+    
+    private func nextBody(socket: CInt, size: Int , error:NSErrorPointer) -> String? {
+        var body = ""
+        var counter = 0;
+        while ( counter < size ) {
+            let c = nextUInt8(socket)
+            if ( c < 0 ) {
+                if error != nil { error.memory = HttpParser.err("IO error while reading body") }
+                return nil
+            }
+            body.append(UnicodeScalar(c))
+            counter++;
+        }
+        return body
     }
     
     private func nextHeaders(socket: CInt, error:NSErrorPointer) -> Dictionary<String, String>? {
@@ -51,7 +80,7 @@ class HttpParser {
                 // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."
                 // We can keep lower case version.
                 let headerName = headerTokens[0].lowercaseString
-                let headerValue = headerTokens[1]
+                let headerValue = headerTokens[1].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                 if ( !headerName.isEmpty && !headerValue.isEmpty ) {
                     headers.updateValue(headerValue, forKey: headerName)
                 }
@@ -60,23 +89,11 @@ class HttpParser {
         return nil
     }
 
-    var recvBuffer = [UInt8](count: 1024, repeatedValue: 0)
-    var recvBufferSize: Int = 0
-    var recvBufferOffset: Int = 0
-    
     private func nextUInt8(socket: CInt) -> Int {
-        if ( recvBufferSize == 0 || recvBufferOffset == recvBuffer.count ) {
-            recvBufferOffset = 0
-            recvBufferSize = recv(socket, &recvBuffer, UInt(recvBuffer.count), 0)
-            if ( recvBufferSize <= 0 ) { return recvBufferSize }
-            if recvBufferSize < recvBuffer.count
-            {
-                recvBuffer[recvBufferSize] = 0
-            }
-        }
-        let returnValue = recvBuffer[recvBufferOffset]
-        recvBufferOffset++
-        return Int(returnValue)
+        var buffer = [UInt8](count: 1, repeatedValue: 0);
+        let next = recv(socket, &buffer, UInt(buffer.count), 0)
+        if next <= 0 { return next }
+        return Int(buffer[0])
     }
     
     private func nextLine(socket: CInt, error:NSErrorPointer) -> String? {

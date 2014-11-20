@@ -8,10 +8,11 @@
 
 import Foundation
 
-struct HttpRequest {
+struct HttpRequest {    
     let url: String
+    let urlParams: [(String, String)] // http://stackoverflow.com/questions/1746507/authoritative-position-of-duplicate-http-get-query-keys
     let method: String
     let headers: Dictionary<String, String>
-	let body: NSData?
+	let body: String?
     var capturedUrlGroups: [String]
 }

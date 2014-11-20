@@ -8,11 +8,9 @@
 
 import Foundation
 
-let server = demoServer("~/")
+let server = demoServer(NSBundle.mainBundle().resourcePath)
 
 var error: NSError?
-
-let person = Person()
 
 if !server.start(error: &error) {
     println("Server start error: \(error)")

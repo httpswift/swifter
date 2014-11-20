@@ -14,6 +14,7 @@ enum HttpResponseBody {
     case XML(AnyObject)
     case PLIST(AnyObject)
     case RAW(String)
+    case HTML(String)
     
     func data() -> String? {
         switch self {
@@ -40,6 +41,8 @@ enum HttpResponseBody {
             return "Invalid object to serialise."
         case .RAW(let data):
             return data
+        case .HTML(let body):
+            return "<html><body>\(body)</body></html>"
         }
     }
 }

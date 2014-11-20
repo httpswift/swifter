@@ -29,33 +29,7 @@ class HttpServer
             }
         }
     }
-    
-//    Uncommenting this will cause following compilation errors:
-//
-//      Cannot invoke 'subscript' with an argument list of type '($T5, Builtin.RawPointer)'
-//      Cannot invoke 'subscript' with an argument list of type '($T5, Builtin.RawPointer)'
-//
-//    Swift stopped to support subscripts with multiple outputs.
-//
-//    subscript (asdasd: String) -> String {
-//        get {
-//            return asdasd
-//        }
-//        set ( directoryPath ) {
-//            if let regex = NSRegularExpression(pattern: asdasd, options: expressionOptions, error: nil) {
-//                handlers.append(expression: regex, handler: { request in
-//                    let result = regex.firstMatchInString(request.url, options: self.matchingOptions, range: NSMakeRange(0, request.url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding)))
-//                    let nsPath: NSString = request.url
-//                    let filesPath = directoryPath.stringByExpandingTildeInPath.stringByAppendingPathComponent(nsPath.substringWithRange(result!.rangeAtIndex(1)))
-//                    if let fileBody = String(contentsOfFile: filesPath, encoding: NSUTF8StringEncoding, error: nil) {
-//                        return HttpResponse.OK(.RAW(fileBody))
-//                    }
-//                    return HttpResponse.NotFound
-//                })
-//            }
-//        }
-//    }
-    
+        
     func routes() -> Array<String> {
         var results = [String]()
         for (expression,_) in handlers { results.append(expression.pattern) }
@@ -74,7 +48,7 @@ class HttpServer
                             let keepAlive = parser.supportsKeepAlive(request.headers)
                             if let (expression, handler) = self.findHandler(request.url) {
                                 let capturedUrlsGroups = self.captureExpressionGroups(expression, value: request.url)
-                                let updatedRequest = HttpRequest(url: request.url, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups)
+                                let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups)
                                 HttpServer.writeResponse(socket, response: handler(updatedRequest), keepAlive: keepAlive)
                             } else {
                                 HttpServer.writeResponse(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)
