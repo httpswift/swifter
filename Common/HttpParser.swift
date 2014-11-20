@@ -40,17 +40,13 @@ class HttpParser {
     }
     
     private func extractUrlParams(url: String) -> [(String, String)] {
-        var result = [(String, String)]()
-        let tokens = url.componentsSeparatedByString("?")
-        if tokens.count >= 2 {
-            for pair in tokens[1].componentsSeparatedByString("&") {
-                let keyAndValue = pair.componentsSeparatedByString("=")
-                if keyAndValue.count >= 2 {
-                    result.append((keyAndValue[0], keyAndValue[1]))
-                }
-            }
+        if let query = split(url, { $0 == "?" }).last {
+            return map(split(query, { $0 == "&" }), { (param:String) -> (String, String) in
+                let tokens = split(param, { $0 == "=" })
+                return tokens.count >= 2 ? (tokens.first!, tokens.last!) : ("", "")
+            })
         }
-        return result
+        return []
     }
     
     private func nextBody(socket: CInt, size: Int , error:NSErrorPointer) -> String? {
