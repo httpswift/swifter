@@ -7,18 +7,21 @@ How to start ?
 ```swift
 let server = HttpServer()
 server["/hello"] = { .OK(.HTML("You asked for " + $0.url)) }
+server.start()
 ```
 How to share files ? 
 ```swift
-if let publicDir = publicDir {
-    server["/home/(.+)"] = HttpHandlers.directory("~/")
-}
+let server = HttpServer()
+server["/home/(.+)"] = HttpHandlers.directory("~/")
+server.start()
 ```
 How to redirect ?
 ```swift
+let server = HttpServer()
 server["/redirect"] = { request in
   return .MovedPermanently("http://www.google.com")
 }
+server.start()
 ```
 
 
