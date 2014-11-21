@@ -14,8 +14,8 @@ class HttpHandlers {
         return { request in
             if let localPath = request.capturedUrlGroups.first {
                 let filesPath = dir.stringByExpandingTildeInPath.stringByAppendingPathComponent(localPath)
-                if let fileBody = String(contentsOfFile: filesPath, encoding: NSASCIIStringEncoding, error: nil) {
-                    return HttpResponse.OK(.RAW(fileBody))
+                if let fileBody = NSData(contentsOfFile: filesPath) {
+                    return HttpResponse.RAW(200, fileBody)
                 }
             }
             return HttpResponse.NotFound

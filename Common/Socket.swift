@@ -50,20 +50,31 @@ struct Socket {
         return s
     }
     
-    static func writeStringUTF8(socket: CInt, string: String, error:NSErrorPointer = nil) -> Bool {
-        var sent = 0;
-        if let nsdata = string.dataUsingEncoding(NSUTF8StringEncoding)
-		{
-			let unsafePointer = UnsafePointer<UInt8>(nsdata.bytes)
-			while ( sent < nsdata.length ) {
-				let s = write(socket, unsafePointer + sent, UInt(nsdata.length - sent))
-				if ( s <= 0 ) {
-					if error != nil { error.memory = socketLastError("write(\(string)) failed.") }
-					return false
-				}
-				sent += s
-			}
-		}
+    static func writeStringUTF8(socket: CInt, string: String, error: NSErrorPointer = nil) -> Bool {
+        if let nsdata = string.dataUsingEncoding(NSUTF8StringEncoding) {
+            writeData(socket, data: nsdata, error: error)
+        }
+        return true
+    }
+    
+    static func writeStringASCII(socket: CInt, string: String, error: NSErrorPointer = nil) -> Bool {
+        if let nsdata = string.dataUsingEncoding(NSASCIIStringEncoding) {
+            writeData(socket, data: nsdata, error: error)
+        }
+        return true
+    }
+    
+    static func writeData(socket: CInt, data: NSData, error:NSErrorPointer = nil) -> Bool {
+        var sent = 0
+        let unsafePointer = UnsafePointer<UInt8>(data.bytes)
+        while ( sent < data.length ) {
+            let s = write(socket, unsafePointer + sent, UInt(data.length - sent))
+            if ( s <= 0 ) {
+                if error != nil { error.memory = socketLastError("write(...) failed.") }
+                return false
+            }
+            sent += s
+        }
         return true
     }
     

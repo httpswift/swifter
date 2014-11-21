@@ -10,6 +10,7 @@
 		7C6A510E1A149859004924B5 /* ActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6A510D1A149859004924B5 /* ActiveRecord.swift */; };
 		7C6A510F1A149859004924B5 /* ActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6A510D1A149859004924B5 /* ActiveRecord.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
+		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7319422CFF003A6950 /* AppDelegate.swift */; };
 		7C839B7619422CFF003A6950 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7519422CFF003A6950 /* ViewController.swift */; };
 		7C839B7919422CFF003A6950 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C839B7719422CFF003A6950 /* Main.storyboard */; };
@@ -42,6 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */,
 				7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */,
 				7CA4815919A2EF560030B30D /* test.json in CopyFiles */,
 			);

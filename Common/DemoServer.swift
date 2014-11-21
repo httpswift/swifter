@@ -41,7 +41,7 @@ func demoServer(publicDir: String?) -> HttpServer {
     server["/long"] = { request in
         var longResponse = ""
         for k in 0..<1000 { longResponse += "(\(k)),->" }
-        return .OK(.RAW(longResponse))
+        return .OK(.HTML(longResponse))
     }
     server["/demo"] = { request in
         return .OK(.HTML("<center><h2>Hello Swift</h2>" +
@@ -52,8 +52,8 @@ func demoServer(publicDir: String?) -> HttpServer {
         switch request.method.uppercaseString {
             case "GET":
                 if let rootDir = publicDir {
-                    if let html = String(contentsOfFile:"\(rootDir)/login.html", encoding: NSUTF8StringEncoding, error: nil){
-                        return .OK(.RAW(html))
+                    if let html = NSData(contentsOfFile:"\(rootDir)/login.html") {
+                        return .RAW(200, html)
                     } else {
                         return .NotFound
                     }

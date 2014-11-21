@@ -84,24 +84,20 @@ class HttpServer
     
     class func writeResponse(socket: CInt, response: HttpResponse, keepAlive: Bool) {
         Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
-        let messageBody = response.body()
-        if let body = messageBody {
-            if let nsdata = body.dataUsingEncoding(NSUTF8StringEncoding) {
-                Socket.writeStringUTF8(socket, string: "Content-Length: \(nsdata.length)\r\n")
-            }
+        if let body = response.body() {
+            Socket.writeStringASCII(socket, string: "Content-Length: \(body.length)\r\n")
         } else {
-            Socket.writeStringUTF8(socket, string: "Content-Length: 0\r\n")
+            Socket.writeStringASCII(socket, string: "Content-Length: 0\r\n")
         }
         if keepAlive {
-            Socket.writeStringUTF8(socket, string: "Connection: keep-alive\r\n")
+            Socket.writeStringASCII(socket, string: "Connection: keep-alive\r\n")
         }
-        //Socket.writeStringUTF8(socket, string: "Content-Type: text/html; charset=UTF-8\r\n")
         for (name, value) in response.headers() {
-            Socket.writeStringUTF8(socket, string: "\(name): \(value)\r\n")
+            Socket.writeStringASCII(socket, string: "\(name): \(value)\r\n")
         }
-        Socket.writeStringUTF8(socket, string: "\r\n")
-        if let body = messageBody {
-            Socket.writeStringUTF8(socket, string: body)
+        Socket.writeStringASCII(socket, string: "\r\n")
+        if let body = response.body() {
+            Socket.writeData(socket, data: body)
         }
     }
     
