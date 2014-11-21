@@ -22,7 +22,7 @@ class HttpServer
             return nil
         }
         set ( newValue ) {
-            if let regex: NSRegularExpression = NSRegularExpression(pattern: path, options: expressionOptions, error: nil) {
+            if let regex = NSRegularExpression(pattern: path, options: expressionOptions, error: nil) {
                 if let newHandler = newValue {
                     handlers.append(expression: regex, handler: newHandler)
                 }
@@ -30,13 +30,9 @@ class HttpServer
         }
     }
         
-    func routes() -> Array<String> {
-        var results = [String]()
-        for (expression,_) in handlers { results.append(expression.pattern) }
-        return results
-    }
+    func routes() -> [String] { return map(handlers, { $0.0.pattern }) }
     
-    func start(listenPort: in_port_t = 8080, error:NSErrorPointer = nil) -> Bool {
+    func start(listenPort: in_port_t = 8080, error: NSErrorPointer = nil) -> Bool {
         releaseAcceptSocket()
         if let socket = Socket.tcpForListen(port: listenPort, error: error) {
             acceptSocket = socket
@@ -56,30 +52,36 @@ class HttpServer
                             if !keepAlive { break }
                         }
                         Socket.release(socket)
-                    });
+                    })
                 }
                 self.releaseAcceptSocket()
-            });
+            })
             return true
         }
         return false
     }
     
     func findHandler(url:String) -> (NSRegularExpression, Handler)? {
-        return filter(self.handlers, { (expression: NSRegularExpression, handler) -> Bool in
-            return expression.numberOfMatchesInString(url, options: self.matchingOptions, range: NSMakeRange(0, url.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))) > 0
+        return filter(self.handlers, {
+            $0.0.numberOfMatchesInString(url, options: self.matchingOptions, range: HttpServer.asciiRange(url)) > 0
         }).first
     }
     
     func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {
         var capturedGroups = [String]()
-        if let result = expression.firstMatchInString(value, options: matchingOptions, range: NSMakeRange(0, value.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))) {
+        if let result = expression.firstMatchInString(value, options: matchingOptions, range: HttpServer.asciiRange(value)) {
             let nsValue: NSString = value
             for var i = 1 ; i < result.numberOfRanges ; ++i {
-                capturedGroups.append(nsValue.substringWithRange(result.rangeAtIndex(i)))
+                if let group = nsValue.substringWithRange(result.rangeAtIndex(i)).stringByRemovingPercentEncoding {
+                    capturedGroups.append(group)
+                }
             }
         }
         return capturedGroups
+    }
+    
+    class func asciiRange(value: String) -> NSRange {
+        return NSMakeRange(0, value.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
     }
     
     class func writeResponse(socket: CInt, response: HttpResponse, keepAlive: Bool) {

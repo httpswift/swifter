@@ -43,7 +43,12 @@ class HttpParser {
         if let query = split(url, { $0 == "?" }).last {
             return map(split(query, { $0 == "&" }), { (param:String) -> (String, String) in
                 let tokens = split(param, { $0 == "=" })
-                return tokens.count >= 2 ? (tokens.first!, tokens.last!) : ("", "")
+                if tokens.count >= 2 {
+                    let key = tokens[0].stringByRemovingPercentEncoding
+                    let value = tokens[1].stringByRemovingPercentEncoding
+                    if key != nil && value != nil { return (key!, value!) }
+                }
+                return ("","")
             })
         }
         return []

@@ -85,11 +85,14 @@ enum HttpResponse {
         }
     }
     
-    func headers() -> Dictionary<String, String> {
+    func headers() -> [String: String] {
+        var headers = [String:String]()
+        headers["Server"] = "Swifter"
         switch self {
-        case .MovedPermanently(let location) : return [ "Location" : location ]
-        default: return Dictionary()
+        case .MovedPermanently(let location) : headers["Location"] = location
+        default:[];
         }
+        return headers
     }
     
     func body() -> NSData? {

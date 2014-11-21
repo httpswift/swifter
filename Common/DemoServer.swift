@@ -13,6 +13,7 @@ func demoServer(publicDir: String?) -> HttpServer {
     if let publicDir = publicDir {
         server["/resources/(.+)"] = HttpHandlers.directory(publicDir)
     }
+    server["/files(.+)"] = HttpHandlers.directoryBrowser("~/")
     server["/magic"] = { .OK(.HTML("You asked for " + $0.url)) }
     server["/test"] = { request in
         var headersInfo = ""
