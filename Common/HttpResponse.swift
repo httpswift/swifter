@@ -1,8 +1,6 @@
 //
 //  HttpResponse.swift
 //  Swifter
-//
-//  Created by Damian Kolakowski on 18/06/14.
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 
@@ -90,7 +88,7 @@ enum HttpResponse {
         headers["Server"] = "Swifter"
         switch self {
         case .MovedPermanently(let location) : headers["Location"] = location
-        default:[];
+        default:[]
         }
         return headers
     }

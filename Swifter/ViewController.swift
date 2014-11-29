@@ -1,8 +1,6 @@
 //
 //  ViewController.swift
 //  Swifter
-//
-//  Created by Damian Kolakowski on 06/06/14.
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 

@@ -1,8 +1,6 @@
 //
 //  ActiveRecord.swift
 //  Swifter
-//
-//  Created by Damian Kolakowski on 13/11/14.
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 
@@ -41,14 +39,5 @@ class SwifterActiveRecord<T: NSObject> {
     }
 }
 
-// An example model class.
-
-class Person: NSObject {
-    var firstName: String? = "firstName"
-    var lastName: String? = "lastName"
-    var age: UInt? = 1
-}
-
-let peopleWithNameFoo = SwifterActiveRecord<Person>.find({ $0.firstName == "Foo" })
 
 

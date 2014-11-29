@@ -1,12 +1,14 @@
 //
 //  main.swift
 //  SwifterOSX
-//
-//  Created by Damian Kolakowski on 19/08/14.
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
+
+let DB = SQLiteActiveRecordProxy(name: "sample.db")
+
+let scheme = DB.scheme()
 
 let server = demoServer(NSBundle.mainBundle().resourcePath)
 

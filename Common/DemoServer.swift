@@ -1,8 +1,6 @@
 //
 //  DemoServer.swift
 //  Swifter
-//
-//  Created by Damian Kolakowski on 14/11/14.
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 

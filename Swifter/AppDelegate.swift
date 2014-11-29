@@ -1,8 +1,6 @@
 //
 //  AppDelegate.swift
 //  TestSwift
-//
-//  Created by Damian Kolakowski on 05/06/14.
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 

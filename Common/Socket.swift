@@ -1,7 +1,6 @@
 //
 //  Socket.swift
-//
-//  Created by Damian Kolakowski on 05/06/14.
+//  Swifter
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 
