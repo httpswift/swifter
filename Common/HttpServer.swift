@@ -1,6 +1,6 @@
 //
 //  HttpServer.swift
-//  Swifter
+//
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 
@@ -10,7 +10,7 @@ class HttpServer
 {
     typealias Handler = HttpRequest -> HttpResponse
     
-    var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
+    var handlers: [(method: String, expression: NSRegularExpression, handler: Handler)] = []
     var acceptSocket: CInt = -1
     
     let matchingOptions = NSMatchingOptions(0)
@@ -23,13 +23,26 @@ class HttpServer
         set ( newValue ) {
             if let regex = NSRegularExpression(pattern: path, options: expressionOptions, error: nil) {
                 if let newHandler = newValue {
-                    handlers.append(expression: regex, handler: newHandler)
+                    handlers.append(method:"GET",expression: regex, handler: newHandler)
                 }
             }
         }
     }
-        
-    func routes() -> [String] { return map(handlers, { $0.0.pattern }) }
+    
+    subscript (method: String, path: String) -> Handler? {
+        get {
+            return nil
+        }
+        set ( newValue ) {
+            if let regex = NSRegularExpression(pattern: path, options: expressionOptions, error: nil) {
+                if let newHandler = newValue {
+                    handlers.append(method: method, expression: regex, handler: newHandler)
+                }
+            }
+        }
+    }
+    
+    func routes() -> [String] { return map(handlers, { $0.1.pattern }) }
     
     func start(listenPort: in_port_t = 8080, error: NSErrorPointer = nil) -> Bool {
         releaseAcceptSocket()
@@ -41,7 +54,7 @@ class HttpServer
                         let parser = HttpParser()
                         while let request = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(request.headers)
-                            if let (expression, handler) = self.findHandler(request.url) {
+                            if let (method, expression, handler) = self.findHandler(request.method,url:request.url) {
                                 let capturedUrlsGroups = self.captureExpressionGroups(expression, value: request.url)
                                 let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups)
                                 HttpServer.writeResponse(socket, response: handler(updatedRequest), keepAlive: keepAlive)
@@ -60,9 +73,9 @@ class HttpServer
         return false
     }
     
-    func findHandler(url:String) -> (NSRegularExpression, Handler)? {
-        return filter(self.handlers, {
-            $0.0.numberOfMatchesInString(url, options: self.matchingOptions, range: HttpServer.asciiRange(url)) > 0
+    func findHandler(method:String,url:String) -> (String, NSRegularExpression, Handler)? {
+        return filter(filter(sorted(self.handlers,{ countElements($0.1.pattern) > countElements($1.1.pattern)}),{$0.0 == method}), {
+            $0.1.numberOfMatchesInString(url, options: self.matchingOptions, range: HttpServer.asciiRange(url)) > 0
         }).first
     }
     
