@@ -6,9 +6,11 @@
 
 import Foundation
 
-let DB = SQLiteActiveRecordProxy(name: "sample.db")
+let DB = SwifterSQLiteDatabaseProxy(name: "sample.db")
 
-let scheme = DB.scheme()
+let scheme = DB.scheme(nil)
+
+println(scheme)
 
 let server = demoServer(NSBundle.mainBundle().resourcePath)
 

@@ -13,10 +13,10 @@ struct SwifterActiveRecordField {
 class SwifterActiveRecord<T: NSObject> {
     
     init() {
-        let properties = scheme()
+
     }
     
-    private func scheme() -> [SwifterActiveRecordField] {
+    private func scheme(error: NSErrorPointer?) -> [SwifterActiveRecordField] {
         var results = [SwifterActiveRecordField]()
         let classInfoDump = reflect(self)
         for var index = 1; index < classInfoDump.count; ++index {

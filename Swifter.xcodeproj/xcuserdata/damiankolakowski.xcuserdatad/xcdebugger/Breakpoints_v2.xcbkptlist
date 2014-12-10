@@ -585,8 +585,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "86"
             endingLineNumber = "86"
-            landmarkName = "HttpServer"
-            landmarkType = "3">
+            landmarkName = "writeResponse(_:response:keepAlive:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -721,7 +721,7 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/ActiveRecordProxy.swift"
+            filePath = "Common/ActiveRecord/SwifterDatabaseProxy.swift"
             timestampString = "438537864.654188"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
@@ -732,15 +732,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SwifterOSX/main.swift"
-            timestampString = "438945000.908855"
+            timestampString = "439934407.772606"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13"
-            endingLineNumber = "13">
+            startingLineNumber = "15"
+            endingLineNumber = "15">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -749,13 +749,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/SQLiteProxy.swift"
-            timestampString = "438981295.838168"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439934881.370643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "scheme()"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "scheme(_:)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -795,13 +795,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/SQLiteProxy.swift"
-            timestampString = "438981295.838168"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439934881.370643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "scheme()"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "scheme(_:)"
             landmarkType = "5">
             <Locations>
                <Location
@@ -855,42 +855,120 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/SQLiteProxy.swift"
-            timestampString = "438981295.838168"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439934881.370643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "31"
-            endingLineNumber = "31"
-            landmarkName = "scheme()"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "scheme(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439934083.043208"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "103"
+            endingLineNumber = "103"
+            landmarkName = "SwifterSQLiteDatabaseProxy"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439934881.370643"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
+            landmarkName = "scheme(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439931696.615275"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "71"
+            endingLineNumber = "71"
+            landmarkName = "generate()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439931696.615275"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "init(database:statment:error:)"
             landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.SQLiteActiveRecordProxy.scheme (SwifterOSX.SQLiteActiveRecordProxy)() -&gt; Swift.Dictionary&lt;Swift.String, Swift.Dictionary&lt;Swift.String, SwifterOSX.ActiveRecordType&gt;&gt;"
+                  symbolName = "SwifterOSX.SQLiteSequence.init (SwifterOSX.SQLiteSequence.Type)(database : Swift.COpaquePointer, statment : Swift.String, error : Swift.Optional&lt;Swift.AutoreleasingUnsafeMutablePointer&lt;Swift.Optional&lt;ObjectiveC.NSError&gt;&gt;&gt;) -&gt; Swift.Optional&lt;SwifterOSX.SQLiteSequence&gt;"
                   moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SQLiteProxy.swift"
-                  timestampString = "438979660.68089"
+                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+                  timestampString = "439934307.229626"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "39"
-                  endingLineNumber = "39"
-                  offsetFromSymbolStart = "110">
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "114">
                </Location>
                <Location
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.SQLiteActiveRecordProxy.(scheme (SwifterOSX.SQLiteActiveRecordProxy) -&gt; () -&gt; Swift.Dictionary&lt;Swift.String, Swift.Dictionary&lt;Swift.String, SwifterOSX.ActiveRecordType&gt;&gt;).(closure #1)"
+                  symbolName = "SwifterOSX.SQLiteSequence.(init (SwifterOSX.SQLiteSequence.Type) -&gt; (database : Swift.COpaquePointer, statment : Swift.String, error : Swift.Optional&lt;Swift.AutoreleasingUnsafeMutablePointer&lt;Swift.Optional&lt;ObjectiveC.NSError&gt;&gt;&gt;) -&gt; Swift.Optional&lt;SwifterOSX.SQLiteSequence&gt;).(closure #1)"
                   moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SQLiteProxy.swift"
-                  timestampString = "438979660.68104"
+                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+                  timestampString = "439934307.229793"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "39"
-                  endingLineNumber = "39"
-                  offsetFromSymbolStart = "8">
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "23">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "reabstraction thunk helper from @callee_owned (@unowned Swift.UnsafePointer&lt;Swift.Int8&gt;) -&gt; (@unowned Swift.Int32) to @callee_owned (@unowned Swift.UnsafePointer&lt;Swift.Int8&gt;) -&gt; (@out Swift.Int32)"
+                  moduleName = "SwifterOSX"
+                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+                  timestampString = "439934307.229924"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "59"
+                  endingLineNumber = "59"
+                  offsetFromSymbolStart = "11">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -901,13 +979,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/SQLiteProxy.swift"
-            timestampString = "438979667.950649"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439931696.615275"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18"
-            landmarkName = "execute(_:iteratorCallback:)"
+            startingLineNumber = "46"
+            endingLineNumber = "46"
+            landmarkName = "next()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -917,13 +995,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/SQLiteProxy.swift"
-            timestampString = "438981308.004935"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439934881.370643"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "30"
-            endingLineNumber = "30"
-            landmarkName = "scheme()"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "scheme(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -933,44 +1011,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Common/ActiveRecord/SQLiteProxy.swift"
-            timestampString = "438981309.211495"
+            filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
+            timestampString = "439934313.6599"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "scheme()"
+            startingLineNumber = "60"
+            endingLineNumber = "60"
+            landmarkName = "init(database:statment:error:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.SQLiteActiveRecordProxy.(scheme (SwifterOSX.SQLiteActiveRecordProxy) -&gt; () -&gt; Swift.Dictionary&lt;Swift.String, Swift.Dictionary&lt;Swift.String, SwifterOSX.ActiveRecordType&gt;&gt;).(closure #1)"
-                  moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SQLiteProxy.swift"
-                  timestampString = "438981445.794237"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "32"
-                  endingLineNumber = "32"
-                  offsetFromSymbolStart = "19">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.SQLiteActiveRecordProxy.(scheme (SwifterOSX.SQLiteActiveRecordProxy) -&gt; () -&gt; Swift.Dictionary&lt;Swift.String, Swift.Dictionary&lt;Swift.String, SwifterOSX.ActiveRecordType&gt;&gt;).(closure #1)"
-                  moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SQLiteProxy.swift"
-                  timestampString = "438981445.794367"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "32"
-                  endingLineNumber = "32"
-                  offsetFromSymbolStart = "25">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
