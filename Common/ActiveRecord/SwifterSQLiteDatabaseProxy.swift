@@ -134,7 +134,7 @@ class SwifterSQLiteDatabaseProxy: SwifterDatabseProxy {
             return scheme
         } else {
             sqlite3_close(database)
-            if let e = error { e.memory = err("Cant' query tables databse: \(tablesQuery)") }
+            if let e = error { e.memory = err("Can't query tables from database: \(tablesQuery)") }
             return nil
         }
     }
