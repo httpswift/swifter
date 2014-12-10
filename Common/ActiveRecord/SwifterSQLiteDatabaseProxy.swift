@@ -8,14 +8,14 @@ import Foundation
 
 class SQLiteSequenceElement {
     
-    let statmentPointer: COpaquePointer
+    let statementPointer: COpaquePointer
     
     init(pointer: COpaquePointer) {
-        self.statmentPointer = pointer
+        self.statementPointer = pointer
     }
     
     func string(column: Int32) -> String {
-        if let value = String.fromCString(UnsafePointer<CChar>(sqlite3_column_text(statmentPointer, column))) {
+        if let value = String.fromCString(UnsafePointer<CChar>(sqlite3_column_text(statementPointer, column))) {
             return value
         }
         /// Should never happend :)
@@ -26,39 +26,39 @@ class SQLiteSequenceElement {
     }
     
     func integer(column: Int32) -> Int32 {
-        return sqlite3_column_int(statmentPointer, column)
+        return sqlite3_column_int(statementPointer, column)
     }
     
     func integer(column: Int32) -> Double {
-        return sqlite3_column_double(statmentPointer, column)
+        return sqlite3_column_double(statementPointer, column)
     }
 }
 
 class SQLiteSequenceGenarator: GeneratorType {
     
-    let statmentPointer: COpaquePointer
+    let statementPointer: COpaquePointer
     
     init(pointer: COpaquePointer) {
-        self.statmentPointer = pointer
+        self.statementPointer = pointer
     }
     
     func next() -> SQLiteSequenceElement? {
-        if ( sqlite3_step(statmentPointer) == SQLITE_ROW ) {
-            return SQLiteSequenceElement(pointer: statmentPointer)
+        if ( sqlite3_step(statementPointer) == SQLITE_ROW ) {
+            return SQLiteSequenceElement(pointer: statementPointer)
         }
-        sqlite3_finalize(statmentPointer)
+        sqlite3_finalize(statementPointer)
         return nil
     }
 }
 
 class SQLiteSequence: SequenceType {
     
-    var statmentPointer = COpaquePointer()
+    var statementPointer = COpaquePointer()
     
-    init?(database: COpaquePointer, statment: String, error: NSErrorPointer? = nil) {
-        let result = statment.withCString { sqlite3_prepare(database, $0, Int32(strlen($0)), &self.statmentPointer, nil) };
+    init?(database: COpaquePointer, statement: String, error: NSErrorPointer? = nil) {
+        let result = statement.withCString { sqlite3_prepare(database, $0, Int32(strlen($0)), &self.statementPointer, nil) };
         if result != SQLITE_OK {
-            if let error = error { error.memory = err("Can't prepare statment: \(statment), Error: \(result)") }
+            if let error = error { error.memory = err("Can't prepare statement: \(statement), Error: \(result)") }
             return nil
         }
     }
@@ -68,7 +68,7 @@ class SQLiteSequence: SequenceType {
     }
     
     func generate() -> SQLiteSequenceGenarator {
-        return SQLiteSequenceGenarator(pointer: statmentPointer)
+        return SQLiteSequenceGenarator(pointer: statementPointer)
     }
 }
 
@@ -77,26 +77,26 @@ class SQLiteStatement: StringLiteralConvertible {
     typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
     typealias UnicodeScalarLiteralType = UnicodeScalarType
     
-    let sqlStatment: String
+    let sqlStatement: String
     
     init(value: String) {
-        self.sqlStatment = value
+        self.sqlStatement = value
     }
     
     required init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        self.sqlStatment = value
+        self.sqlStatement = value
     }
     
     required init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-        self.sqlStatment = value
+        self.sqlStatement = value
     }
     
     required init(stringLiteral value: StringLiteralType) {
-        self.sqlStatment = value
+        self.sqlStatement = value
     }
     
     func execute(databse: COpaquePointer, error: NSErrorPointer? = nil) -> SQLiteSequence? {
-        return SQLiteSequence(database: databse, statment: sqlStatment, error: error)
+        return SQLiteSequence(database: databse, statement: sqlStatement, error: error)
     }
 }
 
