@@ -29,7 +29,7 @@ class SQLiteSequenceElement {
         return sqlite3_column_int(statementPointer, column)
     }
     
-    func integer(column: Int32) -> Double {
+    func double(column: Int32) -> Double {
         return sqlite3_column_double(statementPointer, column)
     }
 }
