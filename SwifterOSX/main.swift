@@ -8,13 +8,15 @@ import Foundation
 
 let DB = SwifterSQLiteDatabaseProxy(name: "sample.db")
 
-let scheme = DB.scheme(nil)
+var error: NSError?
+
+let scheme = DB.scheme(&error)
 
 println(scheme)
+println(error)
 
 let server = demoServer(NSBundle.mainBundle().resourcePath)
 
-var error: NSError?
 
 if !server.start(error: &error) {
     println("Server start error: \(error)")

@@ -55,15 +55,15 @@ class SQLiteSequence: SequenceType {
     
     var statementPointer = COpaquePointer()
     
-    init?(database: COpaquePointer, statement: String, error: NSErrorPointer? = nil) {
-        let result = statement.withCString { sqlite3_prepare(database, $0, Int32(strlen($0)), &self.statementPointer, nil) };
+    init?(db: COpaquePointer, sql: String, err: NSErrorPointer? = nil) {
+        let result = sql.withCString { sqlite3_prepare(db, $0, Int32(strlen($0)), &self.statementPointer, nil) };
         if result != SQLITE_OK {
-            if let error = error { error.memory = err("Can't prepare statement: \(statement), Error: \(result)") }
+            if let err = err { err.memory = error("Can't prepare statement: \(sql), Error: \(result)") }
             return nil
         }
     }
     
-    func err(reason: String) -> NSError {
+    func error(reason: String) -> NSError {
         return NSError(domain: "SQLiteSequence", code: 0, userInfo: [NSLocalizedDescriptionKey : reason])
     }
     
@@ -72,74 +72,52 @@ class SQLiteSequence: SequenceType {
     }
 }
 
-class SQLiteStatement: StringLiteralConvertible {
-    
-    typealias ExtendedGraphemeClusterLiteralType = StringLiteralType
-    typealias UnicodeScalarLiteralType = UnicodeScalarType
-    
-    let sqlStatement: String
-    
-    init(value: String) {
-        self.sqlStatement = value
-    }
-    
-    required init(unicodeScalarLiteral value: UnicodeScalarLiteralType) {
-        self.sqlStatement = value
-    }
-    
-    required init(extendedGraphemeClusterLiteral value: ExtendedGraphemeClusterLiteralType) {
-        self.sqlStatement = value
-    }
-    
-    required init(stringLiteral value: StringLiteralType) {
-        self.sqlStatement = value
-    }
-    
-    func execute(databse: COpaquePointer, error: NSErrorPointer? = nil) -> SQLiteSequence? {
-        return SQLiteSequence(database: databse, statement: sqlStatement, error: error)
-    }
-}
-
 class SwifterSQLiteDatabaseProxy: SwifterDatabseProxy {
 
-    let databaseName: String
-    let typesMap = [ "TEXT": SwifterDatabseProxyType.String, "INT": .Integer, "REAL": .Float]
+    let name: String
     
-    init(name: String) {
-        databaseName = name
+    init(name databaseName: String) {
+        name = databaseName
     }
     
     func err(reason: String) -> NSError {
         return NSError(domain: "SwifterSQLiteDatabaseProxy", code: 0, userInfo: [NSLocalizedDescriptionKey : reason])
     }
     
-    func scheme(error: NSErrorPointer?) -> [String: [(String, SwifterDatabseProxyType)]]? {
+    func execute<Result>(name: String, sql: String, err: NSErrorPointer? = nil, f: ((SQLiteSequence) -> Result?)? = nil ) -> Result? {
         var database = COpaquePointer()
-        if ( SQLITE_OK != databaseName.withCString { sqlite3_open($0, &database) } ) {
-            if let e = error { e.memory = err("Cant' open databse: \(databaseName)") }
-            return nil
-        }
-        var scheme = [String: [(String, SwifterDatabseProxyType)]]()
-        let tablesQuery: SQLiteStatement = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-        if let tables = tablesQuery.execute(database, error: error) {
-            for table in map(tables, { $0.string(0) }) {
-                if let columns = SQLiteStatement(value: "PRAGMA table_info('\(table)');").execute(database, error: error) {
-                    scheme[table] = map(columns) {
-                        if let swifterType = self.typesMap[$0.string(2)] { return ($0.string(1), swifterType) }
-                        return ($0.string(1), SwifterDatabseProxyType.Unknown)
-                    }
+        if ( SQLITE_OK == name.withCString { sqlite3_open($0, &database) } ) {
+            if let sequence = SQLiteSequence(db: database, sql: sql, err: err) {
+                var result: Result?
+                if let f = f {
+                    result = f(sequence)
                 }
+                sqlite3_close(database)
+                return result
             }
             sqlite3_close(database)
-            return scheme
-        } else {
-            sqlite3_close(database)
-            if let e = error { e.memory = err("Can't query tables from database: \(tablesQuery)") }
-            return nil
         }
+        return nil
     }
     
-    func createTable(name: String, columns: [String: SwifterDatabseProxyType], error: NSErrorPointer?) -> Bool {
+    func scheme(error: NSErrorPointer?) -> [String: [(String, String)]]? {
+        let tables: [String]? = execute(name, sql: "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;", err: error) { map($0, { $0.string(0) }) }
+        if let tables = tables {
+            var scheme = [String: [(String, String)]]()
+            for table in tables {
+                let columns: [(String, String)]? = execute(name, sql: "PRAGMA table_info('\(table)');", err: error) { map($0, { ($0.string(1), $0.string(2)) } ) }
+                if let columns = columns {
+                    scheme[table] = columns
+                } else {
+                    return nil
+                }
+            }
+            return scheme
+        }
+        return nil
+    }
+    
+    func createTable(name: String, columns: [String: String], error: NSErrorPointer?) -> Bool {
         return false
     }
     

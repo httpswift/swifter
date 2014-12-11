@@ -11,9 +11,9 @@ enum SwifterDatabseProxyType {
 }
 
 protocol SwifterDatabseProxy {
-    func scheme(error: NSErrorPointer?) -> [String: [(String, SwifterDatabseProxyType)]]?;
+    func scheme(error: NSErrorPointer?) -> [String: [(String, String)]]?;
     
-    func createTable(name: String, columns: [String: SwifterDatabseProxyType], error: NSErrorPointer?) -> Bool;
+    func createTable(name: String, columns: [String: String], error: NSErrorPointer?) -> Bool;
     func deleteTable(name: String, error: NSErrorPointer?) -> Bool;
     
     func insertColumn(table: String, column: String, error: NSErrorPointer?) -> Bool;

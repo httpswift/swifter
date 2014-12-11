@@ -8,16 +8,16 @@ import Foundation
 
 class HttpParser {
     
-    class func err(reason:String) -> NSError {
-        return NSError(domain: "HTTP_PARSER", code: 0, userInfo:[NSLocalizedFailureReasonErrorKey : reason])
+    func err(reason: String) -> NSError {
+        return NSError(domain: "HttpParser", code: 0, userInfo: [NSLocalizedDescriptionKey : reason])
     }
-
+    
     func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? {
         if let statusLine = nextLine(socket, error: error) {
             let statusTokens = split(statusLine, { $0 == " " })
             println(statusTokens)
             if ( statusTokens.count < 3 ) {
-                if error != nil { error.memory = HttpParser.err("Invalid status line: \(statusLine)") }
+                if error != nil { error.memory = err("Invalid status line: \(statusLine)") }
                 return nil
             }
             let method = statusTokens[0]
@@ -59,7 +59,7 @@ class HttpParser {
         while ( counter < size ) {
             let c = nextUInt8(socket)
             if ( c < 0 ) {
-                if error != nil { error.memory = HttpParser.err("IO error while reading body") }
+                if error != nil { error.memory = err("IO error while reading body") }
                 return nil
             }
             body.append(UnicodeScalar(c))
@@ -104,7 +104,7 @@ class HttpParser {
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
         } while ( n > 0 && n != 10 /* NL */)
         if ( n == -1 && characters.isEmpty ) {
-            if error != nil { error.memory = Socket.socketLastError("recv(...) failed.") }
+            if error != nil { error.memory = Socket.lastErr("recv(...) failed.") }
             return nil
         }
         return characters

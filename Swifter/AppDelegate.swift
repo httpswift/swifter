@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let server = demoServer(NSBundle.mainBundle().resourcePath)
         self.server = server
         var error: NSError?
-        if server.start(error: &error) {
+        if !server.start(error: &error) {
             println("Server start error: \(error)")
         }
         return true
