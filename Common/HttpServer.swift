@@ -44,9 +44,9 @@ class HttpServer
                             if let (expression, handler) = self.findHandler(request.url) {
                                 let capturedUrlsGroups = self.captureExpressionGroups(expression, value: request.url)
                                 let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups)
-                                HttpServer.writeResponse(socket, response: handler(updatedRequest), keepAlive: keepAlive)
+                                HttpServer.respond(socket, response: handler(updatedRequest), keepAlive: keepAlive)
                             } else {
-                                HttpServer.writeResponse(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)
+                                HttpServer.respond(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)
                             }
                             if !keepAlive { break }
                         }
@@ -83,20 +83,20 @@ class HttpServer
         return NSMakeRange(0, value.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
     }
     
-    class func writeResponse(socket: CInt, response: HttpResponse, keepAlive: Bool) {
-        Socket.writeStringUTF8(socket, string: "HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
+    class func respond(socket: CInt, response: HttpResponse, keepAlive: Bool) {
+        Socket.writeUTF8(socket, string: "HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         if let body = response.body() {
-            Socket.writeStringASCII(socket, string: "Content-Length: \(body.length)\r\n")
+            Socket.writeASCII(socket, string: "Content-Length: \(body.length)\r\n")
         } else {
-            Socket.writeStringASCII(socket, string: "Content-Length: 0\r\n")
+            Socket.writeASCII(socket, string: "Content-Length: 0\r\n")
         }
         if keepAlive {
-            Socket.writeStringASCII(socket, string: "Connection: keep-alive\r\n")
+            Socket.writeASCII(socket, string: "Connection: keep-alive\r\n")
         }
         for (name, value) in response.headers() {
-            Socket.writeStringASCII(socket, string: "\(name): \(value)\r\n")
+            Socket.writeASCII(socket, string: "\(name): \(value)\r\n")
         }
-        Socket.writeStringASCII(socket, string: "\r\n")
+        Socket.writeASCII(socket, string: "\r\n")
         if let body = response.body() {
             Socket.writeData(socket, data: body)
         }

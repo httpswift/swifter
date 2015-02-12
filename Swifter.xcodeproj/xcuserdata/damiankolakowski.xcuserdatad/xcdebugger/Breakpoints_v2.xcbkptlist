@@ -585,7 +585,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "86"
             endingLineNumber = "86"
-            landmarkName = "writeResponse(_:response:keepAlive:)"
+            landmarkName = "respond(_:response:keepAlive:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -601,7 +601,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
             endingLineNumber = "87"
-            landmarkName = "writeResponse(_:response:keepAlive:)"
+            landmarkName = "respond(_:response:keepAlive:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -633,7 +633,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "55"
             endingLineNumber = "55"
-            landmarkName = "writeStringUTF8(_:string:error:)"
+            landmarkName = "writeUTF8(_:string:error:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -847,8 +847,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "79"
             endingLineNumber = "79"
-            landmarkName = "SwifterSQLiteDatabaseProxy"
-            landmarkType = "3">
+            landmarkName = "init(name:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

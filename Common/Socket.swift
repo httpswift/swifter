@@ -49,14 +49,14 @@ struct Socket {
         return s
     }
     
-    static func writeStringUTF8(socket: CInt, string: String, error: NSErrorPointer = nil) -> Bool {
+    static func writeUTF8(socket: CInt, string: String, error: NSErrorPointer = nil) -> Bool {
         if let nsdata = string.dataUsingEncoding(NSUTF8StringEncoding) {
             writeData(socket, data: nsdata, error: error)
         }
         return true
     }
     
-    static func writeStringASCII(socket: CInt, string: String, error: NSErrorPointer = nil) -> Bool {
+    static func writeASCII(socket: CInt, string: String, error: NSErrorPointer = nil) -> Bool {
         if let nsdata = string.dataUsingEncoding(NSASCIIStringEncoding) {
             writeData(socket, data: nsdata, error: error)
         }

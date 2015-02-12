@@ -10,7 +10,11 @@ struct SwifterActiveRecordField {
     let name: String?
 }
 
-class SwifterActiveRecord<T: NSObject> {
+protocol WithInit {
+    init()
+}
+
+class SwifterActiveRecord<T: WithInit> {
     
     init() {
 
@@ -18,7 +22,7 @@ class SwifterActiveRecord<T: NSObject> {
     
     private func scheme(error: NSErrorPointer?) -> [SwifterActiveRecordField] {
         var results = [SwifterActiveRecordField]()
-        let classInfoDump = reflect(self)
+        let classInfoDump = reflect(T())
         for var index = 1; index < classInfoDump.count; ++index {
             let field = classInfoDump[index]
             results.append(SwifterActiveRecordField(name: field.0))
@@ -38,6 +42,5 @@ class SwifterActiveRecord<T: NSObject> {
         return false
     }
 }
-
 
 

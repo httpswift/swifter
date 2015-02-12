@@ -57,7 +57,7 @@ class HttpParser {
         var body = ""
         var counter = 0;
         while ( counter < size ) {
-            let c = nextUInt8(socket)
+            let c = nextInt8(socket)
             if ( c < 0 ) {
                 if error != nil { error.memory = err("IO error while reading body") }
                 return nil
@@ -89,7 +89,7 @@ class HttpParser {
         return nil
     }
 
-    private func nextUInt8(socket: CInt) -> Int {
+    private func nextInt8(socket: CInt) -> Int {
         var buffer = [UInt8](count: 1, repeatedValue: 0);
         let next = recv(socket, &buffer, UInt(buffer.count), 0)
         if next <= 0 { return next }
@@ -100,7 +100,7 @@ class HttpParser {
         var characters: String = ""
         var n = 0
         do {
-            n = nextUInt8(socket)
+            n = nextInt8(socket)
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
         } while ( n > 0 && n != 10 /* NL */)
         if ( n == -1 && characters.isEmpty ) {
