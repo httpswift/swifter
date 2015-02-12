@@ -20,7 +20,9 @@ enum HttpResponseBody {
             if NSJSONSerialization.isValidJSONObject(object) {
                 var serializationError: NSError?
                 if let json = NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted, error: &serializationError) {
-                    return NSString(data: json, encoding: NSUTF8StringEncoding)
+                    if let nsString = NSString(data: json, encoding: NSUTF8StringEncoding) {
+                        return nsString as String
+                    }
                 }
                 return "Serialisation error: \(serializationError)"
             }
@@ -32,7 +34,9 @@ enum HttpResponseBody {
             if NSPropertyListSerialization.propertyList(object, isValidForFormat: format) {
                 var serializationError: NSError?
                 if let plist = NSPropertyListSerialization.dataWithPropertyList(object, format: format, options: 0, error: &serializationError) {
-                    return NSString(data: plist, encoding: NSUTF8StringEncoding)
+                    if let nsString = NSString(data: plist, encoding: NSUTF8StringEncoding)  {
+                        return nsString as String
+                    }
                 }
                 return "Serialisation error: \(serializationError)"
             }

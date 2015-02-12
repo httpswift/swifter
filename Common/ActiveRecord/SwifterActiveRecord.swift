@@ -7,7 +7,7 @@
 import Foundation
 
 struct SwifterActiveRecordField {
-    let name: String?
+    let name: String? = "unknonw"
 }
 
 protocol WithInit {
