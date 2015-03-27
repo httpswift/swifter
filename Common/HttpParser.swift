@@ -20,9 +20,23 @@ class HttpParser {
                 if error != nil { error.memory = err("Invalid status line: \(statusLine)") }
                 return nil
             }
+            var addr = UnsafeMutablePointer<sockaddr_storage>.alloc(1)
+            var len = socklen_t(sizeofValue(addr.memory))
             let method = statusTokens[0]
             let path = statusTokens[1]
             let urlParams = extractUrlParams(path)
+            var host:String = ""
+            if getpeername(socket, UnsafeMutablePointer(addr), &len) != -1 {
+                
+                var hostBuffer = [CChar](count: Int(NI_MAXHOST), repeatedValue: 0)
+                if (getnameinfo(UnsafeMutablePointer(addr), socklen_t(addr.memory.ss_len),
+                    &hostBuffer, socklen_t(hostBuffer.count), nil, 0,
+                    NI_NUMERICHOST) == 0) {
+                        host = String.fromCString(hostBuffer)!
+                        //println("socket \(sockfd) ip \(host)")
+                }
+            }
+            addr.dealloc(1)
             // TODO extract query parameters
             if let headers = nextHeaders(socket, error: error) {
                 // TODO detect content-type and handle:
@@ -30,9 +44,12 @@ class HttpParser {
                 // 'multipart' -> Dictionary
                 if let contentSize = headers["content-length"]?.toInt() {
                     let body = nextBody(socket, size: contentSize, error: error)
-                    return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [])
+                    
+                    return HttpRequest(remoteAddress:host, url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [])
+                    
                 }
-                return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [])
+                return HttpRequest(remoteAddress:host, url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [])
+                
             }
         }
         return nil
