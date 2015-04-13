@@ -35,7 +35,7 @@ struct Socket {
             sin_port: port_htons(port), sin_addr: in_addr(s_addr: inet_addr("0.0.0.0")), sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
         
         var sock_addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-        memcpy(&sock_addr, &addr, UInt(sizeof(sockaddr_in)))
+        memcpy(&sock_addr, &addr, Int(sizeof(sockaddr_in)))
         if ( bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 ) {
             release(s)
             if error != nil { error.memory = lastErr("bind(...) failed.") }
@@ -67,7 +67,7 @@ struct Socket {
         var sent = 0
         let unsafePointer = UnsafePointer<UInt8>(data.bytes)
         while ( sent < data.length ) {
-            let s = write(socket, unsafePointer + sent, UInt(data.length - sent))
+            let s = write(socket, unsafePointer + sent, Int(data.length - sent))
             if ( s <= 0 ) {
                 if error != nil { error.memory = lastErr("write(...) failed.") }
                 return false

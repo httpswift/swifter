@@ -14,7 +14,7 @@ class HttpParser {
     
     func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? {
         if let statusLine = nextLine(socket, error: error) {
-            let statusTokens = split(statusLine, { $0 == " " })
+            let statusTokens = split(statusLine, isSeparator: { $0 == " " })
             println(statusTokens)
             if ( statusTokens.count < 3 ) {
                 if error != nil { error.memory = err("Invalid status line: \(statusLine)") }
@@ -39,9 +39,9 @@ class HttpParser {
     }
     
     private func extractUrlParams(url: String) -> [(String, String)] {
-        if let query = split(url, { $0 == "?" }).last {
-            return map(split(query, { $0 == "&" }), { (param:String) -> (String, String) in
-                let tokens = split(param, { $0 == "=" })
+        if let query = split(url, isSeparator: { $0 == "?" }).last {
+            return map(split(query, isSeparator: { $0 == "&" }), { (param:String) -> (String, String) in
+                let tokens = split(param, isSeparator: { $0 == "=" })
                 if tokens.count >= 2 {
                     let key = tokens[0].stringByRemovingPercentEncoding
                     let value = tokens[1].stringByRemovingPercentEncoding
@@ -74,7 +74,7 @@ class HttpParser {
             if ( headerLine.isEmpty ) {
                 return headers
             }
-            let headerTokens = split(headerLine, { $0 == ":" })
+            let headerTokens = split(headerLine, isSeparator: { $0 == ":" })
             if ( headerTokens.count >= 2 ) {
                 // RFC 2616 - "Hypertext Transfer Protocol -- HTTP/1.1", paragraph 4.2, "Message Headers":
                 // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."
@@ -91,7 +91,7 @@ class HttpParser {
 
     private func nextInt8(socket: CInt) -> Int {
         var buffer = [UInt8](count: 1, repeatedValue: 0);
-        let next = recv(socket, &buffer, UInt(buffer.count), 0)
+        let next = recv(socket as Int32, &buffer, Int(buffer.count), 0)
         if next <= 0 { return next }
         return Int(buffer[0])
     }
