@@ -7,15 +7,27 @@
 import UIKit
 
 class ViewController: UIViewController {
-                            
+    
+    var server: HttpServer?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let server = demoServer(NSBundle.mainBundle().resourcePath)
+        self.server = server
+        var error: NSError?
+        if !server.start(error: &error) {
+            println("Server start error: \(error)")
+        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @IBAction func likedThis(sender: UIButton) {
+        self.server?.stop();
+        self.server = nil;
     }
 }
 

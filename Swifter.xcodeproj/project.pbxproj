@@ -7,20 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7C6A510E1A149859004924B5 /* SwifterActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6A510D1A149859004924B5 /* SwifterActiveRecord.swift */; };
-		7C6A510F1A149859004924B5 /* SwifterActiveRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6A510D1A149859004924B5 /* SwifterActiveRecord.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7319422CFF003A6950 /* AppDelegate.swift */; };
 		7C839B7619422CFF003A6950 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7519422CFF003A6950 /* ViewController.swift */; };
 		7C839B7919422CFF003A6950 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C839B7719422CFF003A6950 /* Main.storyboard */; };
 		7C839B7B19422CFF003A6950 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C839B7A19422CFF003A6950 /* Images.xcassets */; };
-		7C8B260C1A23878F00566475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C8B260B1A23878F00566475 /* libsqlite3.dylib */; };
-		7C8B260E1A23879500566475 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C8B260D1A23879500566475 /* libsqlite3.dylib */; };
-		7C8B262B1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8B262A1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift */; };
-		7C8B262C1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8B262A1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift */; };
-		7C8B262E1A238E6F00566475 /* SwifterDatabaseProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8B262D1A238E6F00566475 /* SwifterDatabaseProxy.swift */; };
-		7C8B262F1A238E6F00566475 /* SwifterDatabaseProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8B262D1A238E6F00566475 /* SwifterDatabaseProxy.swift */; };
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
 		7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
 		7CA4814F19A2EED00030B30D /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
@@ -58,19 +50,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7C6A510D1A149859004924B5 /* SwifterActiveRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterActiveRecord.swift; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* Swifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C839B7219422CFF003A6950 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C839B7319422CFF003A6950 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C839B7519422CFF003A6950 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7C839B7819422CFF003A6950 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7C839B7A19422CFF003A6950 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		7C8B260B1A23878F00566475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
-		7C8B260D1A23879500566475 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.10.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
-		7C8B26241A238D4500566475 /* Swifter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Swifter-Bridging-Header.h"; sourceTree = "<group>"; };
-		7C8B26251A238D4500566475 /* SwifterOSX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwifterOSX-Bridging-Header.h"; sourceTree = "<group>"; };
-		7C8B262A1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterSQLiteDatabaseProxy.swift; sourceTree = "<group>"; };
-		7C8B262D1A238E6F00566475 /* SwifterDatabaseProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterDatabaseProxy.swift; sourceTree = "<group>"; };
 		7CA4813B19A2EA8D0030B30D /* SwifterOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CA4814A19A2EED00030B30D /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
@@ -90,7 +75,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C8B260C1A23878F00566475 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,30 +82,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C8B260E1A23879500566475 /* libsqlite3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7C6A510C1A149843004924B5 /* ActiveRecord */ = {
-			isa = PBXGroup;
-			children = (
-				7C8B262A1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift */,
-				7C8B262D1A238E6F00566475 /* SwifterDatabaseProxy.swift */,
-				7C6A510D1A149859004924B5 /* SwifterActiveRecord.swift */,
-				7C8B26241A238D4500566475 /* Swifter-Bridging-Header.h */,
-				7C8B26251A238D4500566475 /* SwifterOSX-Bridging-Header.h */,
-			);
-			path = ActiveRecord;
-			sourceTree = "<group>";
-		};
 		7C839B6519422CFF003A6950 = {
 			isa = PBXGroup;
 			children = (
-				7C8B260D1A23879500566475 /* libsqlite3.dylib */,
-				7C8B260B1A23878F00566475 /* libsqlite3.dylib */,
 				7CA4815619A2EF2B0030B30D /* Resources */,
 				7CA4814919A2EED00030B30D /* Common */,
 				7C839B7019422CFF003A6950 /* Swifter */,
@@ -170,7 +139,6 @@
 		7CA4814919A2EED00030B30D /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				7C6A510C1A149843004924B5 /* ActiveRecord */,
 				7CA4815A19A2F6A60030B30D /* HttpRequest.swift */,
 				7CA4814A19A2EED00030B30D /* HttpParser.swift */,
 				7CA4814B19A2EED00030B30D /* HttpResponse.swift */,
@@ -285,15 +253,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C6A510E1A149859004924B5 /* SwifterActiveRecord.swift in Sources */,
 				7CA4815019A2EED00030B30D /* HttpResponse.swift in Sources */,
 				7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */,
 				7C839B7619422CFF003A6950 /* ViewController.swift in Sources */,
 				7CA4815419A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */,
-				7C8B262E1A238E6F00566475 /* SwifterDatabaseProxy.swift in Sources */,
-				7C8B262B1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift in Sources */,
 				7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */,
 				7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 				7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */,
@@ -308,12 +273,9 @@
 				7CB102DE1A1680EA00CBA3B4 /* DemoServer.swift in Sources */,
 				7CA4814F19A2EED00030B30D /* HttpParser.swift in Sources */,
 				7CA4815519A2EED00030B30D /* Socket.swift in Sources */,
-				7C8B262C1A238E2F00566475 /* SwifterSQLiteDatabaseProxy.swift in Sources */,
-				7C6A510F1A149859004924B5 /* SwifterActiveRecord.swift in Sources */,
 				7CA4815319A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
 				7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */,
-				7C8B262F1A238E6F00566475 /* SwifterDatabaseProxy.swift in Sources */,
 				7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -421,7 +383,7 @@
 				INFOPLIST_FILE = Swifter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Common/ActiveRecord/Swifter-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -435,7 +397,7 @@
 				INFOPLIST_FILE = Swifter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "Common/ActiveRecord/Swifter-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};
@@ -453,7 +415,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "Common/ActiveRecord/SwifterOSX-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -468,7 +430,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "Common/ActiveRecord/SwifterOSX-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};

@@ -136,6 +136,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "Swifter.HttpServer.subscript.getter (Swift.String) -&gt; Swift.Optional&lt;(Swift.String, Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; Swifter.HttpResponse&gt;"
                   moduleName = "Swifter"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/damiankolakowski/Desktop/Swifter/Swifter/HttpServer.swift"
                   timestampString = "428450085.122215"
                   startingColumnNumber = "9223372036854775807"
@@ -150,6 +151,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "reabstraction thunk helper from @callee_owned (@in (Swift.String, Swift.Dictionary&lt;Swift.String, Swift.String&gt;)) -&gt; (@out Swifter.HttpResponse) to @callee_owned (@owned Swift.String, @owned Swift.Dictionary&lt;Swift.String, Swift.String&gt;) -&gt; (@owned Swifter.HttpResponse)"
                   moduleName = "Swifter"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/damiankolakowski/Desktop/Swifter/Swifter/HttpServer.swift"
                   timestampString = "428450085.12265"
                   startingColumnNumber = "9223372036854775807"
@@ -214,6 +216,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "SwifterOSX.HttpResponseBody.data (SwifterOSX.HttpResponseBody)() -&gt; Swift.Optional&lt;Swift.String&gt;"
                   moduleName = "SwifterOSX"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/damiankolakowski/Desktop/Swifter/Common/HttpResponse.swift"
                   timestampString = "430110038.833456"
                   startingColumnNumber = "9223372036854775807"
@@ -228,6 +231,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "SwifterOSX.HttpResponseBody.data (SwifterOSX.HttpResponseBody)() -&gt; Swift.Optional&lt;Swift.String&gt;"
                   moduleName = "SwifterOSX"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/damiankolakowski/Desktop/Swifter/Common/HttpResponse.swift"
                   timestampString = "430110038.833645"
                   startingColumnNumber = "9223372036854775807"
@@ -541,36 +545,6 @@
             endingLineNumber = "14"
             landmarkName = "directory(_:)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.HttpHandlers.directory (SwifterOSX.HttpHandlers.Type)(Swift.String) -&gt; (SwifterOSX.HttpRequest) -&gt; SwifterOSX.HttpResponse"
-                  moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/HttpHandlers.swift"
-                  timestampString = "438224155.861229"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "122">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "SwifterOSX.HttpHandlers.(directory (SwifterOSX.HttpHandlers.Type) -&gt; (Swift.String) -&gt; (SwifterOSX.HttpRequest) -&gt; SwifterOSX.HttpResponse).(closure #1)"
-                  moduleName = "SwifterOSX"
-                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/HttpHandlers.swift"
-                  timestampString = "438224155.861392"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "14"
-                  endingLineNumber = "14"
-                  offsetFromSymbolStart = "163">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -735,20 +709,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "SwifterOSX/main.swift"
-            timestampString = "440014599.057613"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "18"
-            endingLineNumber = "18">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
             timestampString = "439931696.615275"
             startingColumnNumber = "9223372036854775807"
@@ -780,6 +740,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "SwifterOSX.SQLiteSequence.init (SwifterOSX.SQLiteSequence.Type)(database : Swift.COpaquePointer, statment : Swift.String, error : Swift.Optional&lt;Swift.AutoreleasingUnsafeMutablePointer&lt;Swift.Optional&lt;ObjectiveC.NSError&gt;&gt;&gt;) -&gt; Swift.Optional&lt;SwifterOSX.SQLiteSequence&gt;"
                   moduleName = "SwifterOSX"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
                   timestampString = "439934307.229626"
                   startingColumnNumber = "9223372036854775807"
@@ -794,6 +755,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "SwifterOSX.SQLiteSequence.(init (SwifterOSX.SQLiteSequence.Type) -&gt; (database : Swift.COpaquePointer, statment : Swift.String, error : Swift.Optional&lt;Swift.AutoreleasingUnsafeMutablePointer&lt;Swift.Optional&lt;ObjectiveC.NSError&gt;&gt;&gt;) -&gt; Swift.Optional&lt;SwifterOSX.SQLiteSequence&gt;).(closure #1)"
                   moduleName = "SwifterOSX"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
                   timestampString = "439934307.229793"
                   startingColumnNumber = "9223372036854775807"
@@ -808,6 +770,7 @@
                   continueAfterRunningActions = "No"
                   symbolName = "reabstraction thunk helper from @callee_owned (@unowned Swift.UnsafePointer&lt;Swift.Int8&gt;) -&gt; (@unowned Swift.Int32) to @callee_owned (@unowned Swift.UnsafePointer&lt;Swift.Int8&gt;) -&gt; (@out Swift.Int32)"
                   moduleName = "SwifterOSX"
+                  usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/damiankolakowski/Desktop/swifter/Common/ActiveRecord/SwifterSQLiteDatabaseProxy.swift"
                   timestampString = "439934307.229924"
                   startingColumnNumber = "9223372036854775807"
@@ -864,6 +827,116 @@
             startingLineNumber = "60"
             endingLineNumber = "60"
             landmarkName = "init(db:sql:err:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/HttpHandlers.swift"
+            timestampString = "448289808.826471"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "13"
+            endingLineNumber = "13"
+            landmarkName = "directory(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/HttpHandlers.swift"
+            timestampString = "448289829.185053"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "directoryBrowser(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/DemoServer.swift"
+            timestampString = "448798123.272156"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "demoServer(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/HttpParser.swift"
+            timestampString = "448798148.791495"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "nextHttpRequest(_:error:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Common/HttpParser.swift"
+            timestampString = "448798167.471669"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "nextHttpRequest(_:error:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SwifterOSX/main.swift"
+            timestampString = "455528191.812153"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "9"
+            endingLineNumber = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Swifter/ViewController.swift"
+            timestampString = "455528244.369233"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "14"
+            endingLineNumber = "14"
+            landmarkName = "viewDidLoad()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

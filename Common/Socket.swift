@@ -18,7 +18,7 @@ struct Socket {
         return NSError(domain: "SOCKET", code: Int(errorCode), userInfo: nil)
     }
     
-    static func tcpForListen(port: in_port_t = 8080, error:NSErrorPointer = nil) -> CInt? {
+    static func tcpForListen(port: in_port_t = 8080, error: NSErrorPointer = nil) -> CInt? {
         let s = socket(AF_INET, SOCK_STREAM, 0)
         if ( s == -1 ) {
             if error != nil { error.memory = lastErr("socket(...) failed.") }
@@ -63,7 +63,7 @@ struct Socket {
         return true
     }
     
-    static func writeData(socket: CInt, data: NSData, error:NSErrorPointer = nil) -> Bool {
+    static func writeData(socket: CInt, data: NSData, error: NSErrorPointer = nil) -> Bool {
         var sent = 0
         let unsafePointer = UnsafePointer<UInt8>(data.bytes)
         while ( sent < data.length ) {
