@@ -8,6 +8,7 @@ import Foundation
 
 func demoServer(publicDir: String?) -> HttpServer {
     let server = HttpServer()
+    
     if let publicDir = publicDir {
         server["/resources/(.+)"] = HttpHandlers.directory(publicDir)
     }

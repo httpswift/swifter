@@ -11,6 +11,8 @@ class HttpServer
     typealias Handler = HttpRequest -> HttpResponse
     
     var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
+    var clientSockets: Set<CInt> = []
+    let clientSocketsLock = 0
     var acceptSocket: CInt = -1
     
     let matchingOptions = NSMatchingOptions(0)
@@ -28,15 +30,19 @@ class HttpServer
             }
         }
     }
-        
+    
     func routes() -> [String] { return map(handlers, { $0.0.pattern }) }
     
     func start(listenPort: in_port_t = 8080, error: NSErrorPointer = nil) -> Bool {
-        releaseAcceptSocket()
+        stop()
         if let socket = Socket.tcpForListen(port: listenPort, error: error) {
-            acceptSocket = socket
+            self.acceptSocket = socket
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
                 while let socket = Socket.acceptClientSocket(self.acceptSocket) {
+                    HttpServer.lock(self.clientSocketsLock) {
+                        self.clientSockets.insert(socket)
+                    }
+                    if self.acceptSocket == -1 { return }
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
                         let parser = HttpParser()
                         while let request = parser.nextHttpRequest(socket) {
@@ -51,9 +57,12 @@ class HttpServer
                             if !keepAlive { break }
                         }
                         Socket.release(socket)
+                        HttpServer.lock(self.clientSocketsLock) {
+                            self.clientSockets.remove(socket)
+                        }
                     })
                 }
-                self.releaseAcceptSocket()
+                self.stop()
             })
             return true
         }
@@ -79,8 +88,25 @@ class HttpServer
         return capturedGroups
     }
     
+    func stop() {
+        Socket.release(acceptSocket)
+        acceptSocket = -1
+        HttpServer.lock(self.clientSocketsLock) {
+            for clientSocket in self.clientSockets {
+                Socket.release(clientSocket)
+            }
+            self.clientSockets.removeAll(keepCapacity: true)
+        }
+    }
+    
     class func asciiRange(value: String) -> NSRange {
         return NSMakeRange(0, value.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
+    }
+    
+    class func lock(handle: AnyObject, closure: () -> ()) {
+        objc_sync_enter(handle)
+        closure()
+        objc_sync_exit(handle)
     }
     
     class func respond(socket: CInt, response: HttpResponse, keepAlive: Bool) {
@@ -99,17 +125,6 @@ class HttpServer
         Socket.writeASCII(socket, string: "\r\n")
         if let body = response.body() {
             Socket.writeData(socket, data: body)
-        }
-    }
-    
-    func stop() {
-        releaseAcceptSocket()
-    }
-    
-    func releaseAcceptSocket() {
-        if ( acceptSocket != -1 ) {
-            Socket.release(acceptSocket)
-            acceptSocket = -1
         }
     }
 }
