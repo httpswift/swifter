@@ -43,13 +43,14 @@ class HttpServer
                         self.clientSockets.insert(socket)
                     }
                     if self.acceptSocket == -1 { return }
+                    let socektAddress = Socket.peername(socket)
                     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
                         let parser = HttpParser()
                         while let request = parser.nextHttpRequest(socket) {
                             let keepAlive = parser.supportsKeepAlive(request.headers)
                             if let (expression, handler) = self.findHandler(request.url) {
                                 let capturedUrlsGroups = self.captureExpressionGroups(expression, value: request.url)
-                                let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups)
+                                let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups, address: socektAddress)
                                 HttpServer.respond(socket, response: handler(updatedRequest), keepAlive: keepAlive)
                             } else {
                                 HttpServer.respond(socket, response: HttpResponse.NotFound, keepAlive: keepAlive)

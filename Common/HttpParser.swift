@@ -30,9 +30,9 @@ class HttpParser {
                 // 'multipart' -> Dictionary
                 if let contentSize = headers["content-length"]?.toInt() {
                     let body = nextBody(socket, size: contentSize, error: error)
-                    return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [])
+                    return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
                 }
-                return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [])
+                return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [], address: nil)
             }
         }
         return nil

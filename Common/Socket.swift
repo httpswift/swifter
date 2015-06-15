@@ -103,4 +103,18 @@ struct Socket {
         shutdown(socket, SHUT_RDWR)
         close(socket)
     }
+    
+    static func peername(socket: CInt, error: NSErrorPointer = nil) -> String? {
+        var addr = sockaddr(), len: socklen_t = socklen_t(sizeof(sockaddr))
+        if getpeername(socket, &addr, &len) != 0 {
+            if error != nil { error.memory = lastErr("getpeername(...) failed.") }
+            return nil
+        }
+        var hostBuffer = [CChar](count: Int(NI_MAXHOST), repeatedValue: 0)
+        if getnameinfo(&addr, len, &hostBuffer, socklen_t(hostBuffer.count), nil, 0, NI_NUMERICHOST) != 0 {
+            if error != nil { error.memory = lastErr("getnameinfo(...) failed.") }
+            return nil
+        }
+        return String.fromCString(hostBuffer)
+    }
 }

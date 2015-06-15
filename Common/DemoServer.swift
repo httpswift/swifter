@@ -23,7 +23,7 @@ func demoServer(publicDir: String?) -> HttpServer {
         for (name, value) in request.urlParams {
             queryParamsInfo += "\(name) : \(value)<br>"
         }
-        return .OK(.HTML("<h3>Url:</h3> \(request.url)<h3>Method: \(request.method)</h3><h3>Headers:</h3>\(headersInfo)<h3>Query:</h3>\(queryParamsInfo)"))
+        return .OK(.HTML("<h3>Address: \(request.address)</h3><h3>Url:</h3> \(request.url)<h3>Method: \(request.method)</h3><h3>Headers:</h3>\(headersInfo)<h3>Query:</h3>\(queryParamsInfo)"))
     }
     server["/params/(.+)/(.+)"] = { request in
         var capturedGroups = ""
