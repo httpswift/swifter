@@ -13,18 +13,7 @@ let server = demoServer(NSBundle.mainBundle().resourcePath)
 if !server.start(listenPort: 9080, error: &error) {
     println("Server start error: \(error)")
 } else {
-    println("Server started; try a connection now")
-    sleep(10)
-    
-    println("main thread is awake again")
-    server.stop()
-    
-    println("Server started; try a connection now")
-    sleep(10)
-    
-    server.start(listenPort: 9080, error: &error)
-    
-    println("stopped server; try to connect")
+    println("Server started. Try a connection now...")
     while ( true ) { };
 }
 
