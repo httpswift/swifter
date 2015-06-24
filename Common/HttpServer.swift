@@ -15,27 +15,30 @@ class HttpServer
     let clientSocketsLock = 0
     var acceptSocket: CInt = -1
     
-    let matchingOptions = NSMatchingOptions(0)
-    let expressionOptions = NSRegularExpressionOptions(0)
+    let matchingOptions = NSMatchingOptions(rawValue: 0)
+    let expressionOptions = NSRegularExpressionOptions(rawValue: 0)
     
     subscript (path: String) -> Handler? {
         get {
             return nil
         }
         set ( newValue ) {
-            if let regex = NSRegularExpression(pattern: path, options: expressionOptions, error: nil) {
+            do {
+                let regex = try NSRegularExpression(pattern: path, options: expressionOptions)
                 if let newHandler = newValue {
                     handlers.append(expression: regex, handler: newHandler)
                 }
+            } catch {
+                    
             }
         }
     }
     
-    func routes() -> [String] { return map(handlers, { $0.0.pattern }) }
+    func routes() -> [String] { return handlers.map { $0.0.pattern } }
     
     func start(listenPort: in_port_t = 8080, error: NSErrorPointer = nil) -> Bool {
         stop()
-        if let socket = Socket.tcpForListen(port: listenPort, error: error) {
+        if let socket = Socket.tcpForListen(listenPort, error: error) {
             self.acceptSocket = socket
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
                 while let socket = Socket.acceptClientSocket(self.acceptSocket) {
@@ -71,9 +74,9 @@ class HttpServer
     }
     
     func findHandler(url:String) -> (NSRegularExpression, Handler)? {
-        return filter(self.handlers, {
+        return self.handlers.filter {
             $0.0.numberOfMatchesInString(url, options: self.matchingOptions, range: HttpServer.asciiRange(url)) > 0
-        }).first
+        }.first
     }
     
     func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {

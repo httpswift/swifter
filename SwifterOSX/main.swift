@@ -10,10 +10,10 @@ import Foundation
 var error: NSError?
 let server = demoServer(NSBundle.mainBundle().resourcePath)
 
-if !server.start(listenPort: 9080, error: &error) {
-    println("Server start error: \(error)")
+if !server.start(9080, error: &error) {
+    print("Server start error: \(error)")
 } else {
-    println("Server started. Try a connection now...")
+    print("Server started. Try a connection now...")
     while ( true ) { };
 }
 
