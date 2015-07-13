@@ -14,7 +14,7 @@ if !server.start(9080, error: &error) {
     print("Server start error: \(error)")
 } else {
     print("Server started. Try a connection now...")
-    while ( true ) { };
+    NSRunLoop.mainRunLoop().run()
 }
 
 
