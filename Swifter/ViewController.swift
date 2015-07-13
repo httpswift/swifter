@@ -16,7 +16,7 @@ class ViewController: UIViewController {
         self.server = server
         var error: NSError?
         if !server.start(error: &error) {
-            println("Server start error: \(error)")
+            print("Server start error: \(error)")
         }
     }
 
