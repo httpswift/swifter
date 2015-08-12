@@ -48,3 +48,13 @@ class HttpHandlers {
         }
     }
 }
+
+private extension String {
+    var stringByExpandingTildeInPath: String {
+        return (self as NSString).stringByExpandingTildeInPath
+    }
+
+    func stringByAppendingPathComponent(str: String) -> String {
+        return (self as NSString).stringByAppendingPathComponent(str)
+    }
+}
