@@ -31,7 +31,7 @@ class HttpHandlers {
                         do {
                             let files = try fileManager.contentsOfDirectoryAtPath(filePath)
                             var response = "<h3>\(filePath)</h3></br><table>"
-                            response += "".join(files.map { "<tr><td><a href=\"\(request.url)/\($0)\">\($0)</a></td></tr>"} )
+                            response += files.map({ "<tr><td><a href=\"\(request.url)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
                             response += "</table>"
                             return HttpResponse.OK(.HTML(response))
                         } catch  {
