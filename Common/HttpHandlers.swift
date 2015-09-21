@@ -8,7 +8,7 @@ import Foundation
 
 public class HttpHandlers {
 
-    class func directory(dir: String) -> ( HttpRequest -> HttpResponse ) {
+    public class func directory(dir: String) -> ( HttpRequest -> HttpResponse ) {
         return { request in
             if let localPath = request.capturedUrlGroups.first {
                 let filesPath = dir.stringByExpandingTildeInPath.stringByAppendingPathComponent(localPath)
@@ -20,7 +20,7 @@ public class HttpHandlers {
         }
     }
 
-    class func directoryBrowser(dir: String) -> ( HttpRequest -> HttpResponse ) {
+    public class func directoryBrowser(dir: String) -> ( HttpRequest -> HttpResponse ) {
         return { request in
             if let pathFromUrl = request.capturedUrlGroups.first {
                 let filePath = dir.stringByExpandingTildeInPath.stringByAppendingPathComponent(pathFromUrl)
