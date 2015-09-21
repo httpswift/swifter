@@ -6,7 +6,7 @@
 
 import Foundation
 
-class HttpHandlers {
+public class HttpHandlers {
 
     class func directory(dir: String) -> ( HttpRequest -> HttpResponse ) {
         return { request in
