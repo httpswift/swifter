@@ -107,3 +107,18 @@ public enum HttpResponse {
         }
     }
 }
+
+/**
+	Makes it possible to compare handler responses with '==', but
+	ignores any associated values. This should generally be what
+	you want. E.g.:
+	
+		let resp = handler(updatedRequest)
+		if resp == .NotFound {
+			print("Client requested not found: \(request.url)")
+		}
+*/
+
+func ==(inLeft: HttpResponse, inRight: HttpResponse) -> Bool {
+	return inLeft.statusCode() == inRight.statusCode()
+}
