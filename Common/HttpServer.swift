@@ -76,16 +76,25 @@ public class HttpServer
         return false
     }
     
-    public func findHandler(url:String) -> (NSRegularExpression, Handler)? {
-        return self.handlers.filter {
-            $0.0.numberOfMatchesInString(url, options: self.matchingOptions, range: HttpServer.asciiRange(url)) > 0
-        }.first
+    func findHandler(url:String) -> (NSRegularExpression, Handler)? {
+		let u = NSURL(string: url)!
+		let path = u.path!
+		for handler in self.handlers {
+			let regex = handler.0
+            let matches = regex.numberOfMatchesInString(path, options: self.matchingOptions, range: HttpServer.asciiRange(path)) > 0
+			if matches {
+				return handler;
+			}
+        }
+		return nil
     }
     
-    public func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {
+    func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {
+		let u = NSURL(string: value)!
+		let path = u.path!
         var capturedGroups = [String]()
-        if let result = expression.firstMatchInString(value, options: matchingOptions, range: HttpServer.asciiRange(value)) {
-            let nsValue: NSString = value
+        if let result = expression.firstMatchInString(path, options: matchingOptions, range: HttpServer.asciiRange(path)) {
+            let nsValue: NSString = path
             for var i = 1 ; i < result.numberOfRanges ; ++i {
                 if let group = nsValue.substringWithRange(result.rangeAtIndex(i)).stringByRemovingPercentEncoding {
                     capturedGroups.append(group)

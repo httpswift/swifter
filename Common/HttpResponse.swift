@@ -14,39 +14,39 @@ public enum HttpResponseBody {
     case HTML(String)
     case RAW(String)
     
-    func data() -> String? {
+    func data() -> (content: String?, contentType: String?) {
         switch self {
         case .JSON(let object):
             if NSJSONSerialization.isValidJSONObject(object) {
                 do {
                     let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
                     if let nsString = NSString(data: json, encoding: NSUTF8StringEncoding) {
-                        return nsString as String
+                        return (nsString as String, "application/json")
                     }
                 } catch let serializationError as NSError {
-                    return "Serialisation error: \(serializationError)"
+                    return ("Serialisation error: \(serializationError)", nil)
                 }
             }
-            return "Invalid object to serialise."
+            return ("Invalid object to serialise.", nil)
         case .XML(_):
-            return "XML serialization not supported."
+            return ("XML serialization not supported.", nil)
         case .PLIST(let object):
             let format = NSPropertyListFormat.XMLFormat_v1_0
             if NSPropertyListSerialization.propertyList(object, isValidForFormat: format) {
                 do {
                     let plist = try NSPropertyListSerialization.dataWithPropertyList(object, format: format, options: 0)
                     if let nsString = NSString(data: plist, encoding: NSUTF8StringEncoding) {
-                        return nsString as String
+                        return (nsString as String, "application/plist")
                     }
                 } catch let serializationError as NSError {
-                    return "Serialisation error: \(serializationError)"
+                    return ("Serialisation error: \(serializationError)", nil)
                 }
             }
-            return "Invalid object to serialise."
+            return ("Invalid object to serialise.", nil)
         case .RAW(let body):
-            return body
+            return (body, "application/octet-stream")
         case .HTML(let body):
-            return "<html><body>\(body)</body></html>"
+            return ("<html><body>\(body)</body></html>", "text/html")
         }
     }
 }
@@ -93,6 +93,13 @@ public enum HttpResponse {
         var headers = [String:String]()
         headers["Server"] = "Swifter"
         switch self {
+		case .OK(let body):
+			let d = body.data()
+			if let ct = d.1
+			{
+				headers["Content-Type"] = ct
+			}
+			
         case .MovedPermanently(let location) : headers["Location"] = location
         default:[]
         }
@@ -101,7 +108,10 @@ public enum HttpResponse {
     
     func body() -> NSData? {
         switch self {
-        case .OK(let body)      : return body.data()?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        case .OK(let body):
+			let d = body.data()
+			return d.0?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+			
         case .RAW(_, let data)  : return data
         default                 : return nil
         }
