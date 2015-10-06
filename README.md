@@ -26,5 +26,8 @@ server["/redirect"] = { request in
 }
 server.start()
 ```
-
+### CocoaPods ? Yes.
+```
+pod 'Swifter', '~> 1.0.2’
+```
 
