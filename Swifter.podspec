@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Swifter"
-  s.version          = "1.0.1"
+  s.version          = "1.0.2"
   s.summary          = "Tiny http server engine written in Swift programming language."
   s.homepage         = "https://github.com/glock45/swifter"
   s.license          = { :type => 'Copyright', :file => 'LICENSE' }

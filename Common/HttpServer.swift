@@ -8,7 +8,7 @@ import Foundation
 
 public class HttpServer
 {
-    static let VERSION = "0.9";
+    static let VERSION = "1.0.2";
     
     public typealias Handler = HttpRequest -> HttpResponse
     
