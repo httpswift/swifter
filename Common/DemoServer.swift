@@ -53,7 +53,7 @@ func demoServer(publicDir: String?) -> HttpServer {
             case "GET":
                 if let rootDir = publicDir {
                     if let html = NSData(contentsOfFile:"\(rootDir)/login.html") {
-                        return .RAW(200, html)
+                        return HttpResponse.RAW(200, "OK", nil, html)
                     } else {
                         return .NotFound
                     }
@@ -69,6 +69,9 @@ func demoServer(publicDir: String?) -> HttpServer {
                 return .NotFound
         }
         return .NotFound
+    }
+    server["/raw"] = { request in
+        return HttpResponse.RAW(200, "OK", ["XXX-Custom-Header": "value"], "Sample Response".dataUsingEncoding(NSUTF8StringEncoding)!)
     }
     server["/"] = { request in
         var listPage = "Available services:<br><ul>"

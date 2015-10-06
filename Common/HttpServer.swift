@@ -8,6 +8,8 @@ import Foundation
 
 public class HttpServer
 {
+    static let VERSION = "0.9";
+    
     public typealias Handler = HttpRequest -> HttpResponse
     
     var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
@@ -18,8 +20,7 @@ public class HttpServer
     let matchingOptions = NSMatchingOptions(rawValue: 0)
     let expressionOptions = NSRegularExpressionOptions(rawValue: 0)
     
-    public init(){
-    }
+    public init() { }
     
     public subscript (path: String) -> Handler? {
         get {
