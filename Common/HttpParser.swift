@@ -6,36 +6,55 @@
 
 import Foundation
 
+
+enum HttpParserError : ErrorType {
+    case RecvFailed
+    case ReadBodyFailed
+    case InvalidStatusLine(String)
+    
+    var value: String {
+        switch self {
+            case .RecvFailed:
+                return "recv(...) failed."
+            
+            case .ReadBodyFailed:
+                return "IO error while reading body"
+            
+            case .InvalidStatusLine(let statusLine):
+                return "Invalid status line: \(statusLine)"
+        }
+    }
+}
+
 class HttpParser {
     
-    func err(reason: String) -> NSError {
-        return NSError(domain: "HttpParser", code: 0, userInfo: [NSLocalizedDescriptionKey : reason])
-    }
-    
-    func nextHttpRequest(socket: CInt, error:NSErrorPointer = nil) -> HttpRequest? {
-        if let statusLine = nextLine(socket, error: error) {
+    func nextHttpRequest(socket: CInt) throws -> HttpRequest {
+        do {
+            let statusLine = try nextLine(socket)
             let statusTokens = statusLine.componentsSeparatedByString(" ")
             print(statusTokens)
-            if ( statusTokens.count < 3 ) {
-                if error != nil { error.memory = err("Invalid status line: \(statusLine)") }
-                return nil
+            if (statusTokens.count < 3) {
+                throw HttpParserError.InvalidStatusLine(statusLine)
             }
             let method = statusTokens[0]
             let path = statusTokens[1]
             let urlParams = extractUrlParams(path)
             // TODO extract query parameters
-            if let headers = nextHeaders(socket, error: error) {
-                // TODO detect content-type and handle:
-                // 'application/x-www-form-urlencoded' -> Dictionary
-                // 'multipart' -> Dictionary
-                if let contentLength = headers["content-length"], let contentLengthValue = Int(contentLength) {
-                    let body = nextBody(socket, size: contentLengthValue, error: error)
-                    return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
-                }
-                return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [], address: nil)
+            let headers = try nextHeaders(socket)
+            // TODO detect content-type and handle:
+            // 'application/x-www-form-urlencoded' -> Dictionary
+            // 'multipart' -> Dictionary
+            let body: String?
+            if let contentLengthString = headers["content-length"],
+                let contentLength = Int(contentLengthString) {
+                    body = try nextBody(socket, size: contentLength)
+            } else {
+                body = nil
             }
+            return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
+        } catch {
+            throw error
         }
-        return nil
     }
     
     private func extractUrlParams(url: String) -> [(String, String)] {
@@ -53,14 +72,13 @@ class HttpParser {
         return []
     }
     
-    private func nextBody(socket: CInt, size: Int , error:NSErrorPointer) -> String? {
+    private func nextBody(socket: CInt, size: Int) throws -> String {
         var body = ""
         var counter = 0;
-        while ( counter < size ) {
+        while (counter < size) {
             let c = nextInt8(socket)
-            if ( c < 0 ) {
-                if error != nil { error.memory = err("IO error while reading body") }
-                return nil
+            if (c < 0) {
+                throw HttpParserError.ReadBodyFailed
             }
             body.append(UnicodeScalar(c))
             counter++;
@@ -68,9 +86,9 @@ class HttpParser {
         return body
     }
     
-    private func nextHeaders(socket: CInt, error:NSErrorPointer) -> Dictionary<String, String>? {
+    private func nextHeaders(socket: CInt) throws -> Dictionary<String, String> {
         var headers = Dictionary<String, String>()
-        while let headerLine = nextLine(socket, error: error) {
+        while let headerLine = try? nextLine(socket) {
             if ( headerLine.isEmpty ) {
                 return headers
             }
@@ -86,7 +104,7 @@ class HttpParser {
                 }
             }
         }
-        return nil
+        throw HttpParserError.RecvFailed
     }
 
     private func nextInt8(socket: CInt) -> Int {
@@ -96,7 +114,7 @@ class HttpParser {
         return Int(buffer[0])
     }
     
-    private func nextLine(socket: CInt, error:NSErrorPointer) -> String? {
+    private func nextLine(socket: CInt) throws -> String {
         var characters: String = ""
         var n = 0
         repeat {
@@ -104,8 +122,7 @@ class HttpParser {
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
         } while ( n > 0 && n != 10 /* NL */)
         if ( n == -1 && characters.isEmpty ) {
-            if error != nil { error.memory = Socket.lastErr("recv(...) failed.") }
-            return nil
+            throw HttpParserError.RecvFailed
         }
         return characters
     }

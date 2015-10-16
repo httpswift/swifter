@@ -7,14 +7,13 @@
 
 import Foundation
 
-var error: NSError?
 let server = demoServer(NSBundle.mainBundle().resourcePath)
-
-if !server.start(9080, error: &error) {
-    print("Server start error: \(error)")
-} else {
+do {
+    try server.start(9080)
     print("Server started. Try a connection now...")
     NSRunLoop.mainRunLoop().run()
+} catch {
+    print("Server start error: \(error)")
 }
 
 
