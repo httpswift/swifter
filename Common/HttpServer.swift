@@ -12,10 +12,10 @@ public class HttpServer
     
     public typealias Handler = HttpRequest -> HttpResponse
     
-    var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
-    var clientSockets: Set<CInt> = []
+    private(set) var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
+    private(set) var clientSockets: Set<CInt> = []
     let clientSocketsLock = 0
-    var acceptSocket: CInt = -1
+    private(set) var acceptSocket: CInt = -1
     
     let matchingOptions = NSMatchingOptions(rawValue: 0)
     let expressionOptions = NSRegularExpressionOptions(rawValue: 0)
@@ -30,15 +30,17 @@ public class HttpServer
         set {
             if let newHandler = newValue,
                let regex = try? NSRegularExpression(pattern: path, options: expressionOptions){
-                handlers.append(expression: regex, handler: newHandler)
+                self.handlers.append(expression: regex, handler: newHandler)
             }
         }
     }
     
-    public func routes() -> [String] { return handlers.map { $0.0.pattern } }
+    public var routes:[String] {
+        return self.handlers.map { $0.0.pattern }
+    }
     
     public func start(listenPort: in_port_t = 8080) throws {
-        stop()
+        self.stop()
         do {
             let socket = try Socket.tcpForListen(listenPort)
             self.acceptSocket = socket
@@ -80,36 +82,40 @@ public class HttpServer
     }
     
     func findHandler(url:String) -> (NSRegularExpression, Handler)? {
-		let u = NSURL(string: url)!
-		let path = u.path!
-		for handler in self.handlers {
-			let regex = handler.0
-            let matches = regex.numberOfMatchesInString(path, options: self.matchingOptions, range: HttpServer.asciiRange(path)) > 0
-			if matches {
-				return handler;
-			}
+        if let u = NSURL(string: url),
+                  path = u.path {
+            for handler in self.handlers {
+                if handler.expression.numberOfMatchesInString(path, options: self.matchingOptions, range: HttpServer.asciiRange(path)) > 0 {
+                    return handler;
+                }
+            }
         }
 		return nil
     }
     
     func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {
-		let u = NSURL(string: value)!
-		let path = u.path!
         var capturedGroups = [String]()
+        
+        guard let u = NSURL(string: value),
+                  path = u.path else {
+                return capturedGroups
+        }
+        
         if let result = expression.firstMatchInString(path, options: matchingOptions, range: HttpServer.asciiRange(path)) {
             let nsValue: NSString = path
-            for var i = 1 ; i < result.numberOfRanges ; ++i {
+            for i in 1..<result.numberOfRanges {
                 if let group = nsValue.substringWithRange(result.rangeAtIndex(i)).stringByRemovingPercentEncoding {
                     capturedGroups.append(group)
                 }
             }
+//            for var i = 1 ; i < result.numberOfRanges ; ++i {
         }
         return capturedGroups
     }
     
     public func stop() {
         Socket.release(acceptSocket)
-        acceptSocket = -1
+        self.acceptSocket = -1
         HttpServer.lock(self.clientSocketsLock) {
             for clientSocket in self.clientSockets {
                 Socket.release(clientSocket)
@@ -147,6 +153,7 @@ public class HttpServer
             }
         } catch {
             // TODO: handle error
+            print("error responding to client")
         }
         
     }

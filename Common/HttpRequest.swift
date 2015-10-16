@@ -8,10 +8,15 @@ import Foundation
 
 public struct HttpRequest {
     public let url: String
-    public let urlParams: [(String, String)] // http://stackoverflow.com/questions/1746507/authoritative-position-of-duplicate-http-get-query-keys
+    public let urlParams: [String: Parameter] // http://stackoverflow.com/questions/1746507/authoritative-position-of-duplicate-http-get-query-keys
     public let method: String
     public let headers: [String: String]
 	public let body: String?
     public var capturedUrlGroups: [String]
     public var address: String?
+}
+
+public enum Parameter {
+    case StringValue(String)
+    case ArrayString([String])
 }

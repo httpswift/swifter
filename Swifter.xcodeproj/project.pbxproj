@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18447C3F1BD14CF50011C707 /* TestSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18447C3E1BD14CF50011C707 /* TestSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		18447C411BD14E400011C707 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 18447C401BD14E400011C707 /* index.html */; settings = {ASSET_TAGS = (); }; };
+		187F2CB71BD1501700AC8474 /* TestSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18447C3E1BD14CF50011C707 /* TestSocket.swift */; settings = {ASSET_TAGS = (); }; };
+		187F2CB81BD1511500AC8474 /* index.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 18447C401BD14E400011C707 /* index.html */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7319422CFF003A6950 /* AppDelegate.swift */; };
@@ -42,6 +46,7 @@
 			dstSubfolderSpec = 7;
 			files = (
 				7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */,
+				187F2CB81BD1511500AC8474 /* index.html in CopyFiles */,
 				7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */,
 				7CA4815919A2EF560030B30D /* test.json in CopyFiles */,
 			);
@@ -50,6 +55,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		18447C3E1BD14CF50011C707 /* TestSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSocket.swift; sourceTree = "<group>"; };
+		18447C401BD14E400011C707 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* Swifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C839B7219422CFF003A6950 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C839B7319422CFF003A6950 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -146,6 +153,7 @@
 				7CA4814C19A2EED00030B30D /* HttpServer.swift */,
 				7CA4814D19A2EED00030B30D /* Socket.swift */,
 				7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */,
+				18447C3E1BD14CF50011C707 /* TestSocket.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -156,6 +164,7 @@
 				98630C061A1C9A9D00478D08 /* login.html */,
 				7CB102DF1A17381D00CBA3B4 /* logo.png */,
 				7CA4815719A2EF2B0030B30D /* test.json */,
+				18447C401BD14E400011C707 /* index.html */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -242,6 +251,7 @@
 				7CB102E01A17381D00CBA3B4 /* logo.png in Resources */,
 				7C839B7919422CFF003A6950 /* Main.storyboard in Resources */,
 				98630C071A1C9A9D00478D08 /* login.html in Resources */,
+				18447C411BD14E400011C707 /* index.html in Resources */,
 				7C839B7B19422CFF003A6950 /* Images.xcassets in Resources */,
 				7CA4815819A2EF2B0030B30D /* test.json in Resources */,
 			);
@@ -258,6 +268,7 @@
 				7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */,
 				7C839B7619422CFF003A6950 /* ViewController.swift in Sources */,
+				18447C3F1BD14CF50011C707 /* TestSocket.swift in Sources */,
 				7CA4815419A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */,
@@ -276,6 +287,7 @@
 				7CA4815519A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815319A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
+				187F2CB71BD1501700AC8474 /* TestSocket.swift in Sources */,
 				7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 			);

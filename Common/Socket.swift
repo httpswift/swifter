@@ -49,14 +49,15 @@ enum SocketError: ErrorType {
 
 let maxPendingConnection: Int32 = 20
 
-struct Socket {    
+struct Socket {
     static func tcpForListen(port: in_port_t = 8080) throws -> CInt {
         let s = socket(AF_INET, SOCK_STREAM, 0)
-        if ( s == -1 ) {
+        if s == -1 {
             throw SocketError.SocketInitializationFailed
         }
-        var value: Int32 = 1;
-        if ( setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32))) == -1 ) {
+        var value: Int32 = 1
+        
+        if setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32))) == -1 {
             release(s)
             throw SocketError.SocketOptionInitializationFailed
         }
@@ -69,11 +70,11 @@ struct Socket {
         
         var sock_addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
         memcpy(&sock_addr, &addr, Int(sizeof(sockaddr_in)))
-        if ( bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 ) {
+        if bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 {
             release(s)
             throw SocketError.BindFailed
         }
-        if ( listen(s, maxPendingConnection ) == -1 ) {
+        if listen(s, maxPendingConnection ) == -1 {
             release(s)
             throw SocketError.ListenFailed
         }
@@ -103,9 +104,9 @@ struct Socket {
     static func writeData(socket: CInt, data: NSData) throws {
         var sent = 0
         let unsafePointer = UnsafePointer<UInt8>(data.bytes)
-        while ( sent < data.length ) {
+        while sent < data.length {
             let s = write(socket, unsafePointer + sent, Int(data.length - sent))
-            if ( s <= 0 ) {
+            if s <= 0 {
                 throw SocketError.WriteFailed
             }
             sent += s
@@ -116,7 +117,7 @@ struct Socket {
         var addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
         var len: socklen_t = 0
         let clientSocket = accept(socket, &addr, &len)
-        if ( clientSocket == -1 ) {
+        if clientSocket == -1 {
             throw SocketError.AcceptFailed
         }
         Socket.nosigpipe(clientSocket)

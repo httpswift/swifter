@@ -33,13 +33,13 @@ class HttpParser {
             let statusLine = try nextLine(socket)
             let statusTokens = statusLine.componentsSeparatedByString(" ")
             print(statusTokens)
-            if (statusTokens.count < 3) {
+            if statusTokens.count < 3 {
                 throw HttpParserError.InvalidStatusLine(statusLine)
             }
             let method = statusTokens[0]
             let path = statusTokens[1]
-            let urlParams = extractUrlParams(path)
-            // TODO extract query parameters
+            let urlParams = self.extractUrlParams(path)
+            
             let headers = try nextHeaders(socket)
             // TODO detect content-type and handle:
             // 'application/x-www-form-urlencoded' -> Dictionary
@@ -48,36 +48,64 @@ class HttpParser {
             if let contentLengthString = headers["content-length"],
                 let contentLength = Int(contentLengthString) {
                     body = try nextBody(socket, size: contentLength)
+                    
+//                    self.extractBodyParams(body!)
             } else {
                 body = nil
             }
+            
             return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
         } catch {
             throw error
         }
     }
     
-    private func extractUrlParams(url: String) -> [(String, String)] {
-        if let query = url.componentsSeparatedByString("?").last {
-            return query.componentsSeparatedByString("&").map { (param:String) -> (String, String) in
-                let tokens = param.componentsSeparatedByString("=")
-                if tokens.count >= 2 {
-                    let key = tokens[0].stringByRemovingPercentEncoding
-                    let value = tokens[1].stringByRemovingPercentEncoding
-                    if key != nil && value != nil { return (key!, value!) }
+    private func extractBodyParams(body: String) -> [String: Parameter] {
+        let params = body.componentsSeparatedByString("&").map { (param:String) -> (String, String) in
+            let tokens = param.componentsSeparatedByString("=")
+            if tokens.count >= 2 {
+                let key = tokens[0].stringByRemovingPercentEncoding
+                let value = tokens[1].stringByRemovingPercentEncoding
+                if key != nil && value != nil { return (key!, value!) }
+            }
+            return ("","")
+        }
+        
+        var result = [String: Parameter]()
+        
+        for (key, value) in params {
+            if let val = result[key] {
+                switch val {
+                case .StringValue(let stringValue):
+                    result[key] = Parameter.ArrayString([stringValue, value])
+                    
+                case .ArrayString(var arrayValue):
+                    arrayValue.append(value)
+                    result[key] = Parameter.ArrayString(arrayValue)
                 }
-                return ("","")
+            } else {
+                result[key] = Parameter.StringValue(value)
             }
         }
-        return []
+        
+        return result
+
+    }
+    
+    private func extractUrlParams(url: String) -> [String : Parameter] {
+        guard let query = url.componentsSeparatedByString("?").last else {
+            return [:]
+        }
+        
+        return self.extractBodyParams(query)
     }
     
     private func nextBody(socket: CInt, size: Int) throws -> String {
         var body = ""
         var counter = 0;
-        while (counter < size) {
+        while counter < size {
             let c = nextInt8(socket)
-            if (c < 0) {
+            if c < 0 {
                 throw HttpParserError.ReadBodyFailed
             }
             body.append(UnicodeScalar(c))
@@ -86,20 +114,20 @@ class HttpParser {
         return body
     }
     
-    private func nextHeaders(socket: CInt) throws -> Dictionary<String, String> {
-        var headers = Dictionary<String, String>()
+    private func nextHeaders(socket: CInt) throws -> [String: String] {
+        var headers = [String: String]()
         while let headerLine = try? nextLine(socket) {
-            if ( headerLine.isEmpty ) {
+            if headerLine.isEmpty {
                 return headers
             }
             let headerTokens = headerLine.componentsSeparatedByString(":")
-            if ( headerTokens.count >= 2 ) {
+            if headerTokens.count >= 2 {
                 // RFC 2616 - "Hypertext Transfer Protocol -- HTTP/1.1", paragraph 4.2, "Message Headers":
                 // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."
                 // We can keep lower case version.
                 let headerName = headerTokens[0].lowercaseString
                 let headerValue = headerTokens[1].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
-                if ( !headerName.isEmpty && !headerValue.isEmpty ) {
+                if !headerName.isEmpty && !headerValue.isEmpty {
                     headers.updateValue(headerValue, forKey: headerName)
                 }
             }
@@ -120,14 +148,14 @@ class HttpParser {
         repeat {
             n = nextInt8(socket)
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
-        } while ( n > 0 && n != 10 /* NL */)
-        if ( n == -1 && characters.isEmpty ) {
+        } while n > 0 && n != 10 /* NL */
+        if n == -1 && characters.isEmpty {
             throw HttpParserError.RecvFailed
         }
         return characters
     }
     
-    func supportsKeepAlive(headers: Dictionary<String, String>) -> Bool {
+    func supportsKeepAlive(headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
             return "keep-alive" == value.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).lowercaseString
         }

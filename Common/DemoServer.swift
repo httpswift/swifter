@@ -75,7 +75,7 @@ func demoServer(publicDir: String?) -> HttpServer {
     }
     server["/"] = { request in
         var listPage = "Available services:<br><ul>"
-        for item in server.routes() {
+        for item in server.routes {
             listPage += "<li><a href=\"\(item)\">\(item)</a></li>"
         }
         listPage += "</ul>"
