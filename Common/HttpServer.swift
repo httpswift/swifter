@@ -69,7 +69,7 @@ public class HttpServer
                             try HttpServer.respond(socket, response: response, keepAlive: keepAlive)
                         } catch {
                             print("Failed to send response: \(error)")
-                            return
+                            break
                         }
                         if !keepAlive { break }
                     }
