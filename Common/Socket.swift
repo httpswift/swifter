@@ -31,8 +31,9 @@ struct Socket {
         
         var value: Int32 = 1
         if setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32))) == -1 {
+            let details = String.fromCString(UnsafePointer(strerror(errno)))
             release(s)
-            throw SocketError.SocketOptionInitializationFailed(String.fromCString(UnsafePointer(strerror(errno))))
+            throw SocketError.SocketOptionInitializationFailed(details)
         }
         
         nosigpipe(s)
@@ -46,13 +47,15 @@ struct Socket {
         memcpy(&sock_addr, &addr, Int(sizeof(sockaddr_in)))
         
         if bind(s, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 {
+            let details = String.fromCString(UnsafePointer(strerror(errno)))
             release(s)
-            throw SocketError.BindFailed(String.fromCString(UnsafePointer(strerror(errno))))
+            throw SocketError.BindFailed(details)
         }
         
         if listen(s, maxPendingConnection ) == -1 {
+            let details = String.fromCString(UnsafePointer(strerror(errno)))
             release(s)
-            throw SocketError.ListenFailed(String.fromCString(UnsafePointer(strerror(errno))))
+            throw SocketError.ListenFailed(details)
         }
         return s
     }
