@@ -1,7 +1,7 @@
 //
 //  ViewController.swift
 //  Swifter
-//  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
+//  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
 import UIKit
@@ -12,10 +12,10 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let server = demoServer(NSBundle.mainBundle().resourcePath)
-        self.server = server
-        var error: NSError?
-        if !server.start(error: &error) {
+        self.server = demoServer(NSBundle.mainBundle().resourcePath)
+        do {
+            try self.server.start()
+        } catch {
             print("Server start error: \(error)")
         }
     }

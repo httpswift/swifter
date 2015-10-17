@@ -1,12 +1,14 @@
 //
-//  main.swift
-//  SwifterOSX
-//  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
+//  chat.swift
+//  Swifter
+//
+//  Created by Damian Kolakowski on 17/10/15.
+//  Copyright © 2015 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
 
-let server = demoServer(NSBundle.mainBundle().resourcePath!)
+let server = testSocket(NSBundle.mainBundle().resourcePath!)
 
 do {
     try server.start(9080)
@@ -15,6 +17,3 @@ do {
 } catch {
     print("Server start error: \(error)")
 }
-
-
-

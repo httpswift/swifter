@@ -1,7 +1,7 @@
 //
 //  Handlers.swift
 //  Swifter
-//  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
+//  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
@@ -16,6 +16,7 @@ public class HttpHandlers {
                     return HttpResponse.RAW(200, "OK", nil, fileBody)
                 }
             }
+            
             return HttpResponse.NotFound
         }
     }
@@ -26,8 +27,8 @@ public class HttpHandlers {
                 let filePath = dir.stringByExpandingTildeInPath.stringByAppendingPathComponent(pathFromUrl)
                 let fileManager = NSFileManager.defaultManager()
                 var isDir: ObjCBool = false;
-                if ( fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) ) {
-                    if ( isDir ) {
+                if fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) {
+                    if isDir {
                         do {
                             let files = try fileManager.contentsOfDirectoryAtPath(filePath)
                             var response = "<h3>\(filePath)</h3></br><table>"

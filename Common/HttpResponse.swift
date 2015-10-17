@@ -1,7 +1,7 @@
 //
 //  HttpResponse.swift
 //  Swifter
-//  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
+//  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
@@ -16,6 +16,7 @@ public enum HttpResponseBody {
     
     func data() -> String? {
         switch self {
+            
         case .JSON(let object):
             if NSJSONSerialization.isValidJSONObject(object) {
                 do {
@@ -28,8 +29,10 @@ public enum HttpResponseBody {
                 }
             }
             return "Invalid object to serialise."
+            
         case .XML(_):
             return "XML serialization not supported."
+            
         case .PLIST(let object):
             let format = NSPropertyListFormat.XMLFormat_v1_0
             if NSPropertyListSerialization.propertyList(object, isValidForFormat: format) {
@@ -43,8 +46,10 @@ public enum HttpResponseBody {
                 }
             }
             return "Invalid object to serialise."
+            
         case .STRING(let body):
             return body
+            
         case .HTML(let body):
             return "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
         }
@@ -103,9 +108,8 @@ public enum HttpResponse {
                 // source XML document -- is readable by casual users, text/xml is preferable to application/xml. 
                 // MIME user agents (and web user agents) that do not have explicit support for text/xml will treat it as text/plain, 
                 // for example, by displaying the XML MIME entity as plain text.
-                // Application/xml is preferable when the XML MIME entity is unreadable by casual users."
                 case .HTML(_)   : headers["Content-Type"] = "text/html"
-                default:[]
+                default:break
             }
         case .MovedPermanently(let location): headers["Location"] = location
         case .RAW(_,_, let rawHeaders,_):
@@ -114,7 +118,7 @@ public enum HttpResponse {
                     headers.updateValue(v, forKey: k)
                 }
             }
-        default:[]
+        default:break
         }
         return headers
     }
