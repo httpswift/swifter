@@ -46,7 +46,7 @@ public enum HttpResponseBody {
         case .STRING(let body):
             return body
         case .HTML(let body):
-            return "<html><body>\(body)</body></html>"
+            return "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
         }
     }
 }
@@ -98,10 +98,11 @@ public enum HttpResponse {
                 case .JSON(_)   : headers["Content-Type"] = "application/json"
                 case .PLIST(_)  : headers["Content-Type"] = "application/xml"
                 case .XML(_)    : headers["Content-Type"] = "application/xml"
-                // 'application/xml' vs 'text/xml'
-                // From RFC: http://www.rfc-editor.org/rfc/rfc3023.txt - "If an XML document -- that is, the unprocessed, source XML document -- is readable by casual users,
-                // text/xml is preferable to application/xml. MIME user agents (and web user agents) that do not have explicit 
-                // support for text/xml will treat it as text/plain, for example, by displaying the XML MIME entity as plain text. 
+                // 'application/xml' or 'text/xml' ?
+                // From RFC: http://www.rfc-editor.org/rfc/rfc3023.txt - "If an XML document -- that is, the unprocessed, 
+                // source XML document -- is readable by casual users, text/xml is preferable to application/xml. 
+                // MIME user agents (and web user agents) that do not have explicit support for text/xml will treat it as text/plain, 
+                // for example, by displaying the XML MIME entity as plain text.
                 // Application/xml is preferable when the XML MIME entity is unreadable by casual users."
                 case .HTML(_)   : headers["Content-Type"] = "text/html"
                 default:[]

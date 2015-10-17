@@ -32,8 +32,8 @@ public class HttpServer
                 if let newHandler = newValue {
                     handlers.append(expression: regex, handler: newHandler)
                 }
-            } catch {
-                    
+            } catch  {
+                print("Could not register handler for: \(path), error: \(error)")
             }
         }
     }

@@ -23,11 +23,7 @@ class HttpParser {
             let method = statusTokens[0]
             let path = statusTokens[1]
             let urlParams = extractUrlParams(path)
-            // TODO extract query parameters
             if let headers = nextHeaders(socket, error: error) {
-                // TODO detect content-type and handle:
-                // 'application/x-www-form-urlencoded' -> Dictionary
-                // 'multipart' -> Dictionary
                 if let contentLength = headers["content-length"], let contentLengthValue = Int(contentLength) {
                     let body = nextBody(socket, size: contentLengthValue, error: error)
                     return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
@@ -45,7 +41,7 @@ class HttpParser {
                 if tokens.count >= 2 {
                     let key = tokens[0].stringByRemovingPercentEncoding
                     let value = tokens[1].stringByRemovingPercentEncoding
-                    if key != nil && value != nil { return (key!, value!) }
+                    if let key = key, value = value { return (key, value) }
                 }
                 return ("","")
             }
