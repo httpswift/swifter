@@ -8,15 +8,14 @@ import Foundation
 
 
 enum HttpParserError : ErrorType {
-    case RecvFailed(String?)
-    case ReadBodyFailed(String?)
+    case ReadBodyFailed(String)
     case InvalidStatusLine(String)
 }
 
 class HttpParser {
     
-    func nextHttpRequest(socket: CInt) throws -> HttpRequest {
-        let statusLine = try nextLine(socket)
+    func nextHttpRequest(socket: Socket) throws -> HttpRequest {
+        let statusLine = try socket.nextLine()
         let statusLineTokens = statusLine.componentsSeparatedByString(" ")
         print(statusLineTokens)
         if statusLineTokens.count < 3 {
@@ -25,9 +24,9 @@ class HttpParser {
         let method = statusLineTokens[0]
         let path = statusLineTokens[1]
         let urlParams = extractUrlParams(path)
-        let headers = try nextHeaders(socket)
+        let headers = try self.nextHeaders(socket)
         if let contentLength = headers["content-length"], let contentLengthValue = Int(contentLength) {
-            let body = try nextBody(socket, size: contentLengthValue)
+            let body = try self.nextBody(socket, size: contentLengthValue)
             return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
         }
         return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [], address: nil)
@@ -49,13 +48,13 @@ class HttpParser {
         }
     }
     
-    private func nextBody(socket: CInt, size: Int) throws -> String {
+    private func nextBody(socket: Socket, size: Int) throws -> String {
         var body = ""
         var counter = 0;
         while counter < size {
-            let c = nextInt8(socket)
+            let c = socket.nextInt8()
             if c < 0 {
-                throw HttpParserError.ReadBodyFailed(String.fromCString(UnsafePointer(strerror(errno))))
+                throw HttpParserError.ReadBodyFailed(ErrorHandle.errorText)
             }
             body.append(UnicodeScalar(c))
             counter++;
@@ -63,10 +62,10 @@ class HttpParser {
         return body
     }
     
-    private func nextHeaders(socket: CInt) throws -> [String: String] {
+    private func nextHeaders(socket: Socket) throws -> [String: String] {
         var requestHeaders = [String: String]()
         repeat {
-            let headerLine = try nextLine(socket)
+            let headerLine = try socket.nextLine()
             if headerLine.isEmpty {
                 return requestHeaders
             }
@@ -82,28 +81,6 @@ class HttpParser {
                 }
             }
         } while true
-    }
-
-    private func nextInt8(socket: CInt) -> Int {
-        var buffer = [UInt8](count: 1, repeatedValue: 0);
-        let next = recv(socket as Int32, &buffer, Int(buffer.count), 0)
-        if next <= 0 {
-            return next
-        }
-        return Int(buffer[0])
-    }
-    
-    private func nextLine(socket: CInt) throws -> String {
-        var characters: String = ""
-        var n = 0
-        repeat {
-            n = nextInt8(socket)
-            if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
-        } while n > 0 && n != 10 /* NL */
-        if n == -1 {
-            throw HttpParserError.RecvFailed(String.fromCString(UnsafePointer(strerror(errno))))
-        }
-        return characters
     }
     
     func supportsKeepAlive(headers: [String: String]) -> Bool {

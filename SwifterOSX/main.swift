@@ -15,6 +15,3 @@ do {
 } catch {
     print("Server start error: \(error)")
 }
-
-
-
