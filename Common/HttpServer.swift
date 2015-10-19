@@ -13,8 +13,8 @@ public class HttpServer
     public typealias Handler = HttpRequest -> HttpResponse
     
     private(set) var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
-    private(set) var acceptSocket: CInt = -1
-    private(set) var clientSockets: Set<CInt> = []
+    private(set) var acceptSocket: Socket!
+    private(set) var clientSockets: Set<Socket> = []
     private let clientSocketsLock = 0
 
     
@@ -27,11 +27,12 @@ public class HttpServer
         get {
             return nil
         }
-        set ( newValue ) {
+        
+        set {
             do {
-                let regex = try NSRegularExpression(pattern: path, options: expressionOptions)
+                let regex = try NSRegularExpression(pattern: path, options: self.expressionOptions)
                 if let newHandler = newValue {
-                    handlers.append(expression: regex, handler: newHandler)
+                    self.handlers.append(expression: regex, handler: newHandler)
                 }
             } catch  {
                 print("Could not register handler for: \(path), error: \(error)")
@@ -40,19 +41,18 @@ public class HttpServer
     }
     
     public var routes:[String] {
-        return self.handlers.map { $0.0.pattern }
+        return self.handlers.map { $0.expression.pattern }
     }
     
     public func start(listenPort: in_port_t = 8080) throws {
         self.stop()
-        self.acceptSocket = try Socket.tcpForListen(listenPort)
+        self.acceptSocket = try Socket(port:listenPort)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-            while let socket = try? Socket.acceptClientSocket(self.acceptSocket) {
+            while let socket = try? self.acceptSocket.acceptClientSocket() {
                 HttpServer.lock(self.clientSocketsLock) {
                     self.clientSockets.insert(socket)
                 }
-                if self.acceptSocket == -1 { return }
-                let socketAddress = try? Socket.peername(socket)!
+                let socketAddress = try? self.acceptSocket.peername()
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
                     let parser = HttpParser()
                     while let request = try? parser.nextHttpRequest(socket) {
@@ -73,7 +73,6 @@ public class HttpServer
                         }
                         if !keepAlive { break }
                     }
-                    Socket.release(socket)
                     HttpServer.lock(self.clientSocketsLock) {
                         self.clientSockets.remove(socket)
                     }
@@ -112,12 +111,12 @@ public class HttpServer
     }
     
     public func stop() {
-        Socket.release(acceptSocket)
-        self.acceptSocket = -1
+//        self.acceptSocket?.release()
+        self.acceptSocket = nil
         HttpServer.lock(self.clientSocketsLock) {
-            for clientSocket in self.clientSockets {
-                Socket.release(clientSocket)
-            }
+//            for clientSocket in self.clientSockets {
+//                clientSocket.release()
+//            }
             self.clientSockets.removeAll(keepCapacity: true)
         }
     }
@@ -132,21 +131,21 @@ public class HttpServer
         objc_sync_exit(handle)
     }
     
-    private class func respond(socket: CInt, response: HttpResponse, keepAlive: Bool) throws {
-        try Socket.writeUTF8(socket, string: "HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
+    private class func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws {
+        try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         
         let length = response.body()?.length ?? 0
-        try Socket.writeASCII(socket, string: "Content-Length: \(length)\r\n")
+        try socket.writeASCII("Content-Length: \(length)\r\n")
         
         if keepAlive {
-            try Socket.writeASCII(socket, string: "Connection: keep-alive\r\n")
+            try socket.writeASCII("Connection: keep-alive\r\n")
         }
         for (name, value) in response.headers() {
-            try Socket.writeASCII(socket, string: "\(name): \(value)\r\n")
+            try socket.writeASCII("\(name): \(value)\r\n")
         }
-        try Socket.writeASCII(socket, string: "\r\n")
+        try socket.writeASCII("\r\n")
         if let body = response.body() {
-            try Socket.writeData(socket, data: body)
+            try socket.writeData(body)
         }
     }
 }
