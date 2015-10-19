@@ -1,7 +1,7 @@
 //
 //  Handlers.swift
 //  Swifter
-//  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
+//  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation

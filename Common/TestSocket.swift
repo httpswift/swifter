@@ -7,14 +7,16 @@
 //
 
 import Foundation
+
 //http://socket.io/get-started/chat/
+
 func testSocket(publicDir: String) -> HttpServer {
     let server = HttpServer()
 
     server["/resources/(.+)"] = HttpHandlers.directory(publicDir)
     
     server["/"] = { request in
-        if let html = NSData(contentsOfFile:"\(publicDir)/index.html") {
+        if let html = NSData(contentsOfFile:"\(publicDir)/chat.html") {
             return HttpResponse.RAW(200, "OK", nil, html)
         } else {
             return .NotFound

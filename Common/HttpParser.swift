@@ -1,103 +1,52 @@
 //
 //  HttpParser.swift
 //  Swifter
-//  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
+//  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
 
 
 enum HttpParserError : ErrorType {
-    case RecvFailed
-    case ReadBodyFailed
+    case RecvFailed(String?)
+    case ReadBodyFailed(String?)
     case InvalidStatusLine(String)
-    
-    var value: String {
-        switch self {
-            case .RecvFailed:
-                return "recv(...) failed."
-            
-            case .ReadBodyFailed:
-                return "IO error while reading body"
-            
-            case .InvalidStatusLine(let statusLine):
-                return "Invalid status line: \(statusLine)"
-        }
-    }
 }
 
 class HttpParser {
     
     func nextHttpRequest(socket: CInt) throws -> HttpRequest {
-        do {
-            let statusLine = try nextLine(socket)
-            let statusTokens = statusLine.componentsSeparatedByString(" ")
-            print(statusTokens)
-            if statusTokens.count < 3 {
-                throw HttpParserError.InvalidStatusLine(statusLine)
-            }
-            let method = statusTokens[0]
-            let path = statusTokens[1]
-            let urlParams = self.extractUrlParams(path)
-            
-            let headers = try nextHeaders(socket)
-            // TODO detect content-type and handle:
-            // 'application/x-www-form-urlencoded' -> Dictionary
-            // 'multipart' -> Dictionary
-            let body: String?
-            if let contentLengthString = headers["content-length"],
-                let contentLength = Int(contentLengthString) {
-                    body = try nextBody(socket, size: contentLength)
-                    
-//                    self.extractBodyParams(body!)
-            } else {
-                body = nil
-            }
-            
+        let statusLine = try nextLine(socket)
+        let statusLineTokens = statusLine.componentsSeparatedByString(" ")
+        print(statusLineTokens)
+        if statusLineTokens.count < 3 {
+            throw HttpParserError.InvalidStatusLine(statusLine)
+        }
+        let method = statusLineTokens[0]
+        let path = statusLineTokens[1]
+        let urlParams = extractUrlParams(path)
+        let headers = try nextHeaders(socket)
+        if let contentLength = headers["content-length"], let contentLengthValue = Int(contentLength) {
+            let body = try nextBody(socket, size: contentLengthValue)
             return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
-        } catch {
-            throw error
         }
+        return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [], address: nil)
     }
     
-    private func extractBodyParams(body: String) -> [String: Parameter] {
-        let params = body.componentsSeparatedByString("&").map { (param:String) -> (String, String) in
-            let tokens = param.componentsSeparatedByString("=")
-            if tokens.count >= 2 {
-                let key = tokens[0].stringByRemovingPercentEncoding
-                let value = tokens[1].stringByRemovingPercentEncoding
-                if key != nil && value != nil { return (key!, value!) }
-            }
-            return ("","")
-        }
-        
-        var result = [String: Parameter]()
-        
-        for (key, value) in params {
-            if let val = result[key] {
-                switch val {
-                case .StringValue(let stringValue):
-                    result[key] = Parameter.ArrayString([stringValue, value])
-                    
-                case .ArrayString(var arrayValue):
-                    arrayValue.append(value)
-                    result[key] = Parameter.ArrayString(arrayValue)
-                }
-            } else {
-                result[key] = Parameter.StringValue(value)
-            }
-        }
-        
-        return result
-
-    }
-    
-    private func extractUrlParams(url: String) -> [String : Parameter] {
+    private func extractUrlParams(url: String) -> [(String, String)] {
         guard let query = url.componentsSeparatedByString("?").last else {
-            return [:]
+            return []
         }
-        
-        return self.extractBodyParams(query)
+        return query.componentsSeparatedByString("&").map { (param:String) -> (String, String) in
+            let tokens = param.componentsSeparatedByString("=")
+            guard tokens.count >= 2 else {
+                return ("", "")
+            }
+            guard let k = tokens[0].stringByRemovingPercentEncoding, v = tokens[1].stringByRemovingPercentEncoding else {
+                return ("", "")
+            }
+            return (k, v)
+        }
     }
     
     private func nextBody(socket: CInt, size: Int) throws -> String {
@@ -106,7 +55,7 @@ class HttpParser {
         while counter < size {
             let c = nextInt8(socket)
             if c < 0 {
-                throw HttpParserError.ReadBodyFailed
+                throw HttpParserError.ReadBodyFailed(String.fromCString(UnsafePointer(strerror(errno))))
             }
             body.append(UnicodeScalar(c))
             counter++;
@@ -115,30 +64,32 @@ class HttpParser {
     }
     
     private func nextHeaders(socket: CInt) throws -> [String: String] {
-        var headers = [String: String]()
-        while let headerLine = try? nextLine(socket) {
+        var requestHeaders = [String: String]()
+        repeat {
+            let headerLine = try nextLine(socket)
             if headerLine.isEmpty {
-                return headers
+                return requestHeaders
             }
             let headerTokens = headerLine.componentsSeparatedByString(":")
             if headerTokens.count >= 2 {
                 // RFC 2616 - "Hypertext Transfer Protocol -- HTTP/1.1", paragraph 4.2, "Message Headers":
                 // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."
-                // We can keep lower case version.
+                // We will keep lower case version.
                 let headerName = headerTokens[0].lowercaseString
                 let headerValue = headerTokens[1].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
                 if !headerName.isEmpty && !headerValue.isEmpty {
-                    headers.updateValue(headerValue, forKey: headerName)
+                    requestHeaders.updateValue(headerValue, forKey: headerName)
                 }
             }
-        }
-        throw HttpParserError.RecvFailed
+        } while true
     }
 
     private func nextInt8(socket: CInt) -> Int {
         var buffer = [UInt8](count: 1, repeatedValue: 0);
         let next = recv(socket as Int32, &buffer, Int(buffer.count), 0)
-        if next <= 0 { return next }
+        if next <= 0 {
+            return next
+        }
         return Int(buffer[0])
     }
     
@@ -149,8 +100,8 @@ class HttpParser {
             n = nextInt8(socket)
             if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
         } while n > 0 && n != 10 /* NL */
-        if n == -1 && characters.isEmpty {
-            throw HttpParserError.RecvFailed
+        if n == -1 {
+            throw HttpParserError.RecvFailed(String.fromCString(UnsafePointer(strerror(errno))))
         }
         return characters
     }

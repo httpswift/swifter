@@ -1,7 +1,7 @@
 //
 //  DemoServer.swift
 //  Swifter
-//  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
+//  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
@@ -58,13 +58,9 @@ func demoServer(publicDir: String?) -> HttpServer {
                         return .NotFound
                     }
                 }
-                break;
             case "POST":
-                if let body = request.body {
-                    return .OK(.HTML(body))
-                } else {
-                    return .OK(.HTML("No POST params."))
-            }
+                let formFields = request.parseForm()
+                return HttpResponse.OK(.HTML(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
             default:
                 return .NotFound
         }
@@ -75,10 +71,7 @@ func demoServer(publicDir: String?) -> HttpServer {
     }
     server["/"] = { request in
         var listPage = "Available services:<br><ul>"
-        for item in server.routes {
-            listPage += "<li><a href=\"\(item)\">\(item)</a></li>"
-        }
-        listPage += "</ul>"
+        listPage += server.routes.map({ "<li><a href=\"\($0)\">\($0)</a></li>"}).joinWithSeparator("")
         return .OK(.HTML(listPage))
     }
     return server
