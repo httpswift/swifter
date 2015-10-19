@@ -14,8 +14,8 @@ enum HttpParserError : ErrorType {
 
 class HttpParser {
     
-    func nextHttpRequest(socket: Socket) throws -> HttpRequest {
-        let statusLine = try socket.nextLine()
+    func readHttpRequest(socket: Socket) throws -> HttpRequest {
+        let statusLine = try socket.readLine()
         let statusLineTokens = statusLine.componentsSeparatedByString(" ")
         print(statusLineTokens)
         if statusLineTokens.count < 3 {
@@ -24,9 +24,9 @@ class HttpParser {
         let method = statusLineTokens[0]
         let path = statusLineTokens[1]
         let urlParams = extractUrlParams(path)
-        let headers = try self.nextHeaders(socket)
+        let headers = try readHeaders(socket)
         if let contentLength = headers["content-length"], let contentLengthValue = Int(contentLength) {
-            let body = try self.nextBody(socket, size: contentLengthValue)
+            let body = try readBody(socket, size: contentLengthValue)
             return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
         }
         return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [], address: nil)
@@ -48,13 +48,13 @@ class HttpParser {
         }
     }
     
-    private func nextBody(socket: Socket, size: Int) throws -> String {
+    private func readBody(socket: Socket, size: Int) throws -> String {
         var body = ""
         var counter = 0;
         while counter < size {
-            let c = socket.nextInt8()
+            let c = socket.read()
             if c < 0 {
-                throw HttpParserError.ReadBodyFailed(ErrorHandle.errorText)
+                throw HttpParserError.ReadBodyFailed(String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)")
             }
             body.append(UnicodeScalar(c))
             counter++;
@@ -62,10 +62,10 @@ class HttpParser {
         return body
     }
     
-    private func nextHeaders(socket: Socket) throws -> [String: String] {
+    private func readHeaders(socket: Socket) throws -> [String: String] {
         var requestHeaders = [String: String]()
         repeat {
-            let headerLine = try socket.nextLine()
+            let headerLine = try socket.readLine()
             if headerLine.isEmpty {
                 return requestHeaders
             }

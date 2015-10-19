@@ -12,12 +12,13 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.server = demoServer(NSBundle.mainBundle().resourcePath)
+        let server = demoServer(NSBundle.mainBundle().resourcePath)
         do {
-            try self.server.start()
+            try server.start()
         } catch {
             print("Server start error: \(error)")
         }
+        self.server = server
     }
 
     override func didReceiveMemoryWarning() {
