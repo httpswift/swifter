@@ -6,7 +6,7 @@
 
 import Foundation
 
-let server = demoServer(NSBundle.mainBundle().resourcePath!)
+let server = swiftyDemoServer(NSBundle.mainBundle().resourcePath!)
 
 do {
     try server.start(9080)

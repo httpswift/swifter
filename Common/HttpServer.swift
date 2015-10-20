@@ -10,9 +10,11 @@ public class HttpServer
 {
     static let VERSION = "1.0.2";
     
+    typealias HandlerLine = (rawExpression: String, expression: NSRegularExpression, handler: Handler)
+    
     public typealias Handler = HttpRequest -> HttpResponse
     
-    private(set) var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
+    private(set) var handlers: [HandlerLine] = []
     private(set) var acceptSocket: Socket!
     private(set) var clientSockets: Set<Socket> = []
     private let clientSocketsLock = 0
@@ -32,7 +34,7 @@ public class HttpServer
             do {
                 let regex = try NSRegularExpression(pattern: path, options: self.expressionOptions)
                 if let newHandler = newValue {
-                    self.handlers.append(expression: regex, handler: newHandler)
+                    self.handlers.append(rawExpression: path, expression: regex, handler: newHandler)
                 }
             } catch  {
                 print("Could not register handler for: \(path), error: \(error)")
@@ -58,11 +60,12 @@ public class HttpServer
                     while let request = try? parser.nextHttpRequest(socket) {
                         let keepAlive = parser.supportsKeepAlive(request.headers)
                         let response: HttpResponse
-                        if let (expression, handler) = self.findHandler(request.url) {
+                        if let (_, expression, handler) = self.findHandler(request.url) {
                             let capturedUrlsGroups = self.captureExpressionGroups(expression, value: request.url)
                             let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups, address: socketAddress)
                             response = handler(updatedRequest)
                         } else {
+                            print("handler not found")
                             response = HttpResponse.NotFound
                         }
                         do {
@@ -82,12 +85,25 @@ public class HttpServer
         }
     }
     
-    func findHandler(url:String) -> (NSRegularExpression, Handler)? {
+    func findHandler(url:String) -> HandlerLine? {
         if let u = NSURL(string: url), path = u.path {
-            for handler in self.handlers {
-                if handler.expression.numberOfMatchesInString(path, options: self.matchingOptions, range: HttpServer.asciiRange(path)) > 0 {
-                    return handler
+            var res = self.handlers.filter { $0.expression.numberOfMatchesInString(path, options: self.matchingOptions, range: HttpServer.asciiRange(path)) > 0 }
+            
+            if res.count > 1 {
+                // we eliminate first the "/" route
+                res = res.filter { $0.rawExpression != "/" }
+                
+                // if there is still the conflict, we take the better matching route
+                if res.count > 1 {
+                    print("conflict between routes")
+                    let weight = res.map { $0.expression.numberOfMatchesInString(path, options: self.matchingOptions, range: HttpServer.asciiRange(path)) }
+                    res = [res[weight.indexOf(weight.maxElement()!)!]]
+
                 }
+            }
+            
+            if res.count > 0 {
+                return res[0]
             }
         }
 		return nil
