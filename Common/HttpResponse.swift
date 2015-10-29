@@ -6,52 +6,104 @@
 
 import Foundation
 
+public enum SerializationError: ErrorType {
+    case InvalidObject
+    case NotSupported
+    case EncodingError
+}
+
+public protocol Serializer {
+    func serialize(object: Any) throws -> String
+}
+
+public class JSONSerializer : Serializer {
+    public func serialize(object: Any) throws -> String {
+        guard let obj = object as? AnyObject where NSJSONSerialization.isValidJSONObject(obj) else {
+            throw SerializationError.InvalidObject
+        }
+        
+        let json = try NSJSONSerialization.dataWithJSONObject(obj, options: NSJSONWritingOptions.PrettyPrinted)
+        
+        guard let string = String(data: json, encoding: NSUTF8StringEncoding) else {
+            throw SerializationError.EncodingError
+        }
+        
+        return string
+    }
+    
+    private static func serialize(object: Any) throws -> String {
+        let serializer = JSONSerializer()
+        return try serializer.serialize(object)
+    }
+}
+
+public class XMLSerializer: Serializer {
+    public func serialize(object: Any) throws -> String {
+        throw SerializationError.NotSupported
+    }
+    
+    private static func serialize(object: Any) throws -> String {
+        let serializer = XMLSerializer()
+        return try serializer.serialize(object)
+    }
+}
+
+public class PLISTSerializer: Serializer {
+    public func serialize(object: Any) throws -> String {
+        let format = NSPropertyListFormat.XMLFormat_v1_0
+        
+        guard let obj = object as? AnyObject where NSPropertyListSerialization.propertyList(obj, isValidForFormat: format) else {
+            throw SerializationError.InvalidObject
+        }
+        
+        let plist = try NSPropertyListSerialization.dataWithPropertyList(obj, format: format, options: 0)
+        
+        guard let string = String(data: plist, encoding: NSUTF8StringEncoding) else {
+            throw SerializationError.EncodingError
+        }
+        
+        return string
+    }
+    
+    private static func serialize(object: Any) throws -> String {
+        let serializer = PLISTSerializer()
+        return try serializer.serialize(object)
+    }
+}
+
 public enum HttpResponseBody {
     
-    case JSON(AnyObject)
-    case XML(AnyObject)
-    case PLIST(AnyObject)
-    case HTML(String)
-    case STRING(String)
+    case Json(AnyObject)
+    case Xml(AnyObject)
+    case Plist(AnyObject)
+    case Html(String)
+    case Text(String)
+    case Custom(Serializer, Any)
     
     func data() -> String? {
-        switch self {
-            
-        case .JSON(let object):
-            if NSJSONSerialization.isValidJSONObject(object) {
-                do {
-                    let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
-                    if let nsString = NSString(data: json, encoding: NSUTF8StringEncoding) {
-                        return nsString as String
-                    }
-                } catch let serializationError as NSError {
-                    return "Serialisation error: \(serializationError)"
-                }
+        do {
+            switch self {
+                
+            case .Json(let object):
+                return try JSONSerializer.serialize(object)
+                
+            case .Xml(let object):
+                return try XMLSerializer.serialize(object)
+                
+            case .Plist(let object):
+                return try PLISTSerializer.serialize(object)
+                
+            case .Text(let body):
+                return body
+                
+            case .Html(let body):
+                return "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
+                
+            case .Custom(let serializer, let object):
+                return try serializer.serialize(object)
             }
-            return "Invalid object to serialise."
-            
-        case .XML(_):
-            return "XML serialization not supported."
-            
-        case .PLIST(let object):
-            let format = NSPropertyListFormat.XMLFormat_v1_0
-            if NSPropertyListSerialization.propertyList(object, isValidForFormat: format) {
-                do {
-                    let plist = try NSPropertyListSerialization.dataWithPropertyList(object, format: format, options: 0)
-                    if let nsString = NSString(data: plist, encoding: NSUTF8StringEncoding) {
-                        return nsString as String
-                    }
-                } catch let serializationError as NSError {
-                    return "Serialisation error: \(serializationError)"
-                }
-            }
-            return "Invalid object to serialise."
-            
-        case .STRING(let body):
-            return body
-            
-        case .HTML(let body):
-            return "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
+        } catch {
+            return "Serialisation error: \(error)"
         }
     }
 }
@@ -100,15 +152,15 @@ public enum HttpResponse {
         switch self {
 		case .OK(let body):
             switch body {
-                case .JSON(_)   : headers["Content-Type"] = "application/json"
-                case .PLIST(_)  : headers["Content-Type"] = "application/xml"
-                case .XML(_)    : headers["Content-Type"] = "application/xml"
+                case .Json(_)   : headers["Content-Type"] = "application/json"
+                case .Plist(_)  : headers["Content-Type"] = "application/xml"
+                case .Xml(_)    : headers["Content-Type"] = "application/xml"
                 // 'application/xml' or 'text/xml' ?
                 // From RFC: http://www.rfc-editor.org/rfc/rfc3023.txt - "If an XML document -- that is, the unprocessed, 
                 // source XML document -- is readable by casual users, text/xml is preferable to application/xml. 
                 // MIME user agents (and web user agents) that do not have explicit support for text/xml will treat it as text/plain, 
                 // for example, by displaying the XML MIME entity as plain text.
-                case .HTML(_)   : headers["Content-Type"] = "text/html"
+                case .Html(_)   : headers["Content-Type"] = "text/html"
                 default:break
             }
         case .MovedPermanently(let location): headers["Location"] = location
@@ -146,3 +198,5 @@ public enum HttpResponse {
 func ==(inLeft: HttpResponse, inRight: HttpResponse) -> Bool {
 	return inLeft.statusCode() == inRight.statusCode()
 }
+
+

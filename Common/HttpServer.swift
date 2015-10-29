@@ -25,14 +25,14 @@ public class HttpServer
                 let regex = try NSRegularExpression(pattern: path, options: self.expressionOptions)
                 if let newHandler = newValue {
                     self.handlers.append(expression: regex, handler: newHandler)
+                    // Longer patterns will have higher priority.
+                    self.handlers = self.handlers.sort { $0.0.pattern > $1.0.pattern }
                 }
             } catch  {
                 print("Could not register handler for: \(path), error: \(error)")
             }
         }
-        get {
-            return nil
-        }
+        get { return nil }
     }
     
     public var routes:[String] {
@@ -77,7 +77,7 @@ public class HttpServer
             self.stop()
         }
     }
-    
+
     public func stop() {
         self.listenSocket.release()
         HttpServer.lock(self.clientSocketsLock) {
@@ -99,7 +99,7 @@ public class HttpServer
                 }
             }
         }
-		return nil
+        return nil
     }
     
     private func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {

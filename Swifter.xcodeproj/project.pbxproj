@@ -7,12 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18E610A71BD6397D00B7D17A /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
-		7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7319422CFF003A6950 /* AppDelegate.swift */; };
-		7C839B7619422CFF003A6950 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C839B7519422CFF003A6950 /* ViewController.swift */; };
-		7C839B7919422CFF003A6950 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C839B7719422CFF003A6950 /* Main.storyboard */; };
-		7C839B7B19422CFF003A6950 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C839B7A19422CFF003A6950 /* Images.xcassets */; };
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
 		7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
 		7CA4814F19A2EED00030B30D /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
@@ -31,6 +28,11 @@
 		7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
 		7CB102DE1A1680EA00CBA3B4 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
 		7CB102E01A17381D00CBA3B4 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
+		7CDAB8121BE2A1D400C8A977 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
+		7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */; };
+		7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */; };
+		7CDAB8151BE2A1D400C8A977 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB8101BE2A1D400C8A977 /* Info.plist */; };
+		7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB8111BE2A1D400C8A977 /* ViewController.swift */; };
 		98630C071A1C9A9D00478D08 /* login.html in Resources */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 /* End PBXBuildFile section */
 
@@ -50,12 +52,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		7C839B6E19422CFF003A6950 /* Swifter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swifter.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C839B7219422CFF003A6950 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7C839B7319422CFF003A6950 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7C839B7519422CFF003A6950 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		7C839B7819422CFF003A6950 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		7C839B7A19422CFF003A6950 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		7C839B6E19422CFF003A6950 /* SwifteriOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifteriOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813B19A2EA8D0030B30D /* SwifterOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CA4814A19A2EED00030B30D /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
@@ -67,6 +65,11 @@
 		7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
 		7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 		7CB102DF1A17381D00CBA3B4 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7CDAB80E1BE2A1D400C8A977 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		7CDAB8101BE2A1D400C8A977 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7CDAB8111BE2A1D400C8A977 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		98630C061A1C9A9D00478D08 /* login.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = login.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,7 +96,7 @@
 			children = (
 				7CA4815619A2EF2B0030B30D /* Resources */,
 				7CA4814919A2EED00030B30D /* Common */,
-				7C839B7019422CFF003A6950 /* Swifter */,
+				7CDAB80B1BE2A1D400C8A977 /* SwifteriOS */,
 				7CA4813C19A2EA8D0030B30D /* SwifterOSX */,
 				7C839B6F19422CFF003A6950 /* Products */,
 			);
@@ -102,36 +105,17 @@
 		7C839B6F19422CFF003A6950 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7C839B6E19422CFF003A6950 /* Swifter.app */,
+				7C839B6E19422CFF003A6950 /* SwifteriOS.app */,
 				7CA4813B19A2EA8D0030B30D /* SwifterOSX */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		7C839B7019422CFF003A6950 /* Swifter */ = {
-			isa = PBXGroup;
-			children = (
-				7C839B7319422CFF003A6950 /* AppDelegate.swift */,
-				7C839B7519422CFF003A6950 /* ViewController.swift */,
-				7C839B7719422CFF003A6950 /* Main.storyboard */,
-				7C839B7A19422CFF003A6950 /* Images.xcassets */,
-				7C839B7119422CFF003A6950 /* Supporting Files */,
-			);
-			path = Swifter;
-			sourceTree = "<group>";
-		};
-		7C839B7119422CFF003A6950 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				7C839B7219422CFF003A6950 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		7CA4813C19A2EA8D0030B30D /* SwifterOSX */ = {
 			isa = PBXGroup;
 			children = (
 				7CA4813D19A2EA8D0030B30D /* main.swift */,
+				18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */,
 			);
 			path = SwifterOSX;
 			sourceTree = "<group>";
@@ -160,12 +144,24 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		7CDAB80B1BE2A1D400C8A977 /* SwifteriOS */ = {
+			isa = PBXGroup;
+			children = (
+				7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */,
+				7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */,
+				7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */,
+				7CDAB8101BE2A1D400C8A977 /* Info.plist */,
+				7CDAB8111BE2A1D400C8A977 /* ViewController.swift */,
+			);
+			path = SwifteriOS;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7C839B6D19422CFF003A6950 /* Swifter */ = {
+		7C839B6D19422CFF003A6950 /* SwifteriOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "Swifter" */;
+			buildConfigurationList = 7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifteriOS" */;
 			buildPhases = (
 				7C839B6A19422CFF003A6950 /* Sources */,
 				7C839B6B19422CFF003A6950 /* Frameworks */,
@@ -175,9 +171,9 @@
 			);
 			dependencies = (
 			);
-			name = Swifter;
+			name = SwifteriOS;
 			productName = Swifter;
-			productReference = 7C839B6E19422CFF003A6950 /* Swifter.app */;
+			productReference = 7C839B6E19422CFF003A6950 /* SwifteriOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7CA4813A19A2EA8D0030B30D /* SwifterOSX */ = {
@@ -228,7 +224,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7C839B6D19422CFF003A6950 /* Swifter */,
+				7C839B6D19422CFF003A6950 /* SwifteriOS */,
 				7CA4813A19A2EA8D0030B30D /* SwifterOSX */,
 			);
 		};
@@ -240,10 +236,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CB102E01A17381D00CBA3B4 /* logo.png in Resources */,
-				7C839B7919422CFF003A6950 /* Main.storyboard in Resources */,
+				7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */,
+				7CDAB8151BE2A1D400C8A977 /* Info.plist in Resources */,
 				98630C071A1C9A9D00478D08 /* login.html in Resources */,
-				7C839B7B19422CFF003A6950 /* Images.xcassets in Resources */,
 				7CA4815819A2EF2B0030B30D /* test.json in Resources */,
+				7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,15 +251,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */,
 				7CA4815019A2EED00030B30D /* HttpResponse.swift in Sources */,
 				7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */,
-				7C839B7619422CFF003A6950 /* ViewController.swift in Sources */,
+				7CDAB8121BE2A1D400C8A977 /* AppDelegate.swift in Sources */,
 				7CA4815419A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */,
 				7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */,
-				7C839B7419422CFF003A6950 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +273,7 @@
 				7CA4815519A2EED00030B30D /* Socket.swift in Sources */,
 				7CA4815319A2EED00030B30D /* HttpServer.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
+				18E610A71BD6397D00B7D17A /* SwiftyJSON.swift in Sources */,
 				7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */,
 				7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 			);
@@ -284,10 +282,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		7C839B7719422CFF003A6950 /* Main.storyboard */ = {
+		7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
-				7C839B7819422CFF003A6950 /* Base */,
+				7CDAB80E1BE2A1D400C8A977 /* Base */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -382,7 +380,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = Swifter/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SwifteriOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski..${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -397,7 +395,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = Swifter/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SwifteriOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski..${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -450,7 +448,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "Swifter" */ = {
+		7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifteriOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C839B8B19422D00003A6950 /* Debug */,
