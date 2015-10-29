@@ -31,7 +31,6 @@
 		7CDAB8121BE2A1D400C8A977 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
 		7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */; };
 		7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */; };
-		7CDAB8151BE2A1D400C8A977 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB8101BE2A1D400C8A977 /* Info.plist */; };
 		7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB8111BE2A1D400C8A977 /* ViewController.swift */; };
 		98630C071A1C9A9D00478D08 /* login.html in Resources */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 /* End PBXBuildFile section */
@@ -237,7 +236,6 @@
 			files = (
 				7CB102E01A17381D00CBA3B4 /* logo.png in Resources */,
 				7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */,
-				7CDAB8151BE2A1D400C8A977 /* Info.plist in Resources */,
 				98630C071A1C9A9D00478D08 /* login.html in Resources */,
 				7CA4815819A2EF2B0030B30D /* test.json in Resources */,
 				7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */,
