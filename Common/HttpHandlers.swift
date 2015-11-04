@@ -7,6 +7,16 @@
 import Foundation
 
 public class HttpHandlers {
+    
+    public class func file(path: String) -> ( HttpRequest -> HttpResponse ) {
+        return { request in
+            let filesPath = path.stringByExpandingTildeInPath
+            if let fileBody = NSData(contentsOfFile: filesPath) {
+                return HttpResponse.RAW(200, "OK", nil, fileBody)
+            }
+            return HttpResponse.NotFound
+        }
+    }
 
     public class func directory(dir: String) -> ( HttpRequest -> HttpResponse ) {
         return { request in
@@ -16,7 +26,6 @@ public class HttpHandlers {
                     return HttpResponse.RAW(200, "OK", nil, fileBody)
                 }
             }
-            
             return HttpResponse.NotFound
         }
     }
