@@ -72,6 +72,10 @@ public class Socket : Hashable {
         Socket.release(self.socketFileDescriptor)
     }
     
+    public func shutdown() {
+        Socket.shutdown(self.socketFileDescriptor)
+    }
+    
     public func acceptClientSocket() throws -> Socket {
         var addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
         var len: socklen_t = 0
@@ -158,8 +162,12 @@ public class Socket : Hashable {
         setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, socklen_t(sizeof(Int32)));
     }
     
+    private class func shutdown(socket: CInt) {
+        Darwin.shutdown(socket, SHUT_RDWR)
+    }
+    
     private class func release(socket: CInt) {
-        shutdown(socket, SHUT_RDWR)
+        Darwin.shutdown(socket, SHUT_RDWR)
         close(socket)
     }
     
