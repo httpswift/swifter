@@ -74,7 +74,7 @@ public class HttpHandlers {
                             var response = "<h3>\(filePath)</h3></br><table>"
                             response += files.map({ "<tr><td><a href=\"\(request.url)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
                             response += "</table>"
-                            return HttpResponse.OK(.HTML(response))
+                            return HttpResponse.OK(.Html(response))
                         } catch  {
                             return HttpResponse.NotFound
                         }
