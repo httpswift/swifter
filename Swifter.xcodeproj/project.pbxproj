@@ -79,10 +79,10 @@
 
 /* Begin PBXFileReference section */
 		18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
-		7AE893E71C05127900A29F63 /* SwifteriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwifteriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AE893E71C05127900A29F63 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE893E91C05127900A29F63 /* SwifteriOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifteriOS.h; sourceTree = "<group>"; };
 		7AE893EB1C05127900A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7AE893FB1C0512C400A29F63 /* SwifterMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwifterMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AE893FB1C0512C400A29F63 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE893FD1C0512C400A29F63 /* SwifterMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifterMac.h; sourceTree = "<group>"; };
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
@@ -174,8 +174,8 @@
 			children = (
 				7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */,
 				7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */,
-				7AE893E71C05127900A29F63 /* SwifteriOS.framework */,
-				7AE893FB1C0512C400A29F63 /* SwifterMac.framework */,
+				7AE893E71C05127900A29F63 /* Swifter.framework */,
+				7AE893FB1C0512C400A29F63 /* Swifter.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -263,7 +263,7 @@
 			);
 			name = SwifteriOS;
 			productName = SwifteriOS;
-			productReference = 7AE893E71C05127900A29F63 /* SwifteriOS.framework */;
+			productReference = 7AE893E71C05127900A29F63 /* Swifter.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7AE893FA1C0512C400A29F63 /* SwifterMac */ = {
@@ -281,7 +281,7 @@
 			);
 			name = SwifterMac;
 			productName = SwifterMac;
-			productReference = 7AE893FB1C0512C400A29F63 /* SwifterMac.framework */;
+			productReference = 7AE893FB1C0512C400A29F63 /* Swifter.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7C839B6D19422CFF003A6950 /* SwifterSampleiOS */ = {
@@ -493,7 +493,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Swifter;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -517,7 +517,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Swifter;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -543,7 +543,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterMac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Swifter;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -571,7 +571,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterMac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Swifter;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
