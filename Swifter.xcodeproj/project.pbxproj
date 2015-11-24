@@ -52,8 +52,8 @@
 
 /* Begin PBXFileReference section */
 		18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
-		7C839B6E19422CFF003A6950 /* SwifteriOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifteriOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7CA4813B19A2EA8D0030B30D /* SwifterOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterOSX; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterSampleOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CA4814A19A2EED00030B30D /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
 		7CA4814B19A2EED00030B30D /* HttpResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpResponse.swift; sourceTree = "<group>"; };
@@ -104,8 +104,8 @@
 		7C839B6F19422CFF003A6950 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7C839B6E19422CFF003A6950 /* SwifteriOS.app */,
-				7CA4813B19A2EA8D0030B30D /* SwifterOSX */,
+				7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */,
+				7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -158,9 +158,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7C839B6D19422CFF003A6950 /* SwifteriOS */ = {
+		7C839B6D19422CFF003A6950 /* SwifterSampleiOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifteriOS" */;
+			buildConfigurationList = 7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifterSampleiOS" */;
 			buildPhases = (
 				7C839B6A19422CFF003A6950 /* Sources */,
 				7C839B6B19422CFF003A6950 /* Frameworks */,
@@ -170,14 +170,14 @@
 			);
 			dependencies = (
 			);
-			name = SwifteriOS;
+			name = SwifterSampleiOS;
 			productName = Swifter;
-			productReference = 7C839B6E19422CFF003A6950 /* SwifteriOS.app */;
+			productReference = 7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7CA4813A19A2EA8D0030B30D /* SwifterOSX */ = {
+		7CA4813A19A2EA8D0030B30D /* SwifterSampleOSX */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7CA4814119A2EA8D0030B30D /* Build configuration list for PBXNativeTarget "SwifterOSX" */;
+			buildConfigurationList = 7CA4814119A2EA8D0030B30D /* Build configuration list for PBXNativeTarget "SwifterSampleOSX" */;
 			buildPhases = (
 				7CA4813719A2EA8D0030B30D /* Sources */,
 				7CA4813819A2EA8D0030B30D /* Frameworks */,
@@ -187,9 +187,9 @@
 			);
 			dependencies = (
 			);
-			name = SwifterOSX;
+			name = SwifterSampleOSX;
 			productName = SwifterOSX;
-			productReference = 7CA4813B19A2EA8D0030B30D /* SwifterOSX */;
+			productReference = 7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -223,8 +223,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7C839B6D19422CFF003A6950 /* SwifteriOS */,
-				7CA4813A19A2EA8D0030B30D /* SwifterOSX */,
+				7C839B6D19422CFF003A6950 /* SwifterSampleiOS */,
+				7CA4813A19A2EA8D0030B30D /* SwifterSampleOSX */,
 			);
 		};
 /* End PBXProject section */
@@ -446,7 +446,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifteriOS" */ = {
+		7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifterSampleiOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C839B8B19422D00003A6950 /* Debug */,
@@ -455,7 +455,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7CA4814119A2EA8D0030B30D /* Build configuration list for PBXNativeTarget "SwifterOSX" */ = {
+		7CA4814119A2EA8D0030B30D /* Build configuration list for PBXNativeTarget "SwifterSampleOSX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7CA4813F19A2EA8D0030B30D /* Debug */,
