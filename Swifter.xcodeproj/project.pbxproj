@@ -27,21 +27,14 @@
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
-		7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
 		7CA4814F19A2EED00030B30D /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
-		7CA4815019A2EED00030B30D /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814B19A2EED00030B30D /* HttpResponse.swift */; };
 		7CA4815119A2EED00030B30D /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814B19A2EED00030B30D /* HttpResponse.swift */; };
-		7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814C19A2EED00030B30D /* HttpServer.swift */; };
 		7CA4815319A2EED00030B30D /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814C19A2EED00030B30D /* HttpServer.swift */; };
-		7CA4815419A2EED00030B30D /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814D19A2EED00030B30D /* Socket.swift */; };
 		7CA4815519A2EED00030B30D /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814D19A2EED00030B30D /* Socket.swift */; };
 		7CA4815819A2EF2B0030B30D /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
-		7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
 		7CA4815C19A2F6A60030B30D /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
-		7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
 		7CB102DB1A16657200CBA3B4 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
-		7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
 		7CB102DE1A1680EA00CBA3B4 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
 		7CB102E01A17381D00CBA3B4 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7CDAB8121BE2A1D400C8A977 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
@@ -50,6 +43,16 @@
 		7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB8111BE2A1D400C8A977 /* ViewController.swift */; };
 		98630C071A1C9A9D00478D08 /* login.html in Resources */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		7AE8940A1C0513C500A29F63 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 7C839B6619422CFF003A6950 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7AE893E61C05127900A29F63;
+			remoteInfo = SwifteriOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		7CA4813919A2EA8D0030B30D /* CopyFiles */ = {
@@ -282,6 +285,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				7AE8940B1C0513C500A29F63 /* PBXTargetDependency */,
 			);
 			name = SwifterSampleiOS;
 			productName = Swifter;
@@ -413,14 +417,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */,
-				7CA4815019A2EED00030B30D /* HttpResponse.swift in Sources */,
-				7CB102DA1A1664B200CBA3B4 /* HttpHandlers.swift in Sources */,
-				7CB102DD1A167FFA00CBA3B4 /* DemoServer.swift in Sources */,
 				7CDAB8121BE2A1D400C8A977 /* AppDelegate.swift in Sources */,
-				7CA4815419A2EED00030B30D /* Socket.swift in Sources */,
-				7CA4815219A2EED00030B30D /* HttpServer.swift in Sources */,
-				7CA4814E19A2EED00030B30D /* HttpParser.swift in Sources */,
-				7CA4815B19A2F6A60030B30D /* HttpRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -441,6 +438,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		7AE8940B1C0513C500A29F63 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7AE893E61C05127900A29F63 /* SwifteriOS */;
+			targetProxy = 7AE8940A1C0513C500A29F63 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */ = {
@@ -466,7 +471,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = SwifteriOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOS;
@@ -490,7 +495,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = SwifteriOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOS;
