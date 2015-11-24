@@ -31,3 +31,8 @@ server.start()
 pod 'Swifter', '~> 1.0.2’
 ```
 
+### Carthage? Also yes.
+
+```
+github "glock45/swifter" == 1.0.2
+```
