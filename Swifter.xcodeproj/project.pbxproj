@@ -8,6 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		18E610A71BD6397D00B7D17A /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */; };
+		7AE893EA1C05127900A29F63 /* SwifteriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893E91C05127900A29F63 /* SwifteriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7AE893EF1C05128800A29F63 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
+		7AE893F01C05128800A29F63 /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
+		7AE893F11C05128800A29F63 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814B19A2EED00030B30D /* HttpResponse.swift */; };
+		7AE893F21C05128800A29F63 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
+		7AE893F31C05128800A29F63 /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814C19A2EED00030B30D /* HttpServer.swift */; };
+		7AE893F41C05128800A29F63 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814D19A2EED00030B30D /* Socket.swift */; };
+		7AE893F51C05128800A29F63 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
+		7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893FD1C0512C400A29F63 /* SwifterMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7AE894031C0512D900A29F63 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
+		7AE894041C0512D900A29F63 /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
+		7AE894051C0512D900A29F63 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814B19A2EED00030B30D /* HttpResponse.swift */; };
+		7AE894061C0512D900A29F63 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */; };
+		7AE894071C0512D900A29F63 /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814C19A2EED00030B30D /* HttpServer.swift */; };
+		7AE894081C0512D900A29F63 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814D19A2EED00030B30D /* Socket.swift */; };
+		7AE894091C0512D900A29F63 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
@@ -52,6 +68,12 @@
 
 /* Begin PBXFileReference section */
 		18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		7AE893E71C05127900A29F63 /* SwifteriOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwifteriOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AE893E91C05127900A29F63 /* SwifteriOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifteriOS.h; sourceTree = "<group>"; };
+		7AE893EB1C05127900A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AE893FB1C0512C400A29F63 /* SwifterMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwifterMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AE893FD1C0512C400A29F63 /* SwifterMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifterMac.h; sourceTree = "<group>"; };
+		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterSampleOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -73,6 +95,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		7AE893E31C05127900A29F63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AE893F71C0512C400A29F63 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C839B6B19422CFF003A6950 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -90,6 +126,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7AE893E81C05127900A29F63 /* SwifteriOS */ = {
+			isa = PBXGroup;
+			children = (
+				7AE893E91C05127900A29F63 /* SwifteriOS.h */,
+				7AE893EB1C05127900A29F63 /* Info.plist */,
+			);
+			path = SwifteriOS;
+			sourceTree = "<group>";
+		};
+		7AE893FC1C0512C400A29F63 /* SwifterMac */ = {
+			isa = PBXGroup;
+			children = (
+				7AE893FD1C0512C400A29F63 /* SwifterMac.h */,
+				7AE893FF1C0512C400A29F63 /* Info.plist */,
+			);
+			path = SwifterMac;
+			sourceTree = "<group>";
+		};
 		7C839B6519422CFF003A6950 = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +151,8 @@
 				7CA4814919A2EED00030B30D /* Common */,
 				7CDAB80B1BE2A1D400C8A977 /* SwifteriOS */,
 				7CA4813C19A2EA8D0030B30D /* SwifterOSX */,
+				7AE893E81C05127900A29F63 /* SwifteriOS */,
+				7AE893FC1C0512C400A29F63 /* SwifterMac */,
 				7C839B6F19422CFF003A6950 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -106,6 +162,8 @@
 			children = (
 				7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */,
 				7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */,
+				7AE893E71C05127900A29F63 /* SwifteriOS.framework */,
+				7AE893FB1C0512C400A29F63 /* SwifterMac.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -157,7 +215,62 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		7AE893E41C05127900A29F63 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AE893EA1C05127900A29F63 /* SwifteriOS.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AE893F81C0512C400A29F63 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		7AE893E61C05127900A29F63 /* SwifteriOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AE893EC1C05127900A29F63 /* Build configuration list for PBXNativeTarget "SwifteriOS" */;
+			buildPhases = (
+				7AE893E21C05127900A29F63 /* Sources */,
+				7AE893E31C05127900A29F63 /* Frameworks */,
+				7AE893E41C05127900A29F63 /* Headers */,
+				7AE893E51C05127900A29F63 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwifteriOS;
+			productName = SwifteriOS;
+			productReference = 7AE893E71C05127900A29F63 /* SwifteriOS.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7AE893FA1C0512C400A29F63 /* SwifterMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AE894001C0512C400A29F63 /* Build configuration list for PBXNativeTarget "SwifterMac" */;
+			buildPhases = (
+				7AE893F61C0512C400A29F63 /* Sources */,
+				7AE893F71C0512C400A29F63 /* Frameworks */,
+				7AE893F81C0512C400A29F63 /* Headers */,
+				7AE893F91C0512C400A29F63 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwifterMac;
+			productName = SwifterMac;
+			productReference = 7AE893FB1C0512C400A29F63 /* SwifterMac.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		7C839B6D19422CFF003A6950 /* SwifterSampleiOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7C839B8A19422D00003A6950 /* Build configuration list for PBXNativeTarget "SwifterSampleiOS" */;
@@ -202,6 +315,12 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Damian Kołakowski";
 				TargetAttributes = {
+					7AE893E61C05127900A29F63 = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					7AE893FA1C0512C400A29F63 = {
+						CreatedOnToolsVersion = 7.1;
+					};
 					7C839B6D19422CFF003A6950 = {
 						CreatedOnToolsVersion = 6.0;
 					};
@@ -225,11 +344,27 @@
 			targets = (
 				7C839B6D19422CFF003A6950 /* SwifterSampleiOS */,
 				7CA4813A19A2EA8D0030B30D /* SwifterSampleOSX */,
+				7AE893E61C05127900A29F63 /* SwifteriOS */,
+				7AE893FA1C0512C400A29F63 /* SwifterMac */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		7AE893E51C05127900A29F63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AE893F91C0512C400A29F63 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C839B6C19422CFF003A6950 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -245,6 +380,34 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		7AE893E21C05127900A29F63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AE893F11C05128800A29F63 /* HttpResponse.swift in Sources */,
+				7AE893F01C05128800A29F63 /* HttpParser.swift in Sources */,
+				7AE893F51C05128800A29F63 /* DemoServer.swift in Sources */,
+				7AE893F41C05128800A29F63 /* Socket.swift in Sources */,
+				7AE893F31C05128800A29F63 /* HttpServer.swift in Sources */,
+				7AE893F21C05128800A29F63 /* HttpHandlers.swift in Sources */,
+				7AE893EF1C05128800A29F63 /* HttpRequest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7AE893F61C0512C400A29F63 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7AE894051C0512D900A29F63 /* HttpResponse.swift in Sources */,
+				7AE894041C0512D900A29F63 /* HttpParser.swift in Sources */,
+				7AE894091C0512D900A29F63 /* DemoServer.swift in Sources */,
+				7AE894081C0512D900A29F63 /* Socket.swift in Sources */,
+				7AE894071C0512D900A29F63 /* HttpServer.swift in Sources */,
+				7AE894061C0512D900A29F63 /* HttpHandlers.swift in Sources */,
+				7AE894031C0512D900A29F63 /* HttpRequest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7C839B6A19422CFF003A6950 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,6 +454,108 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		7AE893ED1C05127900A29F63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SwifteriOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7AE893EE1C05127900A29F63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SwifteriOS/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7AE894011C0512C400A29F63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SwifterMac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7AE894021C0512C400A29F63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = SwifterMac/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterMac;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		7C839B8819422D00003A6950 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -437,6 +702,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		7AE893EC1C05127900A29F63 /* Build configuration list for PBXNativeTarget "SwifteriOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AE893ED1C05127900A29F63 /* Debug */,
+				7AE893EE1C05127900A29F63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		7AE894001C0512C400A29F63 /* Build configuration list for PBXNativeTarget "SwifterMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7AE894011C0512C400A29F63 /* Debug */,
+				7AE894021C0512C400A29F63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		7C839B6919422CFF003A6950 /* Build configuration list for PBXProject "Swifter" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
