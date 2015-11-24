@@ -24,6 +24,7 @@
 		7AE894071C0512D900A29F63 /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814C19A2EED00030B30D /* HttpServer.swift */; };
 		7AE894081C0512D900A29F63 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814D19A2EED00030B30D /* Socket.swift */; };
 		7AE894091C0512D900A29F63 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
+		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
@@ -77,6 +78,7 @@
 		7AE893FB1C0512C400A29F63 /* SwifterMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwifterMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE893FD1C0512C400A29F63 /* SwifterMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifterMac.h; sourceTree = "<group>"; };
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterSampleOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -152,7 +154,7 @@
 			children = (
 				7CA4815619A2EF2B0030B30D /* Resources */,
 				7CA4814919A2EED00030B30D /* Common */,
-				7CDAB80B1BE2A1D400C8A977 /* SwifteriOS */,
+				7CDAB80B1BE2A1D400C8A977 /* SwifterSampleiOS */,
 				7CA4813C19A2EA8D0030B30D /* SwifterOSX */,
 				7AE893E81C05127900A29F63 /* SwifteriOS */,
 				7AE893FC1C0512C400A29F63 /* SwifterMac */,
@@ -204,7 +206,7 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		7CDAB80B1BE2A1D400C8A977 /* SwifteriOS */ = {
+		7CDAB80B1BE2A1D400C8A977 /* SwifterSampleiOS */ = {
 			isa = PBXGroup;
 			children = (
 				7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */,
@@ -212,7 +214,9 @@
 				7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */,
 				7CDAB8101BE2A1D400C8A977 /* Info.plist */,
 				7CDAB8111BE2A1D400C8A977 /* ViewController.swift */,
+				7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */,
 			);
+			name = SwifterSampleiOS;
 			path = SwifteriOS;
 			sourceTree = "<group>";
 		};
@@ -373,6 +377,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */,
 				7CB102E01A17381D00CBA3B4 /* logo.png in Resources */,
 				7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */,
 				98630C071A1C9A9D00478D08 /* login.html in Resources */,
@@ -646,7 +651,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SwifteriOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -661,7 +665,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SwifteriOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

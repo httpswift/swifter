@@ -5,7 +5,6 @@
 //
 
 import Foundation
-import SwifteriOS
 
 public func demoServer(publicDir: String?) -> HttpServer {
     let server = HttpServer()
