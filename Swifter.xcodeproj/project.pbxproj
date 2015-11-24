@@ -25,7 +25,6 @@
 		7AE894081C0512D900A29F63 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814D19A2EED00030B30D /* Socket.swift */; };
 		7AE894091C0512D900A29F63 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */; };
 		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
-		7AE894101C0515E300A29F63 /* SwifterMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE893FB1C0512C400A29F63 /* SwifterMac.framework */; };
 		7AE894111C05171800A29F63 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4815A19A2F6A60030B30D /* HttpRequest.swift */; };
 		7AE894121C05171800A29F63 /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814A19A2EED00030B30D /* HttpParser.swift */; };
 		7AE894131C05171800A29F63 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4814B19A2EED00030B30D /* HttpResponse.swift */; };
@@ -112,7 +111,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AE894101C0515E300A29F63 /* SwifterMac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,8 +141,8 @@
 		7AE893E81C05127900A29F63 /* SwifteriOS */ = {
 			isa = PBXGroup;
 			children = (
-				7AE893E91C05127900A29F63 /* SwifteriOS.h */,
 				7AE893EB1C05127900A29F63 /* Info.plist */,
+				7AE893E91C05127900A29F63 /* SwifteriOS.h */,
 			);
 			path = SwifteriOS;
 			sourceTree = "<group>";
@@ -152,8 +150,8 @@
 		7AE893FC1C0512C400A29F63 /* SwifterMac */ = {
 			isa = PBXGroup;
 			children = (
-				7AE893FD1C0512C400A29F63 /* SwifterMac.h */,
 				7AE893FF1C0512C400A29F63 /* Info.plist */,
+				7AE893FD1C0512C400A29F63 /* SwifterMac.h */,
 			);
 			path = SwifterMac;
 			sourceTree = "<group>";
@@ -161,13 +159,13 @@
 		7C839B6519422CFF003A6950 = {
 			isa = PBXGroup;
 			children = (
-				7CA4815619A2EF2B0030B30D /* Resources */,
 				7CA4814919A2EED00030B30D /* Common */,
-				7CDAB80B1BE2A1D400C8A977 /* SwifterSampleiOS */,
-				7CA4813C19A2EA8D0030B30D /* SwifterSampleOSX */,
-				7AE893E81C05127900A29F63 /* SwifteriOS */,
-				7AE893FC1C0512C400A29F63 /* SwifterMac */,
 				7C839B6F19422CFF003A6950 /* Products */,
+				7CA4815619A2EF2B0030B30D /* Resources */,
+				7AE893FC1C0512C400A29F63 /* SwifterMac */,
+				7CA4813C19A2EA8D0030B30D /* SwifterSampleOSX */,
+				7CDAB80B1BE2A1D400C8A977 /* SwifterSampleiOS */,
+				7AE893E81C05127900A29F63 /* SwifteriOS */,
 			);
 			sourceTree = "<group>";
 		};
@@ -185,23 +183,22 @@
 		7CA4813C19A2EA8D0030B30D /* SwifterSampleOSX */ = {
 			isa = PBXGroup;
 			children = (
-				7CA4813D19A2EA8D0030B30D /* main.swift */,
 				18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */,
+				7CA4813D19A2EA8D0030B30D /* main.swift */,
 			);
-			name = SwifterSampleOSX;
-			path = SwifterOSX;
+			path = SwifterSampleOSX;
 			sourceTree = "<group>";
 		};
 		7CA4814919A2EED00030B30D /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				7CA4815A19A2F6A60030B30D /* HttpRequest.swift */,
-				7CA4814A19A2EED00030B30D /* HttpParser.swift */,
-				7CA4814B19A2EED00030B30D /* HttpResponse.swift */,
+				7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */,
 				7CB102D91A1664B200CBA3B4 /* HttpHandlers.swift */,
+				7CA4814A19A2EED00030B30D /* HttpParser.swift */,
+				7CA4815A19A2F6A60030B30D /* HttpRequest.swift */,
+				7CA4814B19A2EED00030B30D /* HttpResponse.swift */,
 				7CA4814C19A2EED00030B30D /* HttpServer.swift */,
 				7CA4814D19A2EED00030B30D /* Socket.swift */,
-				7CB102DC1A167FFA00CBA3B4 /* DemoServer.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -220,14 +217,13 @@
 			isa = PBXGroup;
 			children = (
 				7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */,
-				7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */,
 				7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */,
 				7CDAB8101BE2A1D400C8A977 /* Info.plist */,
-				7CDAB8111BE2A1D400C8A977 /* ViewController.swift */,
 				7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */,
+				7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */,
+				7CDAB8111BE2A1D400C8A977 /* ViewController.swift */,
 			);
-			name = SwifterSampleiOS;
-			path = SwifteriOS;
+			path = SwifterSampleiOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -475,6 +471,7 @@
 				7CDAB80E1BE2A1D400C8A977 /* Base */,
 			);
 			name = Main.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -490,7 +487,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = SwifteriOS/Info.plist;
+				INFOPLIST_FILE = SwifterSampleiOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -514,7 +511,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = SwifteriOS/Info.plist;
+				INFOPLIST_FILE = SwifterSampleiOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -668,9 +665,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/SwifteriOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SwifterSampleiOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski..${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -682,9 +679,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/SwifteriOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/SwifterSampleiOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski..${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
@@ -733,6 +730,7 @@
 				7AE893EE1C05127900A29F63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7AE894001C0512C400A29F63 /* Build configuration list for PBXNativeTarget "SwifterMac" */ = {
 			isa = XCConfigurationList;
@@ -741,6 +739,7 @@
 				7AE894021C0512C400A29F63 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7C839B6919422CFF003A6950 /* Build configuration list for PBXProject "Swifter" */ = {
 			isa = XCConfigurationList;
