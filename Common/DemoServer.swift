@@ -6,7 +6,7 @@
 
 import Foundation
 
-func demoServer(publicDir: String?) -> HttpServer {
+public func demoServer(publicDir: String?) -> HttpServer {
     let server = HttpServer()
     
     if let publicDir = publicDir {
