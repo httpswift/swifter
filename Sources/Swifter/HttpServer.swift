@@ -129,20 +129,20 @@ public class HttpServer
     }
     
     private class func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws {
-        try socket.writeASCII("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
+        try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         
-        let length = response.body()?.length ?? 0
-        try socket.writeASCII("Content-Length: \(length)\r\n")
+        let length = response.body()?.count ?? 0
+        try socket.writeUTF8("Content-Length: \(length)\r\n")
         
         if keepAlive {
-            try socket.writeASCII("Connection: keep-alive\r\n")
+            try socket.writeUTF8("Connection: keep-alive\r\n")
         }
         for (name, value) in response.headers() {
-            try socket.writeASCII("\(name): \(value)\r\n")
+            try socket.writeUTF8("\(name): \(value)\r\n")
         }
-        try socket.writeASCII("\r\n")
+        try socket.writeUTF8("\r\n")
         if let body = response.body() {
-            try socket.writeData(body)
+            try socket.writeUInt8(body)
         }
     }
 }

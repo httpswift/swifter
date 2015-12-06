@@ -80,30 +80,30 @@ public enum HttpResponseBody {
     case Text(String)
     case Custom(Serializer, Any)
     
-    func data() -> String? {
+    func data() -> [UInt8]? {
         do {
             switch self {
-                
             case .Json(let object):
-                return try JSONSerializer.serialize(object)
-                
+                let serialised = try JSONSerializer.serialize(object)
+                return [UInt8](serialised.utf8)
             case .Xml(let object):
-                return try XMLSerializer.serialize(object)
-                
+                let serialised = try XMLSerializer.serialize(object)
+                return [UInt8](serialised.utf8)
             case .Plist(let object):
-                return try PLISTSerializer.serialize(object)
-                
+                let serialised = try PLISTSerializer.serialize(object)
+                return [UInt8](serialised.utf8)
             case .Text(let body):
-                return body
-                
+                let serialised = body
+                return [UInt8](serialised.utf8)
             case .Html(let body):
-                return "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
-                
+                let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
+                return [UInt8](serialised.utf8)
             case .Custom(let serializer, let object):
-                return try serializer.serialize(object)
+                let serialised = try serializer.serialize(object)
+                return [UInt8](serialised.utf8)
             }
         } catch {
-            return "Serialisation error: \(error)"
+            return [UInt8]("Serialisation error: \(error)".utf8)
         }
     }
 }
@@ -114,7 +114,7 @@ public enum HttpResponse {
     case MovedPermanently(String)
     case BadRequest, Unauthorized, Forbidden, NotFound
     case InternalServerError
-    case RAW(Int, String, [String:String]?, NSData)
+    case RAW(Int, String, [String:String]?, [UInt8]?)
     
     func statusCode() -> Int {
         switch self {
@@ -175,9 +175,9 @@ public enum HttpResponse {
         return headers
     }
     
-    func body() -> NSData? {
+    func body() -> [UInt8]? {
         switch self {
-        case .OK(let body)          : return body.data()?.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+        case .OK(let body)          : return body.data()
         case .RAW(_,_,_, let data)  : return data
         default                     : return nil
         }

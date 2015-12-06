@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7AE893FA1C0512C400A29F63"
-               BuildableName = "SwifterMac.framework"
+               BuildableName = "Swifter.framework"
                BlueprintName = "SwifterMac"
                ReferencedContainer = "container:Swifter.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AE893FA1C0512C400A29F63"
-            BuildableName = "SwifterMac.framework"
+            BuildableName = "Swifter.framework"
             BlueprintName = "SwifterMac"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AE893FA1C0512C400A29F63"
-            BuildableName = "SwifterMac.framework"
+            BuildableName = "Swifter.framework"
             BlueprintName = "SwifterMac"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>

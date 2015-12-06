@@ -41,14 +41,16 @@ public class HttpHandlers {
                 let endStr = (rangeHeader as NSString).substringWithRange(match.rangeAtIndex(2))
                 
                 guard let start = Int(startStr), end = Int(endStr) else {
-                    return HttpResponse.RAW(200, "OK", nil, fileBody)
+                    var array = [UInt8](count: fileBody.length, repeatedValue: 0)
+                    fileBody.getBytes(&array, length: fileBody.length)
+                    return HttpResponse.RAW(200, "OK", nil, array)
                 }
                 
                 let length = end - start
                 let range = NSRange(location: start, length: length + 1)
                 
                 guard range.location + range.length <= fileBody.length else {
-                    return HttpResponse.RAW(416, "Requested range not satisfiable", nil, NSData())
+                    return HttpResponse.RAW(416, "Requested range not satisfiable", nil, nil)
                 }
                 
                 let subData = fileBody.subdataWithRange(range)
@@ -57,11 +59,15 @@ public class HttpHandlers {
                     "Content-Range" : "bytes \(startStr)-\(endStr)/\(fileBody.length)"
                 ]
                 
-                return HttpResponse.RAW(206, "Partial Content", headers, subData)
+                var array = [UInt8](count: subData.length, repeatedValue: 0)
+                subData.getBytes(&array, length: subData.length)
+                return HttpResponse.RAW(206, "Partial Content", headers, array)
                 
             }
             else {
-                return HttpResponse.RAW(200, "OK", nil, fileBody)
+                var array = [UInt8](count: fileBody.length, repeatedValue: 0)
+                fileBody.getBytes(&array, length: fileBody.length)
+                return HttpResponse.RAW(200, "OK", nil, array)
             }
             
         }
@@ -86,7 +92,9 @@ public class HttpHandlers {
                         }
                     } else {
                         if let fileBody = NSData(contentsOfFile: filePath) {
-                            return HttpResponse.RAW(200, "OK", nil, fileBody)
+                            var array = [UInt8](count: fileBody.length, repeatedValue: 0)
+                            fileBody.getBytes(&array, length: fileBody.length)
+                            return HttpResponse.RAW(200, "OK", nil, array)
                         }
                     }
                 }

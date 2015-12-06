@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7AE893E61C05127900A29F63"
-               BuildableName = "SwifteriOS.framework"
+               BuildableName = "Swifter.framework"
                BlueprintName = "SwifteriOS"
                ReferencedContainer = "container:Swifter.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AE893E61C05127900A29F63"
-            BuildableName = "SwifteriOS.framework"
+            BuildableName = "Swifter.framework"
             BlueprintName = "SwifteriOS"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7AE893E61C05127900A29F63"
-            BuildableName = "SwifteriOS.framework"
+            BuildableName = "Swifter.framework"
             BlueprintName = "SwifteriOS"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>

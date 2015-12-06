@@ -4,7 +4,11 @@
 //  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
 /* Low level routines for POSIX sockets */
 
@@ -24,6 +28,7 @@ enum SocketError: ErrorType {
 public class Socket : Hashable {
     
     public class func tcpSocketForListen(port: in_port_t = 8080, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
+
         let socketFileDescriptor = socket(AF_INET, SOCK_STREAM, 0)
         if socketFileDescriptor == -1 {
             throw SocketError.SocketCreationFailed(Socket.descriptionOfLastError())
@@ -88,30 +93,19 @@ public class Socket : Hashable {
     }
     
     public func writeUTF8(string: String) throws {
-        try self.writeString(string, withEncoding: NSUTF8StringEncoding)
+        try writeUInt8([UInt8](string.utf8))
     }
     
-    public func writeASCII(string: String) throws {
-        try self.writeString(string, withEncoding: NSASCIIStringEncoding)
-    }
-    
-    public func writeString(string: String, withEncoding encoding: NSStringEncoding) throws {
-        if let nsdata = string.dataUsingEncoding(encoding) {
-            try self.writeData(nsdata)
-        } else {
-            throw SocketError.WriteFailed("dataUsingEncoding(\(encoding)) failed")
-        }
-    }
-    
-    public func writeData(data: NSData) throws {
-        var sent = 0
-        let unsafePointer = UnsafePointer<UInt8>(data.bytes)
-        while sent < data.length {
-            let s = write(self.socketFileDescriptor, unsafePointer + sent, Int(data.length - sent))
-            if s <= 0 {
-                throw SocketError.WriteFailed(Socket.descriptionOfLastError())
+    public func writeUInt8(data: [UInt8]) throws {
+        try data.withUnsafeBufferPointer { pointer in
+            var sent = 0
+            while sent < data.count {
+                let s = write(self.socketFileDescriptor, pointer.baseAddress + sent, Int(data.count - sent))
+                if s <= 0 {
+                    throw SocketError.WriteFailed(Socket.descriptionOfLastError())
+                }
+                sent += s
             }
-            sent += s
         }
     }
     
