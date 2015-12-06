@@ -170,9 +170,11 @@ public class Socket : Hashable {
     }
     
     private class func setNoSigPipe(socket: Int32) {
-        // prevents crashes when blocking calls are pending and the app is paused ( via Home button )
         #if os(Linux)
+            // There is no SO_NOSIGPIPE in Linux (nor some other systems). You can instead use the MSG_NOSIGNAL flag when calling send(),
+            // or use signal(SIGPIPE, SIG_IGN) to make your entire application ignore SIGPIPE.
         #else
+            // Prevents crashes when blocking calls are pending and the app is paused ( via Home button ).
             var no_sig_pipe: Int32 = 1;
             setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, socklen_t(sizeof(Int32)));
         #endif
