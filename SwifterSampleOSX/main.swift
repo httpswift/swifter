@@ -16,6 +16,7 @@ class SwiftyJSONSerializer: Serializer {
     }
 }
 
+
 let server = demoServer(NSBundle.mainBundle().resourcePath!)
 
 do {

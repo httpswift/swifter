@@ -28,8 +28,13 @@ enum SocketError: ErrorType {
 public class Socket : Hashable {
     
     public class func tcpSocketForListen(port: in_port_t = 8080, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
-
-        let socketFileDescriptor = socket(AF_INET, SOCK_STREAM, 0)
+        
+        #if os(Linux)
+            let socketFileDescriptor = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
+        #else
+            let socketFileDescriptor = socket(AF_INET, SOCK_STREAM, 0)
+        #endif
+        
         if socketFileDescriptor == -1 {
             throw SocketError.SocketCreationFailed(Socket.descriptionOfLastError())
         }
@@ -42,16 +47,25 @@ public class Socket : Hashable {
         }
         Socket.setNoSigPipe(socketFileDescriptor)
         
-        var addr = sockaddr_in(
-            sin_len: __uint8_t(sizeof(sockaddr_in)),
-            sin_family: sa_family_t(AF_INET),
-            sin_port: Socket.htonsPort(port),
-            sin_addr: in_addr(s_addr: inet_addr("0.0.0.0")),
-            sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
-        var sock_addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-        memcpy(&sock_addr, &addr, Int(sizeof(sockaddr_in)))
+        #if os(Linux)
+            var addr = sockaddr_in()
+            addr.sin_family = sa_family_t(AF_INET)
+            addr.sin_port = Socket.htonsPort(port)
+            addr.sin_addr = in_addr(s_addr: in_addr_t(0))
+            addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
+        #else
+            var addr = sockaddr_in()
+            addr.sin_len = __uint8_t(sizeof(sockaddr_in))
+            addr.sin_family = sa_family_t(AF_INET)
+            addr.sin_port = Socket.htonsPort(port)
+            addr.sin_addr = in_addr(s_addr: inet_addr("0.0.0.0"))
+            addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
+        #endif
         
-        if bind(socketFileDescriptor, &sock_addr, socklen_t(sizeof(sockaddr_in))) == -1 {
+        var bind_addr = sockaddr()
+        memcpy(&bind_addr, &addr, Int(sizeof(sockaddr_in)))
+        
+        if bind(socketFileDescriptor, &bind_addr, socklen_t(sizeof(sockaddr_in))) == -1 {
             let details = Socket.descriptionOfLastError()
             Socket.release(socketFileDescriptor)
             throw SocketError.BindFailed(details)
@@ -65,9 +79,9 @@ public class Socket : Hashable {
         return Socket(socketFileDescriptor: socketFileDescriptor)
     }
     
-    private let socketFileDescriptor: CInt
+    private let socketFileDescriptor: Int32
     
-    init(socketFileDescriptor: CInt) {
+    init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
     }
     
@@ -77,12 +91,17 @@ public class Socket : Hashable {
         Socket.release(self.socketFileDescriptor)
     }
     
-    public func shutdown() {
-        Socket.shutdown(self.socketFileDescriptor)
+    public func shutdwn() {
+        Socket.shutdwn(self.socketFileDescriptor)
     }
     
     public func acceptClientSocket() throws -> Socket {
-        var addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        #if os(Linux)
+            var addr = sockaddr()
+        #else
+            var addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        #endif
+        
         var len: socklen_t = 0
         let clientSocket = accept(self.socketFileDescriptor, &addr, &len)
         if clientSocket == -1 {
@@ -150,24 +169,39 @@ public class Socket : Hashable {
         return String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
     }
     
-    private class func setNoSigPipe(socket: CInt) {
+    private class func setNoSigPipe(socket: Int32) {
         // prevents crashes when blocking calls are pending and the app is paused ( via Home button )
-        var no_sig_pipe: Int32 = 1;
-        setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, socklen_t(sizeof(Int32)));
+        #if os(Linux)
+        #else
+            var no_sig_pipe: Int32 = 1;
+            setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, socklen_t(sizeof(Int32)));
+        #endif
     }
     
-    private class func shutdown(socket: CInt) {
-        Darwin.shutdown(socket, SHUT_RDWR)
+    private class func shutdwn(socket: Int32) {
+        #if os(Linux)
+            shutdown(socket, Int32(SHUT_RDWR))
+        #else
+            Darwin.shutdown(socket, SHUT_RDWR)
+        #endif
     }
     
-    private class func release(socket: CInt) {
-        Darwin.shutdown(socket, SHUT_RDWR)
+    private class func release(socket: Int32) {
+        #if os(Linux)
+            shutdown(socket, Int32(SHUT_RDWR))
+        #else
+            Darwin.shutdown(socket, SHUT_RDWR)
+        #endif
         close(socket)
     }
     
     private class func htonsPort(port: in_port_t) -> in_port_t {
-        let isLittleEndian = Int(OSHostByteOrder()) == OSLittleEndian
-        return isLittleEndian ? _OSSwapInt16(port) : port
+        #if os(Linux)
+            return htons(port)
+        #else
+            let isLittleEndian = Int(OSHostByteOrder()) == OSLittleEndian
+            return isLittleEndian ? _OSSwapInt16(port) : port
+        #endif
     }
 }
 

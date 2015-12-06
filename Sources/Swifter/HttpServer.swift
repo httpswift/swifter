@@ -82,7 +82,7 @@ public class HttpServer
         self.listenSocket.release()
         HttpServer.lock(self.clientSocketsLock) {
             for socket in self.clientSockets {
-                socket.shutdown()
+                socket.shutdwn()
             }
             self.clientSockets.removeAll(keepCapacity: true)
         }
