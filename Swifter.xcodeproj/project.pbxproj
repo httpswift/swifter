@@ -17,6 +17,10 @@
 		7CA4815819A2EF2B0030B30D /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CB102E01A17381D00CBA3B4 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
+		7CD6DAB91C15C48500A04931 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD6DAB81C15C48500A04931 /* String+Misc.swift */; };
+		7CD6DABA1C15C48500A04931 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD6DAB81C15C48500A04931 /* String+Misc.swift */; };
+		7CD6DABB1C15C48500A04931 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD6DAB81C15C48500A04931 /* String+Misc.swift */; };
+		7CD6DABC1C15C48500A04931 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD6DAB81C15C48500A04931 /* String+Misc.swift */; };
 		7CDAB8121BE2A1D400C8A977 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
 		7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */; };
 		7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */; };
@@ -98,6 +102,7 @@
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CA4815719A2EF2B0030B30D /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		7CB102DF1A17381D00CBA3B4 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		7CD6DAB81C15C48500A04931 /* String+Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Misc.swift"; sourceTree = "<group>"; };
 		7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CDAB80E1BE2A1D400C8A977 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -239,6 +244,7 @@
 				7CEAF8501C14B29B003252DE /* HttpResponse.swift */,
 				7CEAF8511C14B29B003252DE /* HttpServer.swift */,
 				7CEAF8521C14B29B003252DE /* Socket.swift */,
+				7CD6DAB81C15C48500A04931 /* String+Misc.swift */,
 			);
 			path = Swifter;
 			sourceTree = "<group>";
@@ -424,6 +430,7 @@
 				7CEAF8611C14B29B003252DE /* HttpRequest.swift in Sources */,
 				7CEAF85D1C14B29B003252DE /* HttpParser.swift in Sources */,
 				7CEAF8551C14B29B003252DE /* DemoServer.swift in Sources */,
+				7CD6DABB1C15C48500A04931 /* String+Misc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,6 +445,7 @@
 				7CEAF8621C14B29B003252DE /* HttpRequest.swift in Sources */,
 				7CEAF85E1C14B29B003252DE /* HttpParser.swift in Sources */,
 				7CEAF8561C14B29B003252DE /* DemoServer.swift in Sources */,
+				7CD6DABC1C15C48500A04931 /* String+Misc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -448,6 +456,7 @@
 				7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */,
 				7CEAF8531C14B29B003252DE /* DemoServer.swift in Sources */,
 				7CEAF8671C14B29B003252DE /* HttpServer.swift in Sources */,
+				7CD6DAB91C15C48500A04931 /* String+Misc.swift in Sources */,
 				7CEAF8571C14B29B003252DE /* HttpHandlers.swift in Sources */,
 				7CEAF85B1C14B29B003252DE /* HttpParser.swift in Sources */,
 				7CEAF86B1C14B29B003252DE /* Socket.swift in Sources */,
@@ -464,6 +473,7 @@
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
 				7CEAF8541C14B29B003252DE /* DemoServer.swift in Sources */,
 				7CEAF8681C14B29B003252DE /* HttpServer.swift in Sources */,
+				7CD6DABA1C15C48500A04931 /* String+Misc.swift in Sources */,
 				7CEAF8581C14B29B003252DE /* HttpHandlers.swift in Sources */,
 				7CEAF85C1C14B29B003252DE /* HttpParser.swift in Sources */,
 				7CEAF86C1C14B29B003252DE /* Socket.swift in Sources */,

@@ -18,7 +18,7 @@ public struct HttpRequest {
     
     public func parseForm() -> [(String, String)] {
         if let body = body {
-            return body.componentsSeparatedByString("&").map { (param:String) -> (String, String) in
+            return body.componentsSeparatedBy("&").map { (param:String) -> (String, String) in
                 let tokens = param.componentsSeparatedByString("=")
                 if tokens.count >= 2 {
                     let key = tokens[0].stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding

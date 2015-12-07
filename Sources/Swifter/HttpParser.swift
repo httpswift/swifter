@@ -16,7 +16,7 @@ class HttpParser {
     
     func readHttpRequest(socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
-        let statusLineTokens = statusLine.componentsSeparatedByString(" ")
+        let statusLineTokens = statusLine.componentsSeparatedBy(" ")
         print(statusLineTokens)
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
@@ -33,18 +33,15 @@ class HttpParser {
     }
     
     private func extractUrlParams(url: String) -> [(String, String)] {
-        guard let query = url.componentsSeparatedByString("?").last else {
+        guard let query = url.componentsSeparatedBy("?").last else {
             return []
         }
-        return query.componentsSeparatedByString("&").map { (param:String) -> (String, String) in
-            let tokens = param.componentsSeparatedByString("=")
+        return query.componentsSeparatedBy("&").map { (param:String) -> (String, String) in
+            let tokens = param.componentsSeparatedBy("=")
             guard tokens.count >= 2 else {
                 return ("", "")
             }
-            guard let k = tokens[0].stringByRemovingPercentEncoding, v = tokens[1].stringByRemovingPercentEncoding else {
-                return ("", "")
-            }
-            return (k, v)
+            return (tokens[0].stringByRemovingPercent(), tokens[1].stringByRemovingPercent())
         }
     }
     
@@ -69,13 +66,13 @@ class HttpParser {
             if headerLine.isEmpty {
                 return requestHeaders
             }
-            let headerTokens = headerLine.componentsSeparatedByString(":")
+            let headerTokens = headerLine.componentsSeparatedBy(":")
             if headerTokens.count >= 2 {
                 // RFC 2616 - "Hypertext Transfer Protocol -- HTTP/1.1", paragraph 4.2, "Message Headers":
                 // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."
                 // We will keep lower case version.
                 let headerName = headerTokens[0].lowercaseString
-                let headerValue = headerTokens[1].stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
+                let headerValue = headerTokens[1].trim()
                 if !headerName.isEmpty && !headerValue.isEmpty {
                     requestHeaders.updateValue(headerValue, forKey: headerName)
                 }
@@ -85,7 +82,7 @@ class HttpParser {
     
     func supportsKeepAlive(headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
-            return "keep-alive" == value.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet()).lowercaseString
+            return "keep-alive" == value.trim()
         }
         return false
     }
