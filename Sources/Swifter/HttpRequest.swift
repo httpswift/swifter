@@ -18,12 +18,12 @@ public struct HttpRequest {
     
     public func parseForm() -> [(String, String)] {
         if let body = body {
-            return body.componentsSeparatedBy("&").map { (param:String) -> (String, String) in
-                let tokens = param.componentsSeparatedByString("=")
+            return body.split("&").map { (param: String) -> (String, String) in
+                let tokens = param.split("=")
                 if tokens.count >= 2 {
-                    let key = tokens[0].stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
-                    let value = tokens[1].stringByReplacingOccurrencesOfString("+", withString: " ").stringByRemovingPercentEncoding
-                    if let key = key, value = value { return (key, value) }
+                    let key = tokens[0].replace("+", new: " ").removePercentEncoding()
+                    let value = tokens[1].replace("+", new: " ").removePercentEncoding()
+                    return (key, value)
                 }
                 return ("","")
             }

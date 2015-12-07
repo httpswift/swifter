@@ -6,8 +6,14 @@
 
 extension String {
 
-    public func componentsSeparatedBy(separator: Character) -> [String] {
+    public func split(separator: Character) -> [String] {
         return self.characters.split { $0 == separator }.map(String.init)
+    }
+    
+    public func replace(old: Character, new: Character) -> String {
+        var buffer = [Character]()
+        self.characters.forEach { buffer.append($0 == old ? new : $0) }
+        return String(buffer)
     }
     
     public func trim() -> String {
@@ -17,7 +23,7 @@ extension String {
         return String(scalars)
     }
     
-    public func stringByRemovingPercent() -> String {
+    public func removePercentEncoding() -> String {
         var scalars = self.unicodeScalars
         var buffer = [Character]()
         while let scalar = scalars.popFirst() {

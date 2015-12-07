@@ -4,7 +4,11 @@
 //  Copyright (c) 2015 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
 
 enum HttpParserError : ErrorType {
@@ -16,7 +20,7 @@ class HttpParser {
     
     func readHttpRequest(socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
-        let statusLineTokens = statusLine.componentsSeparatedBy(" ")
+        let statusLineTokens = statusLine.split(" ")
         print(statusLineTokens)
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
@@ -33,15 +37,15 @@ class HttpParser {
     }
     
     private func extractUrlParams(url: String) -> [(String, String)] {
-        guard let query = url.componentsSeparatedBy("?").last else {
+        guard let query = url.split("?").last else {
             return []
         }
-        return query.componentsSeparatedBy("&").map { (param:String) -> (String, String) in
-            let tokens = param.componentsSeparatedBy("=")
+        return query.split("&").map { (param:String) -> (String, String) in
+            let tokens = param.split("=")
             guard tokens.count >= 2 else {
                 return ("", "")
             }
-            return (tokens[0].stringByRemovingPercent(), tokens[1].stringByRemovingPercent())
+            return (tokens[0].removePercentEncoding(), tokens[1].removePercentEncoding())
         }
     }
     
@@ -66,7 +70,7 @@ class HttpParser {
             if headerLine.isEmpty {
                 return requestHeaders
             }
-            let headerTokens = headerLine.componentsSeparatedBy(":")
+            let headerTokens = headerLine.split(":")
             if headerTokens.count >= 2 {
                 // RFC 2616 - "Hypertext Transfer Protocol -- HTTP/1.1", paragraph 4.2, "Message Headers":
                 // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."

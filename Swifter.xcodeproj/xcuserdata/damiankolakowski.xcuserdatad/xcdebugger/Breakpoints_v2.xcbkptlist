@@ -789,12 +789,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/Swifter/String+Misc.swift"
-            timestampString = "471207427.521354"
+            timestampString = "471209479.941914"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "29"
-            endingLineNumber = "29"
-            landmarkName = "stringByRemovingPercent()"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
+            landmarkName = "removePercentEncoding()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -805,11 +805,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/Swifter/String+Misc.swift"
-            timestampString = "471207463.1494"
+            timestampString = "471209479.941914"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "14"
-            endingLineNumber = "14"
+            startingLineNumber = "20"
+            endingLineNumber = "20"
             landmarkName = "trim()"
             landmarkType = "5">
          </BreakpointContent>
