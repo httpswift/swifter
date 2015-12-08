@@ -12,7 +12,8 @@ public class HttpServer
     
     public typealias Handler = HttpRequest -> HttpResponse
     
-    private var handlers: [(expression: NSRegularExpression, handler: Handler)] = []
+    private var router = HttpRouter()
+    
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
     private let clientSocketsLock = 0
@@ -21,22 +22,15 @@ public class HttpServer
     
     public subscript (path: String) -> Handler? {
         set {
-            do {
-                let regex = try NSRegularExpression(pattern: path, options: self.expressionOptions)
-                if let newHandler = newValue {
-                    self.handlers.append(expression: regex, handler: newHandler)
-                    // Longer patterns will have higher priority.
-                    self.handlers = self.handlers.sort { $0.0.pattern > $1.0.pattern }
-                }
-            } catch  {
-                print("Could not register handler for: \(path), error: \(error)")
-            }
+            router.register(path, handler: newValue!)
         }
-        get { return nil }
+        get {
+            return nil
+        }
     }
     
     public var routes:[String] {
-        return self.handlers.map { $0.expression.pattern }
+        return router.routes()
     }
     
     public func start(listenPort: in_port_t = 8080) throws {
@@ -53,9 +47,8 @@ public class HttpServer
                     while let request = try? httpParser.readHttpRequest(socket) {
                         let keepAlive = httpParser.supportsKeepAlive(request.headers)
                         let response: HttpResponse
-                        if let (expression, handler) = self.findHandler(request.url) {
-                            let capturedUrlsGroups = self.captureExpressionGroups(expression, value: request.url)
-                            let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, capturedUrlGroups: capturedUrlsGroups, address: socketAddress)
+                        if let (params, handler) = self.router.select(request.url) {
+                            let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, address: socketAddress, params: params)
                             response = handler(updatedRequest)
                         } else {
                             response = HttpResponse.NotFound
@@ -86,40 +79,6 @@ public class HttpServer
             }
             self.clientSockets.removeAll(keepCapacity: true)
         }
-    }
-    
-    private let matchingOptions = NSMatchingOptions(rawValue: 0)
-    private let expressionOptions = NSRegularExpressionOptions(rawValue: 0)
-    
-    private func findHandler(url:String) -> (NSRegularExpression, Handler)? {
-        if let u = NSURL(string: url), path = u.path {
-            for handler in self.handlers {
-                if handler.expression.numberOfMatchesInString(path, options: self.matchingOptions, range: HttpServer.asciiRange(path)) > 0 {
-                    return handler
-                }
-            }
-        }
-        return nil
-    }
-    
-    private func captureExpressionGroups(expression: NSRegularExpression, value: String) -> [String] {
-        guard let u = NSURL(string: value), path = u.path else {
-            return []
-        }
-        var capturedGroups = [String]()
-        if let result = expression.firstMatchInString(path, options: matchingOptions, range: HttpServer.asciiRange(path)) {
-            let nsValue: NSString = path
-            for i in 1..<result.numberOfRanges {
-                if let group = nsValue.substringWithRange(result.rangeAtIndex(i)).stringByRemovingPercentEncoding {
-                    capturedGroups.append(group)
-                }
-            }
-        }
-        return capturedGroups
-    }
-    
-    private class func asciiRange(value: String) -> NSRange {
-        return NSMakeRange(0, value.lengthOfBytesUsingEncoding(NSASCIIStringEncoding))
     }
     
     private class func lock(handle: AnyObject, closure: () -> ()) {

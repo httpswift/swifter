@@ -31,16 +31,16 @@ class HttpParser {
         let headers = try readHeaders(socket)
         if let contentLength = headers["content-length"], let contentLengthValue = Int(contentLength) {
             let body = try readBody(socket, size: contentLengthValue)
-            return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, capturedUrlGroups: [], address: nil)
+            return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, address: nil, params: [:])
         }
-        return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, capturedUrlGroups: [], address: nil)
+        return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, address: nil, params: [:])
     }
     
     private func extractUrlParams(url: String) -> [(String, String)] {
         guard let query = url.split("?").last else {
             return []
         }
-        return query.split("&").map { (param:String) -> (String, String) in
+        return query.split("&").map { (param: String) -> (String, String) in
             let tokens = param.split("=")
             guard tokens.count >= 2 else {
                 return ("", "")

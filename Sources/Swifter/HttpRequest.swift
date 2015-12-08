@@ -13,8 +13,8 @@ public struct HttpRequest {
     public let method: String
     public let headers: [String: String]
     public let body: String?
-    public var capturedUrlGroups: [String]
     public var address: String?
+    public var params: [String: String]
     
     public func parseForm() -> [(String, String)] {
         if let body = body {

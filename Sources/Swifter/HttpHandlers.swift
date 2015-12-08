@@ -15,11 +15,11 @@ public class HttpHandlers {
     public class func directory(dir: String) -> ( HttpRequest -> HttpResponse ) {
         return { request in
             
-            guard let localPath = request.capturedUrlGroups.first else {
+            guard let localPath = request.params.first else {
                 return HttpResponse.NotFound
             }
             
-            let filesPath = dir.stringByExpandingTildeInPath.stringByAppendingPathComponent(localPath)
+            let filesPath = dir + "/" + localPath.1
             
             let cachedBody = cache.objectForKey(filesPath) as? NSData
             
@@ -74,9 +74,9 @@ public class HttpHandlers {
     }
     
     public class func directoryBrowser(dir: String) -> ( HttpRequest -> HttpResponse ) {
-        return { request in
-            if let pathFromUrl = request.capturedUrlGroups.first {
-                let filePath = dir.stringByExpandingTildeInPath.stringByAppendingPathComponent(pathFromUrl)
+        return { r in
+            if let (_, value) = r.params.first {
+                let filePath = dir + "/" + value
                 let fileManager = NSFileManager.defaultManager()
                 var isDir: ObjCBool = false;
                 if ( fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) ) {
@@ -84,7 +84,7 @@ public class HttpHandlers {
                         do {
                             let files = try fileManager.contentsOfDirectoryAtPath(filePath)
                             var response = "<h3>\(filePath)</h3></br><table>"
-                            response += files.map({ "<tr><td><a href=\"\(request.url)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
+                            response += files.map({ "<tr><td><a href=\"\(r.url)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
                             response += "</table>"
                             return HttpResponse.OK(.Html(response))
                         } catch  {
@@ -101,15 +101,5 @@ public class HttpHandlers {
             }
             return HttpResponse.NotFound
         }
-    }
-}
-
-private extension String {
-    var stringByExpandingTildeInPath: String {
-        return (self as NSString).stringByExpandingTildeInPath
-    }
-    
-    func stringByAppendingPathComponent(str: String) -> String {
-        return (self as NSString).stringByAppendingPathComponent(str)
     }
 }
