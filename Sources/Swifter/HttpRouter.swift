@@ -15,11 +15,18 @@ public class HttpRouter {
     }
     
     public func register(path: String, handler: HttpServer.Handler) {
-        handlers.append((path.split("/"), handler));
+        handlers.append((path.split("/"), handler))
         handlers.sortInPlace { $0.0.pattern.count < $0.1.pattern.count }
     }
     
-    public func select(url:String) -> ([String:String], HttpServer.Handler)? {
+    public func unregister(path: String) {
+        let p = path.split("/")
+        handlers = handlers.filter { (pattern, handler) -> Bool in
+            return pattern != p
+        }
+    }
+    
+    public func select(url: String) -> ([String: String], HttpServer.Handler)? {
         let urlTokens = url.split("/")
         for (pattern, handler) in handlers {
             if let params = matchParams(pattern, valueTokens: urlTokens) {
@@ -38,7 +45,7 @@ public class HttpRouter {
             let patternToken = patternTokens[index]
             let valueToken = valueTokens[index]
             if patternToken.isEmpty {
-                if  patternToken != valueToken {
+                if patternToken != valueToken {
                     return nil
                 }
             }
