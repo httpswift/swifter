@@ -6,8 +6,8 @@
 
 import Foundation
 
-public class HttpServer
-{
+public class HttpServer {
+    
     static let VERSION = "1.0.2";
     
     public typealias Handler = HttpRequest -> HttpResponse
@@ -20,22 +20,27 @@ public class HttpServer
     
     public init() { }
     
-    public subscript (path: String) -> Handler? {
+    public subscript(path: String) -> Handler? {
         set {
-            router.register(path, handler: newValue!)
+            if let newValue = newValue {
+                router.register(path, handler: newValue)
+            }
+            else {
+                router.unregister(path)
+            }
         }
         get {
             return nil
         }
     }
     
-    public var routes:[String] {
+    public var routes: [String] {
         return router.routes()
     }
     
     public func start(listenPort: in_port_t = 8080) throws {
-        self.stop()
-        self.listenSocket = try Socket.tcpSocketForListen(listenPort)
+        stop()
+        listenSocket = try Socket.tcpSocketForListen(listenPort)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             while let socket = try? self.listenSocket.acceptClientSocket() {
                 HttpServer.lock(self.clientSocketsLock) {
@@ -72,7 +77,7 @@ public class HttpServer
     }
 
     public func stop() {
-        self.listenSocket.release()
+        listenSocket.release()
         HttpServer.lock(self.clientSocketsLock) {
             for socket in self.clientSockets {
                 socket.shutdwn()
