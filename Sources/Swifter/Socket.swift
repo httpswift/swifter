@@ -25,7 +25,7 @@ enum SocketError: ErrorType {
     case RecvFailed(String)
 }
 
-public class Socket : Hashable {
+public class Socket : Hashable, Equatable {
     
     public class func tcpSocketForListen(port: in_port_t = 8080, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         
@@ -209,5 +209,5 @@ public class Socket : Hashable {
 
 
 public func ==(socket1: Socket, socket2: Socket) -> Bool {
-    return socket1.hashValue == socket2.hashValue
+    return socket1.socketFileDescriptor == socket2.socketFileDescriptor
 }
