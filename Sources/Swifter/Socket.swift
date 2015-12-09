@@ -119,7 +119,15 @@ public class Socket : Hashable {
         try data.withUnsafeBufferPointer { pointer in
             var sent = 0
             while sent < data.count {
+                #if os(Linux)
+                    // ignore signal.
+                    signal(SIGPIPE, SIG_IGN)
+                #endif
                 let s = write(self.socketFileDescriptor, pointer.baseAddress + sent, Int(data.count - sent))
+                #if os(Linux)
+                    // restore.
+                    signal(SIGPIPE, SIG_DFL)
+                #endif
                 if s <= 0 {
                     throw SocketError.WriteFailed(Socket.descriptionOfLastError())
                 }
