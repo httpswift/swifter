@@ -29,7 +29,11 @@ public class HttpHandlers {
                     return HttpResponse.BadRequest
                 }
                 
+#if os(Linux)
+                let rangeString = rangeHeader.substringFromIndex(HttpHandlers.rangePrefix.characters.count)
+#else
                 let rangeString = rangeHeader.substringFromIndex(rangeHeader.startIndex.advancedBy(HttpHandlers.rangePrefix.characters.count))
+#endif
                 let rangeStringExploded = rangeString.split("-")
                 guard rangeStringExploded.count == 2 else {
                     return HttpResponse.BadRequest
