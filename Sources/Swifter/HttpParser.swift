@@ -11,7 +11,7 @@
 #endif
 
 
-enum HttpParserError : ErrorType {
+enum HttpParserError: ErrorType {
     case ReadBodyFailed(String)
     case InvalidStatusLine(String)
 }
@@ -51,14 +51,14 @@ class HttpParser {
     
     private func readBody(socket: Socket, size: Int) throws -> String {
         var body = ""
-        var counter = 0;
+        var counter = 0
         while counter < size {
             let c = socket.read()
             if c < 0 {
                 throw HttpParserError.ReadBodyFailed(String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)")
             }
             body.append(UnicodeScalar(c))
-            counter++;
+            counter++
         }
         return body
     }

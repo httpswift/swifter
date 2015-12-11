@@ -25,7 +25,7 @@ enum SocketError: ErrorType {
     case RecvFailed(String)
 }
 
-public class Socket : Hashable, Equatable {
+public class Socket: Hashable, Equatable {
     
     public class func tcpSocketForListen(port: in_port_t = 8080, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         
@@ -133,7 +133,7 @@ public class Socket : Hashable, Equatable {
     }
     
     public func read() -> Int {
-        var buffer = [UInt8](count: 1, repeatedValue: 0);
+        var buffer = [UInt8](count: 1, repeatedValue: 0)
         let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), 0)
         if next <= 0 {
             return next
@@ -146,7 +146,7 @@ public class Socket : Hashable, Equatable {
         var n = 0
         repeat {
             n = self.read()
-            if ( n > 13 /* CR */ ) { characters.append(Character(UnicodeScalar(n))) }
+            if n > 13 /* CR */ { characters.append(Character(UnicodeScalar(n))) }
         } while n > 0 && n != 10 /* NL */
         if n == -1 {
             throw SocketError.RecvFailed(Socket.descriptionOfLastError())
@@ -179,8 +179,8 @@ public class Socket : Hashable, Equatable {
             // or use signal(SIGPIPE, SIG_IGN) to make your entire application ignore SIGPIPE.
         #else
             // Prevents crashes when blocking calls are pending and the app is paused ( via Home button ).
-            var no_sig_pipe: Int32 = 1;
-            setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, socklen_t(sizeof(Int32)));
+            var no_sig_pipe: Int32 = 1
+            setsockopt(socket, SOL_SOCKET, SO_NOSIGPIPE, &no_sig_pipe, socklen_t(sizeof(Int32)))
         #endif
     }
     

@@ -48,7 +48,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
     }
     
     server["/json"] = { request in
-        return .OK(.Json(["posts" : [[ "id" : 1, "message" : "hello world"],[ "id" : 2, "message" : "sample message"]], "new_updates" : false]))
+        return .OK(.Json(["posts": [["id": 1, "message": "hello world"], ["id": 2, "message": "sample message"]], "new_updates": false]))
     }
     
     server["/redirect"] = { request in
