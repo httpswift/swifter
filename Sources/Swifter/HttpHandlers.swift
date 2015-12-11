@@ -10,8 +10,6 @@ public class HttpHandlers {
     
     private static let rangeExpression = try! NSRegularExpression(pattern: "bytes=(\\d*)-(\\d*)", options: .CaseInsensitive)
     
-    private static let cache = NSCache()
-    
     public class func directory(dir: String) -> (HttpRequest -> HttpResponse) {
         return { request in
             
@@ -21,14 +19,8 @@ public class HttpHandlers {
             
             let filesPath = dir + "/" + localPath.1
             
-            let cachedBody = cache.objectForKey(filesPath) as? NSData
-            
-            guard let fileBody = cachedBody ?? NSData(contentsOfFile: filesPath) else {
+            guard let fileBody = NSData(contentsOfFile: filesPath) else {
                 return HttpResponse.NotFound
-            }
-            
-            if cachedBody == nil {
-                cache.setObject(fileBody, forKey: filesPath)
             }
             
             if let rangeHeader = request.headers["range"] {
