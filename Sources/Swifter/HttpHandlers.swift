@@ -8,7 +8,7 @@ import Foundation
 
 public class HttpHandlers {
     
-    private static let rangeExpression = try! NSRegularExpression(pattern: "bytes=(\\d*)-(\\d*)", options: .CaseInsensitive)
+    private static let rangePrefix = "bytes="
     
     public class func directory(dir: String) -> (HttpRequest -> HttpResponse) {
         return { request in
@@ -25,12 +25,18 @@ public class HttpHandlers {
             
             if let rangeHeader = request.headers["range"] {
                 
-                guard let match = rangeExpression.matchesInString(rangeHeader, options: .Anchored, range: NSRange(location: 0, length: rangeHeader.characters.count)).first where match.numberOfRanges == 3 else {
+                guard rangeHeader.hasPrefix(HttpHandlers.rangePrefix) else {
                     return HttpResponse.BadRequest
                 }
                 
-                let startStr = (rangeHeader as NSString).substringWithRange(match.rangeAtIndex(1))
-                let endStr = (rangeHeader as NSString).substringWithRange(match.rangeAtIndex(2))
+                let rangeString = rangeHeader.substringFromIndex(rangeHeader.startIndex.advancedBy(HttpHandlers.rangePrefix.characters.count))
+                let rangeStringExploded = rangeString.split("-")
+                guard rangeStringExploded.count == 2 else {
+                    return HttpResponse.BadRequest
+                }
+                
+                let startStr = rangeStringExploded[0]
+                let endStr   = rangeStringExploded[1]
                 
                 guard let start = Int(startStr), end = Int(endStr) else {
                     var array = [UInt8](count: fileBody.length, repeatedValue: 0)
