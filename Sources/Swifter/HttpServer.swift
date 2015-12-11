@@ -7,12 +7,13 @@
 import Foundation
 
 #if os(Linux)
+    import Glibc
     import NSLinux
 #endif
 
 public class HttpServer {
     
-    static let VERSION = "1.0.2";
+    static let VERSION = "1.0.2"
     
     public typealias Handler = HttpRequest -> HttpResponse
     
