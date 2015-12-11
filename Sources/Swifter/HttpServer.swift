@@ -6,6 +6,10 @@
 
 import Foundation
 
+#if os(Linux)
+    import NSLinux
+#endif
+
 public class HttpServer {
     
     static let VERSION = "1.0.2";
