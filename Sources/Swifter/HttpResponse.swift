@@ -24,11 +24,7 @@ public class JSONSerializer: Serializer {
         
         let json = try NSJSONSerialization.dataWithJSONObject(obj, options: NSJSONWritingOptions.PrettyPrinted)
         
-        guard let string = String(data: json, encoding: NSUTF8StringEncoding) else {
-            throw SerializationError.EncodingError
-        }
-        
-        return string
+        return String(json)
     }
     
     private static func serialize(object: Any) throws -> String {
@@ -58,11 +54,9 @@ public class PLISTSerializer: Serializer {
         
         let plist = try NSPropertyListSerialization.dataWithPropertyList(obj, format: format, options: 0)
         
-        guard let string = String(data: plist, encoding: NSUTF8StringEncoding) else {
-            throw SerializationError.EncodingError
-        }
         
-        return string
+        
+        return String(plist)
     }
     
     private static func serialize(object: Any) throws -> String {
@@ -150,18 +144,18 @@ public enum HttpResponse {
         var headers = [String:String]()
         headers["Server"] = "Swifter \(HttpServer.VERSION)"
         switch self {
-		case .OK(let body):
+        case .OK(let body):
             switch body {
-                case .Json(_)   : headers["Content-Type"] = "application/json"
-                case .Plist(_)  : headers["Content-Type"] = "application/xml"
-                case .Xml(_)    : headers["Content-Type"] = "application/xml"
+            case .Json(_)   : headers["Content-Type"] = "application/json"
+            case .Plist(_)  : headers["Content-Type"] = "application/xml"
+            case .Xml(_)    : headers["Content-Type"] = "application/xml"
                 // 'application/xml' or 'text/xml' ?
-                // From RFC: http://www.rfc-editor.org/rfc/rfc3023.txt - "If an XML document -- that is, the unprocessed, 
-                // source XML document -- is readable by casual users, text/xml is preferable to application/xml. 
-                // MIME user agents (and web user agents) that do not have explicit support for text/xml will treat it as text/plain, 
-                // for example, by displaying the XML MIME entity as plain text.
-                case .Html(_)   : headers["Content-Type"] = "text/html"
-                default:break
+                // From RFC: http://www.rfc-editor.org/rfc/rfc3023.txt - "If an XML document -- that is, the unprocessed,
+                // source XML document -- is readable by casual users, text/xml is preferable to application/xml.
+                // MIME user agents (and web user agents) that do not have explicit support for text/xml will treat it as text/plain,
+            // for example, by displaying the XML MIME entity as plain text.
+            case .Html(_)   : headers["Content-Type"] = "text/html"
+            default:break
             }
         case .MovedPermanently(let location): headers["Location"] = location
         case .RAW(_, _, let rawHeaders, _):
@@ -189,14 +183,13 @@ public enum HttpResponse {
 	ignores any associated values. This should generally be what
 	you want. E.g.:
 	
-		let resp = handler(updatedRequest)
-		if resp == .NotFound {
-			print("Client requested not found: \(request.url)")
-		}
-*/
+ let resp = handler(updatedRequest)
+ if resp == .NotFound {
+ print("Client requested not found: \(request.url)")
+ }
+ */
 
 func ==(inLeft: HttpResponse, inRight: HttpResponse) -> Bool {
-	return inLeft.statusCode() == inRight.statusCode()
+    return inLeft.statusCode() == inRight.statusCode()
 }
-
 

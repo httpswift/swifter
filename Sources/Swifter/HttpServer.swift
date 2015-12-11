@@ -42,7 +42,7 @@ public class HttpServer {
         return router.routes()
     }
     
-    public func start(listenPort: in_port_t = 8080) throws {
+    public func start(listenPort: UInt16 = 8080) throws {
         stop()
         listenSocket = try Socket.tcpSocketForListen(listenPort)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
@@ -79,7 +79,7 @@ public class HttpServer {
             self.stop()
         }
     }
-
+    
     public func stop() {
         listenSocket.release()
         HttpServer.lock(self.clientSocketsLock) {

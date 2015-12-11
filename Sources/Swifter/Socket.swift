@@ -27,7 +27,7 @@ enum SocketError: ErrorType {
 
 public class Socket: Hashable, Equatable {
     
-    public class func tcpSocketForListen(port: in_port_t = 8080, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
+    public class func tcpSocketForListen(port: UInt16 = 8080, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         
         #if os(Linux)
             let socketFileDescriptor = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
