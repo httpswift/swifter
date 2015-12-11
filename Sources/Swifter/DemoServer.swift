@@ -48,7 +48,8 @@ public func demoServer(publicDir: String?) -> HttpServer {
     }
     
     server["/json"] = { request in
-        return .OK(.Json(["posts": [["id": 1, "message": "hello world"], ["id": 2, "message": "sample message"]], "new_updates": false]))
+        let jsonObject: NSDictionary = [NSString(string: "foo"): NSNumber(int: 3), NSString(string: "bar"): NSString(string: "baz")] 
+        return .OK(.Json(jsonObject))
     }
     
     server["/redirect"] = { request in
