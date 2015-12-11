@@ -50,7 +50,11 @@ public class HttpRouter {
                 }
             }
             if patternToken.characters.first == ":" {
+#if os(Linux)
+                params[patternToken.substringFromIndex(1)] = valueToken
+#else
                 params[patternToken.substringFromIndex(patternToken.characters.startIndex.successor())] = valueToken
+#endif
             } else {
                 if patternToken != valueToken {
                     return nil
