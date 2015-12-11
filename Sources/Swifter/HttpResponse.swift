@@ -16,7 +16,7 @@ public protocol Serializer {
     func serialize(object: Any) throws -> String
 }
 
-public class JSONSerializer : Serializer {
+public class JSONSerializer: Serializer {
     public func serialize(object: Any) throws -> String {
         guard let obj = object as? AnyObject where NSJSONSerialization.isValidJSONObject(obj) else {
             throw SerializationError.InvalidObject
@@ -127,7 +127,7 @@ public enum HttpResponse {
         case .Forbidden             : return 403
         case .NotFound              : return 404
         case .InternalServerError   : return 500
-        case .RAW(let code,_,_,_)   : return code
+        case .RAW(let code, _ , _, _)   : return code
         }
     }
     
@@ -142,7 +142,7 @@ public enum HttpResponse {
         case .Forbidden             : return "Forbidden"
         case .NotFound              : return "Not Found"
         case .InternalServerError   : return "Internal Server Error"
-        case .RAW(_,let pharse,_,_) : return pharse
+        case .RAW(_, let phrase, _, _) : return phrase
         }
     }
     
@@ -164,7 +164,7 @@ public enum HttpResponse {
                 default:break
             }
         case .MovedPermanently(let location): headers["Location"] = location
-        case .RAW(_,_, let rawHeaders,_):
+        case .RAW(_, _, let rawHeaders, _):
             if let rawHeaders = rawHeaders {
                 for (k, v) in rawHeaders {
                     headers.updateValue(v, forKey: k)
@@ -178,7 +178,7 @@ public enum HttpResponse {
     func body() -> [UInt8]? {
         switch self {
         case .OK(let body)          : return body.data()
-        case .RAW(_,_,_, let data)  : return data
+        case .RAW(_, _, _, let data)  : return data
         default                     : return nil
         }
     }

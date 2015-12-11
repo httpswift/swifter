@@ -1,0 +1,5 @@
+disabled_rules:
+  - line_length
+  - statement_position
+  - trailing_whitespace
+  - variable_name_min_length

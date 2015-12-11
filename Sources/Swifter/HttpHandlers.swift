@@ -12,7 +12,7 @@ public class HttpHandlers {
     
     private static let cache = NSCache()
     
-    public class func directory(dir: String) -> ( HttpRequest -> HttpResponse ) {
+    public class func directory(dir: String) -> (HttpRequest -> HttpResponse) {
         return { request in
             
             guard let localPath = request.params.first else {
@@ -78,16 +78,16 @@ public class HttpHandlers {
             if let (_, value) = r.params.first {
                 let filePath = dir + "/" + value
                 let fileManager = NSFileManager.defaultManager()
-                var isDir: ObjCBool = false;
-                if ( fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) ) {
-                    if ( isDir ) {
+                var isDir: ObjCBool = false
+                if fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) {
+                    if isDir {
                         do {
                             let files = try fileManager.contentsOfDirectoryAtPath(filePath)
                             var response = "<h3>\(filePath)</h3></br><table>"
                             response += files.map({ "<tr><td><a href=\"\(r.url)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
                             response += "</table>"
                             return HttpResponse.OK(.Html(response))
-                        } catch  {
+                        } catch {
                             return HttpResponse.NotFound
                         }
                     } else {

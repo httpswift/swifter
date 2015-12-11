@@ -28,8 +28,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func likedThis(sender: UIButton) {
-        self.server?.stop();
-        self.server = nil;
+        self.server?.stop()
+        self.server = nil
     }
 }
-

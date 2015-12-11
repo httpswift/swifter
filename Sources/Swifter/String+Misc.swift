@@ -31,7 +31,7 @@ extension String {
                 buffer.append(Character(scalar))
                 continue
             }
-            if ( scalar == "%" ) {
+            if scalar == "%" {
                 let first = scalars.popFirst()
                 let secon = scalars.popFirst()
                 if let first = unicodeScalarToUInt32Hex(first), secon = unicodeScalarToUInt32Hex(secon) {
@@ -53,11 +53,11 @@ extension String {
     
     private func unicodeScalarToUInt32Whitespace(x: UnicodeScalar?) -> UInt32? {
         if let x = x {
-            if (x.value >= 9 && x.value <= 13) {
-                return x.value;
+            if x.value >= 9 && x.value <= 13 {
+                return x.value
             }
-            if (x.value == 32) {
-                return x.value;
+            if x.value == 32 {
+                return x.value
             }
         }
         return nil
@@ -65,13 +65,13 @@ extension String {
     
     private func unicodeScalarToUInt32Hex(x: UnicodeScalar?) -> UInt32? {
         if let x = x {
-            if (x.value >= 48 && x.value <= 57) {
+            if x.value >= 48 && x.value <= 57 {
                 return x.value - 48
             }
-            if (x.value >= 97 && x.value <= 102) {
+            if x.value >= 97 && x.value <= 102 {
                 return x.value - 97
             }
-            if (x.value >= 65 && x.value <= 70) {
+            if x.value >= 65 && x.value <= 70 {
                 return x.value - 65
             }
         }
