@@ -20,7 +20,7 @@ public class HttpServer {
     
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
-    private let clientSocketsLock = 0
+    private let clientSocketsLock = NSLock()
     
     public init() { }
     
@@ -90,10 +90,10 @@ public class HttpServer {
         }
     }
     
-    private class func lock(handle: AnyObject, closure: () -> ()) {
-        objc_sync_enter(handle)
+    private class func lock(handle: NSLock, closure: () -> ()) {
+        handle.lock()
         closure()
-        objc_sync_exit(handle)
+        handle.unlock();
     }
     
     private class func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws {
