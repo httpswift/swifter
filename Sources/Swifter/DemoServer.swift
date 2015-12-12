@@ -39,6 +39,28 @@ public func demoServer(publicDir: String?) -> HttpServer {
         return .OK(.Html("<h3>Address: \(r.address)</h3><h3>Url:</h3> \(r.url)<h3>Method: \(r.method)</h3><h3>Headers:</h3>\(headersInfo)<h3>Query:</h3>\(queryParamsInfo)<h3>Path params:</h3>\(pathParamsInfo)"))
     }
     
+    server["/login"] = { r in
+        switch r.method.uppercaseString {
+        case "GET":
+            if let rootDir = publicDir {
+                if let html = NSData(contentsOfFile:"\(rootDir)/login.html") {
+                    var array = [UInt8](count: html.length, repeatedValue: 0)
+                    html.getBytes(&array, length: html.length)
+                    return HttpResponse.RAW(200, "OK", nil, array)
+                } else {
+                    return .NotFound
+                }
+            }
+        case "POST":
+            let formFields = r.parseForm()
+            return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
+        default:
+            return .NotFound
+        }
+        return .NotFound
+
+    }
+    
     server["/demo"] = { r in
         return .OK(.Html("<center><h2>Hello Swift</h2><img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br></center>"))
     }

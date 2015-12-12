@@ -4,6 +4,8 @@
 //  Copyright (c) 2014 Damian Kołakowski. All rights reserved.
 //
 
+import Foundation
+
 extension String {
 
     public func split(separator: Character) -> [String] {
@@ -25,56 +27,72 @@ extension String {
     
     public func removePercentEncoding() -> String {
         var scalars = self.unicodeScalars
-        var buffer = [Character]()
+        var output = ""
+        var bytesBuffer = [UInt8]()
         while let scalar = scalars.popFirst() {
-            guard scalar.isASCII() else {
-                buffer.append(Character(scalar))
-                continue
-            }
             if scalar == "%" {
                 let first = scalars.popFirst()
                 let secon = scalars.popFirst()
                 if let first = unicodeScalarToUInt32Hex(first), secon = unicodeScalarToUInt32Hex(secon) {
-                    buffer.append(Character(UnicodeScalar(first*16+secon)))
+                    bytesBuffer.append(first*16+secon)
                 } else {
-                    if let first = first {
-                        buffer.append(Character(first))
+                    if !bytesBuffer.isEmpty {
+                        output.appendContentsOf(UInt8ArrayToUTF8String(bytesBuffer))
+                        bytesBuffer.removeAll()
                     }
-                    if let secon = secon {
-                        buffer.append(Character(secon))
-                    }
+                    if let first = first { output.append(Character(first)) }
+                    if let secon = secon { output.append(Character(secon)) }
                 }
             } else {
-                buffer.append(Character(scalar))
+                if !bytesBuffer.isEmpty {
+                    output.appendContentsOf(UInt8ArrayToUTF8String(bytesBuffer))
+                    bytesBuffer.removeAll()
+                }
+                output.append(Character(scalar))
             }
         }
-        return String(buffer)
+        if !bytesBuffer.isEmpty {
+            output.appendContentsOf(UInt8ArrayToUTF8String(bytesBuffer))
+            bytesBuffer.removeAll()
+        }
+        return output
     }
     
-    private func unicodeScalarToUInt32Whitespace(x: UnicodeScalar?) -> UInt32? {
+    private func unicodeScalarToUInt32Whitespace(x: UnicodeScalar?) -> UInt8? {
         if let x = x {
             if x.value >= 9 && x.value <= 13 {
-                return x.value
+                return UInt8(x.value)
             }
             if x.value == 32 {
-                return x.value
+                return UInt8(x.value)
             }
         }
         return nil
     }
     
-    private func unicodeScalarToUInt32Hex(x: UnicodeScalar?) -> UInt32? {
+    private func unicodeScalarToUInt32Hex(x: UnicodeScalar?) -> UInt8? {
         if let x = x {
             if x.value >= 48 && x.value <= 57 {
-                return x.value - 48
+                return UInt8(x.value) - 48
             }
             if x.value >= 97 && x.value <= 102 {
-                return x.value - 97
+                return UInt8(x.value) - 87
             }
             if x.value >= 65 && x.value <= 70 {
-                return x.value - 65
+                return UInt8(x.value) - 55
             }
         }
         return nil
     }
+}
+
+public func UInt8ArrayToUTF8String(array: [UInt8]) -> String {
+    #if os(Linux)
+        return String(data: NSData(bytes: array, length: array.count), encoding: NSUTF8StringEncoding)
+    #else
+        if let s = String(data: NSData(bytes: array, length: array.count), encoding: NSUTF8StringEncoding) {
+            return s
+        }
+        return ""
+    #endif
 }

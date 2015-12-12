@@ -141,19 +141,13 @@ public enum HttpResponse {
     }
     
     func headers() -> [String: String] {
-        var headers = [String:String]()
-        headers["Server"] = "Swifter \(HttpServer.VERSION)"
+        var headers = ["Server" : "Swifter \(HttpServer.VERSION)"]
         switch self {
         case .OK(let body):
             switch body {
             case .Json(_)   : headers["Content-Type"] = "application/json"
             case .Plist(_)  : headers["Content-Type"] = "application/xml"
             case .Xml(_)    : headers["Content-Type"] = "application/xml"
-                // 'application/xml' or 'text/xml' ?
-                // From RFC: http://www.rfc-editor.org/rfc/rfc3023.txt - "If an XML document -- that is, the unprocessed,
-                // source XML document -- is readable by casual users, text/xml is preferable to application/xml.
-                // MIME user agents (and web user agents) that do not have explicit support for text/xml will treat it as text/plain,
-            // for example, by displaying the XML MIME entity as plain text.
             case .Html(_)   : headers["Content-Type"] = "text/html"
             default:break
             }
@@ -171,9 +165,9 @@ public enum HttpResponse {
     
     func body() -> [UInt8]? {
         switch self {
-        case .OK(let body)          : return body.data()
-        case .RAW(_, _, _, let data)  : return data
-        default                     : return nil
+        case .OK(let body)           : return body.data()
+        case .RAW(_, _, _, let data) : return data
+        default                      : return nil
         }
     }
 }

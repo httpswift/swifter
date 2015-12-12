@@ -12,13 +12,13 @@ public struct HttpRequest {
     public let urlParams: [(String, String)]
     public let method: String
     public let headers: [String: String]
-    public let body: String?
+    public let body: [UInt8]?
     public var address: String?
     public var params: [String: String]
     
     public func parseForm() -> [(String, String)] {
         if let body = body {
-            return body.split("&").map { (param: String) -> (String, String) in
+            return UInt8ArrayToUTF8String(body).split("&").map { (param: String) -> (String, String) in
                 let tokens = param.split("=")
                 if tokens.count >= 2 {
                     let key = tokens[0].replace("+", new: " ").removePercentEncoding()

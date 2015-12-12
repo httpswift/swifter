@@ -49,15 +49,15 @@ class HttpParser {
         }
     }
     
-    private func readBody(socket: Socket, size: Int) throws -> String {
-        var body = ""
+    private func readBody(socket: Socket, size: Int) throws -> [UInt8] {
+        var body = [UInt8]()
         var counter = 0
         while counter < size {
             let c = socket.read()
             if c < 0 {
                 throw HttpParserError.ReadBodyFailed(String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)")
             }
-            body.append(UnicodeScalar(c))
+            body.append(UInt8(c))
             counter++
         }
         return body
