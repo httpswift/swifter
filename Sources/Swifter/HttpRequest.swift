@@ -6,11 +6,15 @@
 
 import Foundation
 
+public enum HttpMethod : String {
+    case GET, POST, PUT, DELETE
+}
+
 public struct HttpRequest {
     
     public let url: String
     public let urlParams: [(String, String)]
-    public let method: String
+    public let method: HttpMethod
     public let headers: [String: String]
     public let body: [UInt8]?
     public var address: String?
