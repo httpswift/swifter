@@ -26,7 +26,7 @@ class HttpParser {
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
         }
-        guard let method = HttpMethod(rawValue: statusLineTokens[0]) else {
+        guard let method = HttpMethod.fromAnyString(statusLineTokens[0]) else {
             throw HttpParserError.InvalidHttpMethod(statusLineTokens[0])
         }
         let path = statusLineTokens[1]

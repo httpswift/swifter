@@ -8,6 +8,10 @@ import Foundation
 
 public enum HttpMethod : String {
     case GET, POST, PUT, DELETE
+    
+    static func fromAnyString(anyString: String) -> HttpMethod? {
+        return HttpMethod(rawValue: anyString.uppercaseString)
+    }
 }
 
 public struct HttpRequest {
