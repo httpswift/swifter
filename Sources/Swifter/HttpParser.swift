@@ -14,6 +14,7 @@
 enum HttpParserError: ErrorType {
     case ReadBodyFailed(String)
     case InvalidStatusLine(String)
+    case InvalidHttpMethod(String)
 }
 
 class HttpParser {
@@ -25,7 +26,9 @@ class HttpParser {
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
         }
-        let method = statusLineTokens[0]
+        guard let method = HttpMethod.fromAnyString(statusLineTokens[0]) else {
+            throw HttpParserError.InvalidHttpMethod(statusLineTokens[0])
+        }
         let path = statusLineTokens[1]
         let urlParams = extractUrlParams(path)
         let headers = try readHeaders(socket)

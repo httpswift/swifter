@@ -40,8 +40,8 @@ public func demoServer(publicDir: String?) -> HttpServer {
     }
     
     server["/login"] = { r in
-        switch r.method.uppercaseString {
-        case "GET":
+        switch r.method {
+        case .GET:
             if let rootDir = publicDir {
                 if let html = NSData(contentsOfFile:"\(rootDir)/login.html") {
                     var array = [UInt8](count: html.length, repeatedValue: 0)
@@ -51,7 +51,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
                     return .NotFound
                 }
             }
-        case "POST":
+        case .POST:
             let formFields = r.parseForm()
             return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
         default:

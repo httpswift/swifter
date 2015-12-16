@@ -6,11 +6,19 @@
 
 import Foundation
 
+public enum HttpMethod : String {
+    case GET, POST, PUT, DELETE
+    
+    static func fromAnyString(anyString: String) -> HttpMethod? {
+        return HttpMethod(rawValue: anyString.uppercaseString)
+    }
+}
+
 public struct HttpRequest {
     
     public let url: String
     public let urlParams: [(String, String)]
-    public let method: String
+    public let method: HttpMethod
     public let headers: [String: String]
     public let body: [UInt8]?
     public var address: String?
