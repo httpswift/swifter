@@ -12,6 +12,29 @@ import Foundation
 #endif
 
 public class HttpServer {
+    public class MethodRouter {
+        private let method: HttpRequest.Method?
+        private let router: HttpRouter
+        
+        private init(method: HttpRequest.Method?, router: HttpRouter) {
+            self.method = method
+            self.router = router
+        }
+        
+        public subscript(path: String) -> Handler? {
+            set {
+                if let newValue = newValue {
+                    router.register(method, path: path, handler: newValue)
+                }
+                else {
+                    router.unregister(method, path: path)
+                }
+            }
+            get {
+                return nil
+            }
+        }
+    }
     
     static let VERSION = "1.0.2"
     
@@ -23,7 +46,13 @@ public class HttpServer {
     private var clientSockets: Set<Socket> = []
     private let clientSocketsLock = NSLock()
     
-    public init() { }
+    public init() {
+        anyMethod = MethodRouter(method: nil, router: router)
+        getMethod = MethodRouter(method: .GET, router: router)
+        postMethod = MethodRouter(method: .POST, router: router)
+        putMethod = MethodRouter(method: .PUT, router: router)
+        deleteMethod = MethodRouter(method: .DELETE, router: router)
+    }
     
     public subscript(path: String) -> Handler? {
         set {
@@ -39,7 +68,32 @@ public class HttpServer {
         }
     }
     
-    public var routes: [String] {
+    private var anyMethod: MethodRouter
+    public var ANY: MethodRouter {
+        return anyMethod
+    }
+    
+    private var getMethod: MethodRouter
+    public var GET: MethodRouter {
+        return getMethod
+    }
+    
+    private var postMethod: MethodRouter
+    public var POST: MethodRouter {
+        return postMethod
+    }
+    
+    private var putMethod: MethodRouter
+    public var PUT: MethodRouter {
+        return putMethod
+    }
+    
+    private var deleteMethod: MethodRouter
+    public var DELETE: MethodRouter {
+        return deleteMethod
+    }
+    
+    public var routes: [(method: HttpRequest.Method?, path: String)] {
         return router.routes()
     }
     
@@ -51,26 +105,33 @@ public class HttpServer {
                 HttpServer.lock(self.clientSocketsLock) {
                     self.clientSockets.insert(socket)
                 }
+                
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
                     let socketAddress = try? socket.peername()
                     let httpParser = HttpParser()
+                    
                     while let request = try? httpParser.readHttpRequest(socket) {
                         let keepAlive = httpParser.supportsKeepAlive(request.headers)
                         var response = HttpResponse.NotFound
-                        if let (params, handler) = self.router.select(request.url) {
+                        
+                        if let (params, handler) = self.router.select(request.method,
+                                                                      url: request.url) {
                             let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, address: socketAddress, params: params)
                             response = handler(updatedRequest)
                         } else {
                             response = HttpResponse.NotFound
                         }
+                        
                         do {
                             try HttpServer.respond(socket, response: response, keepAlive: keepAlive)
                         } catch {
                             print("Failed to send response: \(error)")
                             break
                         }
+                        
                         if !keepAlive { break }
                     }
+                    
                     socket.release()
                     HttpServer.lock(self.clientSocketsLock) {
                         self.clientSockets.remove(socket)

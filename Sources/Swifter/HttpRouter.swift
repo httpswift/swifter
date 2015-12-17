@@ -7,30 +7,41 @@
 import Foundation
 
 public class HttpRouter {
+    private var handlers: [(method: HttpRequest.Method?, pattern: [String],
+                            handler: HttpServer.Handler)] = []
     
-    private var handlers: [(pattern: [String], handler: HttpServer.Handler)] = []
-    
-    public func routes() -> [String] {
-        return handlers.map { $0.pattern.joinWithSeparator("/") }
+    public func routes() -> [(method: HttpRequest.Method?, path: String)] {
+        return handlers.map { ($0.method, "/" + $0.pattern.joinWithSeparator("/")) }
     }
     
     public func register(path: String, handler: HttpServer.Handler) {
-        handlers.append((path.split("/"), handler))
+        register(nil, path: path, handler: handler)
+    }
+    
+    public func register(method: HttpRequest.Method?, path: String, handler: HttpServer.Handler) {
+        handlers.append((method, path.split("/"), handler))
         handlers.sortInPlace { $0.0.pattern.count < $0.1.pattern.count }
     }
     
     public func unregister(path: String) {
+        unregister(nil, path: path)
+    }
+    
+    public func unregister(method: HttpRequest.Method?, path: String) {
         let p = path.split("/")
-        handlers = handlers.filter { (pattern, handler) -> Bool in
-            return pattern != p
+        handlers = handlers.filter { (meth, pattern, _) -> Bool in
+            return meth != method || pattern != p
         }
     }
     
-    public func select(url: String) -> ([String: String], HttpServer.Handler)? {
+    public func select(method: HttpRequest.Method, url: String)
+                      -> ([String: String], HttpServer.Handler)? {
         let urlTokens = url.split("/")
-        for (pattern, handler) in handlers {
-            if let params = matchParams(pattern, valueTokens: urlTokens) {
-                return (params, handler)
+        for (meth, pattern, handler) in handlers {
+            if meth == nil || meth! == method {
+                if let params = matchParams(pattern, valueTokens: urlTokens) {
+                    return (params, handler)
+                }
             }
         }
         return nil
