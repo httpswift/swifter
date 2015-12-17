@@ -67,7 +67,8 @@ class HttpParser {
                 return requestHeaders
             }
             let headerTokens = headerLine.split(":")
-            if let name = headerTokens.first, value = headerTokens.last where headerTokens.count == 2 {
+            if let name = headerTokens.first where headerTokens.count >= 2 {
+                let value = headerTokens.dropFirst().joinWithSeparator(":")
                 requestHeaders[name.lowercaseString] = value.trim()
             }
         } while true
