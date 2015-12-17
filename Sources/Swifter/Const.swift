@@ -7,8 +7,16 @@
 //
 
 import Foundation
+#if os(Linux)
+    import Glibc
+    import NSLinux
+#endif
 
 struct Constants {
-    static let CR = UInt8(13)
-    static let NL = UInt8(10)
+    
+    static let VERSION      = "1.0.2"
+    static let DEFAULT_PORT = in_port_t(8080)
+    
+    static let CR           = UInt8(13)
+    static let NL           = UInt8(10)
 }

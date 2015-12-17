@@ -7,20 +7,17 @@
 import Foundation
 
 public struct HttpRequest {
-    public enum Method: String {
-        case GET, POST, PUT, DELETE
-    }
     
-    public let url: String
-    public let urlParams: [(String, String)]
-    public let method: Method
-    public let headers: [String: String]
-    public let body: [UInt8]?
-    public var address: String?
-    public var params: [String: String]
+    public var url: String = ""
+    public var queryParams: [(String, String)] = []
+    public var method: String = ""
+    public var headers: [String: String] = [:]
+    public var body: [UInt8] = []
+    public var address: String? = ""
+    public var params: [String: String] = [:]
     
     public func parseUrlencodedForm() -> [(String, String)] {
-        guard let body = body, let contentTypeHeader = headers["content-type"] else {
+        guard let contentTypeHeader = headers["content-type"] else {
             return []
         }
         let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
@@ -43,7 +40,7 @@ public struct HttpRequest {
     }
     
     public func parseMultiPartFormData() -> [MultiPart] {
-        guard let body = body, let contentTypeHeader = headers["content-type"] else {
+        guard let contentTypeHeader = headers["content-type"] else {
             return []
         }
         let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }

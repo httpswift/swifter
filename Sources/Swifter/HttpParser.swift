@@ -14,7 +14,6 @@
 enum HttpParserError: ErrorType {
     case ReadBodyFailed(String)
     case InvalidStatusLine(String)
-    case UnknownRequestMethod(String)
 }
 
 class HttpParser {
@@ -26,20 +25,15 @@ class HttpParser {
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
         }
-        
-        // Make sure the request is of a known type
-        guard let method = HttpRequest.Method(rawValue: statusLineTokens[0]) else {
-            throw HttpParserError.UnknownRequestMethod(statusLine)
+        var request = HttpRequest()
+        request.method = statusLineTokens[0]
+        request.url = statusLineTokens[1]
+        request.queryParams = extractUrlParams(request.url)
+        request.headers = try readHeaders(socket)
+        if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
+            request.body = try readBody(socket, size: contentLengthValue)
         }
-        
-        let path = statusLineTokens[1]
-        let urlParams = extractUrlParams(path)
-        let headers = try readHeaders(socket)
-        if let contentLength = headers["content-length"], let contentLengthValue = Int(contentLength) {
-            let body = try readBody(socket, size: contentLengthValue)
-            return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: body, address: nil, params: [:])
-        }
-        return HttpRequest(url: path, urlParams: urlParams, method: method, headers: headers, body: nil, address: nil, params: [:])
+        return request
     }
     
     private func extractUrlParams(url: String) -> [(String, String)] {

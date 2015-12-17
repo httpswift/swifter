@@ -17,12 +17,9 @@ public func demoServer(publicDir: String?) -> HttpServer {
 
     server["/"] = { r in
         var listPage = "Available services:<br><ul>"
-        for route in server.routes {
-            if route.method == nil || route.method! == .GET {
-                listPage += "<li><a href=\"\(route.path)\">\(route.path)</a></li>"
-            }
+        for (method, path) in server.routes {
+            listPage += "<li><a href=\"\(path)\">\(method): \(path)</a></li>"
         }
-        
         listPage += "</ul>"
         return .OK(.Html(listPage))
     }
@@ -35,7 +32,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
             headersInfo += "\(name) : \(value)<br>"
         }
         var queryParamsInfo = ""
-        for (name, value) in r.urlParams {
+        for (name, value) in r.queryParams {
             queryParamsInfo += "\(name) : \(value)<br>"
         }
         var pathParamsInfo = ""

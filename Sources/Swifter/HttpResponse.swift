@@ -9,7 +9,6 @@ import Foundation
 public enum SerializationError: ErrorType {
     case InvalidObject
     case NotSupported
-    case EncodingError
 }
 
 public enum HttpResponseBody {
@@ -83,7 +82,7 @@ public enum HttpResponse {
     }
     
     func headers() -> [String: String] {
-        var headers = ["Server" : "Swifter \(HttpServer.VERSION)"]
+        var headers = ["Server" : "Swifter \(Constants.VERSION)"]
         switch self {
         case .OK(let body):
             switch body {
@@ -91,7 +90,8 @@ public enum HttpResponse {
             case .Html(_)   : headers["Content-Type"] = "text/html"
             default:break
             }
-        case .MovedPermanently(let location): headers["Location"] = location
+        case .MovedPermanently(let location):
+            headers["Location"] = location
         case .RAW(_, _, let rawHeaders, _):
             if let rawHeaders = rawHeaders {
                 for (k, v) in rawHeaders {
