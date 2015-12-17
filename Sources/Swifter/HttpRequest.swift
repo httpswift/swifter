@@ -7,10 +7,13 @@
 import Foundation
 
 public struct HttpRequest {
+    public enum Method: String {
+        case GET, POST, PUT, DELETE
+    }
     
     public let url: String
     public let urlParams: [(String, String)]
-    public let method: String
+    public let method: Method
     public let headers: [String: String]
     public let body: [UInt8]?
     public var address: String?
