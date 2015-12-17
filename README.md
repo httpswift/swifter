@@ -28,7 +28,8 @@ server.start()
 ```
 ### CocoaPods? Yes.
 ```
-pod 'Swifter', '~> 1.0.2’
+use_frameworks!
+pod 'Swifter', '~> 1.0.2'
 ```
 
 ### Carthage? Also yes.
