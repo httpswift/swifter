@@ -11,12 +11,20 @@
 		7AE893EA1C05127900A29F63 /* SwifteriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893E91C05127900A29F63 /* SwifteriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893FD1C0512C400A29F63 /* SwifterMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
+		7C47894C1C222C7F00586CD0 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47894B1C222C7F00586CD0 /* Const.swift */; };
+		7C47894D1C222C7F00586CD0 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47894B1C222C7F00586CD0 /* Const.swift */; };
+		7C47894E1C222C7F00586CD0 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47894B1C222C7F00586CD0 /* Const.swift */; };
+		7C47894F1C222C7F00586CD0 /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C47894B1C222C7F00586CD0 /* Const.swift */; };
 		7C67C3471C17542E007B98E8 /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67C3461C17542E007B98E8 /* HttpRouter.swift */; };
 		7C67C3481C17542E007B98E8 /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67C3461C17542E007B98E8 /* HttpRouter.swift */; };
 		7C67C3491C17542E007B98E8 /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67C3461C17542E007B98E8 /* HttpRouter.swift */; };
 		7C67C34A1C17542E007B98E8 /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67C3461C17542E007B98E8 /* HttpRouter.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
+		7C7488781C1DA07300CBCD77 /* file.html in Resources */ = {isa = PBXBuildFile; fileRef = 7C7488771C1DA07300CBCD77 /* file.html */; };
+		7C7488791C1DA07300CBCD77 /* file.html in Resources */ = {isa = PBXBuildFile; fileRef = 7C7488771C1DA07300CBCD77 /* file.html */; };
+		7C74887A1C1DA07300CBCD77 /* file.html in Resources */ = {isa = PBXBuildFile; fileRef = 7C7488771C1DA07300CBCD77 /* file.html */; };
+		7C74887B1C1DA08200CBCD77 /* file.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7C7488771C1DA07300CBCD77 /* file.html */; };
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
 		7CA4815819A2EF2B0030B30D /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
@@ -84,6 +92,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				7C74887B1C1DA08200CBCD77 /* file.html in CopyFiles */,
 				7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */,
 				7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */,
 				7CA4815919A2EF560030B30D /* test.json in CopyFiles */,
@@ -101,7 +110,9 @@
 		7AE893FD1C0512C400A29F63 /* SwifterMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifterMac.h; sourceTree = "<group>"; };
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		7C47894B1C222C7F00586CD0 /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		7C67C3461C17542E007B98E8 /* HttpRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpRouter.swift; sourceTree = "<group>"; };
+		7C7488771C1DA07300CBCD77 /* file.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = file.html; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterSampleOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -211,6 +222,7 @@
 		7CA4815619A2EF2B0030B30D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7C7488771C1DA07300CBCD77 /* file.html */,
 				98630C061A1C9A9D00478D08 /* login.html */,
 				7CB102DF1A17381D00CBA3B4 /* logo.png */,
 				7CA4815719A2EF2B0030B30D /* test.json */,
@@ -245,8 +257,9 @@
 				7CEAF84C1C14B29B003252DE /* DemoServer.swift */,
 				7C67C3461C17542E007B98E8 /* HttpRouter.swift */,
 				7CEAF84D1C14B29B003252DE /* HttpHandlers.swift */,
-				7CEAF84E1C14B29B003252DE /* HttpParser.swift */,
 				7CEAF84F1C14B29B003252DE /* HttpRequest.swift */,
+				7C47894B1C222C7F00586CD0 /* Const.swift */,
+				7CEAF84E1C14B29B003252DE /* HttpParser.swift */,
 				7CEAF8501C14B29B003252DE /* HttpResponse.swift */,
 				7CEAF8511C14B29B003252DE /* HttpServer.swift */,
 				7CEAF8521C14B29B003252DE /* Socket.swift */,
@@ -399,6 +412,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C7488791C1DA07300CBCD77 /* file.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +420,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C74887A1C1DA07300CBCD77 /* file.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +428,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C7488781C1DA07300CBCD77 /* file.html in Resources */,
 				7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */,
 				7CB102E01A17381D00CBA3B4 /* logo.png in Resources */,
 				7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */,
@@ -438,6 +454,7 @@
 				7CEAF8551C14B29B003252DE /* DemoServer.swift in Sources */,
 				7CD6DABB1C15C48500A04931 /* String+Misc.swift in Sources */,
 				7C67C3491C17542E007B98E8 /* HttpRouter.swift in Sources */,
+				7C47894E1C222C7F00586CD0 /* Const.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +471,7 @@
 				7CEAF8561C14B29B003252DE /* DemoServer.swift in Sources */,
 				7CD6DABC1C15C48500A04931 /* String+Misc.swift in Sources */,
 				7C67C34A1C17542E007B98E8 /* HttpRouter.swift in Sources */,
+				7C47894F1C222C7F00586CD0 /* Const.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,6 +484,7 @@
 				7CEAF8671C14B29B003252DE /* HttpServer.swift in Sources */,
 				7CD6DAB91C15C48500A04931 /* String+Misc.swift in Sources */,
 				7C67C3471C17542E007B98E8 /* HttpRouter.swift in Sources */,
+				7C47894C1C222C7F00586CD0 /* Const.swift in Sources */,
 				7CEAF8571C14B29B003252DE /* HttpHandlers.swift in Sources */,
 				7CEAF85B1C14B29B003252DE /* HttpParser.swift in Sources */,
 				7CEAF86B1C14B29B003252DE /* Socket.swift in Sources */,
@@ -484,6 +503,7 @@
 				7CEAF8681C14B29B003252DE /* HttpServer.swift in Sources */,
 				7CD6DABA1C15C48500A04931 /* String+Misc.swift in Sources */,
 				7C67C3481C17542E007B98E8 /* HttpRouter.swift in Sources */,
+				7C47894D1C222C7F00586CD0 /* Const.swift in Sources */,
 				7CEAF8581C14B29B003252DE /* HttpHandlers.swift in Sources */,
 				7CEAF85C1C14B29B003252DE /* HttpParser.swift in Sources */,
 				7CEAF86C1C14B29B003252DE /* Socket.swift in Sources */,

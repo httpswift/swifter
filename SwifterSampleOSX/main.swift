@@ -6,24 +6,17 @@
 
 import Foundation
 
-class SwiftyJSONSerializer: Serializer {
-    func serialize(object: Any) throws -> String {
-        guard let obj = object as? JSON,
-            let rawString = obj.rawString() else {
-                throw SerializationError.InvalidObject
-        }
-        return rawString
-    }
-}
-
-
 let server = demoServer(NSBundle.mainBundle().resourcePath!)
 
 do {
     server["/SwiftyJSON"] = { request in
-        let serialize = SwiftyJSONSerializer()
         let js: JSON = ["return": "OK", "isItAJSON": true, "code" : 200]
-        return .OK(.Custom(serialize, js))
+        return .OK(.Custom(js, { object in
+            guard let obj = object as? JSON, let rawString = obj.rawString() else {
+                throw SerializationError.InvalidObject
+            }
+            return rawString
+        }))
     }
     server["/testAfterBaseRoute"] = { request in
         return .OK(.Html("ok !"))

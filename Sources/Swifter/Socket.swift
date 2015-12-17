@@ -116,13 +116,13 @@ public class Socket: Hashable, Equatable {
     }
     
     public func writeUInt8(data: [UInt8]) throws {
-        try data.withUnsafeBufferPointer { pointer in
+        try data.withUnsafeBufferPointer {
             var sent = 0
             while sent < data.count {
                 #if os(Linux)
-                    let s = send(self.socketFileDescriptor, pointer.baseAddress + sent, Int(data.count - sent), Int32(MSG_NOSIGNAL))
+                    let s = send(self.socketFileDescriptor, $0.baseAddress + sent, Int(data.count - sent), Int32(MSG_NOSIGNAL))
                 #else
-                    let s = write(self.socketFileDescriptor, pointer.baseAddress + sent, Int(data.count - sent))
+                    let s = write(self.socketFileDescriptor, $0.baseAddress + sent, Int(data.count - sent))
                 #endif
                 if s <= 0 {
                     throw SocketError.WriteFailed(Socket.descriptionOfLastError())
@@ -132,25 +132,22 @@ public class Socket: Hashable, Equatable {
         }
     }
     
-    public func read() -> Int {
+    public func read() throws -> UInt8 {
         var buffer = [UInt8](count: 1, repeatedValue: 0)
         let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), 0)
         if next <= 0 {
-            return next
+            throw SocketError.RecvFailed(Socket.descriptionOfLastError())
         }
-        return Int(buffer[0])
+        return buffer[0]
     }
     
     public func readLine() throws -> String {
         var characters: String = ""
-        var n = 0
+        var n: UInt8 = 0
         repeat {
-            n = self.read()
-            if n > 13 /* CR */ { characters.append(Character(UnicodeScalar(n))) }
-        } while n > 0 && n != 10 /* NL */
-        if n == -1 {
-            throw SocketError.RecvFailed(Socket.descriptionOfLastError())
-        }
+            n = try self.read()
+            if n > Constants.CR { characters.append(Character(UnicodeScalar(n))) }
+        } while n != Constants.NL
         return characters
     }
     
@@ -210,7 +207,6 @@ public class Socket: Hashable, Equatable {
         #endif
     }
 }
-
 
 public func ==(socket1: Socket, socket2: Socket) -> Bool {
     return socket1.socketFileDescriptor == socket2.socketFileDescriptor

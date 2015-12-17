@@ -42,10 +42,10 @@ class HttpParser {
         }
         return query.split("&").map { (param: String) -> (String, String) in
             let tokens = param.split("=")
-            guard tokens.count >= 2 else {
+            guard let name = tokens.first, value = tokens.last else {
                 return ("", "")
             }
-            return (tokens[0].removePercentEncoding(), tokens[1].removePercentEncoding())
+            return (name.removePercentEncoding(), value.removePercentEncoding())
         }
     }
     
@@ -53,11 +53,7 @@ class HttpParser {
         var body = [UInt8]()
         var counter = 0
         while counter < size {
-            let c = socket.read()
-            if c < 0 {
-                throw HttpParserError.ReadBodyFailed(String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)")
-            }
-            body.append(UInt8(c))
+            body.append(try socket.read())
             counter++
         }
         return body
@@ -71,15 +67,8 @@ class HttpParser {
                 return requestHeaders
             }
             let headerTokens = headerLine.split(":")
-            if headerTokens.count >= 2 {
-                // RFC 2616 - "Hypertext Transfer Protocol -- HTTP/1.1", paragraph 4.2, "Message Headers":
-                // "Each header field consists of a name followed by a colon (":") and the field value. Field names are case-insensitive."
-                // We will keep lower case version.
-                let headerName = headerTokens[0].lowercaseString
-                let headerValue = headerTokens[1].trim()
-                if !headerName.isEmpty && !headerValue.isEmpty {
-                    requestHeaders.updateValue(headerValue, forKey: headerName)
-                }
+            if let name = headerTokens.first, value = headerTokens.last where headerTokens.count == 2 {
+                requestHeaders[name.lowercaseString] = value.trim()
             }
         } while true
     }

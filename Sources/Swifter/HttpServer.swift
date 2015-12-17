@@ -56,7 +56,7 @@ public class HttpServer {
                     let httpParser = HttpParser()
                     while let request = try? httpParser.readHttpRequest(socket) {
                         let keepAlive = httpParser.supportsKeepAlive(request.headers)
-                        let response: HttpResponse
+                        var response = HttpResponse.NotFound
                         if let (params, handler) = self.router.select(request.url) {
                             let updatedRequest = HttpRequest(url: request.url, urlParams: request.urlParams, method: request.method, headers: request.headers, body: request.body, address: socketAddress, params: params)
                             response = handler(updatedRequest)

@@ -39,6 +39,27 @@ public func demoServer(publicDir: String?) -> HttpServer {
         return .OK(.Html("<h3>Address: \(r.address)</h3><h3>Url:</h3> \(r.url)<h3>Method: \(r.method)</h3><h3>Headers:</h3>\(headersInfo)<h3>Query:</h3>\(queryParamsInfo)<h3>Path params:</h3>\(pathParamsInfo)"))
     }
     
+    server["/upload"] = { r in
+        switch r.method.uppercaseString {
+        case "GET":
+            if let rootDir = publicDir {
+                if let html = NSData(contentsOfFile:"\(rootDir)/file.html") {
+                    var array = [UInt8](count: html.length, repeatedValue: 0)
+                    html.getBytes(&array, length: html.length)
+                    return HttpResponse.RAW(200, "OK", nil, array)
+                } else {
+                    return .NotFound
+                }
+            }
+        case "POST":
+            let formFields = r.parseMultiPartFormData()
+            return HttpResponse.OK(.Html(formFields.map({ UInt8ArrayToUTF8String($0.body) }).joinWithSeparator("<br>")))
+        default:
+            return .NotFound
+        }
+        return .NotFound
+    }
+    
     server["/login"] = { r in
         switch r.method.uppercaseString {
         case "GET":
@@ -52,13 +73,12 @@ public func demoServer(publicDir: String?) -> HttpServer {
                 }
             }
         case "POST":
-            let formFields = r.parseForm()
+            let formFields = r.parseUrlencodedForm()
             return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
         default:
             return .NotFound
         }
         return .NotFound
-
     }
     
     server["/demo"] = { r in
