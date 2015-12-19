@@ -15,19 +15,19 @@ public class HttpRouter {
     }
     
     public func register(method: String?, path: String, handler: HttpRequest -> HttpResponse) {
-        handlers.append((method, path.split("/"), handler))
+        handlers.append((method, stripQuery(path).split("/"), handler))
         handlers.sortInPlace { $0.0.pattern.count < $0.1.pattern.count }
     }
     
     public func unregister(method: String?, path: String) {
-        let tokens = path.split("/")
+        let pathTokens = stripQuery(path).split("/")
         handlers = handlers.filter { (meth, pattern, _) -> Bool in
-            return meth != method || pattern != tokens
+            return meth != method || pattern != pathTokens
         }
     }
     
     public func select(method: String?, url: String) -> ([String: String], HttpRequest -> HttpResponse)? {
-        let urlTokens = url.split("/")
+        let urlTokens = stripQuery(url).split("/")
         for (meth, pattern, handler) in handlers {
             if meth == nil || meth! == method {
                 if let params = matchParams(pattern, valueTokens: urlTokens) {
@@ -64,5 +64,12 @@ public class HttpRouter {
             }
         }
         return params
+    }
+    
+    private func stripQuery(path: String) -> String {
+        if let path = path.split("?").first {
+            return path
+        }
+        return path
     }
 }

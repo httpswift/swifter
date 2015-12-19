@@ -27,7 +27,7 @@ enum SocketError: ErrorType {
 
 public class Socket: Hashable, Equatable {
     
-    public class func tcpSocketForListen(port: in_port_t = 8080, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
+    public class func tcpSocketForListen(port: in_port_t, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         
         #if os(Linux)
             let socketFileDescriptor = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
@@ -96,12 +96,7 @@ public class Socket: Hashable, Equatable {
     }
     
     public func acceptClientSocket() throws -> Socket {
-        #if os(Linux)
-            var addr = sockaddr()
-        #else
-            var addr = sockaddr(sa_len: 0, sa_family: 0, sa_data: (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-        #endif
-        
+        var addr = sockaddr()        
         var len: socklen_t = 0
         let clientSocket = accept(self.socketFileDescriptor, &addr, &len)
         if clientSocket == -1 {

@@ -13,45 +13,44 @@ public class HttpServer: HttpServerIO {
     private let router = HttpRouter()
     
     public var routes: [(method: String?, path: String)] {
-        return router.routes()
+        return router.routes();
     }
     
     public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
         set {
             if let handler = newValue {
                 self.router.register(nil, path: path, handler: handler)
-            }
-            else {
+            } else {
                 self.router.unregister(nil, path: path)
             }
         }
         get { return nil }
     }
     
-    public lazy var DELETE : Route = self.lazyBuild("DELETE")
-    public lazy var UPDATE : Route = self.lazyBuild("UPDATE")
-    public lazy var HEAD   : Route = self.lazyBuild("HEAD")
-    public lazy var POST   : Route = self.lazyBuild("POST")
-    public lazy var GET    : Route = self.lazyBuild("GET")
-    public lazy var PUT    : Route = self.lazyBuild("PUT")
+    public lazy var DELETE : Route = self.newRoute("DELETE")
+    public lazy var UPDATE : Route = self.newRoute("UPDATE")
+    public lazy var HEAD   : Route = self.newRoute("HEAD")
+    public lazy var POST   : Route = self.newRoute("POST")
+    public lazy var GET    : Route = self.newRoute("GET")
+    public lazy var PUT    : Route = self.newRoute("PUT")
     
     public struct Route {
         public let method: String
-        public let server: HttpServer
+        public let router: HttpRouter
         public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
             set {
                 if let handler = newValue {
-                    server.router.register(method, path: path, handler: handler)
+                    router.register(method, path: path, handler: handler)
                 } else {
-                    server.router.unregister(method, path: path)
+                    router.unregister(method, path: path)
                 }
             }
             get { return nil }
         }
     }
     
-    private func lazyBuild(method: String) -> Route {
-        return Route(method: method, server: self)
+    private func newRoute(method: String) -> Route {
+        return Route(method: method, router: self.router)
     }
     
     override public func select(method: String, url: String) -> ([String : String], HttpRequest -> HttpResponse) {

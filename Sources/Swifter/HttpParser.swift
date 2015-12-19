@@ -12,7 +12,6 @@
 
 
 enum HttpParserError: ErrorType {
-    case ReadBodyFailed(String)
     case InvalidStatusLine(String)
 }
 
@@ -28,7 +27,7 @@ class HttpParser {
         var request = HttpRequest()
         request.method = statusLineTokens[0]
         request.url = statusLineTokens[1]
-        request.queryParams = extractUrlParams(request.url)
+        request.queryParams = extractQueryParams(request.url)
         request.headers = try readHeaders(socket)
         if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
             request.body = try readBody(socket, size: contentLengthValue)
@@ -36,14 +35,17 @@ class HttpParser {
         return request
     }
     
-    private func extractUrlParams(url: String) -> [(String, String)] {
+    private func extractQueryParams(url: String) -> [(String, String)] {
         guard let query = url.split("?").last else {
             return []
         }
         return query.split("&").map { (param: String) -> (String, String) in
             let tokens = param.split("=")
-            guard let name = tokens.first, value = tokens.last else {
+            guard let name = tokens.first else {
                 return ("", "")
+            }
+            guard let value = tokens.last where tokens.count > 1 else {
+                return (name.removePercentEncoding(), "")
             }
             return (name.removePercentEncoding(), value.removePercentEncoding())
         }
