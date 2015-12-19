@@ -5,11 +5,11 @@
 //
 
 import UIKit
-import SwifteriOS
+import Swifter
 
 class ViewController: UIViewController {
     
-    var server: HttpServer?
+    private var server: HttpServer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,11 +20,6 @@ class ViewController: UIViewController {
             print("Server start error: \(error)")
         }
         self.server = server
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func likedThis(sender: UIButton) {

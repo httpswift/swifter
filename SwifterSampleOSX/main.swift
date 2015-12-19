@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Swifter
 
 let server = demoServer(NSBundle.mainBundle().resourcePath!)
 

@@ -6,13 +6,12 @@
 
 import Foundation
 import UIKit
-import SwifteriOS
+import Swifter
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
-    var server: HttpServer?
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         return true
