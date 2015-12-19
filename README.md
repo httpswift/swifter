@@ -15,7 +15,7 @@ server.start()
 ### How to share files?
 ```swift
 let server = HttpServer()
-server["/home/(.+)"] = HttpHandlers.directory("~/")
+server["/home/:path"] = HttpHandlers.directory("~/")
 server.start()
 ```
 ### How to redirect?
@@ -29,11 +29,11 @@ server.start()
 ### CocoaPods? Yes.
 ```
 use_frameworks!
-pod 'Swifter', '~> 1.0.2'
+pod 'Swifter', '~> 1.0.3'
 ```
 
 ### Carthage? Also yes.
 
 ```
-github "glock45/swifter" == 1.0.2
+github "glock45/swifter" == 1.0.3
 ```
