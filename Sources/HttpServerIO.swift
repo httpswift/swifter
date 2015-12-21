@@ -28,7 +28,8 @@ public class HttpServerIO {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
                     let socketAddress = try? socket.peername()
                     let httpParser = HttpParser()                    
-                    while var request = try? httpParser.readHttpRequest(socket) {
+                    while let request = try? httpParser.readHttpRequest(socket) {
+                        var request = request
                         let keepAlive = httpParser.supportsKeepAlive(request.headers)
                         let (params, handler) = self.select(request.method, url: request.url)
                         request.address = socketAddress

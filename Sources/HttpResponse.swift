@@ -22,7 +22,7 @@ public enum HttpResponseBody {
         do {
             switch self {
             case .Json(let object):
-                guard let obj = object as? AnyObject where NSJSONSerialization.isValidJSONObject(obj) else {
+                guard case let obj = object where NSJSONSerialization.isValidJSONObject(obj) else {
                     throw SerializationError.InvalidObject
                 }
                 let json = try NSJSONSerialization.dataWithJSONObject(obj, options: NSJSONWritingOptions.PrettyPrinted)
