@@ -10,6 +10,8 @@ import Foundation
 
 public class HttpServer: HttpServerIO {
     
+    public override init() { }
+    
     private let router = HttpRouter()
     
     public var routes: [(method: String?, path: String)] {
