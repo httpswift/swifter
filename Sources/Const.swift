@@ -14,7 +14,7 @@ import Foundation
 
 struct Constants {
     
-    static let VERSION      = "1.0.5"
+    static let VERSION      = "1.0.6"
     static let DEFAULT_PORT = in_port_t(8080)
     
     static let CR           = UInt8(13)
