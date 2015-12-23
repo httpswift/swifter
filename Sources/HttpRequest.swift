@@ -24,7 +24,7 @@ public struct HttpRequest {
         guard let contentType = contentTypeHeaderTokens.first where contentType == "application/x-www-form-urlencoded" else {
             return []
         }
-        return UInt8ArrayToUTF8String(body).split("&").map { (param: String) -> (String, String) in
+        return String.fromUInt8(body).split("&").map { (param: String) -> (String, String) in
             let tokens = param.split("=")
             if let name = tokens.first, value = tokens.last where tokens.count == 2 {
                 return (name.replace("+", new: " ").removePercentEncoding(),
@@ -93,15 +93,18 @@ public struct HttpRequest {
     private func nextMultiPartLine(inout generator: IndexingGenerator<[UInt8]>) -> String? {
         var result = String()
         while let value = generator.next() {
-            if value > Constants.CR {
+            if value > HttpRequest.CR {
                 result.append(Character(UnicodeScalar(value)))
             }
-            if value == Constants.NL {
+            if value == HttpRequest.NL {
                 break
             }
         }
         return result
     }
+    
+    static let CR = UInt8(13)
+    static let NL = UInt8(10)
     
     private func nextMultiPartBody(inout generator: IndexingGenerator<[UInt8]>, boundary: String) -> [UInt8]? {
         var body = [UInt8]()
@@ -112,9 +115,9 @@ public struct HttpRequest {
             body.append(x)
             if matchOffset == boundaryArray.count {
                 body.removeRange(Range<Int>(start: body.count-matchOffset, end: body.count))
-                if body.last == Constants.NL {
+                if body.last == HttpRequest.NL {
                     body.removeLast()
-                    if body.last == Constants.CR {
+                    if body.last == HttpRequest.CR {
                         body.removeLast()
                     }
                 }

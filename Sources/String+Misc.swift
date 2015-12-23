@@ -25,6 +25,17 @@ extension String {
         return String(scalars)
     }
     
+    public static func fromUInt8(array: [UInt8]) -> String {
+        #if os(Linux)
+            return String(data: NSData(bytes: array, length: array.count), encoding: NSUTF8StringEncoding)
+        #else
+            if let s = String(data: NSData(bytes: array, length: array.count), encoding: NSUTF8StringEncoding) {
+                return s
+            }
+            return ""
+        #endif
+    }
+    
     public func removePercentEncoding() -> String {
         var scalars = self.unicodeScalars
         var output = ""
@@ -37,7 +48,7 @@ extension String {
                     bytesBuffer.append(first*16+secon)
                 } else {
                     if !bytesBuffer.isEmpty {
-                        output.appendContentsOf(UInt8ArrayToUTF8String(bytesBuffer))
+                        output.appendContentsOf(String.fromUInt8(bytesBuffer))
                         bytesBuffer.removeAll()
                     }
                     if let first = first { output.append(Character(first)) }
@@ -45,14 +56,14 @@ extension String {
                 }
             } else {
                 if !bytesBuffer.isEmpty {
-                    output.appendContentsOf(UInt8ArrayToUTF8String(bytesBuffer))
+                    output.appendContentsOf(String.fromUInt8(bytesBuffer))
                     bytesBuffer.removeAll()
                 }
                 output.append(Character(scalar))
             }
         }
         if !bytesBuffer.isEmpty {
-            output.appendContentsOf(UInt8ArrayToUTF8String(bytesBuffer))
+            output.appendContentsOf(String.fromUInt8(bytesBuffer))
             bytesBuffer.removeAll()
         }
         return output
@@ -84,15 +95,4 @@ extension String {
         }
         return nil
     }
-}
-
-public func UInt8ArrayToUTF8String(array: [UInt8]) -> String {
-    #if os(Linux)
-        return String(data: NSData(bytes: array, length: array.count), encoding: NSUTF8StringEncoding)
-    #else
-        if let s = String(data: NSData(bytes: array, length: array.count), encoding: NSUTF8StringEncoding) {
-            return s
-        }
-        return ""
-    #endif
 }

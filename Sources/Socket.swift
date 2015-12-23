@@ -136,13 +136,16 @@ public class Socket: Hashable, Equatable {
         return buffer[0]
     }
     
+    private static let CR = UInt8(13)
+    private static let NL = UInt8(10)
+    
     public func readLine() throws -> String {
         var characters: String = ""
         var n: UInt8 = 0
         repeat {
             n = try self.read()
-            if n > Constants.CR { characters.append(Character(UnicodeScalar(n))) }
-        } while n != Constants.NL
+            if n > Socket.CR { characters.append(Character(UnicodeScalar(n))) }
+        } while n != Socket.NL
         return characters
     }
     

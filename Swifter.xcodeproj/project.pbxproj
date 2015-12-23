@@ -14,7 +14,6 @@
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7C73C6911C2615FE00AEF6CA /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */; };
 		7C73C6921C26179C00AEF6CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
-		7C73C6A91C261A2100AEF6CA /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6931C2619E100AEF6CA /* Const.swift */; };
 		7C73C6AA1C261A2100AEF6CA /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6941C2619E100AEF6CA /* DemoServer.swift */; };
 		7C73C6AB1C261A2100AEF6CA /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */; };
 		7C73C6AC1C261A2100AEF6CA /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6961C2619E100AEF6CA /* HttpParser.swift */; };
@@ -25,7 +24,6 @@
 		7C73C6B11C261A2100AEF6CA /* HttpServerIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69B1C2619E100AEF6CA /* HttpServerIO.swift */; };
 		7C73C6B21C261A2100AEF6CA /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69C1C2619E100AEF6CA /* Socket.swift */; };
 		7C73C6B31C261A2100AEF6CA /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69D1C2619E100AEF6CA /* String+Misc.swift */; };
-		7C73C6B41C261A2600AEF6CA /* Const.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6931C2619E100AEF6CA /* Const.swift */; };
 		7C73C6B51C261A2600AEF6CA /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6941C2619E100AEF6CA /* DemoServer.swift */; };
 		7C73C6B61C261A2600AEF6CA /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */; };
 		7C73C6B71C261A2600AEF6CA /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6961C2619E100AEF6CA /* HttpParser.swift */; };
@@ -90,7 +88,6 @@
 		7AE893FD1C0512C400A29F63 /* SwifterMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifterMac.h; sourceTree = "<group>"; };
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		7C73C6931C2619E100AEF6CA /* Const.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Const.swift; sourceTree = "<group>"; };
 		7C73C6941C2619E100AEF6CA /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 		7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
 		7C73C6961C2619E100AEF6CA /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
@@ -227,7 +224,6 @@
 		7CEAF84A1C14B29B003252DE /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				7C73C6931C2619E100AEF6CA /* Const.swift */,
 				7C73C6941C2619E100AEF6CA /* DemoServer.swift */,
 				7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */,
 				7C73C6961C2619E100AEF6CA /* HttpParser.swift */,
@@ -417,7 +413,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C73C6A91C261A2100AEF6CA /* Const.swift in Sources */,
 				7C73C6AA1C261A2100AEF6CA /* DemoServer.swift in Sources */,
 				7C73C6AB1C261A2100AEF6CA /* HttpHandlers.swift in Sources */,
 				7C73C6AC1C261A2100AEF6CA /* HttpParser.swift in Sources */,
@@ -435,7 +430,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C73C6B41C261A2600AEF6CA /* Const.swift in Sources */,
 				7C73C6B51C261A2600AEF6CA /* DemoServer.swift in Sources */,
 				7C73C6B61C261A2600AEF6CA /* HttpHandlers.swift in Sources */,
 				7C73C6B71C261A2600AEF6CA /* HttpParser.swift in Sources */,

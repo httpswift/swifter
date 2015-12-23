@@ -82,7 +82,7 @@ public enum HttpResponse {
     }
     
     func headers() -> [String: String] {
-        var headers = ["Server" : "Swifter \(Constants.VERSION)"]
+        var headers = ["Server" : "Swifter \(HttpServer.VERSION)"]
         switch self {
         case .OK(let body):
             switch body {

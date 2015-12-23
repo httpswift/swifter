@@ -10,6 +10,8 @@ import Foundation
 
 public class HttpServer: HttpServerIO {
     
+    public static let VERSION = "1.0.6"
+    
     public override init() { }
     
     private let router = HttpRouter()
@@ -55,7 +57,7 @@ public class HttpServer: HttpServerIO {
         return Route(method: method, router: self.router)
     }
     
-    override public func select(method: String, url: String) -> ([String : String], HttpRequest -> HttpResponse) {
+    override public func select(method: String, url: String) -> ([String:String], HttpRequest -> HttpResponse) {
         if let handler = router.select(method, url: url) {
             return handler
         }
