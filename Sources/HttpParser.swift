@@ -10,7 +10,6 @@
     import Foundation
 #endif
 
-
 enum HttpParserError: ErrorType {
     case InvalidStatusLine(String)
 }
@@ -20,7 +19,6 @@ class HttpParser {
     func readHttpRequest(socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
         let statusLineTokens = statusLine.split(" ")
-        print(statusLineTokens)
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
         }
