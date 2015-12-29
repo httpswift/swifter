@@ -22,44 +22,48 @@ public class HttpServerIO {
         listenSocket = try Socket.tcpSocketForListen(listenPort)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             while let socket = try? self.listenSocket.acceptClientSocket() {
-                HttpServerIO.lock(self.clientSocketsLock) {
+                self.lock(self.clientSocketsLock) {
                     self.clientSockets.insert(socket)
                 }
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
-                    let socketAddress = try? socket.peername()
-                    let httpParser = HttpParser()                    
-                    while let request = try? httpParser.readHttpRequest(socket) {
-                        var request = request
-                        let keepAlive = httpParser.supportsKeepAlive(request.headers)
-                        let (params, handler) = self.select(request.method, url: request.url)
-                        request.address = socketAddress
-                        request.params = params;
-                        let response = handler(request)
-                        do {
-                            try HttpServerIO.respond(socket, response: response, keepAlive: keepAlive)
-                        } catch {
-                            print("Failed to send response: \(error)")
-                            break
-                        }
-                        if !keepAlive { break }
-                    }
-                    socket.release()
-                    HttpServerIO.lock(self.clientSocketsLock) {
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+                    self.handleConnection(socket)
+                    self.lock(self.clientSocketsLock) {
                         self.clientSockets.remove(socket)
                     }
-                }
+                })
             }
             self.stop()
         }
     }
     
-    public func select(method: String, url: String) -> ([String: String], HttpRequest -> HttpResponse) {
+    public func handleConnection(socket: Socket) {
+        let address = try? socket.peername()
+        let parser = HttpParser()
+        while let request = try? parser.readHttpRequest(socket) {
+            var request = request
+            let keepAlive = parser.supportsKeepAlive(request.headers)
+            let (params, handler) = self.dispatch(request.method, url: request.url)
+            request.address = address
+            request.params = params;
+            let response = handler(request)
+            do {
+                try self.respond(socket, response: response, keepAlive: keepAlive)
+            } catch {
+                print("Failed to send response: \(error)")
+                break
+            }
+            if !keepAlive { break }
+        }
+        socket.release()
+    }
+    
+    public func dispatch(method: String, url: String) -> ([String: String], HttpRequest -> HttpResponse) {
         return ([:], { _ in HttpResponse.NotFound })
     }
     
     public func stop() {
         listenSocket.release()
-        HttpServerIO.lock(self.clientSocketsLock) {
+        lock(self.clientSocketsLock) {
             for socket in self.clientSockets {
                 socket.shutdwn()
             }
@@ -67,13 +71,13 @@ public class HttpServerIO {
         }
     }
     
-    private class func lock(handle: NSLock, closure: () -> ()) {
+    private func lock(handle: NSLock, closure: () -> ()) {
         handle.lock()
         closure()
         handle.unlock();
     }
     
-    private class func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws {
+    private func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws {
         try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         
         let length = response.body()?.count ?? 0
