@@ -8,62 +8,89 @@ import Foundation
 
 public class HttpRouter {
     
-    private var handlers: [(String?, pattern: [String], HttpRequest -> HttpResponse)] = []
-    
-    public func routes() -> [(method: String?, path: String)] {
-        return handlers.map { ($0.0, "/" + $0.pattern.joinWithSeparator("/")) }
+    private class Node {
+        var nodes = [String: Node]()
+        var handler: (HttpRequest -> HttpResponse)? = nil
     }
     
-    public func register(method: String?, path: String, handler: HttpRequest -> HttpResponse) {
-        handlers.append((method, stripQuery(path).split("/"), handler))
-        handlers.sortInPlace { $0.0.pattern.count < $0.1.pattern.count }
-    }
-    
-    public func unregister(method: String?, path: String) {
-        let pathTokens = stripQuery(path).split("/")
-        handlers = handlers.filter { (meth, pattern, _) -> Bool in
-            return meth != method || pattern != pathTokens
+    private var rootNode = Node()
+
+    public func routes() -> [String] {
+        var routes = [String]()
+        for (_, child) in rootNode.nodes {
+            routes.appendContentsOf(routesForNode(child));
         }
+        return routes
     }
     
-    public func select(method: String?, url: String) -> ([String: String], HttpRequest -> HttpResponse)? {
-        let urlTokens = stripQuery(url).split("/")
-        for (meth, pattern, handler) in handlers {
-            if meth == nil || meth! == method {
-                if let params = matchParams(pattern, valueTokens: urlTokens) {
-                    return (params, handler)
-                }
+    private func routesForNode(node: Node, prefix: String = "") -> [String] {
+        var result = [String]()
+        if node.handler != nil {
+            result.append(prefix)
+        }
+        for (key, child) in node.nodes {
+            result.appendContentsOf(routesForNode(child, prefix: prefix + "/" + key));
+        }
+        return result
+    }
+    
+    public func register(method: String?, path: String, handler: (HttpRequest -> HttpResponse)?) {
+        var pathSegments = stripQuery(path).split("/")
+        if let method = method {
+            pathSegments.insert(method, atIndex: 0)
+        } else {
+            pathSegments.insert("*", atIndex: 0)
+        }
+        var pathSegmentsGenerator = pathSegments.generate()
+        inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
+    }
+    
+    public func route(method: String?, path: String) -> ([String: String], HttpRequest -> HttpResponse)? {
+        if let method = method {
+            let pathSegments = (method + "/" + stripQuery(path)).split("/")
+            var pathSegmentsGenerator = pathSegments.generate()
+            var params = [String:String]()
+            if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
+                return (params, handler)
             }
+        }
+        let pathSegments = ("*/" + stripQuery(path)).split("/")
+        var pathSegmentsGenerator = pathSegments.generate()
+        var params = [String:String]()
+        if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
+            return (params, handler)
         }
         return nil
     }
     
-    public func matchParams(patternTokens: [String], valueTokens: [String]) -> [String: String]? {
-        var params = [String: String]()
-        for index in 0..<valueTokens.count {
-            if index >= patternTokens.count {
-                return nil
+    private func inflate(inout node: Node, inout generator: IndexingGenerator<[String]>) -> Node {
+        if let pathToken = generator.next() {
+            if let _ = node.nodes[pathToken] {
+                return inflate(&node.nodes[pathToken]!, generator: &generator)
             }
-            let patternToken = patternTokens[index]
-            let valueToken = valueTokens[index]
-            if patternToken.isEmpty {
-                if patternToken != valueToken {
-                    return nil
-                }
-            }
-            if patternToken.characters.first == ":" {
-#if os(Linux)
-                params[patternToken.substringFromIndex(1)] = valueToken
-#else
-                params[patternToken.substringFromIndex(patternToken.characters.startIndex.successor())] = valueToken
-#endif
-            } else {
-                if patternToken != valueToken {
-                    return nil
-                }
-            }
+            var nextNode = Node()
+            node.nodes[pathToken] = nextNode
+            return inflate(&nextNode, generator: &generator)
         }
-        return params
+        return node
+    }
+    
+    private func findHandler(inout node: Node, inout params: [String: String], inout generator: IndexingGenerator<[String]>) -> (HttpRequest -> HttpResponse)? {
+        guard let pathToken = generator.next() else {
+            return node.handler
+        }
+        let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
+        if let variableNode = variableNodes.first {
+            params[variableNode.0] = pathToken
+            return findHandler(&node.nodes[variableNode.0]!, params: &params, generator: &generator)
+        }
+        if let _ = node.nodes[pathToken] {
+            return findHandler(&node.nodes[pathToken]!, params: &params, generator: &generator)
+        }
+        if let _ = node.nodes["*"] {
+            return findHandler(&node.nodes["*"]!, params: &params, generator: &generator)
+        }
+        return nil
     }
     
     private func stripQuery(path: String) -> String {

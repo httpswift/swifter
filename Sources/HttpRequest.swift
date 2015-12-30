@@ -6,9 +6,9 @@
 
 import Foundation
 
-public struct HttpRequest {
+public class HttpRequest {
     
-    public var url: String = ""
+    public var path: String = ""
     public var queryParams: [(String, String)] = []
     public var method: String = ""
     public var headers: [String: String] = [:]

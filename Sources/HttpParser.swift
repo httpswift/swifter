@@ -22,10 +22,10 @@ class HttpParser {
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
         }
-        var request = HttpRequest()
+        let request = HttpRequest()
         request.method = statusLineTokens[0]
-        request.url = statusLineTokens[1]
-        request.queryParams = extractQueryParams(request.url)
+        request.path = statusLineTokens[1]
+        request.queryParams = extractQueryParams(request.path)
         request.headers = try readHeaders(socket)
         if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
             request.body = try readBody(socket, size: contentLengthValue)

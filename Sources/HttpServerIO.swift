@@ -40,9 +40,9 @@ public class HttpServerIO {
         let address = try? socket.peername()
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
-            var request = request
+            let request = request
             let keepAlive = parser.supportsKeepAlive(request.headers)
-            let (params, handler) = self.dispatch(request.method, url: request.url)
+            let (params, handler) = self.dispatch(request.method, path: request.path)
             request.address = address
             request.params = params;
             let response = handler(request)
@@ -57,7 +57,7 @@ public class HttpServerIO {
         socket.release()
     }
     
-    public func dispatch(method: String, url: String) -> ([String: String], HttpRequest -> HttpResponse) {
+    public func dispatch(method: String, path: String) -> ([String: String], HttpRequest -> HttpResponse) {
         return ([:], { _ in HttpResponse.NotFound })
     }
     

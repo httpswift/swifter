@@ -17,18 +17,18 @@ public func demoServer(publicDir: String?) -> HttpServer {
 
     server["/"] = { r in
         var listPage = "Available services:<br><ul>"
-        for (method, path) in server.routes {
-            if let m = method {
-                listPage += "<li><a href=\"\(path)\">\(m): \(path)</a></li>"
+        for services in server.routes {
+            if services.isEmpty {
+                listPage += "<li><a href=\"/\">/</a></li>"
             } else {
-                listPage += "<li><a href=\"\(path)\">\(path)</a></li>"
+                listPage += "<li><a href=\"\(services)\">\(services)</a></li>"
             }
         }
         listPage += "</ul>"
         return .OK(.Html(listPage))
     }
     
-    server["/magic"] = { .OK(.Html("You asked for " + $0.url)) }
+    server["/magic"] = { .OK(.Html("You asked for " + $0.path)) }
     
     server["/test/:param1/:param2"] = { r in
         var headersInfo = ""
@@ -43,7 +43,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
         for token in r.params {
             pathParamsInfo += "\(token.0) : \(token.1)<br>"
         }
-        return .OK(.Html("<h3>Address: \(r.address)</h3><h3>Url:</h3> \(r.url)<h3>Method:</h3>\(r.method)<h3>Headers:</h3>\(headersInfo)<h3>Query:</h3>\(queryParamsInfo)<h3>Path params:</h3>\(pathParamsInfo)"))
+        return .OK(.Html("<h3>Address: \(r.address)</h3><h3>Url:</h3> \(r.path)<h3>Method:</h3>\(r.method)<h3>Headers:</h3>\(headersInfo)<h3>Query:</h3>\(queryParamsInfo)<h3>Path params:</h3>\(pathParamsInfo)"))
     }
     
     server.GET["/upload"] = { r in
