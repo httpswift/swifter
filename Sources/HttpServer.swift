@@ -12,9 +12,18 @@ public class HttpServer: HttpServerIO {
     
     public static let VERSION = "1.0.6"
     
-    public override init() { }
-    
     private let router = HttpRouter()
+    
+    public override init() {
+        self.DELETE = Route(method: "DELETE", router: self.router)
+        self.UPDATE = Route(method: "UPDATE", router: self.router)
+        self.HEAD   = Route(method: "HEAD", router: self.router)
+        self.POST   = Route(method: "POST", router: self.router)
+        self.GET    = Route(method: "GET", router: self.router)
+        self.PUT    = Route(method: "PUT", router: self.router)
+    }
+    
+    public var DELETE, UPDATE, HEAD, POST, GET, PUT : Route;
     
     public var routes: [(method: String?, path: String)] {
         return router.routes();
@@ -31,13 +40,6 @@ public class HttpServer: HttpServerIO {
         get { return nil }
     }
     
-    public lazy var DELETE : Route = self.newRoute("DELETE")
-    public lazy var UPDATE : Route = self.newRoute("UPDATE")
-    public lazy var HEAD   : Route = self.newRoute("HEAD")
-    public lazy var POST   : Route = self.newRoute("POST")
-    public lazy var GET    : Route = self.newRoute("GET")
-    public lazy var PUT    : Route = self.newRoute("PUT")
-    
     public struct Route {
         public let method: String
         public let router: HttpRouter
@@ -52,11 +54,7 @@ public class HttpServer: HttpServerIO {
             get { return nil }
         }
     }
-    
-    private func newRoute(method: String) -> Route {
-        return Route(method: method, router: self.router)
-    }
-    
+
     override public func dispatch(method: String, url: String) -> ([String:String], HttpRequest -> HttpResponse) {
         if let handler = router.select(method, url: url) {
             return handler
