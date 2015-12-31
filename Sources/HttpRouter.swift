@@ -64,12 +64,12 @@ public class HttpRouter {
     }
     
     private func inflate(inout node: Node, inout generator: IndexingGenerator<[String]>) -> Node {
-        if let pathToken = generator.next() {
-            if let _ = node.nodes[pathToken] {
-                return inflate(&node.nodes[pathToken]!, generator: &generator)
+        if let pathSegment = generator.next() {
+            if let _ = node.nodes[pathSegment] {
+                return inflate(&node.nodes[pathSegment]!, generator: &generator)
             }
             var nextNode = Node()
-            node.nodes[pathToken] = nextNode
+            node.nodes[pathSegment] = nextNode
             return inflate(&nextNode, generator: &generator)
         }
         return node
