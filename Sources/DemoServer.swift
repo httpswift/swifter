@@ -82,23 +82,27 @@ public func demoServer(publicDir: String?) -> HttpServer {
         return .OK(.Html("<center><h2>Hello Swift</h2><img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br></center>"))
     }
     
-    server["/raw"] = { request in
+    server["/raw"] = { r in
         return HttpResponse.RAW(200, "OK", ["XXX-Custom-Header": "value"], [UInt8]("Sample Response".utf8))
     }
     
-    server["/json"] = { request in
+    server["/json"] = { r in
         let jsonObject: NSDictionary = [NSString(string: "foo"): NSNumber(int: 3), NSString(string: "bar"): NSString(string: "baz")] 
         return .OK(.Json(jsonObject))
     }
     
-    server["/redirect"] = { request in
+    server["/redirect"] = { r in
         return .MovedPermanently("http://www.google.com")
     }
 
-    server["/long"] = { request in
+    server["/long"] = { r in
         var longResponse = ""
         for k in 0..<1000 { longResponse += "(\(k)),->" }
         return .OK(.Html(longResponse))
+    }
+    
+    server["/wildcard/*/test/*/:param"] = { r in
+        return .OK(.Html(r.path))
     }
 
     return server
