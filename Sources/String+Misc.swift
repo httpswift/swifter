@@ -12,6 +12,10 @@ extension String {
         return self.characters.split { $0 == separator }.map(String.init)
     }
     
+    public func split(maxSplit: Int = Int.max, separator: Character) -> [String] {
+        return self.characters.split(maxSplit) { $0 == separator }.map(String.init)
+    }
+    
     public func replace(old: Character, new: Character) -> String {
         var buffer = [Character]()
         self.characters.forEach { buffer.append($0 == old ? new : $0) }

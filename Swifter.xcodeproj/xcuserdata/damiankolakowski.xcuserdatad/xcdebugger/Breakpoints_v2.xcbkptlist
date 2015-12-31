@@ -1502,5 +1502,85 @@
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sources/DemoServer.swift"
+            timestampString = "473259839.54395"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "demoServer(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sources/HttpRequest.swift"
+            timestampString = "473259865.519181"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
+            landmarkName = "valueFor(_:parameterName:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Swifter.HttpRequest.MultiPart.(valueFor in _63BD12A9F49458E70E4764A8152B4E3A) (Swifter.HttpRequest.MultiPart)(Swift.String, parameterName : Swift.String) -&gt; Swift.Optional&lt;Swift.String&gt;"
+                  moduleName = "Swifter"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Sources/HttpRequest.swift"
+                  timestampString = "473259865.536405"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "51"
+                  endingLineNumber = "51"
+                  offsetFromSymbolStart = "78">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Swifter.HttpRequest.MultiPart.((valueFor in _63BD12A9F49458E70E4764A8152B4E3A) (Swifter.HttpRequest.MultiPart) -&gt; (Swift.String, parameterName : Swift.String) -&gt; Swift.Optional&lt;Swift.String&gt;).(closure #1)"
+                  moduleName = "Swifter"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/damiankolakowski/Desktop/swifter/Sources/HttpRequest.swift"
+                  timestampString = "473259865.536633"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "52"
+                  endingLineNumber = "52"
+                  offsetFromSymbolStart = "117">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sources/HttpRequest.swift"
+            timestampString = "473259872.823604"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "valueFor(_:parameterName:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

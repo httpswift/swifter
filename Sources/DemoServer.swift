@@ -56,8 +56,11 @@ public func demoServer(publicDir: String?) -> HttpServer {
     }
     
     server.POST["/upload"] = { r in
-        let formFields = r.parseMultiPartFormData()
-        return HttpResponse.OK(.Html(formFields.map({ String.fromUInt8($0.body) }).joinWithSeparator("<br>")))
+        var response = ""
+        for multipart in r.parseMultiPartFormData() {
+            response += "Name: \(multipart.name) File name: \(multipart.fileName) Size: \(multipart.body.count)<br>"
+        }
+        return HttpResponse.OK(.Html(response))
     }
     
     server.GET["/login"] = { r in

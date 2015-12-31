@@ -35,8 +35,33 @@ public class HttpRequest {
     }
     
     public struct MultiPart {
+        
         public let headers: [String: String]
         public let body: [UInt8]
+        
+        public var name: String? {
+            return valueFor("content-disposition", parameterName: "name")
+        }
+        
+        public var fileName: String? {
+            return valueFor("content-disposition", parameterName: "filename")
+        }
+        
+        private func valueFor(headerName: String, parameterName: String) -> String? {
+            return headers.reduce([String]()) { (currentResults: [String], header: (key: String, value: String)) -> [String] in
+                guard header.key == headerName else {
+                    return currentResults
+                }
+                let headerValueParams = header.value.split(";").map { $0.trim() }
+                return headerValueParams.reduce(currentResults, combine: { (results:[String], token: String) -> [String] in
+                    let parameterTokens = token.split(1, separator: "=")
+                    if parameterTokens.first == parameterName, let value = parameterTokens.last {
+                        return results + [value]
+                    }
+                    return results
+                })
+            }.first
+        }
     }
     
     public func parseMultiPartFormData() -> [MultiPart] {

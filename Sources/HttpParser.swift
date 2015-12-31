@@ -37,15 +37,12 @@ class HttpParser {
         guard let query = url.split("?").last else {
             return []
         }
-        return query.split("&").map { (param: String) -> (String, String) in
-            let tokens = param.split("=")
-            guard let name = tokens.first else {
-                return ("", "")
+        return query.split("&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
+            let tokens = s.split(1, separator: "=")
+            if let name = tokens.first, value = tokens.last {
+                return c + [(name.removePercentEncoding(), value.removePercentEncoding())]
             }
-            guard let value = tokens.last where tokens.count > 1 else {
-                return (name.removePercentEncoding(), "")
-            }
-            return (name.removePercentEncoding(), value.removePercentEncoding())
+            return c
         }
     }
     
@@ -66,9 +63,8 @@ class HttpParser {
             if headerLine.isEmpty {
                 return requestHeaders
             }
-            let headerTokens = headerLine.split(":")
-            if let name = headerTokens.first where headerTokens.count >= 2 {
-                let value = headerTokens.dropFirst().joinWithSeparator(":")
+            let headerTokens = headerLine.split(1, separator: ":")
+            if let name = headerTokens.first, value = headerTokens.last {
                 requestHeaders[name.lowercaseString] = value.trim()
             }
         } while true
