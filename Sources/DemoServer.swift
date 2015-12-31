@@ -50,7 +50,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
         if let rootDir = publicDir, html = NSData(contentsOfFile:"\(rootDir)/file.html") {
             var array = [UInt8](count: html.length, repeatedValue: 0)
             html.getBytes(&array, length: html.length)
-            return HttpResponse.RAW(200, "OK", nil, array)
+            return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
         }
         return .NotFound
     }
@@ -65,11 +65,10 @@ public func demoServer(publicDir: String?) -> HttpServer {
     
     server.GET["/login"] = { r in
         if let rootDir = publicDir, html = NSData(contentsOfFile:"\(rootDir)/login.html") {
-                var array = [UInt8](count: html.length, repeatedValue: 0)
-                html.getBytes(&array, length: html.length)
-                return HttpResponse.RAW(200, "OK", nil, array)
+            var array = [UInt8](count: html.length, repeatedValue: 0)
+            html.getBytes(&array, length: html.length)
+            return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
         }
-        
         return .NotFound
     }
     
@@ -83,7 +82,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
     }
     
     server["/raw"] = { r in
-        return HttpResponse.RAW(200, "OK", ["XXX-Custom-Header": "value"], [UInt8]("Sample Response".utf8))
+        return HttpResponse.RAW(200, "OK", ["XXX-Custom-Header": "value"], { $0.write([UInt8]("test".utf8)) })
     }
     
     server["/json"] = { r in
@@ -103,6 +102,13 @@ public func demoServer(publicDir: String?) -> HttpServer {
     
     server["/wildcard/*/test/*/:param"] = { r in
         return .OK(.Html(r.path))
+    }
+    server["/stream"] = { r in
+        return HttpResponse.RAW(200, "OK", nil, { w in
+            for i in 0...100 {
+                w.write([UInt8]("[chunk \(i)]".utf8));
+            }
+        })
     }
 
     return server

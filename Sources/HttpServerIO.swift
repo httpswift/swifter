@@ -41,18 +41,18 @@ public class HttpServerIO {
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
             let request = request
-            let keepAlive = parser.supportsKeepAlive(request.headers)
             let (params, handler) = self.dispatch(request.method, path: request.path)
             request.address = address
             request.params = params;
             let response = handler(request)
+            var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
-                try self.respond(socket, response: response, keepAlive: keepAlive)
+                keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
             } catch {
                 print("Failed to send response: \(error)")
                 break
             }
-            if !keepAlive { break }
+            if !keepConnection { break }
         }
         socket.release()
     }
@@ -77,21 +77,37 @@ public class HttpServerIO {
         handle.unlock();
     }
     
-    private func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws {
+    private struct InnerWriteContext: HttpResponseBodyWriter {
+        let socket: Socket
+        func write(data: [UInt8]) {
+            try? socket.writeUInt8(data)
+        }
+    }
+    
+    private func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
         try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         
-        let length = response.body()?.count ?? 0
-        try socket.writeUTF8("Content-Length: \(length)\r\n")
+        let content = response.content()
         
-        if keepAlive {
+        if content.length > 0 {
+            try socket.writeUTF8("Content-Length: \(content.length)\r\n")
+        }
+        
+        if keepAlive && content.length != -1 {
             try socket.writeUTF8("Connection: keep-alive\r\n")
         }
+        
         for (name, value) in response.headers() {
             try socket.writeUTF8("\(name): \(value)\r\n")
         }
+        
         try socket.writeUTF8("\r\n")
-        if let body = response.body() {
-            try socket.writeUInt8(body)
+    
+        if let writeClosure = content.writeClosure {
+            let context = InnerWriteContext(socket: socket)
+            try writeClosure(context)
         }
+        
+        return keepAlive && content.length != -1;
     }
 }

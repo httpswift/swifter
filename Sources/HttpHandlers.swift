@@ -45,7 +45,7 @@ public class HttpHandlers {
                 guard let start = Int(startStr), end = Int(endStr) else {
                     var array = [UInt8](count: fileBody.length, repeatedValue: 0)
                     fileBody.getBytes(&array, length: fileBody.length)
-                    return HttpResponse.RAW(200, "OK", nil, array)
+                    return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
                 }
                 
                 let length = end - start
@@ -63,13 +63,13 @@ public class HttpHandlers {
                 
                 var array = [UInt8](count: subData.length, repeatedValue: 0)
                 subData.getBytes(&array, length: subData.length)
-                return HttpResponse.RAW(206, "Partial Content", headers, array)
+                return HttpResponse.RAW(206, "Partial Content", headers, { $0.write(array) })
                 
             }
             else {
                 var array = [UInt8](count: fileBody.length, repeatedValue: 0)
                 fileBody.getBytes(&array, length: fileBody.length)
-                return HttpResponse.RAW(200, "OK", nil, array)
+                return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
             }
             
         }
@@ -96,7 +96,7 @@ public class HttpHandlers {
                         if let fileBody = NSData(contentsOfFile: filePath) {
                             var array = [UInt8](count: fileBody.length, repeatedValue: 0)
                             fileBody.getBytes(&array, length: fileBody.length)
-                            return HttpResponse.RAW(200, "OK", nil, array)
+                            return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
                         }
                     }
                 }
