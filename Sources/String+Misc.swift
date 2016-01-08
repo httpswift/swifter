@@ -22,6 +22,16 @@ extension String {
         return String(buffer)
     }
     
+    public func unquote() -> String {
+        var scalars = self.unicodeScalars;
+        if scalars.first == "\"" && scalars.last == "\"" && scalars.count >= 2 {
+            scalars.removeFirst();
+            scalars.removeLast();
+            return String(scalars)
+        }
+        return self
+    }
+    
     public func trim() -> String {
         var scalars = self.unicodeScalars
         while let _ = unicodeScalarToUInt32Whitespace(scalars.first) { scalars.removeFirst() }

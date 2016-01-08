@@ -40,11 +40,11 @@ public class HttpRequest {
         public let body: [UInt8]
         
         public var name: String? {
-            return valueFor("content-disposition", parameterName: "name")
+            return valueFor("content-disposition", parameterName: "name")?.unquote()
         }
         
         public var fileName: String? {
-            return valueFor("content-disposition", parameterName: "filename")
+            return valueFor("content-disposition", parameterName: "filename")?.unquote()
         }
         
         private func valueFor(headerName: String, parameterName: String) -> String? {

@@ -89,7 +89,7 @@ public class HttpServerIO {
         
         let content = response.content()
         
-        if content.length > 0 {
+        if content.length >= 0 {
             try socket.writeUTF8("Content-Length: \(content.length)\r\n")
         }
         
