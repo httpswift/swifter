@@ -51,7 +51,7 @@ class HttpParser {
         var counter = 0
         while counter < size {
             body.append(try socket.read())
-            counter++
+            counter += 1
         }
         return body
     }
