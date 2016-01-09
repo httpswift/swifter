@@ -35,5 +35,5 @@ pod 'Swifter', '~> 1.0.6'
 ### Carthage? Also yes.
 
 ```
-github "glock45/swifter" == 1.0.6
+github "glock45/swifter" == 1.0.7
 ```
