@@ -80,7 +80,7 @@ public class HttpServerIO {
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
         func write(data: [UInt8]) {
-            try? socket.writeUInt8(data)
+            let _ = try? socket.writeUInt8(data)
         }
     }
     
