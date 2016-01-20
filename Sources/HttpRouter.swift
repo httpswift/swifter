@@ -81,6 +81,11 @@ public class HttpRouter {
         }
         let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
         if let variableNode = variableNodes.first {
+            if variableNode.1.nodes.count == 0 {
+                // if it's the last element of the pattern and it's a variable, stop the routing.
+                params[variableNode.0] = pathToken + "/" + generator.joinWithSeparator("/")
+                return variableNode.1.handler
+            }
             params[variableNode.0] = pathToken
             return findHandler(&node.nodes[variableNode.0]!, params: &params, generator: &generator)
         }

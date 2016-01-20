@@ -13,7 +13,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
         server["/resources/:file"] = HttpHandlers.directory(publicDir)
     }
     
-    server["/files/:path"] = HttpHandlers.directoryBrowser("~/")
+    server["/files/:path"] = HttpHandlers.directoryBrowser("/")
 
     server["/"] = { r in
         var listPage = "Available services:<br><ul>"

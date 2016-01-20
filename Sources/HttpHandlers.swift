@@ -10,10 +10,11 @@ public class HttpHandlers {
     
     private static let rangePrefix = "bytes="
     
+    
     public class func directory(dir: String) -> (HttpRequest -> HttpResponse) {
-        return { request in
+        return { r in
             
-            guard let localPath = request.params.first else {
+            guard let localPath = r.params.first else {
                 return HttpResponse.NotFound
             }
             
@@ -23,7 +24,7 @@ public class HttpHandlers {
                 return HttpResponse.NotFound
             }
             
-            if let rangeHeader = request.headers["range"] {
+            if let rangeHeader = r.headers["range"] {
                 
                 guard rangeHeader.hasPrefix(HttpHandlers.rangePrefix) else {
                     return HttpResponse.BadRequest
@@ -35,6 +36,7 @@ public class HttpHandlers {
                 let rangeString = rangeHeader.substringFromIndex(rangeHeader.startIndex.advancedBy(HttpHandlers.rangePrefix.characters.count))
 #endif
                 let rangeStringExploded = rangeString.split("-")
+                
                 guard rangeStringExploded.count == 2 else {
                     return HttpResponse.BadRequest
                 }
@@ -48,30 +50,25 @@ public class HttpHandlers {
                     return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
                 }
                 
-                let length = end - start
-                let range = NSRange(location: start, length: length + 1)
+                let chunkLength = end - start
+                let chunkRange = NSRange(location: start, length: chunkLength + 1)
                 
-                guard range.location + range.length <= fileBody.length else {
+                guard chunkRange.location + chunkRange.length <= fileBody.length else {
                     return HttpResponse.RAW(416, "Requested range not satisfiable", nil, nil)
                 }
                 
-                let subData = fileBody.subdataWithRange(range)
+                let chunk = fileBody.subdataWithRange(chunkRange)
                 
-                let headers = [
-                    "Content-Range" : "bytes \(startStr)-\(endStr)/\(fileBody.length)"
-                ]
+                let headers = [ "Content-Range" : "bytes \(startStr)-\(endStr)/\(fileBody.length)" ]
                 
-                var array = [UInt8](count: subData.length, repeatedValue: 0)
-                subData.getBytes(&array, length: subData.length)
-                return HttpResponse.RAW(206, "Partial Content", headers, { $0.write(array) })
-                
+                var content = [UInt8](count: chunk.length, repeatedValue: 0)
+                chunk.getBytes(&content, length: chunk.length)
+                return HttpResponse.RAW(206, "Partial Content", headers, { $0.write(content) })
+            } else {
+                var content = [UInt8](count: fileBody.length, repeatedValue: 0)
+                fileBody.getBytes(&content, length: fileBody.length)
+                return HttpResponse.RAW(200, "OK", nil, { $0.write(content) })
             }
-            else {
-                var array = [UInt8](count: fileBody.length, repeatedValue: 0)
-                fileBody.getBytes(&array, length: fileBody.length)
-                return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
-            }
-            
         }
     }
     
