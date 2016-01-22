@@ -111,6 +111,10 @@ public func demoServer(publicDir: String?) -> HttpServer {
             }
         })
     }
+    
+    server["/websocket"] = HttpHandlers.websocket() {
+        print("new message: \($0)")
+    }
 
     return server
 }
