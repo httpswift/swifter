@@ -21,7 +21,7 @@ extension HttpHandlers {
                 return .BadRequest
             }
             let upgradeHeaders = [ "Upgrade": "weboscket", "Connection": "Upgrade",
-                "Sec-WebSocket-Accept": secWebSocketKey.sha1()
+                "Sec-WebSocket-Accept": secWebSocketKey.SHA1()
             ]
             return HttpResponse.RAW(101, "Switching Protocols", upgradeHeaders, nil)
         }
