@@ -10,6 +10,8 @@
 		7AE893EA1C05127900A29F63 /* SwifteriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893E91C05127900A29F63 /* SwifteriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893FD1C0512C400A29F63 /* SwifterMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
+		7C1A2BFB1C5605F50026D3BF /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */; };
+		7C1A2BFC1C5605F50026D3BF /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */; };
 		7C2BEC781C518B7C00B8EE90 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
 		7C2BEC791C5195EE00B8EE90 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
 		7C2BEC7A1C5195F200B8EE90 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
@@ -95,6 +97,7 @@
 		7AE893FD1C0512C400A29F63 /* SwifterMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifterMac.h; sourceTree = "<group>"; };
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+BASE64.swift"; sourceTree = "<group>"; };
 		7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
 		7C73C6941C2619E100AEF6CA /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 		7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
@@ -247,6 +250,7 @@
 				7C73C69C1C2619E100AEF6CA /* Socket.swift */,
 				7C73C69D1C2619E100AEF6CA /* String+Misc.swift */,
 				7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */,
+				7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -429,6 +433,7 @@
 				7C2BEC791C5195EE00B8EE90 /* String+SHA1.swift in Sources */,
 				7C73C6AA1C261A2100AEF6CA /* DemoServer.swift in Sources */,
 				7C73C6AB1C261A2100AEF6CA /* HttpHandlers.swift in Sources */,
+				7C1A2BFB1C5605F50026D3BF /* String+BASE64.swift in Sources */,
 				7C73C6AC1C261A2100AEF6CA /* HttpParser.swift in Sources */,
 				7C73C6AD1C261A2100AEF6CA /* HttpRequest.swift in Sources */,
 				7C73C6AE1C261A2100AEF6CA /* HttpResponse.swift in Sources */,
@@ -449,6 +454,7 @@
 				7C2BEC7A1C5195F200B8EE90 /* String+SHA1.swift in Sources */,
 				7C73C6B51C261A2600AEF6CA /* DemoServer.swift in Sources */,
 				7C73C6B61C261A2600AEF6CA /* HttpHandlers.swift in Sources */,
+				7C1A2BFC1C5605F50026D3BF /* String+BASE64.swift in Sources */,
 				7C73C6B71C261A2600AEF6CA /* HttpParser.swift in Sources */,
 				7C73C6B81C261A2600AEF6CA /* HttpRequest.swift in Sources */,
 				7C73C6B91C261A2600AEF6CA /* HttpResponse.swift in Sources */,

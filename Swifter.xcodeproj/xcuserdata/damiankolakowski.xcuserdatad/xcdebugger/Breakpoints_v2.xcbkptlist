@@ -1653,11 +1653,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SwifterSampleOSX/main.swift"
-            timestampString = "475358235.428466"
+            timestampString = "475409598.101265"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "16"
-            endingLineNumber = "16">
+            startingLineNumber = "20"
+            endingLineNumber = "20">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1699,11 +1699,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475105404.261235"
+            timestampString = "475358690.499811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "HttpHandlers"
             landmarkType = "3">
             <Locations>
@@ -1747,11 +1747,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475105404.261235"
+            timestampString = "475358690.499811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "40"
-            endingLineNumber = "40"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
             landmarkName = "HttpHandlers"
             landmarkType = "3">
          </BreakpointContent>
@@ -1763,11 +1763,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475105404.261235"
+            timestampString = "475358690.499811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "HttpHandlers"
             landmarkType = "3">
          </BreakpointContent>
@@ -1939,11 +1939,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475105404.261235"
+            timestampString = "475358690.499811"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
             landmarkName = "HttpHandlers"
             landmarkType = "3">
          </BreakpointContent>
@@ -2193,11 +2193,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SwifterSampleOSX/main.swift"
-            timestampString = "475358235.428466"
+            timestampString = "475409598.101265"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "9"
-            endingLineNumber = "9">
+            startingLineNumber = "13"
+            endingLineNumber = "13">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2293,6 +2293,54 @@
             startingLineNumber = "106"
             endingLineNumber = "106"
             landmarkName = "sha1()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sources/HttpHandlers+WebSockets.swift"
+            timestampString = "475358683.662665"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "closure(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sources/String+BASE64.swift"
+            timestampString = "475409858.054275"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
+            landmarkName = "encodeToBase64(_:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Sources/String+BASE64.swift"
+            timestampString = "475409858.054275"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "40"
+            endingLineNumber = "40"
+            landmarkName = "encodeToBase64(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

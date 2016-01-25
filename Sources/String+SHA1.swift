@@ -1,5 +1,5 @@
 //
-//  String+Hash.swift
+//  String+SHA1.swift
 //  Swifter
 //
 //  Copyright 2014-2016 Damian Kołakowski. All rights reserved.
@@ -49,6 +49,8 @@ extension String {
         for chunkStart in 0..<message.count/64 {
             var words = [UInt32]()
             let chunk = message[chunkStart*64..<chunkStart*64+64]
+            
+            // break chunk into sixteen 32-bit big-endian words w[i], 0 ≤ i ≤ 15
             
             for i in 0...15 {
                 let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>($0.baseAddress + (i*4)).memory })
@@ -105,6 +107,8 @@ extension String {
             h3 = ( h3 &+ d ) & 0xFFFFFFFF
             h4 = ( h4 &+ e ) & 0xFFFFFFFF
         }
+        
+        // Produce the final hash value (big-endian) as a 160 bit number:
         
         var result = [UInt8]()
         
