@@ -7,6 +7,4 @@
 
 import Foundation
 
-public class HttpHandlers {
-
-}
+public class HttpHandlers { }

@@ -53,6 +53,10 @@ public class HttpServerIO {
                 print("Failed to send response: \(error)")
                 break
             }
+            if let handler = response.protocolHandler() {
+                handler(socket)
+                break
+            }
             if !keepConnection { break }
         }
         socket.release()

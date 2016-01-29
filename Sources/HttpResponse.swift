@@ -64,7 +64,7 @@ public enum HttpResponseBody {
 
 public enum HttpResponse {
     
-    case SwitchProtocols
+    case SwitchProtocols([String: String], Socket -> Void)
     case OK(HttpResponseBody), Created, Accepted
     case MovedPermanently(String)
     case BadRequest, Unauthorized, Forbidden, NotFound
@@ -73,12 +73,12 @@ public enum HttpResponse {
     
     func statusCode() -> Int {
         switch self {
-        case .SwitchProtocols         : return 101
+        case .SwitchProtocols(_, _)   : return 101
         case .OK(_)                   : return 200
         case .Created                 : return 201
         case .Accepted                : return 202
         case .MovedPermanently        : return 301
-        case .BadRequest              : return 400
+        case .BadRequest(_)           : return 400
         case .Unauthorized            : return 401
         case .Forbidden               : return 403
         case .NotFound                : return 404
@@ -89,12 +89,12 @@ public enum HttpResponse {
     
     func reasonPhrase() -> String {
         switch self {
-        case .SwitchProtocols          : return "Switching Protocols"
+        case .SwitchProtocols(_, _)    : return "Switching Protocols"
         case .OK(_)                    : return "OK"
         case .Created                  : return "Created"
         case .Accepted                 : return "Accepted"
         case .MovedPermanently         : return "Moved Permanently"
-        case .BadRequest               : return "Bad Request"
+        case .BadRequest(_)            : return "Bad Request"
         case .Unauthorized             : return "Unauthorized"
         case .Forbidden                : return "Forbidden"
         case .NotFound                 : return "Not Found"
@@ -106,6 +106,10 @@ public enum HttpResponse {
     func headers() -> [String: String] {
         var headers = ["Server" : "Swifter \(HttpServer.VERSION)"]
         switch self {
+        case .SwitchProtocols(let switchHeaders, _):
+            for (key, value) in switchHeaders {
+                headers[key] = value
+            }
         case .OK(let body):
             switch body {
             case .Json(_)   : headers["Content-Type"] = "application/json"
@@ -130,6 +134,13 @@ public enum HttpResponse {
         case .OK(let body)             : return body.content()
         case .RAW(_, _, _, let writer) : return (-1, writer)
         default                        : return (-1, nil)
+        }
+    }
+    
+    func protocolHandler() -> (Socket -> Void)?  {
+        switch self {
+        case SwitchProtocols(_, let handler) : return handler
+        default: return nil
         }
     }
 }

@@ -10,6 +10,10 @@ import Foundation
 extension String {
     
     public func SHA1() -> String {
+        return SHA1().reduce("") { $0 + String(format: "%02x", $1) }
+    }
+    
+    public func SHA1() -> [UInt8] {
         
         // Alghorithm from: https://en.wikipedia.org/wiki/SHA-1
         
@@ -33,9 +37,7 @@ extension String {
         
         let padBytesCount = ( message.count + 8 ) % 64
         
-        for _ in padBytesCount...63 {
-            message.append(0x00)
-        }
+        for _ in padBytesCount...63 { message.append(0x00) }
         
         // append ml, in a 64-bit big-endian integer. Thus, the total length is a multiple of 512 bits.
         
@@ -76,20 +78,19 @@ extension String {
                 var f = UInt32(0)
                 var k = UInt32(0)
                 switch i {
-                case 0...19:
-                    f = (b & c) | ((~b) & d)
-                    k = 0x5A827999
-                case 20...39:
-                    f = b ^ c ^ d
-                    k = 0x6ED9EBA1
-                case 40...59:
-                    f = (b & c) | (b & d) | (c & d)
-                    k = 0x8F1BBCDC
-                case 60...79:
-                    f = b ^ c ^ d
-                    k = 0xCA62C1D6
-                default:
-                    print("")
+                    case 0...19:
+                        f = (b & c) | ((~b) & d)
+                        k = 0x5A827999
+                    case 20...39:
+                        f = b ^ c ^ d
+                        k = 0x6ED9EBA1
+                    case 40...59:
+                        f = (b & c) | (b & d) | (c & d)
+                        k = 0x8F1BBCDC
+                    case 60...79:
+                        f = b ^ c ^ d
+                        k = 0xCA62C1D6
+                    default: break
                 }
                 let temp = (rotateLeft(a, 5) &+ f &+ e &+ k &+ words[i]) & 0xFFFFFFFF
                 e = d
@@ -124,7 +125,7 @@ extension String {
         result += ([UInt8(h3Big & 0xFF), UInt8((h3Big >> 8) & 0xFF), UInt8((h3Big >> 16) & 0xFF), UInt8((h3Big >> 24) & 0xFF)]);
         result += ([UInt8(h4Big & 0xff), UInt8((h4Big >> 8) & 0xFF), UInt8((h4Big >> 16) & 0xFF), UInt8((h4Big >> 24) & 0xFF)]);
 
-        return result.reduce("") { $0 + String(format: "%02x", $1) }
+        return result;
     }
     
     func rotateLeft(v: UInt32, _ n: UInt32) -> UInt32 {
