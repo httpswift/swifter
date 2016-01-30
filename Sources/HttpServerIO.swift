@@ -37,7 +37,21 @@ public class HttpServerIO {
         }
     }
     
-    public func handleConnection(socket: Socket) {
+    public func stop() {
+        listenSocket.release()
+        lock(self.clientSocketsLock) {
+            for socket in self.clientSockets {
+                socket.shutdwn()
+            }
+            self.clientSockets.removeAll(keepCapacity: true)
+        }
+    }
+    
+    public func dispatch(method: String, path: String) -> ([String: String], HttpRequest -> HttpResponse) {
+        return ([:], { _ in HttpResponse.NotFound })
+    }
+    
+    private func handleConnection(socket: Socket) {
         let address = try? socket.peername()
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
@@ -60,20 +74,6 @@ public class HttpServerIO {
             if !keepConnection { break }
         }
         socket.release()
-    }
-    
-    public func dispatch(method: String, path: String) -> ([String: String], HttpRequest -> HttpResponse) {
-        return ([:], { _ in HttpResponse.NotFound })
-    }
-    
-    public func stop() {
-        listenSocket.release()
-        lock(self.clientSocketsLock) {
-            for socket in self.clientSockets {
-                socket.shutdwn()
-            }
-            self.clientSockets.removeAll(keepCapacity: true)
-        }
     }
     
     private func lock(handle: NSLock, closure: () -> ()) {
@@ -112,7 +112,7 @@ public class HttpServerIO {
         
         try socket.writeUTF8("\r\n")
     
-        if let writeClosure = content.writeClosure {
+        if let writeClosure = content.write {
             let context = InnerWriteContext(socket: socket)
             try writeClosure(context)
         }

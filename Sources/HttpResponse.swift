@@ -23,7 +23,7 @@ public enum HttpResponseBody {
     case Text(String)
     case Custom(Any, (Any) throws -> String)
     
-    func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
+    func content() -> (Int, (HttpResponseBodyWriter throws -> Void)?) {
         do {
             switch self {
             case .Json(let object):
@@ -129,7 +129,7 @@ public enum HttpResponse {
         return headers
     }
     
-    func content() -> (length: Int, writeClosure: ((HttpResponseBodyWriter) throws -> Void)?) {
+    func content() -> (length: Int, write: (HttpResponseBodyWriter throws -> Void)?) {
         switch self {
         case .OK(let body)             : return body.content()
         case .BadRequest(let body)     : return body?.content() ?? (-1, nil)

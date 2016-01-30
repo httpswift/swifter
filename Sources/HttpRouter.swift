@@ -26,7 +26,7 @@ public class HttpRouter {
     
     private func routesForNode(node: Node, prefix: String = "") -> [String] {
         var result = [String]()
-        if node.handler != nil {
+        if let _ = node.handler {
             result.append(prefix)
         }
         for (key, child) in node.nodes {

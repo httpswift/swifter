@@ -49,24 +49,20 @@ class HttpParser {
     
     private func readBody(socket: Socket, size: Int) throws -> [UInt8] {
         var body = [UInt8]()
-        var counter = 0
-        while counter < size {
-            body.append(try socket.read())
-            counter += 1
-        }
+        for _ in 1...size { body.append(try socket.read()) }
         return body
     }
     
     private func readHeaders(socket: Socket) throws -> [String: String] {
-        var requestHeaders = [String: String]()
+        var headers = [String: String]()
         repeat {
             let headerLine = try socket.readLine()
             if headerLine.isEmpty {
-                return requestHeaders
+                return headers
             }
             let headerTokens = headerLine.split(1, separator: ":")
             if let name = headerTokens.first, value = headerTokens.last {
-                requestHeaders[name.lowercaseString] = value.trim()
+                headers[name.lowercaseString] = value.trim()
             }
         } while true
     }

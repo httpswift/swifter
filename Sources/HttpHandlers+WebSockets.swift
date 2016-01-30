@@ -9,7 +9,8 @@ import Foundation
 
 extension HttpHandlers {
     
-    public class func websocket(text:(String -> Void)?, _ binary:([UInt8] -> Void)?) -> (HttpRequest -> HttpResponse) {
+    public class func websocket(text:((WebSocketSession, String) -> Void)?, _ binary:
+        ((WebSocketSession, [UInt8]) -> Void)?) -> (HttpRequest -> HttpResponse) {
         return { r in
             guard r.headers["upgrade"] == "websocket" else {
                 return .BadRequest(.Text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
@@ -26,11 +27,11 @@ extension HttpHandlers {
                     switch frame.opcode {
                     case .TEXT:
                         if let handleText = text {
-                            handleText(String.fromUInt8(frame.payload))
+                            handleText(session, String.fromUInt8(frame.payload))
                         }
                     case .BINARY:
                         if let handleBinary = binary {
-                            handleBinary(frame.payload)
+                            handleBinary(session, frame.payload)
                         }
                     default: break
                     }
@@ -61,63 +62,60 @@ extension HttpHandlers {
         }
         
         public func writeText(text: String) -> Void {
-            let finAndOpCode = encodeFinAndOpCode(true, op: OpCode.TEXT)
-            let maskAndLngth = encodeLengthAndMaskFlag(UInt64(text.utf8.count), false)
-            do {
-                try socket.writeUInt8([finAndOpCode])
-                try socket.writeUInt8(maskAndLngth)
-                try socket.writeUInt8([UInt8](text.utf8))
-            } catch {
-                print(error)
-            }
+            self.writeFrame([UInt8](text.utf8), OpCode.TEXT)
         }
     
         public func writeBinary(binary: [UInt8]) -> Void {
-            let finAndOpCode = encodeFinAndOpCode(true, op: OpCode.BINARY)
-            let maskAndLngth = encodeLengthAndMaskFlag(UInt64(binary.count), false)
+            self.writeFrame(binary, OpCode.BINARY)
+        }
+        
+        private func writeFrame(data: [UInt8], _ op: OpCode, _ fin: Bool = true) {
+            let finAndOpCode = encodeFinAndOpCode(fin, op: op)
+            let maskAndLngth = encodeLengthAndMaskFlag(UInt64(data.count), false)
             do {
                 try self.socket.writeUInt8([finAndOpCode])
                 try self.socket.writeUInt8(maskAndLngth)
-                try self.socket.writeUInt8(binary)
+                try self.socket.writeUInt8(data)
             } catch {
                 print(error)
             }
         }
         
         private func encodeFinAndOpCode(fin: Bool, op: OpCode) -> UInt8 {
-            var b = UInt8(fin ? 0x80 : 0x00);
+            var encodedByte = UInt8(fin ? 0x80 : 0x00);
             switch op {
-            case .CONTINUE : b |= 0x00 & 0x0F;
-            case .TEXT     : b |= 0x01 & 0x0F;
-            case .BINARY   : b |= 0x02 & 0x0F;
-            case .CLOSE    : b |= 0x08 & 0x0F;
-            case .PING     : b |= 0x09 & 0x0F;
-            case .PONG     : b |= 0x0A & 0x0F;
+            case .CONTINUE : encodedByte |= 0x00 & 0x0F;
+            case .TEXT     : encodedByte |= 0x01 & 0x0F;
+            case .BINARY   : encodedByte |= 0x02 & 0x0F;
+            case .CLOSE    : encodedByte |= 0x08 & 0x0F;
+            case .PING     : encodedByte |= 0x09 & 0x0F;
+            case .PONG     : encodedByte |= 0x0A & 0x0F;
             }
-            return b
+            return encodedByte
         }
         
         private func encodeLengthAndMaskFlag(len: UInt64, _ masked: Bool) -> [UInt8] {
-            let b: UInt8 = masked ? 0x80 : 0x00;
-            var buffer = [UInt8]()
-            if (len > 0xFF_FF) {
-                buffer.append(b | 0x7F);
-                buffer.append(UInt8(len >> 56) & 0xFF);
-                buffer.append(UInt8(len >> 48) & 0xFF);
-                buffer.append(UInt8(len >> 40) & 0xFF);
-                buffer.append(UInt8(len >> 32) & 0xFF);
-                buffer.append(UInt8(len >> 24) & 0xFF);
-                buffer.append(UInt8(len >> 16) & 0xFF);
-                buffer.append(UInt8(len >> 8 ) & 0xFF);
-                buffer.append(UInt8(len & 0xFF));
-            } else if (len >= 0x7E) {
-                buffer.append(b | 0x7E);
-                buffer.append(UInt8(len >> 8));
-                buffer.append(UInt8(len & 0xFF));
-            } else {
-                buffer.append(b | UInt8(len));
+            let encodedLngth = UInt8(masked ? 0x80 : 0x00)
+            var encodedBytes = [UInt8]()
+            switch len {
+            case 0...0x7D:
+                encodedBytes.append(encodedLngth | UInt8(len));
+            case 0x7E...0xFF_FF:
+                encodedBytes.append(encodedLngth | 0x7E);
+                encodedBytes.append(UInt8(len >> 8));
+                encodedBytes.append(UInt8(len & 0xFF));
+            default:
+                encodedBytes.append(encodedLngth | 0x7F);
+                encodedBytes.append(UInt8(len >> 56) & 0xFF);
+                encodedBytes.append(UInt8(len >> 48) & 0xFF);
+                encodedBytes.append(UInt8(len >> 40) & 0xFF);
+                encodedBytes.append(UInt8(len >> 32) & 0xFF);
+                encodedBytes.append(UInt8(len >> 24) & 0xFF);
+                encodedBytes.append(UInt8(len >> 16) & 0xFF);
+                encodedBytes.append(UInt8(len >> 8 ) & 0xFF);
+                encodedBytes.append(UInt8(len & 0xFF));
             }
-            return buffer
+            return encodedBytes
         }
         
         public func readFrame(socket: Socket) throws -> Frame {

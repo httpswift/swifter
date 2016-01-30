@@ -73,33 +73,35 @@ extension HttpHandlers {
         }
     }
     
-    public class func directoryBrowser(dir: String) -> ( HttpRequest -> HttpResponse ) {
+    public class func directoryBrowser(dir: String) -> (HttpRequest -> HttpResponse) {
         return { r in
-            if let (_, value) = r.params.first {
-                let filePath = dir + "/" + value
-                let fileManager = NSFileManager.defaultManager()
-                var isDir: ObjCBool = false
-                if fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) {
-                    if isDir {
-                        do {
-                            let files = try fileManager.contentsOfDirectoryAtPath(filePath)
-                            var response = "<h3>\(filePath)</h3></br><table>"
-                            response += files.map({ "<tr><td><a href=\"\(r.path)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
-                            response += "</table>"
-                            return HttpResponse.OK(.Html(response))
-                        } catch {
-                            return HttpResponse.NotFound
-                        }
-                    } else {
-                        if let fileBody = NSData(contentsOfFile: filePath) {
-                            var array = [UInt8](count: fileBody.length, repeatedValue: 0)
-                            fileBody.getBytes(&array, length: fileBody.length)
-                            return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
-                        }
-                    }
-                }
+            guard let (_, value) = r.params.first else {
+                return HttpResponse.NotFound
             }
-            return HttpResponse.NotFound
+            let filePath = dir + "/" + value
+            let fileManager = NSFileManager.defaultManager()
+            var isDir: ObjCBool = false
+            guard fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) else {
+                return HttpResponse.NotFound
+            }
+            if isDir {
+                do {
+                    let files = try fileManager.contentsOfDirectoryAtPath(filePath)
+                    var response = "<h3>\(filePath)</h3></br><table>"
+                    response += files.map({ "<tr><td><a href=\"\(r.path)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
+                    response += "</table>"
+                    return HttpResponse.OK(.Html(response))
+                } catch {
+                    return HttpResponse.NotFound
+                }
+            } else {
+                if let content = NSData(contentsOfFile: filePath) {
+                    var array = [UInt8](count: content.length, repeatedValue: 0)
+                    content.getBytes(&array, length: content.length)
+                    return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
+                }
+                return HttpResponse.NotFound
+            }
         }
     }
 }

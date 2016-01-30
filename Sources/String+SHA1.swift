@@ -37,7 +37,7 @@ extension String {
         
         let padBytesCount = ( message.count + 8 ) % 64
         
-        for _ in padBytesCount...63 { message.append(0x00) }
+        message.appendContentsOf([UInt8](count: 64 - padBytesCount, repeatedValue: 0))
         
         // append ml, in a 64-bit big-endian integer. Thus, the total length is a multiple of 512 bits.
         

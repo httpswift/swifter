@@ -25,7 +25,7 @@ public class HttpRequest {
         guard let contentType = contentTypeHeaderTokens.first where contentType == "application/x-www-form-urlencoded" else {
             return []
         }
-        return String.fromUInt8(body).split("&").map { (param: String) -> (String, String) in
+        return String.fromUInt8(body).split("&").map { param -> (String, String) in
             let tokens = param.split("=")
             if let name = tokens.first, value = tokens.last where tokens.count == 2 {
                 return (name.replace("+", new: " ").removePercentEncoding(),
@@ -41,22 +41,22 @@ public class HttpRequest {
         public let body: [UInt8]
         
         public var name: String? {
-            return valueFor("content-disposition", parameterName: "name")?.unquote()
+            return valueFor("content-disposition", parameter: "name")?.unquote()
         }
         
         public var fileName: String? {
-            return valueFor("content-disposition", parameterName: "filename")?.unquote()
+            return valueFor("content-disposition", parameter: "filename")?.unquote()
         }
         
-        private func valueFor(headerName: String, parameterName: String) -> String? {
-            return headers.reduce([String]()) { (currentResults: [String], header: (key: String, value: String)) -> [String] in
+        private func valueFor(headerName: String, parameter: String) -> String? {
+            return headers.reduce([String]()) { (combined, header: (key: String, value: String)) -> [String] in
                 guard header.key == headerName else {
-                    return currentResults
+                    return combined
                 }
                 let headerValueParams = header.value.split(";").map { $0.trim() }
-                return headerValueParams.reduce(currentResults, combine: { (results:[String], token: String) -> [String] in
+                return headerValueParams.reduce(combined, combine: { (results, token) -> [String] in
                     let parameterTokens = token.split(1, separator: "=")
-                    if parameterTokens.first == parameterName, let value = parameterTokens.last {
+                    if parameterTokens.first == parameter, let value = parameterTokens.last {
                         return results + [value]
                     }
                     return results
