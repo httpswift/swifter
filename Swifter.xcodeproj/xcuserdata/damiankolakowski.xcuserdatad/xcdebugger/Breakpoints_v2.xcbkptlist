@@ -1699,13 +1699,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475797167.424719"
+            timestampString = "475842615.4941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "93"
-            endingLineNumber = "93"
-            landmarkName = "HttpHandlers"
-            landmarkType = "3">
+            startingLineNumber = "115"
+            endingLineNumber = "115"
+            landmarkName = "readFrame(_:)"
+            landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -1747,11 +1747,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475797167.424719"
+            timestampString = "475842615.4941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "HttpHandlers"
             landmarkType = "3">
          </BreakpointContent>
@@ -1763,13 +1763,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475797167.424719"
+            timestampString = "475842615.4941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "HttpHandlers"
-            landmarkType = "3">
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "readFrame(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1939,13 +1939,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475797167.424719"
+            timestampString = "475842615.4941"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91"
-            landmarkName = "HttpHandlers"
-            landmarkType = "3">
+            startingLineNumber = "113"
+            endingLineNumber = "113"
+            landmarkName = "readFrame(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2335,28 +2335,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sources/HttpHandlers+WebSockets.swift"
-            timestampString = "475797519.716601"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
-            landmarkName = "websocket(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Sources/HttpHandlers+WebSockets.swift"
             timestampString = "475797167.424719"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "13"
             endingLineNumber = "13"
-            landmarkName = "websocket(_:)"
+            landmarkName = "websocket(_:_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

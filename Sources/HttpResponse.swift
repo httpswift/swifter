@@ -67,9 +67,9 @@ public enum HttpResponse {
     case SwitchProtocols([String: String], Socket -> Void)
     case OK(HttpResponseBody), Created, Accepted
     case MovedPermanently(String)
-    case BadRequest, Unauthorized, Forbidden, NotFound
+    case BadRequest(HttpResponseBody?), Unauthorized, Forbidden, NotFound
     case InternalServerError
-    case RAW(Int, String, [String:String]?, ((HttpResponseBodyWriter) -> Void)? )
+    case RAW(Int, String, [String:String]?, (HttpResponseBodyWriter -> Void)? )
     
     func statusCode() -> Int {
         switch self {
@@ -132,12 +132,13 @@ public enum HttpResponse {
     func content() -> (length: Int, writeClosure: ((HttpResponseBodyWriter) throws -> Void)?) {
         switch self {
         case .OK(let body)             : return body.content()
+        case .BadRequest(let body)     : return body?.content() ?? (-1, nil)
         case .RAW(_, _, _, let writer) : return (-1, writer)
         default                        : return (-1, nil)
         }
     }
     
-    func protocolHandler() -> (Socket -> Void)?  {
+    func socketSession() -> (Socket -> Void)?  {
         switch self {
         case SwitchProtocols(_, let handler) : return handler
         default: return nil

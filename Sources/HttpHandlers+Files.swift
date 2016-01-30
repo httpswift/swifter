@@ -27,7 +27,7 @@ extension HttpHandlers {
             if let rangeHeader = r.headers["range"] {
                 
                 guard rangeHeader.hasPrefix(HttpHandlers.rangePrefix) else {
-                    return HttpResponse.BadRequest
+                    return .BadRequest(.Text("Invalid value of 'Range' header: \(r.headers["range"])"))
                 }
                 
                 #if os(Linux)
@@ -35,10 +35,11 @@ extension HttpHandlers {
                 #else
                     let rangeString = rangeHeader.substringFromIndex(rangeHeader.startIndex.advancedBy(HttpHandlers.rangePrefix.characters.count))
                 #endif
+                
                 let rangeStringExploded = rangeString.split("-")
                 
                 guard rangeStringExploded.count == 2 else {
-                    return HttpResponse.BadRequest
+                    return .BadRequest(.Text("Invalid value of 'Range' header: \(r.headers["range"])"))
                 }
                 
                 let startStr = rangeStringExploded[0]
