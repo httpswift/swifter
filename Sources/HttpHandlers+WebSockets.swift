@@ -61,11 +61,63 @@ extension HttpHandlers {
         }
         
         public func writeText(text: String) -> Void {
-            
+            let finAndOpCode = encodeFinAndOpCode(true, op: OpCode.TEXT)
+            let maskAndLngth = encodeLengthAndMaskFlag(UInt64(text.utf8.count), false)
+            do {
+                try socket.writeUInt8([finAndOpCode])
+                try socket.writeUInt8(maskAndLngth)
+                try socket.writeUInt8([UInt8](text.utf8))
+            } catch {
+                print(error)
+            }
+        }
+    
+        public func writeBinary(binary: [UInt8]) -> Void {
+            let finAndOpCode = encodeFinAndOpCode(true, op: OpCode.BINARY)
+            let maskAndLngth = encodeLengthAndMaskFlag(UInt64(binary.count), false)
+            do {
+                try self.socket.writeUInt8([finAndOpCode])
+                try self.socket.writeUInt8(maskAndLngth)
+                try self.socket.writeUInt8(binary)
+            } catch {
+                print(error)
+            }
         }
         
-        public func writeBinary(binary: [UInt8]) -> Void {
-            
+        private func encodeFinAndOpCode(fin: Bool, op: OpCode) -> UInt8 {
+            var b = UInt8(fin ? 0x80 : 0x00);
+            switch op {
+            case .CONTINUE : b |= 0x00 & 0x0F;
+            case .TEXT     : b |= 0x01 & 0x0F;
+            case .BINARY   : b |= 0x02 & 0x0F;
+            case .CLOSE    : b |= 0x08 & 0x0F;
+            case .PING     : b |= 0x09 & 0x0F;
+            case .PONG     : b |= 0x0A & 0x0F;
+            }
+            return b
+        }
+        
+        private func encodeLengthAndMaskFlag(len: UInt64, _ masked: Bool) -> [UInt8] {
+            let b: UInt8 = masked ? 0x80 : 0x00;
+            var buffer = [UInt8]()
+            if (len > 0xFF_FF) {
+                buffer.append(b | 0x7F);
+                buffer.append(UInt8(len >> 56) & 0xFF);
+                buffer.append(UInt8(len >> 48) & 0xFF);
+                buffer.append(UInt8(len >> 40) & 0xFF);
+                buffer.append(UInt8(len >> 32) & 0xFF);
+                buffer.append(UInt8(len >> 24) & 0xFF);
+                buffer.append(UInt8(len >> 16) & 0xFF);
+                buffer.append(UInt8(len >> 8 ) & 0xFF);
+                buffer.append(UInt8(len & 0xFF));
+            } else if (len >= 0x7E) {
+                buffer.append(b | 0x7E);
+                buffer.append(UInt8(len >> 8));
+                buffer.append(UInt8(len & 0xFF));
+            } else {
+                buffer.append(b | UInt8(len));
+            }
+            return buffer
         }
         
         public func readFrame(socket: Socket) throws -> Frame {
