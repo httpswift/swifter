@@ -5,7 +5,11 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
 extension String {
 
@@ -41,7 +45,7 @@ extension String {
     }
     
     public static func fromUInt8(array: [UInt8]) -> String {
-        return String(data: NSData(bytes: array, length: array.count), encoding: NSUTF8StringEncoding) ?? ""
+	return String(array)
     }
     
     public func removePercentEncoding() -> String {
