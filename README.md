@@ -1,3 +1,9 @@
+![Linux](https://dl.dropboxusercontent.com/u/858551/badge/Linux-OK-4BC51D.svg)
+![OSX](https://dl.dropboxusercontent.com/u/858551/badge/OSX-OK-4BC51D.svg)
+![Swift](https://dl.dropboxusercontent.com/u/858551/badge/Swift-2.2-4BC51D.svg)
+![HTTP](https://dl.dropboxusercontent.com/u/858551/badge/Http%201.1-OK-4BC51D.svg)
+![WebSockets](https://dl.dropboxusercontent.com/u/858551/badge/WebSocket-OK-4BC51D.svg)
+
 ### What is Swift?
 
 >Swift is an innovative new programming language for Cocoa and Cocoa Touch. Writing code is interactive and fun, the syntax is concise yet expressive, and apps run lightning-fast. Swift is ready for your next iOS and OS X project — or for addition into your current app — because Swift code works side-by-side with Objective-C.
