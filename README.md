@@ -6,11 +6,9 @@
 
 Tiny http server engine written in Swift ( https://developer.apple.com/swift/ ) programming language.
 
-![Linux](https://dl.dropboxusercontent.com/u/858551/badge/Linux-%E2%9C%93-4BC51D.svg)
-![OSX](https://dl.dropboxusercontent.com/u/858551/badge/OSX-%E2%9C%93-4BC51D.svg)
+![Platforms](https://dl.dropboxusercontent.com/u/858551/badge/Platforms-Linux%20%26%20OSX-4BC51D.svg)
 ![Swift](https://dl.dropboxusercontent.com/u/858551/badge/Swift-2.2-4BC51D.svg)
-![HTTP](https://dl.dropboxusercontent.com/u/858551/badge/Http%201.1-%E2%9C%93-4BC51D.svg)
-![WebSockets](https://dl.dropboxusercontent.com/u/858551/badge/WebSockets-%E2%9C%93-4BC51D.svg)
+![Protocols](https://dl.dropboxusercontent.com/u/858551/badge/Protocols-HTTP%201.1%20%26%20WebSockets-4BC51D.svg)
 
 ### How to start?
 ```swift
