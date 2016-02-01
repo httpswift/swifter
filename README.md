@@ -9,6 +9,7 @@ Tiny http server engine written in Swift ( https://developer.apple.com/swift/ ) 
 ![Platform](https://img.shields.io/badge/Platform-Linux%20&%20OSX-4BC51D.svg?style=flat)
 ![Swift](https://img.shields.io/badge/Swift-2.2-4BC51D.svg?style=flat)
 ![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
+[![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)]()
 
 ### How to start?
 ```swift
