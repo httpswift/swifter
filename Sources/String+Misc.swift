@@ -39,13 +39,14 @@ extension String {
     
     public func trim() -> String {
         var scalars = self.unicodeScalars
-        while let _ = unicodeScalarToUInt32Whitespace(scalars.first) { scalars.removeFirst() }
-        while let _ = unicodeScalarToUInt32Whitespace(scalars.last) { scalars.removeLast() }
+        while let _ = scalars.first?.asWhitespace() { scalars.removeFirst() }
+        while let _ = scalars.last?.asWhitespace() { scalars.removeLast() }
         return String(scalars)
     }
     
     public static func fromUInt8(array: [UInt8]) -> String {
-	return String(array)
+        // Apple changes the definition of String(data: .... ) every realse so let's stay with 'fromUInt8(...)' wrapper.
+        return String(array) // It works for 2.2 and 3.0-dev (25 Jan 2016).
     }
     
     public func removePercentEncoding() -> String {
@@ -56,7 +57,7 @@ extension String {
             if scalar == "%" {
                 let first = scalars.popFirst()
                 let secon = scalars.popFirst()
-                if let first = unicodeScalarToUInt32Hex(first), secon = unicodeScalarToUInt32Hex(secon) {
+                if let first = first?.asAlpha(), secon = secon?.asAlpha() {
                     bytesBuffer.append(first*16+secon)
                 } else {
                     if !bytesBuffer.isEmpty {
@@ -80,30 +81,29 @@ extension String {
         }
         return output
     }
+}
+
+extension UnicodeScalar {
     
-    private func unicodeScalarToUInt32Whitespace(x: UnicodeScalar?) -> UInt8? {
-        if let x = x {
-            if x.value >= 9 && x.value <= 13 {
-                return UInt8(x.value)
-            }
-            if x.value == 32 {
-                return UInt8(x.value)
-            }
+    public func asWhitespace() -> UInt8? {
+        if self.value >= 9 && self.value <= 13 {
+            return UInt8(self.value)
+        }
+        if self.value == 32 {
+            return UInt8(self.value)
         }
         return nil
     }
     
-    private func unicodeScalarToUInt32Hex(x: UnicodeScalar?) -> UInt8? {
-        if let x = x {
-            if x.value >= 48 && x.value <= 57 {
-                return UInt8(x.value) - 48
-            }
-            if x.value >= 97 && x.value <= 102 {
-                return UInt8(x.value) - 87
-            }
-            if x.value >= 65 && x.value <= 70 {
-                return UInt8(x.value) - 55
-            }
+    public func asAlpha() -> UInt8? {
+        if self.value >= 48 && self.value <= 57 {
+            return UInt8(self.value) - 48
+        }
+        if self.value >= 97 && self.value <= 102 {
+            return UInt8(self.value) - 87
+        }
+        if self.value >= 65 && self.value <= 70 {
+            return UInt8(self.value) - 55
         }
         return nil
     }

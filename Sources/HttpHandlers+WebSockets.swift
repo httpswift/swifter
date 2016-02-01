@@ -9,8 +9,9 @@ import Foundation
 
 extension HttpHandlers {
     
-    public class func websocket(text:((WebSocketSession, String) -> Void)?, _ binary:
-        ((WebSocketSession, [UInt8]) -> Void)?) -> (HttpRequest -> HttpResponse) {
+    public class func websocket(
+            text: ((WebSocketSession, String) -> Void)?,
+        _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> (HttpRequest -> HttpResponse) {
         return { r in
             guard r.headers["upgrade"] == "websocket" else {
                 return .BadRequest(.Text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
@@ -25,11 +26,11 @@ extension HttpHandlers {
                 let session = WebSocketSession(socket)
                 while let frame = try? session.readFrame(socket) {
                     switch frame.opcode {
-                    case .TEXT:
+                    case .Text:
                         if let handleText = text {
                             handleText(session, String.fromUInt8(frame.payload))
                         }
-                    case .BINARY:
+                    case .Binary:
                         if let handleBinary = binary {
                             handleBinary(session, frame.payload)
                         }
@@ -37,7 +38,7 @@ extension HttpHandlers {
                     }
                 }
             }
-            let secWebSocketAccept = String.encodeToBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").SHA1())
+            let secWebSocketAccept = String.toBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").SHA1())
             let headers = [ "Upgrade": "WebSocket", "Connection": "Upgrade", "Sec-WebSocket-Accept": secWebSocketAccept]
             return HttpResponse.SwitchProtocols(headers, protocolSessionClosure)
         }
@@ -46,11 +47,10 @@ extension HttpHandlers {
     public class WebSocketSession {
         
         public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame }
-        
-        public enum OpCode { case CONTINUE, CLOSE, PING, PONG, TEXT, BINARY }
+        public enum OpCode { case Continue, Close, Ping, Pong, Text, Binary }
         
         public class Frame {
-            public var opcode = OpCode.CLOSE
+            public var opcode = OpCode.Close
             public var fin = false
             public var payload = [UInt8]()
         }
@@ -62,11 +62,11 @@ extension HttpHandlers {
         }
         
         public func writeText(text: String) -> Void {
-            self.writeFrame([UInt8](text.utf8), OpCode.TEXT)
+            self.writeFrame([UInt8](text.utf8), OpCode.Text)
         }
     
         public func writeBinary(binary: [UInt8]) -> Void {
-            self.writeFrame(binary, OpCode.BINARY)
+            self.writeFrame(binary, OpCode.Binary)
         }
         
         private func writeFrame(data: [UInt8], _ op: OpCode, _ fin: Bool = true) {
@@ -84,12 +84,12 @@ extension HttpHandlers {
         private func encodeFinAndOpCode(fin: Bool, op: OpCode) -> UInt8 {
             var encodedByte = UInt8(fin ? 0x80 : 0x00);
             switch op {
-            case .CONTINUE : encodedByte |= 0x00 & 0x0F;
-            case .TEXT     : encodedByte |= 0x01 & 0x0F;
-            case .BINARY   : encodedByte |= 0x02 & 0x0F;
-            case .CLOSE    : encodedByte |= 0x08 & 0x0F;
-            case .PING     : encodedByte |= 0x09 & 0x0F;
-            case .PONG     : encodedByte |= 0x0A & 0x0F;
+            case .Continue : encodedByte |= 0x00 & 0x0F;
+            case .Text     : encodedByte |= 0x01 & 0x0F;
+            case .Binary   : encodedByte |= 0x02 & 0x0F;
+            case .Close    : encodedByte |= 0x08 & 0x0F;
+            case .Ping     : encodedByte |= 0x09 & 0x0F;
+            case .Pong     : encodedByte |= 0x0A & 0x0F;
             }
             return encodedByte
         }
@@ -98,13 +98,13 @@ extension HttpHandlers {
             let encodedLngth = UInt8(masked ? 0x80 : 0x00)
             var encodedBytes = [UInt8]()
             switch len {
-            case 0...0x7D:
+            case 0...125:
                 encodedBytes.append(encodedLngth | UInt8(len));
-            case 0x7E...0xFF_FF:
+            case 126...UInt64(UINT16_MAX):
                 encodedBytes.append(encodedLngth | 0x7E);
                 encodedBytes.append(UInt8(len >> 8));
                 encodedBytes.append(UInt8(len & 0xFF));
-            default:
+            case UInt64(UINT16_MAX)+1...UINT64_MAX:
                 encodedBytes.append(encodedLngth | 0x7F);
                 encodedBytes.append(UInt8(len >> 56) & 0xFF);
                 encodedBytes.append(UInt8(len >> 48) & 0xFF);
@@ -112,8 +112,8 @@ extension HttpHandlers {
                 encodedBytes.append(UInt8(len >> 32) & 0xFF);
                 encodedBytes.append(UInt8(len >> 24) & 0xFF);
                 encodedBytes.append(UInt8(len >> 16) & 0xFF);
-                encodedBytes.append(UInt8(len >> 8 ) & 0xFF);
-                encodedBytes.append(UInt8(len & 0xFF));
+                encodedBytes.append(UInt8(len >> 08) & 0xFF);
+                encodedBytes.append(UInt8(len >> 00) & 0xFF);
             }
             return encodedBytes
         }
@@ -124,12 +124,12 @@ extension HttpHandlers {
             frm.fin = fst & 0x80 != 0
             let opc = fst & 0x0F
             switch opc {
-                case 0x00: frm.opcode = OpCode.CONTINUE
-                case 0x01: frm.opcode = OpCode.TEXT
-                case 0x02: frm.opcode = OpCode.BINARY
-                case 0x08: frm.opcode = OpCode.CLOSE
-                case 0x09: frm.opcode = OpCode.PING
-                case 0x0A: frm.opcode = OpCode.PONG
+                case 0x00: frm.opcode = OpCode.Continue
+                case 0x01: frm.opcode = OpCode.Text
+                case 0x02: frm.opcode = OpCode.Binary
+                case 0x08: frm.opcode = OpCode.Close
+                case 0x09: frm.opcode = OpCode.Ping
+                case 0x0A: frm.opcode = OpCode.Pong
                 // "If an unknown opcode is received, the receiving endpoint MUST _Fail the WebSocket Connection_."
                 // http://tools.ietf.org/html/rfc6455#section-5.2 ( Page 29 )
                 default  : throw Error.UnknownOpCode("\(opc)")

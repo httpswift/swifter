@@ -16,7 +16,7 @@ extension String {
     
     private static let CODES = [UInt8]("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".utf8)
     
-    public static func encodeToBase64(data: [UInt8]) -> String {
+    public static func toBase64(data: [UInt8]) -> String {
         
         // Based on: https://en.wikipedia.org/wiki/Base64#Sample_Implementation_in_Java
         
