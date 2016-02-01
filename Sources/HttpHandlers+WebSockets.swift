@@ -104,7 +104,7 @@ extension HttpHandlers {
                 encodedBytes.append(encodedLngth | 0x7E);
                 encodedBytes.append(UInt8(len >> 8));
                 encodedBytes.append(UInt8(len & 0xFF));
-            case UInt64(UINT16_MAX)+1...UINT64_MAX:
+            default:
                 encodedBytes.append(encodedLngth | 0x7F);
                 encodedBytes.append(UInt8(len >> 56) & 0xFF);
                 encodedBytes.append(UInt8(len >> 48) & 0xFF);
