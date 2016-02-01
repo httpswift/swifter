@@ -10,6 +10,7 @@ Tiny http server engine written in Swift ( https://developer.apple.com/swift/ ) 
 ![Swift](https://img.shields.io/badge/Swift-2.2-4BC51D.svg?style=flat)
 ![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
 [![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)]()
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ### How to start?
 ```swift
