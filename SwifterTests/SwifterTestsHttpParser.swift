@@ -88,7 +88,7 @@ class SwifterTestsHttpParser: XCTestCase {
         
         do {
             try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 10\r\n\n"))
-            XCTAssertTrue(false, "Parser should  throw an error could not reat the number of bytes defined by 'Content-Length' header.")
+            XCTAssertTrue(false, "Parser should throw an error if request' body is too short.")
         } catch { }
         
         var r = try? parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 10\n\n1234567890"))
