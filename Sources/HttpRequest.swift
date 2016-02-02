@@ -28,8 +28,8 @@ public class HttpRequest {
         return String.fromUInt8(body).split("&").map { param -> (String, String) in
             let tokens = param.split("=")
             if let name = tokens.first, value = tokens.last where tokens.count == 2 {
-                return (name.replace("+", new: " ").removePercentEncoding(),
-                        value.replace("+", new: " ").removePercentEncoding())
+                return (name.replace("+", " ").removePercentEncoding(),
+                        value.replace("+", " ").removePercentEncoding())
             }
             return ("","")
         }

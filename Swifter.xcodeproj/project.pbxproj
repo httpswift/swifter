@@ -47,6 +47,7 @@
 		7CA4815819A2EF2B0030B30D /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CB102E01A17381D00CBA3B4 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
+		7CB15EC71C6144BA004E0FF3 /* SwifterTestsHttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB15EC61C6144BA004E0FF3 /* SwifterTestsHttpParser.swift */; };
 		7CC0F8C91C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */; };
 		7CC0F8CA1C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */; };
 		7CC0F8CC1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */; };
@@ -127,6 +128,7 @@
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CA4815719A2EF2B0030B30D /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		7CB102DF1A17381D00CBA3B4 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		7CB15EC61C6144BA004E0FF3 /* SwifterTestsHttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsHttpParser.swift; sourceTree = "<group>"; };
 		7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpHandlers+Files.swift"; sourceTree = "<group>"; };
 		7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpHandlers+WebSockets.swift"; sourceTree = "<group>"; };
 		7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 		7C6EC0811C614051005A49B3 /* SwifterTests */ = {
 			isa = PBXGroup;
 			children = (
+				7CB15EC61C6144BA004E0FF3 /* SwifterTestsHttpParser.swift */,
 				7C6EC0821C614051005A49B3 /* SwifterTestsStringExtensions.swift */,
 				7C6EC0841C614051005A49B3 /* Info.plist */,
 			);
@@ -533,6 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C6EC0831C614051005A49B3 /* SwifterTestsStringExtensions.swift in Sources */,
+				7CB15EC71C6144BA004E0FF3 /* SwifterTestsHttpParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -37,5 +37,40 @@ class SwifterTestsStringExtensions: XCTestCase {
             "eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eA==")
         XCTAssertEqual(String.toBase64([UInt8]("h".utf8)), "aA==")
     }
+    
+    func testMiscUnquote() {
+        XCTAssertEqual("".unquote(), "")
+        XCTAssertEqual("\"".unquote(), "\"")
+        XCTAssertEqual("\"\"".unquote(), "")
+        
+        XCTAssertEqual("1234".unquote(), "1234")
+        XCTAssertEqual("1234\"".unquote(), "1234\"")
+        XCTAssertEqual("\"1234".unquote(), "\"1234")
+        XCTAssertEqual("\"1234\"".unquote(), "1234")
+        XCTAssertEqual("\"1234\"".unquote(), "1234")
+        
+        XCTAssertEqual("\"\"\"".unquote(), "\"")
+        XCTAssertEqual("\"\" \"\"".unquote(), "\" \"")
+    }
+    
+    func testMiscTrim() {
+        XCTAssertEqual("".trim(), "")
+        XCTAssertEqual("\n".trim(), "")
+        XCTAssertEqual("\t".trim(), "")
+        XCTAssertEqual("\r".trim(), "")
+        XCTAssertEqual(" ".trim(), "")
+        XCTAssertEqual("      ".trim(), "")
+        XCTAssertEqual("1 test     ".trim(), "1 test")
+        XCTAssertEqual("      test          ".trim(), "test")
+        XCTAssertEqual("   \t\n\rtest          ".trim(), "test")
+        XCTAssertEqual("   \t\n\rtest  n   \n\t asd    ".trim(), "test  n   \n\t asd")
+    }
 
+    func testMiscReplace() {
+        XCTAssertEqual("".replace("+", "-"), "")
+        XCTAssertEqual("test".replace("+", "-"), "test")
+        XCTAssertEqual("+++".replace("+", "-"), "---")
+        XCTAssertEqual("t&e&s&t12%3%".replace("&", "+").replace("%", "+"), "t+e+s+t12+3+")
+        XCTAssertEqual("test 1234 #$%^&*( test   ".replace(" ", "_"), "test_1234_#$%^&*(_test___")
+    }
 }

@@ -21,7 +21,7 @@ extension String {
         return self.characters.split(maxSplit) { $0 == separator }.map(String.init)
     }
     
-    public func replace(old: Character, new: Character) -> String {
+    public func replace(old: Character, _ new: Character) -> String {
         var buffer = [Character]()
         self.characters.forEach { buffer.append($0 == old ? new : $0) }
         return String(buffer)
