@@ -29,8 +29,8 @@ public class HttpServer: HttpServerIO {
         self.put    = MethodRoute(method: "PUT", router: router)
     }
     
-    public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute;
-    public var delete, update, head, post, get, put : MethodRoute;
+    public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
+    public var delete, update, head, post, get, put : MethodRoute
 
     public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
         set {

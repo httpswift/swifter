@@ -19,6 +19,11 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>SwifterTests.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>4</integer>
+		</dict>
 		<key>SwifteriOS.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -33,6 +38,11 @@
 			<true/>
 		</dict>
 		<key>7AE893FA1C0512C400A29F63</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7C6EC07F1C614051005A49B3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
