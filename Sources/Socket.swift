@@ -13,7 +13,7 @@
 
 /* Low level routines for POSIX sockets */
 
-enum SocketError: ErrorType {
+public enum SocketError: ErrorType {
     case SocketCreationFailed(String)
     case SocketSettingReUseAddrFailed(String)
     case BindFailed(String)
@@ -82,7 +82,7 @@ public class Socket: Hashable, Equatable {
     
     private let socketFileDescriptor: Int32
     
-    init(socketFileDescriptor: Int32) {
+    public init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
     }
     

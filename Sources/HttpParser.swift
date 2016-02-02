@@ -15,9 +15,11 @@ enum HttpParserError: ErrorType {
     case InvalidStatusLine(String)
 }
 
-class HttpParser {
+public class HttpParser {
     
-    func readHttpRequest(socket: Socket) throws -> HttpRequest {
+    public init() { }
+    
+    public func readHttpRequest(socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
         let statusLineTokens = statusLine.split(" ")
         if statusLineTokens.count < 3 {
@@ -49,7 +51,7 @@ class HttpParser {
     
     private func readBody(socket: Socket, size: Int) throws -> [UInt8] {
         var body = [UInt8]()
-        for _ in 1...size { body.append(try socket.read()) }
+        for _ in 0..<size { body.append(try socket.read()) }
         return body
     }
     
