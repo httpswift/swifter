@@ -83,8 +83,14 @@ public class HttpRouter {
         let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
         if let variableNode = variableNodes.first {
             if variableNode.1.nodes.count == 0 {
-                // if it's the last element of the pattern and it's a variable, stop the routing.
-                params[variableNode.0] = pathToken + "/" + generator.joinWithSeparator("/")
+                // if it's the last element of the pattern and it's a variable, stop the search and
+                // append a tail as a value for the variable.
+                let tail = generator.joinWithSeparator("/")
+                if tail.utf8.count > 0 {
+                    params[variableNode.0] = pathToken + "/" + tail
+                } else {
+                    params[variableNode.0] = pathToken
+                }
                 return variableNode.1.handler
             }
             params[variableNode.0] = pathToken
