@@ -24,11 +24,11 @@ extension String {
         
         var message = [UInt8](self.utf8)
         
-        var h0 = UInt32(0x67452301)
-        var h1 = UInt32(0xEFCDAB89)
-        var h2 = UInt32(0x98BADCFE)
-        var h3 = UInt32(0x10325476)
-        var h4 = UInt32(0xC3D2E1F0)
+        var h0 = UInt32(littleEndian: 0x67452301)
+        var h1 = UInt32(littleEndian: 0xEFCDAB89)
+        var h2 = UInt32(littleEndian: 0x98BADCFE)
+        var h3 = UInt32(littleEndian: 0x10325476)
+        var h4 = UInt32(littleEndian: 0xC3D2E1F0)
         
         // ml = message length in bits (always a multiple of the number of bits in a character).
         
