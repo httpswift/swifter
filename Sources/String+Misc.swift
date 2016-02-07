@@ -52,32 +52,32 @@ extension String {
     public func removePercentEncoding() -> String {
         var scalars = self.unicodeScalars
         var output = ""
-        var bytesBuffer = [UInt8]()
+        var decodeBuffer = [UInt8]()
         while let scalar = scalars.popFirst() {
             if scalar == "%" {
                 let first = scalars.popFirst()
                 let secon = scalars.popFirst()
                 if let first = first?.asAlpha(), secon = secon?.asAlpha() {
-                    bytesBuffer.append(first*16+secon)
+                    decodeBuffer.append(first*16+secon)
                 } else {
-                    if !bytesBuffer.isEmpty {
-                        output.appendContentsOf(String.fromUInt8(bytesBuffer))
-                        bytesBuffer.removeAll()
+                    if !decodeBuffer.isEmpty {
+                        output.appendContentsOf(String.fromUInt8(decodeBuffer))
+                        decodeBuffer.removeAll()
                     }
                     if let first = first { output.append(Character(first)) }
                     if let secon = secon { output.append(Character(secon)) }
                 }
             } else {
-                if !bytesBuffer.isEmpty {
-                    output.appendContentsOf(String.fromUInt8(bytesBuffer))
-                    bytesBuffer.removeAll()
+                if !decodeBuffer.isEmpty {
+                    output.appendContentsOf(String.fromUInt8(decodeBuffer))
+                    decodeBuffer.removeAll()
                 }
                 output.append(Character(scalar))
             }
         }
-        if !bytesBuffer.isEmpty {
-            output.appendContentsOf(String.fromUInt8(bytesBuffer))
-            bytesBuffer.removeAll()
+        if !decodeBuffer.isEmpty {
+            output.appendContentsOf(String.fromUInt8(decodeBuffer))
+            decodeBuffer.removeAll()
         }
         return output
     }

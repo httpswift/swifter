@@ -89,4 +89,24 @@ class SwifterTestsStringExtensions: XCTestCase {
         XCTAssertEqual("t&e&s&t12%3%".replace("&", "+").replace("%", "+"), "t+e+s+t12+3+")
         XCTAssertEqual("test 1234 #$%^&*( test   ".replace(" ", "_"), "test_1234_#$%^&*(_test___")
     }
+    
+    func testMiscRemovePercentEncoding() {
+        XCTAssertEqual("".removePercentEncoding(), "")
+        XCTAssertEqual("%20".removePercentEncoding(), " ")
+        XCTAssertEqual("%22".removePercentEncoding(), "\"")
+        XCTAssertEqual("%25".removePercentEncoding(), "%")
+        XCTAssertEqual("%2d".removePercentEncoding(), "-")
+        XCTAssertEqual("%2e".removePercentEncoding(), ".")
+        XCTAssertEqual("%3C".removePercentEncoding(), "<")
+        XCTAssertEqual("%3E".removePercentEncoding(), ">")
+        XCTAssertEqual("%5C".removePercentEncoding(), "\\")
+        XCTAssertEqual("%5E".removePercentEncoding(), "^")
+        XCTAssertEqual("%5F".removePercentEncoding(), "_")
+        XCTAssertEqual("%60".removePercentEncoding(), "`")
+        XCTAssertEqual("%7B".removePercentEncoding(), "{")
+        XCTAssertEqual("%7C".removePercentEncoding(), "|")
+        XCTAssertEqual("%7D".removePercentEncoding(), "}")
+        XCTAssertEqual("%7E".removePercentEncoding(), "~")
+        XCTAssertEqual("%7e".removePercentEncoding(), "~")
+    }
 }
