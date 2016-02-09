@@ -98,13 +98,9 @@ extension File {
     
     public static func withFileOpenedForMode<Result>(path: String, mode: String, _ f: File throws -> Result) throws -> Result {
         let file = try File.openFileForMode(path, mode)
-        do {
-            let result = try f(file)
+        defer {
             file.close()
-            return result
-        } catch {
-            file.close()
-            throw error
         }
+        return try f(file)
     }
 }
