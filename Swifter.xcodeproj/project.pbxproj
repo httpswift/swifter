@@ -55,6 +55,8 @@
 		7CCD877E1C660EA30068099B /* Swifter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE893FB1C0512C400A29F63 /* Swifter.framework */; };
 		7CCD87841C660ED60068099B /* SwifterTestsHttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD876D1C660B250068099B /* SwifterTestsHttpParser.swift */; };
 		7CCD87851C660ED60068099B /* SwifterTestsStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD876E1C660B250068099B /* SwifterTestsStringExtensions.swift */; };
+		7CCD87871C676EE50068099B /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD87861C676EE50068099B /* File.swift */; };
+		7CCD87881C676EE50068099B /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD87861C676EE50068099B /* File.swift */; };
 		7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */; };
 		7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */; };
 		7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB8111BE2A1D400C8A977 /* ViewController.swift */; };
@@ -143,6 +145,7 @@
 		7CCD876E1C660B250068099B /* SwifterTestsStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsStringExtensions.swift; sourceTree = "<group>"; };
 		7CCD87791C660EA30068099B /* SwifterOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwifterOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCD877D1C660EA30068099B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7CCD87861C676EE50068099B /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7CDAB80E1BE2A1D400C8A977 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -320,6 +323,7 @@
 				7C73C69A1C2619E100AEF6CA /* HttpServer.swift */,
 				7C73C69B1C2619E100AEF6CA /* HttpServerIO.swift */,
 				7C73C69C1C2619E100AEF6CA /* Socket.swift */,
+				7CCD87861C676EE50068099B /* File.swift */,
 				7C73C69D1C2619E100AEF6CA /* String+Misc.swift */,
 				7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */,
 				7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */,
@@ -570,6 +574,7 @@
 				7C73C6AF1C261A2100AEF6CA /* HttpRouter.swift in Sources */,
 				7CC0F8CC1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */,
 				7C73C6B01C261A2100AEF6CA /* HttpServer.swift in Sources */,
+				7CCD87871C676EE50068099B /* File.swift in Sources */,
 				7C73C6B11C261A2100AEF6CA /* HttpServerIO.swift in Sources */,
 				7C73C6B21C261A2100AEF6CA /* Socket.swift in Sources */,
 				7CC0F8C91C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */,
@@ -591,6 +596,7 @@
 				7C73C6BA1C261A2600AEF6CA /* HttpRouter.swift in Sources */,
 				7CC0F8CD1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */,
 				7C73C6BB1C261A2600AEF6CA /* HttpServer.swift in Sources */,
+				7CCD87881C676EE50068099B /* File.swift in Sources */,
 				7C73C6BC1C261A2600AEF6CA /* HttpServerIO.swift in Sources */,
 				7C73C6BD1C261A2600AEF6CA /* Socket.swift in Sources */,
 				7CC0F8CA1C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */,
