@@ -85,6 +85,9 @@ public class HttpServerIO {
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
         func write(data: [UInt8]) {
+            write(ArraySlice(data))
+        }
+        func write(data: ArraySlice<UInt8>) {
             do {
                 try socket.writeUInt8(data)
             } catch {

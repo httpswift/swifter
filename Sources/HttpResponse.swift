@@ -14,6 +14,7 @@ public enum SerializationError: ErrorType {
 
 public protocol HttpResponseBodyWriter {
     func write(data: [UInt8])
+    func write(data: ArraySlice<UInt8>)
 }
 
 public enum HttpResponseBody {

@@ -21,7 +21,7 @@ extension HttpHandlers {
             return .RAW(200, "OK", [:], { writer in
                 var buffer = [UInt8](count: 64, repeatedValue: 0)
                 while let count = try? file.read(&buffer) where count > 0 {
-                    writer.write(Array(buffer[0..<count]))
+                    writer.write(buffer[0..<count])
                 }
                 file.close()
             })
