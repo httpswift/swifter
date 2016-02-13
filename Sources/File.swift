@@ -15,6 +15,7 @@ public enum FileError: ErrorType {
     case OpenFailed(String)
     case WriteFailed(String)
     case ReadFailed(String)
+    case SeekFailed(String)
 }
 
 public class File {
@@ -74,6 +75,12 @@ public class File {
             if fwrite($0.baseAddress, 1, data.count, self.pointer) != data.count {
                 throw FileError.WriteFailed(File.descriptionOfLastError())
             }
+        }
+    }
+    
+    public func seek(offset: Int) throws -> Void {
+        if fseek(self.pointer, offset, SEEK_SET) != 0 {
+            throw FileError.SeekFailed(File.descriptionOfLastError())
         }
     }
     
