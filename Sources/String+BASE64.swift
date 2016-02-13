@@ -22,7 +22,7 @@ extension String {
         
         var result = [UInt8]()
         var tmp: UInt8
-        for var index = 0; index < data.count; index = index + 3 {
+        for index in 0.stride(to: data.count, by: 3) {
             let byte = data[index]
             tmp = (byte & 0xFC) >> 2;
             result.append(CODES[Int(tmp)])
