@@ -7,17 +7,6 @@
 import Foundation
 import Swifter
 
-print(NSBundle.mainBundle().resourcePath!)
-
-enum Route {
-    
-    case Vegetables(data: Int) = {
-    
-        return 1
-    }
-}
-
-
 
 let server = demoServer(NSBundle.mainBundle().resourcePath!)
 

@@ -9,17 +9,4 @@ import Foundation
 
 public class HttpHandlers {
 
-    public enum HtmlNode {
-        case body
-        case head
-
-    }
-    
-
-    
-    
-//    public class func html(directoryPath: String) -> (HttpRequest -> HttpResponse) {
-//        
-//        
-//    }
 }
