@@ -13,9 +13,35 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let server = demoServer(NSBundle.mainBundle().resourcePath)
+        
+        let server = HttpServer();
+        
+        server.get["/upload"] = { r in
+            return .OK(.Html("<form method=\"POST\" action=\"/upload\" enctype=\"multipart/form-data\">" +
+                "<input name=\"my_file\" type=\"file\"/>" +
+                "<button type=\"submit\">Send File</button>" +
+            "</form>"))
+        }
+        server.post["/upload"] = { r in
+            if let myFileMultipart = r.parseMultiPartFormData().filter({ $0.name == "my_file" }).first {
+                guard let documentsUrl = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first else {
+                    return .InternalServerError
+                }
+                let data: NSData = myFileMultipart.body.withUnsafeBufferPointer { pointer in
+                    return NSData(bytes: pointer.baseAddress, length: myFileMultipart.body.count)
+                }
+                guard let fileSaveUrl = NSURL(string: "name_for_file.txt", relativeToURL: documentsUrl) else {
+                    return .InternalServerError
+                }
+                print(fileSaveUrl)
+                data.writeToURL(fileSaveUrl, atomically: true)
+                return .OK(.Html("Your file has been uploaded !"))
+            }
+            return .InternalServerError
+        }
+        
         do {
-            try server.start()
+            try server.start(9099)
         } catch {
             print("Server start error: \(error)")
         }

@@ -7,9 +7,22 @@
 import Foundation
 import Swifter
 
+print(NSBundle.mainBundle().resourcePath!)
+
+enum Route {
+    
+    case Vegetables(data: Int) = {
+    
+        return 1
+    }
+}
+
+
+
 let server = demoServer(NSBundle.mainBundle().resourcePath!)
 
 do {
+    server["/sharedir/:path"] = HttpHandlers.shareFilesFromDirectory("/Users/damiankolakowski/Desktop")
     server["/SwiftyJSON"] = { request in
         let js: JSON = ["return": "OK", "isItAJSON": true, "code" : 200]
         return .OK(.Custom(js, { object in

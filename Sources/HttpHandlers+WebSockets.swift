@@ -57,19 +57,23 @@ extension HttpHandlers {
 
         private let socket: Socket
         
-        init(_ socket: Socket) {
+        public init(_ socket: Socket) {
             self.socket = socket
         }
         
         public func writeText(text: String) -> Void {
-            self.writeFrame([UInt8](text.utf8), OpCode.Text)
+            self.writeFrame(ArraySlice(text.utf8), OpCode.Text)
         }
     
         public func writeBinary(binary: [UInt8]) -> Void {
+            self.writeBinary(ArraySlice(binary))
+        }
+        
+        public func writeBinary(binary: ArraySlice<UInt8>) -> Void {
             self.writeFrame(binary, OpCode.Binary)
         }
         
-        private func writeFrame(data: [UInt8], _ op: OpCode, _ fin: Bool = true) {
+        private func writeFrame(data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
             let finAndOpCode = encodeFinAndOpCode(fin, op: op)
             let maskAndLngth = encodeLengthAndMaskFlag(UInt64(data.count), false)
             do {
@@ -135,7 +139,7 @@ extension HttpHandlers {
                 default  : throw Error.UnknownOpCode("\(opc)")
             }
             let sec = try socket.read()
-            let msk = sec & 0x0F != 0
+            let msk = sec & 0x80 != 0
             guard msk else {
                 // "...a client MUST mask all frames that it sends to the serve.."
                 // http://tools.ietf.org/html/rfc6455#section-5.1
