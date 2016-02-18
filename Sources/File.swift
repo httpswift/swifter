@@ -16,7 +16,7 @@ public enum FileError: ErrorType {
     case WriteFailed(String)
     case ReadFailed(String)
     case SeekFailed(String)
-    case GetCurrentWorkingDirectory(String)
+    case GetCurrentWorkingDirectoryFailed(String)
 }
 
 public class File {
@@ -44,10 +44,10 @@ public class File {
     public static func currentWorkingDirectory() throws -> String {
         let path = getcwd(nil, 0)
         if path == nil {
-            throw FileError.GetCurrentWorkingDirectory(descriptionOfLastError())
+            throw FileError.GetCurrentWorkingDirectoryFailed(descriptionOfLastError())
         }
         guard let result = String.fromCString(path) else {
-            throw FileError.GetCurrentWorkingDirectory("Could not convert getcwd(...)'s result to String.")
+            throw FileError.GetCurrentWorkingDirectoryFailed("Could not convert getcwd(...)'s result to String.")
         }
         return result
     }
