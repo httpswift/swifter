@@ -8,10 +8,8 @@ import Foundation
 import Swifter
 
 
-let server = demoServer(NSBundle.mainBundle().resourcePath!)
-
 do {
-    server["/sharedir/:path"] = HttpHandlers.shareFilesFromDirectory("/Users/damiankolakowski/Desktop")
+    let server = demoServer(try File.currentWorkingDirectory())
     server["/SwiftyJSON"] = { request in
         let js: JSON = ["return": "OK", "isItAJSON": true, "code" : 200]
         return .OK(.Custom(js, { object in

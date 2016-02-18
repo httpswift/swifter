@@ -7,13 +7,13 @@
 
 import Foundation
 
-public func demoServer(publicDir: String?) -> HttpServer {
+public func demoServer(publicDir: String) -> HttpServer {
+    
+    print(publicDir)
     
     let server = HttpServer()
     
-    if let publicDir = publicDir {
-        server["/resources/:file"] = HttpHandlers.directory(publicDir)
-    }
+    server["/public/:path"] = HttpHandlers.shareFilesFromDirectory(publicDir)
     
     server["/files/:path"] = HttpHandlers.directoryBrowser("/")
 
@@ -49,7 +49,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
     }
     
     server.GET["/upload"] = { r in
-        if let rootDir = publicDir, html = NSData(contentsOfFile:"\(rootDir)/file.html") {
+        if let html = NSData(contentsOfFile:"\(publicDir)/file.html") {
             var array = [UInt8](count: html.length, repeatedValue: 0)
             html.getBytes(&array, length: html.length)
             return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
@@ -66,7 +66,7 @@ public func demoServer(publicDir: String?) -> HttpServer {
     }
     
     server.GET["/login"] = { r in
-        if let rootDir = publicDir, html = NSData(contentsOfFile:"\(rootDir)/login.html") {
+        if let html = NSData(contentsOfFile:"\(publicDir)/login.html") {
             var array = [UInt8](count: html.length, repeatedValue: 0)
             html.getBytes(&array, length: html.length)
             return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })

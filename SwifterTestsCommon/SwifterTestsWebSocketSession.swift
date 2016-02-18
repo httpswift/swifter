@@ -97,7 +97,7 @@ class SwifterTestsWebSocketSession: XCTestCase {
             XCTAssert(false, "Parser should accept Pong opcode without any errors.")
         }
         
-        for var opcode in [3, 4, 5, 6, 7, 11, 12, 13, 14, 15] {
+        for opcode in [3, 4, 5, 6, 7, 11, 12, 13, 14, 15] {
             do {
                 try session.readFrame(TestSocket([UInt8(opcode), 0b1000_0000, 0, 0, 0, 0]))
                 XCTAssert(false, "Parse should throw an error for unknown opcode: \(opcode)")
@@ -107,7 +107,5 @@ class SwifterTestsWebSocketSession: XCTestCase {
                 XCTAssert(false, "Parse should throw UnknownOpCode error for unknown opcode (was \(error)).")
             }
         }
-        
     }
-    
 }

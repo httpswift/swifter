@@ -16,6 +16,7 @@ public enum FileError: ErrorType {
     case WriteFailed(String)
     case ReadFailed(String)
     case SeekFailed(String)
+    case GetCurrentWorkingDirectory(String)
 }
 
 public class File {
@@ -38,6 +39,17 @@ public class File {
             throw FileError.OpenFailed(descriptionOfLastError())
         }
         return File(file)
+    }
+    
+    public static func currentWorkingDirectory() throws -> String {
+        let path = getcwd(nil, 0)
+        if path == nil {
+            throw FileError.GetCurrentWorkingDirectory(descriptionOfLastError())
+        }
+        guard let result = String.fromCString(path) else {
+            throw FileError.GetCurrentWorkingDirectory("Could not convert getcwd(...)'s result to String.")
+        }
+        return result
     }
     
     private let pointer: UnsafeMutablePointer<FILE>

@@ -13,15 +13,13 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let server = HttpServer();
-        
         do {
+            let server = demoServer(NSBundle.mainBundle().resourcePath!)
             try server.start(9080)
+            self.server = server
         } catch {
             print("Server start error: \(error)")
         }
-        self.server = server
     }
     
     @IBAction func likedThis(sender: UIButton) {

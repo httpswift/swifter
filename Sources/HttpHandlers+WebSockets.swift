@@ -24,7 +24,7 @@ extension HttpHandlers {
             }
             let protocolSessionClosure: (Socket -> Void) = { socket in
                 let session = WebSocketSession(socket)
-                while let frame = try? session.readFrame(socket) {
+                while let frame = try? session.readFrame() {
                     switch frame.opcode {
                     case .Text:
                         if let handleText = text {
@@ -122,7 +122,7 @@ extension HttpHandlers {
             return encodedBytes
         }
         
-        public func readFrame(socket: Socket) throws -> Frame {
+        public func readFrame() throws -> Frame {
             let frm = Frame()
             let fst = try socket.read()
             frm.fin = fst & 0x80 != 0
