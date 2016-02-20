@@ -16,7 +16,7 @@ extension HttpHandlers {
             guard r.headers["upgrade"] == "websocket" else {
                 return .BadRequest(.Text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
             }
-            guard r.headers["connection"] == "Upgrade" else {
+            guard r.headers["connection"] == "Upgrade" || r.headers["connection"] == "keep-alive, Upgrade" else {
                 return .BadRequest(.Text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
             }
             guard let secWebSocketKey = r.headers["sec-websocket-key"] else {
