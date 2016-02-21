@@ -13,10 +13,10 @@ extension HttpHandlers {
             text: ((WebSocketSession, String) -> Void)?,
         _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> (HttpRequest -> HttpResponse) {
         return { r in
-            guard r.headers["upgrade"] == "websocket" else {
+            guard r.hasTokenForHeader("upgrade", token: "websocket") else {
                 return .BadRequest(.Text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
             }
-            guard r.headers["connection"] == "Upgrade" || r.headers["connection"] == "keep-alive, Upgrade" else {
+            guard r.hasTokenForHeader("connection", token: "upgrade") else {
                 return .BadRequest(.Text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
             }
             guard let secWebSocketKey = r.headers["sec-websocket-key"] else {

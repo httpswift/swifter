@@ -17,6 +17,13 @@ public class HttpRequest {
     public var address: String? = ""
     public var params: [String: String] = [:]
     
+    public func hasTokenForHeader(headerName: String, token: String) -> Bool {
+        guard let headerValue = headers[headerName] else {
+            return false
+        }
+        return headerValue.split(",").filter({ $0.trim().lowercaseString == token }).count > 0
+    }
+    
     public func parseUrlencodedForm() -> [(String, String)] {
         guard let contentTypeHeader = headers["content-type"] else {
             return []
