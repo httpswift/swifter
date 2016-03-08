@@ -29,6 +29,11 @@
 			<key>orderHint</key>
 			<integer>7</integer>
 		</dict>
+		<key>SwifteriOS copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>8</integer>
+		</dict>
 		<key>SwifteriOS.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -98,6 +103,11 @@
 			<true/>
 		</dict>
 		<key>7CCD1B7C1C8F7E520016D664</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7CCD1BA81C8F84E60016D664</key>
 		<dict>
 			<key>primary</key>
 			<true/>

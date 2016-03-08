@@ -62,27 +62,32 @@
 		7CCD1B6A1C8F7CEC0016D664 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD1B691C8F7CEC0016D664 /* ViewController.swift */; };
 		7CCD1B6D1C8F7CEC0016D664 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CCD1B6B1C8F7CEC0016D664 /* Main.storyboard */; };
 		7CCD1B6F1C8F7CEC0016D664 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CCD1B6E1C8F7CEC0016D664 /* Assets.xcassets */; };
-		7CCD1B851C8F7E5C0016D664 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6941C2619E100AEF6CA /* DemoServer.swift */; };
-		7CCD1B861C8F7E5C0016D664 /* HttpHandlers+Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */; };
-		7CCD1B871C8F7E5C0016D664 /* HttpHandlers+WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */; };
-		7CCD1B881C8F7E5C0016D664 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */; };
-		7CCD1B891C8F7E5C0016D664 /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6961C2619E100AEF6CA /* HttpParser.swift */; };
-		7CCD1B8A1C8F7E5C0016D664 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6971C2619E100AEF6CA /* HttpRequest.swift */; };
-		7CCD1B8B1C8F7E5C0016D664 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6981C2619E100AEF6CA /* HttpResponse.swift */; };
-		7CCD1B8C1C8F7E5C0016D664 /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6991C2619E100AEF6CA /* HttpRouter.swift */; };
-		7CCD1B8D1C8F7E5C0016D664 /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69A1C2619E100AEF6CA /* HttpServer.swift */; };
-		7CCD1B8E1C8F7E5C0016D664 /* HttpServerIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69B1C2619E100AEF6CA /* HttpServerIO.swift */; };
-		7CCD1B8F1C8F7E5C0016D664 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69C1C2619E100AEF6CA /* Socket.swift */; };
-		7CCD1B901C8F7E5C0016D664 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD87861C676EE50068099B /* File.swift */; };
-		7CCD1B911C8F7E5C0016D664 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69D1C2619E100AEF6CA /* String+Misc.swift */; };
-		7CCD1B921C8F7E5C0016D664 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
-		7CCD1B931C8F7E5C0016D664 /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */; };
 		7CCD1B9C1C8F7F6E0016D664 /* sqlite-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CCD1B9B1C8F7F6E0016D664 /* sqlite-Bridging-Header.h */; };
 		7CCD1B9D1C8F7F6E0016D664 /* sqlite-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CCD1B9B1C8F7F6E0016D664 /* sqlite-Bridging-Header.h */; };
 		7CCD1B9F1C8F82B60016D664 /* file.html in Resources */ = {isa = PBXBuildFile; fileRef = 7C7488771C1DA07300CBCD77 /* file.html */; };
 		7CCD1BA01C8F82B60016D664 /* login.html in Resources */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7CCD1BA11C8F82B60016D664 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7CCD1BA21C8F82B60016D664 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
+		7CCD1BAA1C8F84E60016D664 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
+		7CCD1BAB1C8F84E60016D664 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6941C2619E100AEF6CA /* DemoServer.swift */; };
+		7CCD1BAC1C8F84E60016D664 /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */; };
+		7CCD1BAD1C8F84E60016D664 /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */; };
+		7CCD1BAE1C8F84E60016D664 /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6961C2619E100AEF6CA /* HttpParser.swift */; };
+		7CCD1BAF1C8F84E60016D664 /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6971C2619E100AEF6CA /* HttpRequest.swift */; };
+		7CCD1BB01C8F84E60016D664 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6981C2619E100AEF6CA /* HttpResponse.swift */; };
+		7CCD1BB11C8F84E60016D664 /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6991C2619E100AEF6CA /* HttpRouter.swift */; };
+		7CCD1BB21C8F84E60016D664 /* sqlite.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C284DA71C80CDB100106AA7 /* sqlite.c */; };
+		7CCD1BB31C8F84E60016D664 /* HttpHandlers+WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */; };
+		7CCD1BB41C8F84E60016D664 /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69A1C2619E100AEF6CA /* HttpServer.swift */; };
+		7CCD1BB51C8F84E60016D664 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD87861C676EE50068099B /* File.swift */; };
+		7CCD1BB61C8F84E60016D664 /* SQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1043E01C80D61F00A8DD6A /* SQLite.swift */; };
+		7CCD1BB71C8F84E60016D664 /* HttpServerIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69B1C2619E100AEF6CA /* HttpServerIO.swift */; };
+		7CCD1BB81C8F84E60016D664 /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69C1C2619E100AEF6CA /* Socket.swift */; };
+		7CCD1BB91C8F84E60016D664 /* HttpHandlers+Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */; };
+		7CCD1BBA1C8F84E60016D664 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69D1C2619E100AEF6CA /* String+Misc.swift */; };
+		7CCD1BBD1C8F84E60016D664 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C284DA81C80CDB100106AA7 /* sqlite.h */; };
+		7CCD1BBE1C8F84E60016D664 /* SwifteriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893E91C05127900A29F63 /* SwifteriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7CCD1BBF1C8F84E60016D664 /* sqlite-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CCD1B9B1C8F7F6E0016D664 /* sqlite-Bridging-Header.h */; };
 		7CCD87611C66099B0068099B /* Swifter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE893E71C05127900A29F63 /* Swifter.framework */; };
 		7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD876D1C660B250068099B /* SwifterTestsHttpParser.swift */; };
 		7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD876E1C660B250068099B /* SwifterTestsStringExtensions.swift */; };
@@ -112,11 +117,11 @@
 			remoteGlobalIDString = 7AE893E61C05127900A29F63;
 			remoteInfo = SwifteriOS;
 		};
-		7CCD1B991C8F7E820016D664 /* PBXContainerItemProxy */ = {
+		7CCD1BC61C8F857F0016D664 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7C839B6619422CFF003A6950 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 7CCD1B7C1C8F7E520016D664;
+			remoteGlobalIDString = 7CCD1BA81C8F84E60016D664;
 			remoteInfo = SwiftertvOS;
 		};
 		7CCD87621C66099B0068099B /* PBXContainerItemProxy */ = {
@@ -191,10 +196,11 @@
 		7CCD1B6C1C8F7CEC0016D664 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7CCD1B6E1C8F7CEC0016D664 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7CCD1B701C8F7CEC0016D664 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7CCD1B7D1C8F7E520016D664 /* SwiftertvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftertvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCD1B7F1C8F7E520016D664 /* SwiftertvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftertvOS.h; sourceTree = "<group>"; };
 		7CCD1B811C8F7E520016D664 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CCD1B9B1C8F7F6E0016D664 /* sqlite-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sqlite-Bridging-Header.h"; sourceTree = "<group>"; };
+		7CCD1BC41C8F84E60016D664 /* SwiftertvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftertvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CCD1BC51C8F84E60016D664 /* SwifteriOS copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SwifteriOS copy-Info.plist"; path = "/Users/damiankolakowski/Desktop/swifter/SwifteriOS copy-Info.plist"; sourceTree = "<absolute>"; };
 		7CCD875C1C66099B0068099B /* SwifteriOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwifteriOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCD87601C66099B0068099B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CCD876D1C660B250068099B /* SwifterTestsHttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsHttpParser.swift; sourceTree = "<group>"; };
@@ -247,7 +253,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7CCD1B791C8F7E520016D664 /* Frameworks */ = {
+		7CCD1BBB1C8F84E60016D664 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -307,6 +313,7 @@
 				7AE893E81C05127900A29F63 /* SwifteriOS */,
 				7CA4813C19A2EA8D0030B30D /* SwifterSampleOSX */,
 				7CDAB80B1BE2A1D400C8A977 /* SwifterSampleiOS */,
+				7CCD1BC51C8F84E60016D664 /* SwifteriOS copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -320,7 +327,7 @@
 				7CCD875C1C66099B0068099B /* SwifteriOSTests.xctest */,
 				7CCD87791C660EA30068099B /* SwifterOSXTests.xctest */,
 				7CCD1B651C8F7CEC0016D664 /* SwifterSampletvOS.app */,
-				7CCD1B7D1C8F7E520016D664 /* SwiftertvOS.framework */,
+				7CCD1BC41C8F84E60016D664 /* SwiftertvOS.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -455,10 +462,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7CCD1B7A1C8F7E520016D664 /* Headers */ = {
+		7CCD1BBC1C8F84E60016D664 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CCD1BBD1C8F84E60016D664 /* sqlite.h in Headers */,
+				7CCD1BBE1C8F84E60016D664 /* SwifteriOS.h in Headers */,
+				7CCD1BBF1C8F84E60016D664 /* sqlite-Bridging-Header.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -548,29 +558,29 @@
 			buildRules = (
 			);
 			dependencies = (
-				7CCD1B9A1C8F7E820016D664 /* PBXTargetDependency */,
+				7CCD1BC71C8F857F0016D664 /* PBXTargetDependency */,
 			);
 			name = SwifterSampletvOS;
 			productName = SwifterSampletvOS;
 			productReference = 7CCD1B651C8F7CEC0016D664 /* SwifterSampletvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7CCD1B7C1C8F7E520016D664 /* SwiftertvOS */ = {
+		7CCD1BA81C8F84E60016D664 /* SwiftertvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7CCD1B821C8F7E520016D664 /* Build configuration list for PBXNativeTarget "SwiftertvOS" */;
+			buildConfigurationList = 7CCD1BC11C8F84E60016D664 /* Build configuration list for PBXNativeTarget "SwiftertvOS" */;
 			buildPhases = (
-				7CCD1B781C8F7E520016D664 /* Sources */,
-				7CCD1B791C8F7E520016D664 /* Frameworks */,
-				7CCD1B7A1C8F7E520016D664 /* Headers */,
-				7CCD1B7B1C8F7E520016D664 /* Resources */,
+				7CCD1BA91C8F84E60016D664 /* Sources */,
+				7CCD1BBB1C8F84E60016D664 /* Frameworks */,
+				7CCD1BBC1C8F84E60016D664 /* Headers */,
+				7CCD1BC01C8F84E60016D664 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = SwiftertvOS;
-			productName = SwiftertvOS;
-			productReference = 7CCD1B7D1C8F7E520016D664 /* SwiftertvOS.framework */;
+			productName = SwifteriOS;
+			productReference = 7CCD1BC41C8F84E60016D664 /* SwiftertvOS.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7CCD875B1C66099B0068099B /* SwifteriOSTests */ = {
@@ -634,9 +644,6 @@
 					7CCD1B641C8F7CEC0016D664 = {
 						CreatedOnToolsVersion = 7.2.1;
 					};
-					7CCD1B7C1C8F7E520016D664 = {
-						CreatedOnToolsVersion = 7.2.1;
-					};
 					7CCD875B1C66099B0068099B = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -663,9 +670,9 @@
 				7CA4813A19A2EA8D0030B30D /* SwifterSampleOSX */,
 				7AE893E61C05127900A29F63 /* SwifteriOS */,
 				7AE893FA1C0512C400A29F63 /* SwifterMac */,
-				7CCD1B7C1C8F7E520016D664 /* SwiftertvOS */,
 				7CCD875B1C66099B0068099B /* SwifteriOSTests */,
 				7CCD87781C660EA30068099B /* SwifterOSXTests */,
+				7CCD1BA81C8F84E60016D664 /* SwiftertvOS */,
 			);
 		};
 /* End PBXProject section */
@@ -712,7 +719,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7CCD1B7B1C8F7E520016D664 /* Resources */ = {
+		7CCD1BC01C8F84E60016D664 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -811,25 +818,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		7CCD1B781C8F7E520016D664 /* Sources */ = {
+		7CCD1BA91C8F84E60016D664 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CCD1B851C8F7E5C0016D664 /* DemoServer.swift in Sources */,
-				7CCD1B861C8F7E5C0016D664 /* HttpHandlers+Files.swift in Sources */,
-				7CCD1B871C8F7E5C0016D664 /* HttpHandlers+WebSockets.swift in Sources */,
-				7CCD1B881C8F7E5C0016D664 /* HttpHandlers.swift in Sources */,
-				7CCD1B891C8F7E5C0016D664 /* HttpParser.swift in Sources */,
-				7CCD1B8A1C8F7E5C0016D664 /* HttpRequest.swift in Sources */,
-				7CCD1B8B1C8F7E5C0016D664 /* HttpResponse.swift in Sources */,
-				7CCD1B8C1C8F7E5C0016D664 /* HttpRouter.swift in Sources */,
-				7CCD1B8D1C8F7E5C0016D664 /* HttpServer.swift in Sources */,
-				7CCD1B8E1C8F7E5C0016D664 /* HttpServerIO.swift in Sources */,
-				7CCD1B8F1C8F7E5C0016D664 /* Socket.swift in Sources */,
-				7CCD1B901C8F7E5C0016D664 /* File.swift in Sources */,
-				7CCD1B911C8F7E5C0016D664 /* String+Misc.swift in Sources */,
-				7CCD1B921C8F7E5C0016D664 /* String+SHA1.swift in Sources */,
-				7CCD1B931C8F7E5C0016D664 /* String+BASE64.swift in Sources */,
+				7CCD1BAA1C8F84E60016D664 /* String+SHA1.swift in Sources */,
+				7CCD1BAB1C8F84E60016D664 /* DemoServer.swift in Sources */,
+				7CCD1BAC1C8F84E60016D664 /* HttpHandlers.swift in Sources */,
+				7CCD1BAD1C8F84E60016D664 /* String+BASE64.swift in Sources */,
+				7CCD1BAE1C8F84E60016D664 /* HttpParser.swift in Sources */,
+				7CCD1BAF1C8F84E60016D664 /* HttpRequest.swift in Sources */,
+				7CCD1BB01C8F84E60016D664 /* HttpResponse.swift in Sources */,
+				7CCD1BB11C8F84E60016D664 /* HttpRouter.swift in Sources */,
+				7CCD1BB21C8F84E60016D664 /* sqlite.c in Sources */,
+				7CCD1BB31C8F84E60016D664 /* HttpHandlers+WebSockets.swift in Sources */,
+				7CCD1BB41C8F84E60016D664 /* HttpServer.swift in Sources */,
+				7CCD1BB51C8F84E60016D664 /* File.swift in Sources */,
+				7CCD1BB61C8F84E60016D664 /* SQLite.swift in Sources */,
+				7CCD1BB71C8F84E60016D664 /* HttpServerIO.swift in Sources */,
+				7CCD1BB81C8F84E60016D664 /* Socket.swift in Sources */,
+				7CCD1BB91C8F84E60016D664 /* HttpHandlers+Files.swift in Sources */,
+				7CCD1BBA1C8F84E60016D664 /* String+Misc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -868,10 +877,10 @@
 			target = 7AE893E61C05127900A29F63 /* SwifteriOS */;
 			targetProxy = 7C73C6BF1C261AA700AEF6CA /* PBXContainerItemProxy */;
 		};
-		7CCD1B9A1C8F7E820016D664 /* PBXTargetDependency */ = {
+		7CCD1BC71C8F857F0016D664 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7CCD1B7C1C8F7E520016D664 /* SwiftertvOS */;
-			targetProxy = 7CCD1B991C8F7E820016D664 /* PBXContainerItemProxy */;
+			target = 7CCD1BA81C8F84E60016D664 /* SwiftertvOS */;
+			targetProxy = 7CCD1BC61C8F857F0016D664 /* PBXContainerItemProxy */;
 		};
 		7CCD87631C66099B0068099B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1055,7 +1064,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
+				SDKROOT = appletvos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/sqlite-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1096,7 +1105,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				METAL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
-				SDKROOT = iphoneos;
+				SDKROOT = appletvos;
 				SWIFT_OBJC_BRIDGING_HEADER = "Sources/sqlite-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1204,54 +1213,51 @@
 			};
 			name = Release;
 		};
-		7CCD1B831C8F7E520016D664 /* Debug */ = {
+		7CCD1BC21C8F84E60016D664 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CURRENT_PROJECT_VERSION = 1;
+				CLANG_ENABLE_MODULES = YES;
+				CURRENT_PROJECT_VERSION = 1.1.3;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = SwiftertvOS/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftertvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwiftertvOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.1;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		7CCD1B841C8F7E520016D664 /* Release */ = {
+		7CCD1BC31C8F84E60016D664 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.1.3;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = SwiftertvOS/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftertvOS/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwiftertvOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
-				TARGETED_DEVICE_FAMILY = 3;
-				TVOS_DEPLOYMENT_TARGET = 9.1;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1377,13 +1383,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 		};
-		7CCD1B821C8F7E520016D664 /* Build configuration list for PBXNativeTarget "SwiftertvOS" */ = {
+		7CCD1BC11C8F84E60016D664 /* Build configuration list for PBXNativeTarget "SwiftertvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7CCD1B831C8F7E520016D664 /* Debug */,
-				7CCD1B841C8F7E520016D664 /* Release */,
+				7CCD1BC21C8F84E60016D664 /* Debug */,
+				7CCD1BC31C8F84E60016D664 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7CCD87641C66099B0068099B /* Build configuration list for PBXNativeTarget "SwifteriOSTests" */ = {
 			isa = XCConfigurationList;
