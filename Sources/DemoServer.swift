@@ -120,5 +120,9 @@ public func demoServer(publicDir: String) -> HttpServer {
         session.writeBinary(binary)
     })
     
+    server.get("/get-via-closure") { r in
+        return .OK(.Html("GET OK"))
+    }
+    
     return server
 }

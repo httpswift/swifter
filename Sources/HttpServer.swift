@@ -20,17 +20,33 @@ public class HttpServer: HttpServerIO {
         self.POST   = MethodRoute(method: "POST", router: router)
         self.GET    = MethodRoute(method: "GET", router: router)
         self.PUT    = MethodRoute(method: "PUT", router: router)
-        
-        self.delete = MethodRoute(method: "DELETE", router: router)
-        self.update = MethodRoute(method: "UPDATE", router: router)
-        self.head   = MethodRoute(method: "HEAD", router: router)
-        self.post   = MethodRoute(method: "POST", router: router)
-        self.get    = MethodRoute(method: "GET", router: router)
-        self.put    = MethodRoute(method: "PUT", router: router)
     }
     
     public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
-    public var delete, update, head, post, get, put : MethodRoute
+    
+    public func get(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+        router.register("GET", path: path, handler: handler)
+    }
+    
+    public func post(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+        router.register("POST", path: path, handler: handler)
+    }
+    
+    public func put(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+        router.register("PUT", path: path, handler: handler)
+    }
+    
+    public func head(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+        router.register("HEAD", path: path, handler: handler)
+    }
+    
+    public func delete(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+        router.register("DELETE", path: path, handler: handler)
+    }
+    
+    public func update(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+        router.register("UPDATE", path: path, handler: handler)
+    }
 
     public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
         set {
