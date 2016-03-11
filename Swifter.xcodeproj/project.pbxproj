@@ -59,6 +59,33 @@
 		7CA4815819A2EF2B0030B30D /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CB102E01A17381D00CBA3B4 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
+		7CBFA0031C92C8BC000989AB /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA0021C92C8BC000989AB /* App.swift */; };
+		7CBFA0041C92C8BC000989AB /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA0021C92C8BC000989AB /* App.swift */; };
+		7CBFA0051C92C8BC000989AB /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA0021C92C8BC000989AB /* App.swift */; };
+		7CBFA0071C9347A7000989AB /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6941C2619E100AEF6CA /* DemoServer.swift */; };
+		7CBFA0081C9347A7000989AB /* HttpHandlers+Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */; };
+		7CBFA0091C9347A7000989AB /* HttpHandlers+WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */; };
+		7CBFA00A1C9347A7000989AB /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */; };
+		7CBFA00B1C9347A7000989AB /* HttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6961C2619E100AEF6CA /* HttpParser.swift */; };
+		7CBFA00C1C9347A7000989AB /* HttpRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6971C2619E100AEF6CA /* HttpRequest.swift */; };
+		7CBFA00D1C9347A7000989AB /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6981C2619E100AEF6CA /* HttpResponse.swift */; };
+		7CBFA00E1C9347A7000989AB /* HttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6991C2619E100AEF6CA /* HttpRouter.swift */; };
+		7CBFA00F1C9347A7000989AB /* HttpServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69A1C2619E100AEF6CA /* HttpServer.swift */; };
+		7CBFA0101C9347A7000989AB /* HttpServerIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69B1C2619E100AEF6CA /* HttpServerIO.swift */; };
+		7CBFA0111C9347A7000989AB /* Socket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69C1C2619E100AEF6CA /* Socket.swift */; };
+		7CBFA0121C9347A7000989AB /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD87861C676EE50068099B /* File.swift */; };
+		7CBFA0131C9347A7000989AB /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69D1C2619E100AEF6CA /* String+Misc.swift */; };
+		7CBFA0141C9347A7000989AB /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
+		7CBFA0151C9347A7000989AB /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */; };
+		7CBFA0161C9347A7000989AB /* Reflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2A27841C920D70002033F8 /* Reflection.swift */; };
+		7CBFA0171C9347A7000989AB /* SQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1043E01C80D61F00A8DD6A /* SQLite.swift */; };
+		7CBFA0181C9347B1000989AB /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA0021C92C8BC000989AB /* App.swift */; };
+		7CBFA0191C9347B8000989AB /* sqlite.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C284DA71C80CDB100106AA7 /* sqlite.c */; };
+		7CBFA01A1C9347C9000989AB /* sqlite-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD1B9B1C8F7F6E0016D664 /* sqlite-Bridging-Header.h */; };
+		7CBFA01C1C934D85000989AB /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA01B1C934D85000989AB /* Process.swift */; };
+		7CBFA01D1C934D85000989AB /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA01B1C934D85000989AB /* Process.swift */; };
+		7CBFA01E1C934D85000989AB /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA01B1C934D85000989AB /* Process.swift */; };
+		7CBFA01F1C934D85000989AB /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFA01B1C934D85000989AB /* Process.swift */; };
 		7CC0F8C91C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */; };
 		7CC0F8CA1C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */; };
 		7CC0F8CC1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */; };
@@ -108,13 +135,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		7AE8940E1C0515A200A29F63 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 7C839B6619422CFF003A6950 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 7AE893FA1C0512C400A29F63;
-			remoteInfo = SwifterMac;
-		};
 		7C73C6BF1C261AA700AEF6CA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7C839B6619422CFF003A6950 /* Project object */;
@@ -195,6 +215,8 @@
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CA4815719A2EF2B0030B30D /* test.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		7CB102DF1A17381D00CBA3B4 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
+		7CBFA0021C92C8BC000989AB /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
+		7CBFA01B1C934D85000989AB /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpHandlers+Files.swift"; sourceTree = "<group>"; };
 		7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpHandlers+WebSockets.swift"; sourceTree = "<group>"; };
 		7CCD1B651C8F7CEC0016D664 /* SwifterSampletvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampletvOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -444,6 +466,8 @@
 				7C284DA71C80CDB100106AA7 /* sqlite.c */,
 				7C284DA81C80CDB100106AA7 /* sqlite.h */,
 				7CCD1B9B1C8F7F6E0016D664 /* sqlite-Bridging-Header.h */,
+				7CBFA0021C92C8BC000989AB /* App.swift */,
+				7CBFA01B1C934D85000989AB /* Process.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -549,7 +573,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				7AE8940F1C0515A200A29F63 /* PBXTargetDependency */,
 			);
 			name = SwifterSampleOSX;
 			productName = SwifterOSX;
@@ -759,6 +782,7 @@
 				7C2BEC791C5195EE00B8EE90 /* String+SHA1.swift in Sources */,
 				7C73C6AA1C261A2100AEF6CA /* DemoServer.swift in Sources */,
 				7C2A27851C920D70002033F8 /* Reflection.swift in Sources */,
+				7CBFA0031C92C8BC000989AB /* App.swift in Sources */,
 				7C73C6AB1C261A2100AEF6CA /* HttpHandlers.swift in Sources */,
 				7C1A2BFB1C5605F50026D3BF /* String+BASE64.swift in Sources */,
 				7C73C6AC1C261A2100AEF6CA /* HttpParser.swift in Sources */,
@@ -766,6 +790,7 @@
 				7C73C6AE1C261A2100AEF6CA /* HttpResponse.swift in Sources */,
 				7C73C6AF1C261A2100AEF6CA /* HttpRouter.swift in Sources */,
 				7C284DA91C80CDB100106AA7 /* sqlite.c in Sources */,
+				7CBFA01D1C934D85000989AB /* Process.swift in Sources */,
 				7CC0F8CC1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */,
 				7C73C6B01C261A2100AEF6CA /* HttpServer.swift in Sources */,
 				7CCD87871C676EE50068099B /* File.swift in Sources */,
@@ -784,6 +809,7 @@
 				7C2BEC7A1C5195F200B8EE90 /* String+SHA1.swift in Sources */,
 				7C73C6B51C261A2600AEF6CA /* DemoServer.swift in Sources */,
 				7C2A27861C920D70002033F8 /* Reflection.swift in Sources */,
+				7CBFA0041C92C8BC000989AB /* App.swift in Sources */,
 				7C73C6B61C261A2600AEF6CA /* HttpHandlers.swift in Sources */,
 				7C1A2BFC1C5605F50026D3BF /* String+BASE64.swift in Sources */,
 				7C73C6B71C261A2600AEF6CA /* HttpParser.swift in Sources */,
@@ -791,6 +817,7 @@
 				7C73C6B91C261A2600AEF6CA /* HttpResponse.swift in Sources */,
 				7C73C6BA1C261A2600AEF6CA /* HttpRouter.swift in Sources */,
 				7C284DAA1C80CDB100106AA7 /* sqlite.c in Sources */,
+				7CBFA01E1C934D85000989AB /* Process.swift in Sources */,
 				7CC0F8CD1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */,
 				7C73C6BB1C261A2600AEF6CA /* HttpServer.swift in Sources */,
 				7CCD87881C676EE50068099B /* File.swift in Sources */,
@@ -815,6 +842,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CBFA01A1C9347C9000989AB /* sqlite-Bridging-Header.h in Sources */,
+				7CBFA0191C9347B8000989AB /* sqlite.c in Sources */,
+				7CBFA0181C9347B1000989AB /* App.swift in Sources */,
+				7CBFA01C1C934D85000989AB /* Process.swift in Sources */,
+				7CBFA0071C9347A7000989AB /* DemoServer.swift in Sources */,
+				7CBFA0081C9347A7000989AB /* HttpHandlers+Files.swift in Sources */,
+				7CBFA0091C9347A7000989AB /* HttpHandlers+WebSockets.swift in Sources */,
+				7CBFA00A1C9347A7000989AB /* HttpHandlers.swift in Sources */,
+				7CBFA00B1C9347A7000989AB /* HttpParser.swift in Sources */,
+				7CBFA00C1C9347A7000989AB /* HttpRequest.swift in Sources */,
+				7CBFA00D1C9347A7000989AB /* HttpResponse.swift in Sources */,
+				7CBFA00E1C9347A7000989AB /* HttpRouter.swift in Sources */,
+				7CBFA00F1C9347A7000989AB /* HttpServer.swift in Sources */,
+				7CBFA0101C9347A7000989AB /* HttpServerIO.swift in Sources */,
+				7CBFA0111C9347A7000989AB /* Socket.swift in Sources */,
+				7CBFA0121C9347A7000989AB /* File.swift in Sources */,
+				7CBFA0131C9347A7000989AB /* String+Misc.swift in Sources */,
+				7CBFA0141C9347A7000989AB /* String+SHA1.swift in Sources */,
+				7CBFA0151C9347A7000989AB /* String+BASE64.swift in Sources */,
+				7CBFA0161C9347A7000989AB /* Reflection.swift in Sources */,
+				7CBFA0171C9347A7000989AB /* SQLite.swift in Sources */,
 				7C73C6911C2615FE00AEF6CA /* SwiftyJSON.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
 			);
@@ -836,6 +884,7 @@
 				7CCD1BAA1C8F84E60016D664 /* String+SHA1.swift in Sources */,
 				7CCD1BAB1C8F84E60016D664 /* DemoServer.swift in Sources */,
 				7C2A27871C920D70002033F8 /* Reflection.swift in Sources */,
+				7CBFA0051C92C8BC000989AB /* App.swift in Sources */,
 				7CCD1BAC1C8F84E60016D664 /* HttpHandlers.swift in Sources */,
 				7CCD1BAD1C8F84E60016D664 /* String+BASE64.swift in Sources */,
 				7CCD1BAE1C8F84E60016D664 /* HttpParser.swift in Sources */,
@@ -843,6 +892,7 @@
 				7CCD1BB01C8F84E60016D664 /* HttpResponse.swift in Sources */,
 				7CCD1BB11C8F84E60016D664 /* HttpRouter.swift in Sources */,
 				7CCD1BB21C8F84E60016D664 /* sqlite.c in Sources */,
+				7CBFA01F1C934D85000989AB /* Process.swift in Sources */,
 				7CCD1BB31C8F84E60016D664 /* HttpHandlers+WebSockets.swift in Sources */,
 				7CCD1BB41C8F84E60016D664 /* HttpServer.swift in Sources */,
 				7CCD1BB51C8F84E60016D664 /* File.swift in Sources */,
@@ -881,11 +931,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		7AE8940F1C0515A200A29F63 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 7AE893FA1C0512C400A29F63 /* SwifterMac */;
-			targetProxy = 7AE8940E1C0515A200A29F63 /* PBXContainerItemProxy */;
-		};
 		7C73C6C01C261AA700AEF6CA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 7AE893E61C05127900A29F63 /* SwifteriOS */;
@@ -1168,7 +1213,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/sqlite-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1184,7 +1229,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "Sources/sqlite-Bridging-Header.h";
 			};
 			name = Release;
 		};

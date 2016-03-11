@@ -9,7 +9,7 @@ import Swifter
 
 
 do {
-    let server = demoServer(try File.currentWorkingDirectory())
+    let server: HttpServer = demoServer(try File.currentWorkingDirectory())
     server["/SwiftyJSON"] = { request in
         let js: JSON = ["return": "OK", "isItAJSON": true, "code" : 200]
         return .OK(.Custom(js, { object in
