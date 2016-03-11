@@ -20,10 +20,15 @@
 		7C284DAA1C80CDB100106AA7 /* sqlite.c in Sources */ = {isa = PBXBuildFile; fileRef = 7C284DA71C80CDB100106AA7 /* sqlite.c */; };
 		7C284DAB1C80CDB100106AA7 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C284DA81C80CDB100106AA7 /* sqlite.h */; };
 		7C284DAC1C80CDB100106AA7 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C284DA81C80CDB100106AA7 /* sqlite.h */; };
+		7C2A27851C920D70002033F8 /* Reflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2A27841C920D70002033F8 /* Reflection.swift */; };
+		7C2A27861C920D70002033F8 /* Reflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2A27841C920D70002033F8 /* Reflection.swift */; };
+		7C2A27871C920D70002033F8 /* Reflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2A27841C920D70002033F8 /* Reflection.swift */; };
 		7C2BEC791C5195EE00B8EE90 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
 		7C2BEC7A1C5195F200B8EE90 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */; };
 		7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
+		7C5915221C92A99300D884BC /* SwifterTestsReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */; };
+		7C5915231C92A99300D884BC /* SwifterTestsReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7C73C6911C2615FE00AEF6CA /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */; };
@@ -170,8 +175,10 @@
 		7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+BASE64.swift"; sourceTree = "<group>"; };
 		7C284DA71C80CDB100106AA7 /* sqlite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = sqlite.c; sourceTree = "<group>"; };
 		7C284DA81C80CDB100106AA7 /* sqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite.h; sourceTree = "<group>"; };
+		7C2A27841C920D70002033F8 /* Reflection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reflection.swift; sourceTree = "<group>"; };
 		7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
 		7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsWebSocketSession.swift; sourceTree = "<group>"; };
+		7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsReflection.swift; sourceTree = "<group>"; };
 		7C73C6941C2619E100AEF6CA /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 		7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
 		7C73C6961C2619E100AEF6CA /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
@@ -384,6 +391,7 @@
 		7CCD876C1C660B250068099B /* SwifterTestsCommon */ = {
 			isa = PBXGroup;
 			children = (
+				7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */,
 				7CCD876D1C660B250068099B /* SwifterTestsHttpParser.swift */,
 				7CCD876E1C660B250068099B /* SwifterTestsStringExtensions.swift */,
 				7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */,
@@ -431,6 +439,7 @@
 				7C73C69D1C2619E100AEF6CA /* String+Misc.swift */,
 				7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */,
 				7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */,
+				7C2A27841C920D70002033F8 /* Reflection.swift */,
 				7C1043E01C80D61F00A8DD6A /* SQLite.swift */,
 				7C284DA71C80CDB100106AA7 /* sqlite.c */,
 				7C284DA81C80CDB100106AA7 /* sqlite.h */,
@@ -749,6 +758,7 @@
 			files = (
 				7C2BEC791C5195EE00B8EE90 /* String+SHA1.swift in Sources */,
 				7C73C6AA1C261A2100AEF6CA /* DemoServer.swift in Sources */,
+				7C2A27851C920D70002033F8 /* Reflection.swift in Sources */,
 				7C73C6AB1C261A2100AEF6CA /* HttpHandlers.swift in Sources */,
 				7C1A2BFB1C5605F50026D3BF /* String+BASE64.swift in Sources */,
 				7C73C6AC1C261A2100AEF6CA /* HttpParser.swift in Sources */,
@@ -773,6 +783,7 @@
 			files = (
 				7C2BEC7A1C5195F200B8EE90 /* String+SHA1.swift in Sources */,
 				7C73C6B51C261A2600AEF6CA /* DemoServer.swift in Sources */,
+				7C2A27861C920D70002033F8 /* Reflection.swift in Sources */,
 				7C73C6B61C261A2600AEF6CA /* HttpHandlers.swift in Sources */,
 				7C1A2BFC1C5605F50026D3BF /* String+BASE64.swift in Sources */,
 				7C73C6B71C261A2600AEF6CA /* HttpParser.swift in Sources */,
@@ -824,6 +835,7 @@
 			files = (
 				7CCD1BAA1C8F84E60016D664 /* String+SHA1.swift in Sources */,
 				7CCD1BAB1C8F84E60016D664 /* DemoServer.swift in Sources */,
+				7C2A27871C920D70002033F8 /* Reflection.swift in Sources */,
 				7CCD1BAC1C8F84E60016D664 /* HttpHandlers.swift in Sources */,
 				7CCD1BAD1C8F84E60016D664 /* String+BASE64.swift in Sources */,
 				7CCD1BAE1C8F84E60016D664 /* HttpParser.swift in Sources */,
@@ -847,6 +859,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */,
+				7C5915221C92A99300D884BC /* SwifterTestsReflection.swift in Sources */,
 				7C13B57C1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */,
 				7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */,
@@ -858,6 +871,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87841C660ED60068099B /* SwifterTestsHttpParser.swift in Sources */,
+				7C5915231C92A99300D884BC /* SwifterTestsReflection.swift in Sources */,
 				7C13B57D1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */,
 				7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7CCD87851C660ED60068099B /* SwifterTestsStringExtensions.swift in Sources */,
@@ -1382,6 +1396,7 @@
 				7CCD1B731C8F7CEC0016D664 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7CCD1BC11C8F84E60016D664 /* Build configuration list for PBXNativeTarget "SwiftertvOS" */ = {
 			isa = XCConfigurationList;
