@@ -64,7 +64,7 @@ public class HttpRouter {
         return nil
     }
     
-    private func inflate(inout node: Node, inout generator: IndexingGenerator<[String]>) -> Node {
+    private func inflate(node: inout Node, generator: inout IndexingGenerator<[String]>) -> Node {
         if let pathSegment = generator.next() {
             if let _ = node.nodes[pathSegment] {
                 return inflate(&node.nodes[pathSegment]!, generator: &generator)
@@ -76,7 +76,7 @@ public class HttpRouter {
         return node
     }
     
-    private func findHandler(inout node: Node, inout params: [String: String], inout generator: IndexingGenerator<[String]>) -> (HttpRequest -> HttpResponse)? {
+    private func findHandler(node: inout Node, params: inout [String: String], generator: inout IndexingGenerator<[String]>) -> (HttpRequest -> HttpResponse)? {
         guard let pathToken = generator.next() else {
             return node.handler
         }

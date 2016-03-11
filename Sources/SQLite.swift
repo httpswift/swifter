@@ -62,8 +62,8 @@ public class SQLite {
     
     public func enumerate(sql: String) throws -> StatmentSequence {
         var statement = COpaquePointer()
-        let prepeareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statement, nil) }
-        guard prepeareResult == SQLITE_OK else {
+        let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statement, nil) }
+        guard prepareResult == SQLITE_OK else {
             throw SQLiteError.ExecFailed(String.fromCString(sqlite3_errmsg(databaseConnection)))
         }
         return StatmentSequence(statement: statement)

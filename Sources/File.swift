@@ -71,7 +71,7 @@ public class File {
         fclose(pointer)
     }
     
-    public func read(inout data: [UInt8]) throws -> Int {
+    public func read(data: inout [UInt8]) throws -> Int {
         if data.count <= 0 {
             return data.count
         }

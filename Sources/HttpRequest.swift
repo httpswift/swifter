@@ -102,7 +102,7 @@ public class HttpRequest {
         return result
     }
     
-    private func nextMultiPart(inout generator: IndexingGenerator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
+    private func nextMultiPart(generator: inout IndexingGenerator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
         if isFirst {
             guard nextMultiPartLine(&generator) == boundary else {
                 return nil
@@ -123,7 +123,7 @@ public class HttpRequest {
         return MultiPart(headers: headers, body: body)
     }
     
-    private func nextMultiPartLine(inout generator: IndexingGenerator<[UInt8]>) -> String? {
+    private func nextMultiPartLine(generator: inout IndexingGenerator<[UInt8]>) -> String? {
         var result = String()
         while let value = generator.next() {
             if value > HttpRequest.CR {
@@ -139,7 +139,7 @@ public class HttpRequest {
     static let CR = UInt8(13)
     static let NL = UInt8(10)
     
-    private func nextMultiPartBody(inout generator: IndexingGenerator<[UInt8]>, boundary: String) -> [UInt8]? {
+    private func nextMultiPartBody(generator: inout IndexingGenerator<[UInt8]>, boundary: String) -> [UInt8]? {
         var body = [UInt8]()
         let boundaryArray = [UInt8](boundary.utf8)
         var matchOffset = 0;
