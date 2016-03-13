@@ -16,10 +16,11 @@ public protocol DatabaseReflectionProtocol {
 
 public class DatabaseReflection: DatabaseReflectionProtocol {
     
+    static var sharedDatabase: SQLite?
+    
     public var id: UInt64? = nil
     
     required public init() { }
-    
 }
 
 public extension DatabaseReflectionProtocol {
@@ -47,6 +48,21 @@ public extension DatabaseReflectionProtocol {
         return ("\(mirror.subjectType)", fields)
     }
     
+    public func schemeWithValuesAsString() -> (String, [String: String?]) {
+        let (name, fields) = schemeWithValuesMethod2()
+        var map = [String: String?]()
+        for (key, value) in fields {
+            // TODO - Replace this by extending all supported types by a protocol.
+            // Example: 'extenstion Int: DatabaseConvertible { convert() -> something ( not necessary String type ) }'
+            if let intValue    = value as? Int    { map[key] = String(intValue) }
+            if let int32Value  = value as? Int32  { map[key] = String(int32Value) }
+            if let int64Value  = value as? Int64  { map[key] = String(int64Value) }
+            if let doubleValue = value as? Double { map[key] = String(doubleValue) }
+            if let stringValue = value as? String { map[key] = stringValue }
+        }
+        return (name, map)
+    }
+    
     public static func classInstanceWithSchemeMethod1() -> (Self, String, [String: Any?]) {
         let instance = Self()
         let (name, fields) = instance.schemeWithValuesMethod1()
@@ -65,12 +81,18 @@ public extension DatabaseReflectionProtocol {
         return instance
     }
     
-    func insert() throws {
-        // Stub.
-    }
-    
-    func update() throws {
-        // Stub.
+    public func insert() throws {
+        guard let database = DatabaseReflection.sharedDatabase else {
+            throw SQLiteError.OpenFailed("Database connection is not opened.")
+        }
+        let (name, fields) = schemeWithValuesAsString()
+        let create = "CREATE TABLE IF NOT EXISTS \(name) (" + fields.keys.map { "\($0) TEXT" }.joinWithSeparator(", ")  + ");"
+        try database.exec(create)
+        // TODO - Replace this with the binding to avoid SQL injection.
+        let ordered = fields.keys.reduce([(String, String)]()) { $0 + [($1, "\"\(fields[$1])\"")] }
+        let names = ordered.map({ $0.0 }).joinWithSeparator(", ")
+        let values = ordered.map({ $0.1 }).joinWithSeparator(", ")
+        try database.exec("INSERT INTO \(name)(" + names + ") VALUES(" + values  + ");" )
     }
     
 }

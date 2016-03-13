@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SQLiteError: ErrorType {
+public enum SQLiteError: ErrorType {
     case OpenFailed(String?)
     case ExecFailed(String?)
 }
@@ -32,12 +32,12 @@ public class SQLite {
     private struct ExecCContext { var callback: ([String: String] -> Void)? }
 
     public func exec(sql: String) throws {
-        try exec(sql, callback: nil)
+        try exec(sql, nil)
     }
     
-    public func exec(sql: String, callback: ([String: String] -> Void)?) throws {
+    public func exec(sql: String, _ stepCallback: ([String: String] -> Void)?) throws {
         var errorMessagePointer = UnsafeMutablePointer<Int8>()
-        var execCContext = ExecCContext(callback: callback)
+        var execCContext = ExecCContext(callback: stepCallback)
         let execResult = sql.withCString {
             sqlite3_exec(databaseConnection, $0, { (context, count, values, names) -> Int32 in
                 var content = [String: String]()
@@ -100,7 +100,7 @@ public class SQLite {
         }
     }
     
-    public func close() throws {
+    public func close() {
         sqlite3_close(databaseConnection)
     }
 }

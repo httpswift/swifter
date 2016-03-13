@@ -18,6 +18,10 @@ public class HttpServerIO {
     private var clientSockets: Set<Socket> = []
     private let clientSocketsLock = NSLock()
     
+    public typealias MiddlewareCallback = HttpRequest -> HttpResponse?
+    
+    public var middleware = [MiddlewareCallback]()
+    
     public func start(listenPort: in_port_t = 8080) throws {
         stop()
         listenSocket = try Socket.tcpSocketForListen(listenPort)
@@ -55,25 +59,36 @@ public class HttpServerIO {
         let address = try? socket.peername()
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
-            let request = request
-            let (params, handler) = self.dispatch(request.method, path: request.path)
             request.address = address
-            request.params = params;
-            let response = handler(request)
+            var response = askMiddlewareForResponse(request)
+            if response == nil {
+                let (params, handler) = self.dispatch(request.method, path: request.path)
+                request.params = params
+                response = handler(request)
+            }
             var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
-                keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
+                keepConnection = try self.respond(socket, response: response!, keepAlive: keepConnection)
             } catch {
                 print("Failed to send response: \(error)")
                 break
             }
-            if let session = response.socketSession() {
+            if let session = response!.socketSession() {
                 session(socket)
                 break
             }
             if !keepConnection { break }
         }
         socket.release()
+    }
+
+    private func askMiddlewareForResponse(request: HttpRequest) -> HttpResponse? {
+        for layer in middleware {
+            if let response = layer(request) {
+                return response
+            }
+        }
+        return nil
     }
     
     private func lock(handle: NSLock, closure: () -> ()) {

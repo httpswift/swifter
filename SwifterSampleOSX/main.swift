@@ -7,7 +7,6 @@
 import Foundation
 import Swifter
 
-
 do {
     let server: HttpServer = demoServer(try File.currentWorkingDirectory())
     server["/SwiftyJSON"] = { request in

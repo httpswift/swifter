@@ -18,24 +18,13 @@ public class Process {
     
     public static func watchSignals(callback: SignalCallback) {
         if !signalsObserved {
-            registerSignals()
+            [SIGTERM, SIGHUP, SIGSTOP, SIGINFO, SIGINT].forEach { item in
+                signal(item) {
+                    signum in Process.signalsWatchers.forEach { $0(signum) }
+                }
+            }
             signalsObserved = true
         }
         signalsWatchers.append(callback)
-    }
-    
-    private static func handleSignal(signal: Int32) {
-        for callback in Process.signalsWatchers {
-            callback(signal)
-        }
-    }
-    
-    private static func registerSignals() {
-        signal(SIGTERM) { signum in Process.handleSignal(signum) }
-        signal(SIGHUP ) { signum in Process.handleSignal(signum) }
-        signal(SIGSTOP) { signum in Process.handleSignal(signum) }
-        signal(SIGTERM) { signum in Process.handleSignal(signum) }
-        signal(SIGINFO) { signum in Process.handleSignal(signum) }
-        signal(SIGINT ) { signum in Process.handleSignal(signum) }
     }
 }
