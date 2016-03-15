@@ -53,7 +53,7 @@ class SwifterTestsSQLite: XCTestCase {
             }
             XCTAssert(counter == 2, "Database should have two rows.")
             
-            try database.close()
+            database.close()
         } catch {
             XCTAssert(false, "Database manipulation should not throw any exceptions.")
         }

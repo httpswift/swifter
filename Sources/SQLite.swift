@@ -10,6 +10,7 @@ import Foundation
 public enum SQLiteError: ErrorType {
     case OpenFailed(String?)
     case ExecFailed(String?)
+    case BindFailed(String?)
 }
 
 public class SQLite {
@@ -35,30 +36,45 @@ public class SQLite {
         try exec(sql, nil)
     }
     
-    public func exec(sql: String, _ stepCallback: ([String: String] -> Void)?) throws {
-        var errorMessagePointer = UnsafeMutablePointer<Int8>()
-        var execCContext = ExecCContext(callback: stepCallback)
-        let execResult = sql.withCString {
-            sqlite3_exec(databaseConnection, $0, { (context, count, values, names) -> Int32 in
-                var content = [String: String]()
-                for i in 0..<count {
-                    if let name = String.fromCString(names.advancedBy(Int(i)).memory),
-                        let value = String.fromCString(values.advancedBy(Int(i)).memory) {
-                            content[name] = value
+    public func exec(sql: String, _ params: [String?]? = nil, _ step: ([String: String?] -> Void)? = nil) throws {
+        var statement = COpaquePointer()
+        let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statement, nil) }
+        guard prepareResult == SQLITE_OK else {
+            throw SQLiteError.ExecFailed(String.fromCString(sqlite3_errmsg(databaseConnection)))
+        }
+        for (index, value) in (params ?? [String?]()).enumerate() {
+            let bindResult = value?.withCString({ sqlite3_bind_text(statement, index + 1, $0, -1 /* take zero terminator. */) { _ in } })
+                    ?? sqlite3_bind_null(statement, index + 1)
+            guard bindResult == SQLITE_OK else {
+                throw SQLiteError.BindFailed(String.fromCString(sqlite3_errmsg(databaseConnection)))
+            }
+        }
+        while true {
+            let stepResult = sqlite3_step(statement)
+            switch stepResult {
+            case SQLITE_ROW:
+                var content = [String: String?]()
+                for i in 0..<sqlite3_column_count(statement) {
+                    if let name = String.fromCString(UnsafePointer<CChar>(sqlite3_column_name(statement, i))) {
+                        let pointer = sqlite3_column_text(statement, i)
+                        if pointer == nil {
+                            content[name] = nil
+                        } else {
+                            content[name] = String.fromCString(UnsafePointer<CChar>(pointer))
+                        }
                     }
                 }
-                if let callback = UnsafeMutablePointer<ExecCContext>(context).memory.callback {
-                    callback(content)
-                }
-                return SQLITE_OK
-            }, &execCContext, &errorMessagePointer)
-        }
-        guard execResult == SQLITE_OK else {
-            let errorDetails = String.fromCString(errorMessagePointer)
-            sqlite3_free(errorMessagePointer)
-            throw SQLiteError.ExecFailed(errorDetails)
+                step?(content)
+            case SQLITE_DONE:
+                return
+            case SQLITE_ERROR:
+                throw SQLiteError.ExecFailed("sqlite3_step() returned SQLITE_ERROR.")
+            default:
+                throw SQLiteError.ExecFailed("Unknown result for sqlite3_step(): \(stepResult)")
+            }
         }
     }
+    
     
     public func enumerate(sql: String) throws -> StatmentSequence {
         var statement = COpaquePointer()
@@ -78,9 +94,13 @@ public class SQLite {
             case SQLITE_ROW:
                 var content = [String: String]()
                 for i in 0..<sqlite3_column_count(statement) {
-                    if let name = String.fromCString(UnsafePointer<CChar>(sqlite3_column_name(statement, i))),
-                        let value = String.fromCString(UnsafePointer<CChar>(sqlite3_column_text(statement, i))) {
-                            content[name] = value
+                    if let name = String.fromCString(UnsafePointer<CChar>(sqlite3_column_name(statement, i))) {
+                        let pointer = sqlite3_column_text(statement, i)
+                        if pointer == nil {
+                            content[name] = nil
+                        } else {
+                            content[name] = String.fromCString(UnsafePointer<CChar>(pointer))
+                        }
                     }
                 }
                 return content

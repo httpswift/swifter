@@ -48,17 +48,17 @@ public extension DatabaseReflectionProtocol {
         return ("\(mirror.subjectType)", fields)
     }
     
-    public func schemeWithValuesAsString() -> (String, [String: String?]) {
+    public func schemeWithValuesAsString() -> (String, [(String, String?)]) {
         let (name, fields) = schemeWithValuesMethod2()
-        var map = [String: String?]()
+        var map = [(String, String?)]()
         for (key, value) in fields {
             // TODO - Replace this by extending all supported types by a protocol.
             // Example: 'extenstion Int: DatabaseConvertible { convert() -> something ( not necessary String type ) }'
-            if let intValue    = value as? Int    { map[key] = String(intValue) }
-            if let int32Value  = value as? Int32  { map[key] = String(int32Value) }
-            if let int64Value  = value as? Int64  { map[key] = String(int64Value) }
-            if let doubleValue = value as? Double { map[key] = String(doubleValue) }
-            if let stringValue = value as? String { map[key] = stringValue }
+            if let intValue    = value as? Int    { map.append((key, String(intValue))) }
+            if let int32Value  = value as? Int32  { map.append((key, String(int32Value))) }
+            if let int64Value  = value as? Int64  { map.append((key, String(int64Value))) }
+            if let doubleValue = value as? Double { map.append((key, String(doubleValue))) }
+            if let stringValue = value as? String { map.append((key, stringValue)) }
         }
         return (name, map)
     }
@@ -86,13 +86,10 @@ public extension DatabaseReflectionProtocol {
             throw SQLiteError.OpenFailed("Database connection is not opened.")
         }
         let (name, fields) = schemeWithValuesAsString()
-        let create = "CREATE TABLE IF NOT EXISTS \(name) (" + fields.keys.map { "\($0) TEXT" }.joinWithSeparator(", ")  + ");"
-        try database.exec(create)
-        // TODO - Replace this with the binding to avoid SQL injection.
-        let ordered = fields.keys.reduce([(String, String)]()) { $0 + [($1, "\"\(fields[$1])\"")] }
-        let names = ordered.map({ $0.0 }).joinWithSeparator(", ")
-        let values = ordered.map({ $0.1 }).joinWithSeparator(", ")
-        try database.exec("INSERT INTO \(name)(" + names + ") VALUES(" + values  + ");" )
+        try database.exec("CREATE TABLE IF NOT EXISTS \(name) (" + fields.map { "\($0.0) TEXT" }.joinWithSeparator(", ")  + ");")
+        let names = fields.map { "\($0.0)" }.joinWithSeparator(", ")
+        let values = Array(count: fields.count, repeatedValue: "?").joinWithSeparator(", ")
+        try database.exec("INSERT INTO \(name)(" + names + ") VALUES(" + values  + ");", fields.map { $0.1 })
     }
     
 }
