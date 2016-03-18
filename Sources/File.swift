@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-public enum FileError: ErrorType {
+public enum FileError: ErrorProtocol {
     case OpenFailed(String)
     case WriteFailed(String)
     case ReadFailed(String)
@@ -55,10 +55,7 @@ public class File {
         if path == nil {
             throw FileError.GetCurrentWorkingDirectoryFailed(descriptionOfLastError())
         }
-        guard let result = String.fromCString(path) else {
-            throw FileError.GetCurrentWorkingDirectoryFailed("Could not convert getcwd(...)'s result (\(path)) to String.")
-        }
-        return result
+        return String(cString: path)
     }
     
     private let pointer: UnsafeMutablePointer<FILE>
@@ -106,7 +103,7 @@ public class File {
     }
     
     private static func descriptionOfLastError() -> String {
-        return String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
+        return String(cString: UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
     }
 }
 

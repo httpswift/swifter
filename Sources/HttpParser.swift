@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-enum HttpParserError: ErrorType {
+enum HttpParserError: ErrorProtocol {
     case InvalidStatusLine(String)
 }
 
@@ -64,7 +64,7 @@ public class HttpParser {
             }
             let headerTokens = headerLine.split(1, separator: ":")
             if let name = headerTokens.first, value = headerTokens.last {
-                headers[name.lowercaseString] = value.trim()
+                headers[name.lowercased()] = value.trim()
             }
         } while true
     }

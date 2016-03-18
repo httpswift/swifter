@@ -18,7 +18,7 @@ extension String {
     }
     
     public func split(maxSplit: Int = Int.max, separator: Character) -> [String] {
-        return self.characters.split(maxSplit) { $0 == separator }.map(String.init)
+        return self.characters.split(maxSplits: maxSplit, omittingEmptySubsequences: true) { $0 == separator }.map(String.init)
     }
     
     public func replace(old: Character, _ new: Character) -> String {
@@ -61,7 +61,7 @@ extension String {
                     decodeBuffer.append(first*16+secon)
                 } else {
                     if !decodeBuffer.isEmpty {
-                        output.appendContentsOf(String.fromUInt8(decodeBuffer))
+                        output.append(String.fromUInt8(decodeBuffer))
                         decodeBuffer.removeAll()
                     }
                     if let first = first { output.append(Character(first)) }
@@ -69,14 +69,14 @@ extension String {
                 }
             } else {
                 if !decodeBuffer.isEmpty {
-                    output.appendContentsOf(String.fromUInt8(decodeBuffer))
+                    output.append(String.fromUInt8(decodeBuffer))
                     decodeBuffer.removeAll()
                 }
                 output.append(Character(scalar))
             }
         }
         if !decodeBuffer.isEmpty {
-            output.appendContentsOf(String.fromUInt8(decodeBuffer))
+            output.append(String.fromUInt8(decodeBuffer))
             decodeBuffer.removeAll()
         }
         return output

@@ -21,7 +21,7 @@ public class HttpRequest {
         guard let headerValue = headers[headerName] else {
             return false
         }
-        return headerValue.split(",").filter({ $0.trim().lowercaseString == token }).count > 0
+        return headerValue.split(",").filter({ $0.trim().lowercased() == token }).count > 0
     }
     
     public func parseUrlencodedForm() -> [(String, String)] {
@@ -94,7 +94,7 @@ public class HttpRequest {
     }
     
     private func parseMultiPartFormData(data: [UInt8], boundary: String) -> [MultiPart] {
-        var generator = data.generate()
+        var generator = data.makeIterator()
         var result = [MultiPart]()
         while let part = nextMultiPart(&generator, boundary: boundary, isFirst: result.isEmpty) {
             result.append(part)
@@ -102,7 +102,7 @@ public class HttpRequest {
         return result
     }
     
-    private func nextMultiPart(generator: inout IndexingGenerator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
+    private func nextMultiPart(generator: inout IndexingIterator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
         if isFirst {
             guard nextMultiPartLine(&generator) == boundary else {
                 return nil
@@ -114,7 +114,7 @@ public class HttpRequest {
         while let line = nextMultiPartLine(&generator) where !line.isEmpty {
             let tokens = line.split(":")
             if let name = tokens.first, value = tokens.last where tokens.count == 2 {
-                headers[name.lowercaseString] = value.trim()
+                headers[name.lowercased()] = value.trim()
             }
         }
         guard let body = nextMultiPartBody(&generator, boundary: boundary) else {
@@ -123,7 +123,7 @@ public class HttpRequest {
         return MultiPart(headers: headers, body: body)
     }
     
-    private func nextMultiPartLine(generator: inout IndexingGenerator<[UInt8]>) -> String? {
+    private func nextMultiPartLine(generator: inout IndexingIterator<[UInt8]>) -> String? {
         var result = String()
         while let value = generator.next() {
             if value > HttpRequest.CR {
@@ -139,7 +139,7 @@ public class HttpRequest {
     static let CR = UInt8(13)
     static let NL = UInt8(10)
     
-    private func nextMultiPartBody(generator: inout IndexingGenerator<[UInt8]>, boundary: String) -> [UInt8]? {
+    private func nextMultiPartBody(generator: inout IndexingIterator<[UInt8]>, boundary: String) -> [UInt8]? {
         var body = [UInt8]()
         let boundaryArray = [UInt8](boundary.utf8)
         var matchOffset = 0;
@@ -147,7 +147,7 @@ public class HttpRequest {
             matchOffset = ( x == boundaryArray[matchOffset] ? matchOffset + 1 : 0 )
             body.append(x)
             if matchOffset == boundaryArray.count {
-                body.removeRange(Range<Int>(body.count-matchOffset ..< body.count))
+                body.removeSubrange(Range<Int>(body.count-matchOffset ..< body.count))
                 if body.last == HttpRequest.NL {
                     body.removeLast()
                     if body.last == HttpRequest.CR {

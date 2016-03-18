@@ -16,7 +16,7 @@ class SwifterTestsHttpParser: XCTestCase {
         
         init(_ content: String) {
             super.init(socketFileDescriptor: -1)
-            self.content.appendContentsOf([UInt8](content.utf8))
+            self.content.append(contentsOf: [UInt8](content.utf8))
         }
 
         override func read() throws -> UInt8 {

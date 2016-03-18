@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SerializationError: ErrorType {
+public enum SerializationError: ErrorProtocol {
     case InvalidObject
     case NotSupported
 }
@@ -31,7 +31,7 @@ public enum HttpResponseBody {
                 guard NSJSONSerialization.isValidJSONObject(object) else {
                     throw SerializationError.InvalidObject
                 }
-                let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
+                let json = try NSJSONSerialization.data(withJSONObject: object, options: NSJSONWritingOptions.prettyPrinted)
                 let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
                 return (data.count, {
                     $0.write(data)

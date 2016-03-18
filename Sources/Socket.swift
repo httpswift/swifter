@@ -13,7 +13,7 @@
 
 /* Low level routines for POSIX sockets */
 
-public enum SocketError: ErrorType {
+public enum SocketError: ErrorProtocol {
     case SocketCreationFailed(String)
     case SocketSettingReUseAddrFailed(String)
     case BindFailed(String)
@@ -133,7 +133,7 @@ public class Socket: Hashable, Equatable {
     }
     
     public func read() throws -> UInt8 {
-        var buffer = [UInt8](count: 1, repeatedValue: 0)
+        var buffer = [UInt8](repeating: 0, count: 1)
         let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), 0)
         if next <= 0 {
             throw SocketError.RecvFailed(Socket.descriptionOfLastError())
@@ -159,18 +159,15 @@ public class Socket: Hashable, Equatable {
         if getpeername(self.socketFileDescriptor, &addr, &len) != 0 {
             throw SocketError.GetPeerNameFailed(Socket.descriptionOfLastError())
         }
-        var hostBuffer = [CChar](count: Int(NI_MAXHOST), repeatedValue: 0)
+        var hostBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
         if getnameinfo(&addr, len, &hostBuffer, socklen_t(hostBuffer.count), nil, 0, NI_NUMERICHOST) != 0 {
             throw SocketError.GetNameInfoFailed(Socket.descriptionOfLastError())
         }
-        guard let name = String.fromCString(hostBuffer) else {
-            throw SocketError.ConvertingPeerNameFailed
-        }
-        return name
+        return String(cString: hostBuffer)
     }
     
     private class func descriptionOfLastError() -> String {
-        return String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
+        return String(cString: UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
     }
     
     private class func setNoSigPipe(socket: Int32) {

@@ -19,7 +19,7 @@ extension HttpHandlers {
                 return .NotFound
             }
             return .RAW(200, "OK", [:], { writer in
-                var buffer = [UInt8](count: 64, repeatedValue: 0)
+                var buffer = [UInt8](repeating: 0, count: 64)
                 while let count = try? file.read(&buffer) where count > 0 {
                     writer.write(buffer[0..<count])
                 }
@@ -52,7 +52,7 @@ extension HttpHandlers {
                 #if os(Linux)
                     let rangeString = rangeHeader.substringFromIndex(HttpHandlers.rangePrefix.characters.count)
                 #else
-                    let rangeString = rangeHeader.substringFromIndex(rangeHeader.startIndex.advancedBy(HttpHandlers.rangePrefix.characters.count))
+                    let rangeString = rangeHeader.substring(from: rangeHeader.startIndex.advanced(by: HttpHandlers.rangePrefix.characters.count))
                 #endif
                 
                 let rangeStringExploded = rangeString.split("-")
@@ -65,7 +65,7 @@ extension HttpHandlers {
                 let endStr   = rangeStringExploded[1]
                 
                 guard let start = Int(startStr), end = Int(endStr) else {
-                    var array = [UInt8](count: fileBody.length, repeatedValue: 0)
+                    var array = [UInt8](repeating: 0, count: fileBody.length)
                     fileBody.getBytes(&array, length: fileBody.length)
                     return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
                 }
@@ -77,15 +77,15 @@ extension HttpHandlers {
                     return HttpResponse.RAW(416, "Requested range not satisfiable", nil, nil)
                 }
                 
-                let chunk = fileBody.subdataWithRange(chunkRange)
+                let chunk = fileBody.subdata(with: chunkRange)
                 
                 let headers = [ "Content-Range" : "bytes \(startStr)-\(endStr)/\(fileBody.length)" ]
                 
-                var content = [UInt8](count: chunk.length, repeatedValue: 0)
+                var content = [UInt8](repeating: 0, count: chunk.length)
                 chunk.getBytes(&content, length: chunk.length)
                 return HttpResponse.RAW(206, "Partial Content", headers, { $0.write(content) })
             } else {
-                var content = [UInt8](count: fileBody.length, repeatedValue: 0)
+                var content = [UInt8](repeating: 0, count: fileBody.length)
                 fileBody.getBytes(&content, length: fileBody.length)
                 return HttpResponse.RAW(200, "OK", nil, { $0.write(content) })
             }
@@ -100,14 +100,14 @@ extension HttpHandlers {
             let filePath = dir + "/" + value
             let fileManager = NSFileManager.defaultManager()
             var isDir: ObjCBool = false
-            guard fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) else {
+            guard fileManager.fileExists(atPath: filePath, isDirectory: &isDir) else {
                 return HttpResponse.NotFound
             }
             if isDir {
                 do {
-                    let files = try fileManager.contentsOfDirectoryAtPath(filePath)
+                    let files = try fileManager.contentsOfDirectory(atPath: filePath)
                     var response = "<h3>\(filePath)</h3></br><table>"
-                    response += files.map({ "<tr><td><a href=\"\(r.path)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
+                    response += files.map({ "<tr><td><a href=\"\(r.path)/\($0)\">\($0)</a></td></tr>"}).joined(separator: "")
                     response += "</table>"
                     return HttpResponse.OK(.Html(response))
                 } catch {
@@ -115,7 +115,7 @@ extension HttpHandlers {
                 }
             } else {
                 if let content = NSData(contentsOfFile: filePath) {
-                    var array = [UInt8](count: content.length, repeatedValue: 0)
+                    var array = [UInt8](repeating: 0, count: content.length)
                     content.getBytes(&array, length: content.length)
                     return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
                 }

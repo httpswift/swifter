@@ -47,7 +47,7 @@ public class HttpServerIO {
             for socket in self.clientSockets {
                 socket.shutdwn()
             }
-            self.clientSockets.removeAll(keepCapacity: true)
+            self.clientSockets.removeAll(keepingCapacity: true)
         }
     }
     

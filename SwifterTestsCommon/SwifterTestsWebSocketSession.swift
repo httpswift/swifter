@@ -16,7 +16,7 @@ class SwifterTestsWebSocketSession: XCTestCase {
         
         init(_ content: [UInt8]) {
             super.init(socketFileDescriptor: -1)
-            self.content.appendContentsOf(content)
+            self.content.append(contentsOf: content)
         }
         
         override func read() throws -> UInt8 {

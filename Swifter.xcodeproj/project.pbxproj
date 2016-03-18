@@ -31,7 +31,6 @@
 		7C5915231C92A99300D884BC /* SwifterTestsReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
-		7C73C6911C2615FE00AEF6CA /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */; };
 		7C73C6921C26179C00AEF6CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
 		7C73C6AA1C261A2100AEF6CA /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6941C2619E100AEF6CA /* DemoServer.swift */; };
 		7C73C6AB1C261A2100AEF6CA /* HttpHandlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */; };
@@ -182,7 +181,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		7AE893E71C05127900A29F63 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE893E91C05127900A29F63 /* SwifteriOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifteriOS.h; sourceTree = "<group>"; };
 		7AE893EB1C05127900A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -364,7 +362,6 @@
 		7CA4813C19A2EA8D0030B30D /* SwifterSampleOSX */ = {
 			isa = PBXGroup;
 			children = (
-				18E610A51BD6397D00B7D17A /* SwiftyJSON.swift */,
 				7CA4813D19A2EA8D0030B30D /* main.swift */,
 			);
 			path = SwifterSampleOSX;
@@ -863,7 +860,6 @@
 				7CBFA0151C9347A7000989AB /* String+BASE64.swift in Sources */,
 				7CBFA0161C9347A7000989AB /* Reflection.swift in Sources */,
 				7CBFA0171C9347A7000989AB /* SQLite.swift in Sources */,
-				7C73C6911C2615FE00AEF6CA /* SwiftyJSON.swift in Sources */,
 				7CA4813E19A2EA8D0030B30D /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -25,15 +25,14 @@ public class App {
         
         // Watch process signals.
         
-        Process.watchSignals { signal in
-            switch signal {
+        Process.watchSignals { switch $0 {
             case SIGTERM, SIGINT:
                 self.server.stop()
                 DatabaseReflection.sharedDatabase?.close()
                 exit(EXIT_SUCCESS)
             case SIGINFO:
                 print("Swifter Version: \(HttpServer.VERSION)")
-                print(self.server.routes.joinWithSeparator("\n"))
+                print(self.server.routes.joined(separator: "\n"))
             case SIGHUP:
                 print("//TODO - Reload config.")
             default:
@@ -56,6 +55,6 @@ public class App {
         
         print("Server started. Waiting for requests....")
         
-        NSRunLoop.mainRunLoop().run()
+        NSRunLoop.main().run()
     }
 }

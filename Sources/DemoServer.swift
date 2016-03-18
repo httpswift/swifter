@@ -50,7 +50,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     server.GET["/upload"] = { r in
         if let html = NSData(contentsOfFile:"\(publicDir)/file.html") {
-            var array = [UInt8](count: html.length, repeatedValue: 0)
+            var array = [UInt8](repeating: 0, count: html.length)
             html.getBytes(&array, length: html.length)
             return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
         }
@@ -67,7 +67,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     server.GET["/login"] = { r in
         if let html = NSData(contentsOfFile:"\(publicDir)/login.html") {
-            var array = [UInt8](count: html.length, repeatedValue: 0)
+            var array = [UInt8](repeating: 0, count: html.length)
             html.getBytes(&array, length: html.length)
             return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
         }
@@ -76,7 +76,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     server.POST["/login"] = { r in
         let formFields = r.parseUrlencodedForm()
-        return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
+        return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joined(separator: "<br>")))
     }
     
     server["/demo"] = { r in

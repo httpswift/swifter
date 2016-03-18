@@ -46,7 +46,7 @@ extension HttpHandlers {
     
     public class WebSocketSession {
         
-        public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame }
+        public enum Error: ErrorProtocol { case UnknownOpCode(String), UnMaskedFrame }
         public enum OpCode { case Continue, Close, Ping, Pong, Text, Binary }
         
         public class Frame {

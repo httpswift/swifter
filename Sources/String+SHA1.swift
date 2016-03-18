@@ -42,14 +42,14 @@ extension String {
         
         let padBytesCount = ( message.count + 8 ) % 64
         
-        message.appendContentsOf([UInt8](count: 64 - padBytesCount, repeatedValue: 0))
+        message.append(contentsOf: [UInt8](repeating: 0, count: 64 - padBytesCount))
         
         // append ml, in a 64-bit big-endian integer. Thus, the total length is a multiple of 512 bits.
         
         var mlBigEndian = ml.bigEndian
         let bytePtr = withUnsafePointer(&mlBigEndian) { UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: sizeofValue(mlBigEndian)) }
         
-        message.appendContentsOf(Array(bytePtr))
+        message.append(contentsOf: Array(bytePtr))
         
         // Process the message in successive 512-bit chunks ( 64 bytes chunks ):
 
@@ -60,7 +60,7 @@ extension String {
             // break chunk into sixteen 32-bit big-endian words w[i], 0 ≤ i ≤ 15
             
             for i in 0...15 {
-                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>($0.baseAddress + (i*4)).memory })
+                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>($0.baseAddress + (i*4)).pointee})
                 words.append(value.bigEndian)
             }
             

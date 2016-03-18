@@ -29,7 +29,7 @@ public extension DatabaseReflectionProtocol {
         let reflections = _reflect(self)
         
         var fields = [String: Any?]()
-        for index in 0.stride(to: reflections.count, by: 1) {
+        for index in stride(from: 0, to: reflections.count, by: 1) {
             let reflection = reflections[index]
             fields[reflection.0] = reflection.1.value
         }
@@ -50,6 +50,7 @@ public extension DatabaseReflectionProtocol {
     
     public func schemeWithValuesAsString() -> (String, [(String, String?)]) {
         let (name, fields) = schemeWithValuesMethod2()
+        let (_, _) = schemeWithValuesMethod1()
         var map = [(String, String?)]()
         for (key, value) in fields {
             // TODO - Replace this by extending all supported types by a protocol.
@@ -61,6 +62,8 @@ public extension DatabaseReflectionProtocol {
             if let stringValue = value as? String { map.append((key, stringValue)) }
         }
         return (name, map)
+        
+
     }
     
     public static func classInstanceWithSchemeMethod1() -> (Self, String, [String: Any?]) {
@@ -86,9 +89,9 @@ public extension DatabaseReflectionProtocol {
             throw SQLiteError.OpenFailed("Database connection is not opened.")
         }
         let (name, fields) = schemeWithValuesAsString()
-        try database.exec("CREATE TABLE IF NOT EXISTS \(name) (" + fields.map { "\($0.0) TEXT" }.joinWithSeparator(", ")  + ");")
-        let names = fields.map { "\($0.0)" }.joinWithSeparator(", ")
-        let values = Array(count: fields.count, repeatedValue: "?").joinWithSeparator(", ")
+        try database.exec("CREATE TABLE IF NOT EXISTS \(name) (" + fields.map { "\($0.0) TEXT" }.joined(separator: ", ")  + ");")
+        let names = fields.map { "\($0.0)" }.joined(separator: ", ")
+        let values = Array(repeating: "?", count: fields.count).joined(separator: ", ")
         try database.exec("INSERT INTO \(name)(" + names + ") VALUES(" + values  + ");", fields.map { $0.1 })
     }
     
