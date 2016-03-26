@@ -22,6 +22,7 @@ public enum HttpResponseBody {
     case Json(AnyObject)
     case Html(String)
     case Text(String)
+    case Data([UInt8])
     case Custom(Any, (Any) throws -> String)
     
     func content() -> (Int, (HttpResponseBodyWriter throws -> Void)?) {
@@ -46,6 +47,10 @@ public enum HttpResponseBody {
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
                     $0.write(data)
+                })
+            case .Data(let body):
+                return (body.count, {
+                    $0.write(body)
                 })
             case .Custom(let object, let closure):
                 let serialised = try closure(object)
@@ -116,6 +121,7 @@ public enum HttpResponse {
             case .Text(_)   : headers["Content-Type"] = "text/plain"
             case .Json(_)   : headers["Content-Type"] = "application/json"
             case .Html(_)   : headers["Content-Type"] = "text/html"
+            case .Data(_)   : headers["Content-Type"] = "application/octet-stream"
             default:break
             }
         case .MovedPermanently(let location):
