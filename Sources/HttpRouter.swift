@@ -15,6 +15,8 @@ public class HttpRouter {
     }
     
     private var rootNode = Node()
+    
+    public init() { }
 
     public func routes() -> [String] {
         var routes = [String]()
@@ -101,6 +103,14 @@ public class HttpRouter {
         }
         if let _ = node.nodes["*"] {
             return findHandler(&node.nodes["*"]!, params: &params, generator: &generator)
+        }
+        if let startStarNode = node.nodes["**"] {
+            let startStarNodeKeys = startStarNode.nodes.keys
+            while let pathToken = generator.next() {
+                if startStarNodeKeys.contains(pathToken) {
+                    return findHandler(&startStarNode.nodes[pathToken]!, params: &params, generator: &generator)
+                }
+            }
         }
         return nil
     }

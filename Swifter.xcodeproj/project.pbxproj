@@ -29,6 +29,8 @@
 		7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		7C5915221C92A99300D884BC /* SwifterTestsReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */; };
 		7C5915231C92A99300D884BC /* SwifterTestsReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */; };
+		7C6B57EB1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6B57EA1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift */; };
+		7C6B57EC1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6B57EA1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift */; };
 		7C71C5B01A1D52F800682BF0 /* login.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7C73C6921C26179C00AEF6CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
@@ -197,6 +199,7 @@
 		7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
 		7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsWebSocketSession.swift; sourceTree = "<group>"; };
 		7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsReflection.swift; sourceTree = "<group>"; };
+		7C6B57EA1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsHttpRouter.swift; sourceTree = "<group>"; };
 		7C73C6941C2619E100AEF6CA /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 		7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpHandlers.swift; sourceTree = "<group>"; };
 		7C73C6961C2619E100AEF6CA /* HttpParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpParser.swift; sourceTree = "<group>"; };
@@ -415,6 +418,7 @@
 				7CCD876E1C660B250068099B /* SwifterTestsStringExtensions.swift */,
 				7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */,
 				7C13B57B1C7B069500556443 /* SwifterTestsSQLite.swift */,
+				7C6B57EA1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift */,
 			);
 			path = SwifterTestsCommon;
 			sourceTree = "<group>";
@@ -905,6 +909,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */,
+				7C6B57EB1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift in Sources */,
 				7C5915221C92A99300D884BC /* SwifterTestsReflection.swift in Sources */,
 				7C13B57C1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */,
 				7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
@@ -917,6 +922,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87841C660ED60068099B /* SwifterTestsHttpParser.swift in Sources */,
+				7C6B57EC1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift in Sources */,
 				7C5915231C92A99300D884BC /* SwifterTestsReflection.swift in Sources */,
 				7C13B57D1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */,
 				7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,

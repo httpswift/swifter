@@ -62,8 +62,6 @@ public extension DatabaseReflectionProtocol {
             if let stringValue = value as? String { map.append((key, stringValue)) }
         }
         return (name, map)
-        
-
     }
     
     public static func classInstanceWithSchemeMethod1() -> (Self, String, [String: Any?]) {

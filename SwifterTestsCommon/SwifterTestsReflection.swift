@@ -2,7 +2,6 @@
 //  SwifterTestsReflection.swift
 //  Swifter
 //
-//  Created by Damian Kolakowski on 06/03/16.
 //  Copyright © 2016 Damian Kołakowski. All rights reserved.
 //
 
