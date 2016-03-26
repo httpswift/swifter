@@ -56,8 +56,16 @@ public extension DatabaseReflectionProtocol {
             // TODO - Replace this by extending all supported types by a protocol.
             // Example: 'extenstion Int: DatabaseConvertible { convert() -> something ( not necessary String type ) }'
             if let intValue    = value as? Int    { map.append((key, String(intValue))) }
+            if let uintValue   = value as? UInt   { map.append((key, String(uintValue))) }
+            if let int8Value   = value as? Int8   { map.append((key, String(int8Value))) }
+            if let uint8Value  = value as? UInt8  { map.append((key, String(uint8Value))) }
+            if let int16Value  = value as? Int16  { map.append((key, String(int16Value))) }
+            if let uint16Value = value as? UInt16 { map.append((key, String(uint16Value))) }
             if let int32Value  = value as? Int32  { map.append((key, String(int32Value))) }
+            if let uint32Value = value as? UInt32 { map.append((key, String(uint32Value))) }
             if let int64Value  = value as? Int64  { map.append((key, String(int64Value))) }
+            if let uint64Value = value as? UInt64 { map.append((key, String(uint64Value))) }
+            if let floatValue  = value as? Float  { map.append((key, String(floatValue))) }
             if let doubleValue = value as? Double { map.append((key, String(doubleValue))) }
             if let stringValue = value as? String { map.append((key, stringValue)) }
         }
@@ -93,4 +101,38 @@ public extension DatabaseReflectionProtocol {
         try database.exec("INSERT INTO \(name)(" + names + ") VALUES(" + values  + ");", fields.map { $0.1 })
     }
     
+}
+
+public func memoryLayoutForStructure(object: Any) -> [String: Range<Int>] {
+    var layout = [String: Range<Int>]()
+    var size = 0
+    var alignment = 1
+    for case let (label?, value) in Mirror(reflecting: object).children {
+        var fieldLength = 0
+        // TODO - Replace this with something smarter.
+        if value is Int    { fieldLength = sizeof(Int)   } else
+        if value is UInt   { fieldLength = sizeof(UInt)  } else
+        if value is Int8   { fieldLength = sizeof(Int8)  } else
+        if value is UInt8  { fieldLength = sizeof(UInt8) } else
+        if value is Int16  { fieldLength = sizeof(Int16) } else
+        if value is UInt16 { fieldLength = sizeof(UInt16)} else
+        if value is Int32  { fieldLength = sizeof(Int32) } else
+        if value is UInt32 { fieldLength = sizeof(UInt32)} else
+        if value is Int64  { fieldLength = sizeof(Int64) } else
+        if value is UInt64 { fieldLength = sizeof(UInt64)} else
+        if value is Float  { fieldLength = sizeof(Float) } else
+        if value is Double { fieldLength = sizeof(Double)} else
+        if value is String { fieldLength = sizeof(String)}
+        if fieldLength <= alignment {
+            layout[label] = size ..< size + fieldLength
+            size = size + fieldLength
+            alignment = fieldLength
+        } else {
+            let offset = size + (fieldLength > size ? (fieldLength - size) : (size % fieldLength))
+            layout[label] = offset ..< offset + fieldLength
+            size = offset + fieldLength
+            alignment = fieldLength
+        }
+    }
+    return layout
 }
