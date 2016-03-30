@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import Swifter
 
 do {
     let server: HttpServer = demoServer(try File.currentWorkingDirectory())
