@@ -17,9 +17,12 @@ public class SQLite {
     
     private let databaseConnection: OpaquePointer
     
-    public static func open(path: String) throws -> SQLite {
-        var databaseConnection: OpaquePointer = nil
-        let openResult = path.withCString { sqlite3_open($0, &databaseConnection) }
+    public static func open(_ path: String) throws -> SQLite {
+        var databaseConnectionPointer: OpaquePointer? = nil
+        let openResult = path.withCString { sqlite3_open($0, &databaseConnectionPointer) }
+        guard let databaseConnection = databaseConnectionPointer else {
+            throw SQLiteError.ExecFailed("Invalid pointer.")
+        }
         guard openResult == SQLITE_OK else {
             throw SQLiteError.OpenFailed(String(cString: sqlite3_errmsg(databaseConnection)))
         }
@@ -32,15 +35,18 @@ public class SQLite {
     
     private struct ExecCContext { var callback: ([String: String] -> Void)? }
 
-    public func exec(sql: String) throws {
+    public func exec(_ sql: String) throws {
         try exec(sql, nil)
     }
     
-    public func exec(sql: String, _ params: [String?]? = nil, _ step: ([String: String?] -> Void)? = nil) throws {
-        var statement: OpaquePointer = nil
-        let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statement, nil) }
+    public func exec(_ sql: String, _ params: [String?]? = nil, _ step: ([String: String?] -> Void)? = nil) throws {
+        var statementPointer: OpaquePointer? = nil
+        let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statementPointer, nil) }
         guard prepareResult == SQLITE_OK else {
             throw SQLiteError.ExecFailed(String(cString: sqlite3_errmsg(databaseConnection)))
+        }
+        guard let statement = statementPointer else {
+            throw SQLiteError.ExecFailed("Invalid pointer.")
         }
         for (index, value) in (params ?? [String?]()).enumerated() {
             let bindResult = value?.withCString({ sqlite3_bind_text(statement, index + 1, $0, -1 /* take zero terminator. */) { _ in } })
@@ -75,13 +81,16 @@ public class SQLite {
     }
     
     
-    public func enumerate(sql: String) throws -> StatmentSequence {
-        var statement: OpaquePointer = nil
+    public func enumerate(_ sql: String) throws -> StatmentSequence {
+        var statement: OpaquePointer? = nil
         let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statement, nil) }
         guard prepareResult == SQLITE_OK else {
             throw SQLiteError.ExecFailed(String(cString: sqlite3_errmsg(databaseConnection)))
         }
-        return StatmentSequence(statement: statement)
+        guard let readyStatement = statement else {
+            throw SQLiteError.ExecFailed("Invalid pointer.")
+        }
+        return StatmentSequence(statement: readyStatement)
     }
     
     public struct StatmentGenerator: IteratorProtocol {

@@ -19,7 +19,7 @@ public class HttpParser {
     
     public init() { }
     
-    public func readHttpRequest(socket: Socket) throws -> HttpRequest {
+    public func readHttpRequest(_ socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
         let statusLineTokens = statusLine.split(" ")
         if statusLineTokens.count < 3 {
@@ -36,7 +36,7 @@ public class HttpParser {
         return request
     }
     
-    private func extractQueryParams(url: String) -> [(String, String)] {
+    private func extractQueryParams(_ url: String) -> [(String, String)] {
         guard let query = url.split("?").last else {
             return []
         }
@@ -49,13 +49,13 @@ public class HttpParser {
         }
     }
     
-    private func readBody(socket: Socket, size: Int) throws -> [UInt8] {
+    private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
         var body = [UInt8]()
         for _ in 0..<size { body.append(try socket.read()) }
         return body
     }
     
-    private func readHeaders(socket: Socket) throws -> [String: String] {
+    private func readHeaders(_ socket: Socket) throws -> [String: String] {
         var headers = [String: String]()
         repeat {
             let headerLine = try socket.readLine()
@@ -69,7 +69,7 @@ public class HttpParser {
         } while true
     }
     
-    func supportsKeepAlive(headers: [String: String]) -> Bool {
+    func supportsKeepAlive(_ headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
             return "keep-alive" == value.trim()
         }

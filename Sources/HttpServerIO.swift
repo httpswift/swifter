@@ -22,7 +22,7 @@ public class HttpServerIO {
     
     public var middleware = [MiddlewareCallback]()
     
-    public func start(listenPort: in_port_t = 8080) throws {
+    public func start(_ listenPort: in_port_t = 8080) throws {
         stop()
         listenSocket = try Socket.tcpSocketForListen(listenPort)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
@@ -51,11 +51,11 @@ public class HttpServerIO {
         }
     }
     
-    public func dispatch(method: String, path: String) -> ([String: String], HttpRequest -> HttpResponse) {
+    public func dispatch(_ method: String, path: String) -> ([String: String], HttpRequest -> HttpResponse) {
         return ([:], { _ in HttpResponse.NotFound })
     }
     
-    private func handleConnection(socket: Socket) {
+    private func handleConnection(_ socket: Socket) {
         let address = try? socket.peername()
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
@@ -82,7 +82,7 @@ public class HttpServerIO {
         socket.release()
     }
 
-    private func askMiddlewareForResponse(request: HttpRequest) -> HttpResponse? {
+    private func askMiddlewareForResponse(_ request: HttpRequest) -> HttpResponse? {
         for layer in middleware {
             if let response = layer(request) {
                 return response
@@ -91,7 +91,7 @@ public class HttpServerIO {
         return nil
     }
     
-    private func lock(handle: NSLock, closure: () -> ()) {
+    private func lock(_ handle: NSLock, closure: () -> ()) {
         handle.lock()
         closure()
         handle.unlock();
@@ -99,10 +99,10 @@ public class HttpServerIO {
     
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
-        func write(data: [UInt8]) {
+        func write(_ data: [UInt8]) {
             write(ArraySlice(data))
         }
-        func write(data: ArraySlice<UInt8>) {
+        func write(_ data: ArraySlice<UInt8>) {
             do {
                 try socket.writeUInt8(data)
             } catch {
@@ -111,7 +111,7 @@ public class HttpServerIO {
         }
     }
     
-    private func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
+    private func respond(_ socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
         try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         
         let content = response.content()

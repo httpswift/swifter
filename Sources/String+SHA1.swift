@@ -60,7 +60,7 @@ extension String {
             // break chunk into sixteen 32-bit big-endian words w[i], 0 ≤ i ≤ 15
             
             for i in 0...15 {
-                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>($0.baseAddress + (i*4)).pointee})
+                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>($0.baseAddress! + (i*4)).pointee})
                 words.append(value.bigEndian)
             }
             
@@ -133,7 +133,7 @@ extension String {
         return result;
     }
     
-    func rotateLeft(v: UInt32, _ n: UInt32) -> UInt32 {
+    func rotateLeft(_ v: UInt32, _ n: UInt32) -> UInt32 {
         return ((v << n) & 0xFFFFFFFF) | (v >> (32 - n))
     }
 }

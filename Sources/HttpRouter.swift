@@ -26,7 +26,7 @@ public class HttpRouter {
         return routes
     }
     
-    private func routesForNode(node: Node, prefix: String = "") -> [String] {
+    private func routesForNode(_ node: Node, prefix: String = "") -> [String] {
         var result = [String]()
         if let _ = node.handler {
             result.append(prefix)
@@ -37,7 +37,7 @@ public class HttpRouter {
         return result
     }
     
-    public func register(method: String?, path: String, handler: (HttpRequest -> HttpResponse)?) {
+    public func register(_ method: String?, path: String, handler: (HttpRequest -> HttpResponse)?) {
         var pathSegments = stripQuery(path).split("/")
         if let method = method {
             pathSegments.insert(method, at: 0)
@@ -48,7 +48,7 @@ public class HttpRouter {
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
-    public func route(method: String?, path: String) -> ([String: String], HttpRequest -> HttpResponse)? {
+    public func route(_ method: String?, path: String) -> ([String: String], HttpRequest -> HttpResponse)? {
         if let method = method {
             let pathSegments = (method + "/" + stripQuery(path)).split("/")
             var pathSegmentsGenerator = pathSegments.makeIterator()
@@ -66,7 +66,7 @@ public class HttpRouter {
         return nil
     }
     
-    private func inflate(node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {
+    private func inflate(_ node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {
         if let pathSegment = generator.next() {
             if let _ = node.nodes[pathSegment] {
                 return inflate(&node.nodes[pathSegment]!, generator: &generator)
@@ -78,7 +78,7 @@ public class HttpRouter {
         return node
     }
     
-    private func findHandler(node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> (HttpRequest -> HttpResponse)? {
+    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> (HttpRequest -> HttpResponse)? {
         guard let pathToken = generator.next() else {
             return node.handler
         }
@@ -115,7 +115,7 @@ public class HttpRouter {
         return nil
     }
     
-    private func stripQuery(path: String) -> String {
+    private func stripQuery(_ path: String) -> String {
         if let path = path.split("?").first {
             return path
         }

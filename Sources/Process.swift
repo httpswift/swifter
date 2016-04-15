@@ -16,7 +16,7 @@ public class Process {
     private static var signalsWatchers = [SignalCallback]()
     private static var signalsObserved = false
     
-    public static func watchSignals(callback: SignalCallback) {
+    public static func watchSignals(_ callback: SignalCallback) {
         if !signalsObserved {
             [SIGTERM, SIGHUP, SIGSTOP, SIGINFO, SIGINT].forEach { item in
                 signal(item) {

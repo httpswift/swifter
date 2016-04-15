@@ -24,27 +24,27 @@ public class HttpServer: HttpServerIO {
     
     public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
     
-    public func get(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func get(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
         router.register("GET", path: path, handler: handler)
     }
     
-    public func post(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func post(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
         router.register("POST", path: path, handler: handler)
     }
     
-    public func put(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func put(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
         router.register("PUT", path: path, handler: handler)
     }
     
-    public func head(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func head(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
         router.register("HEAD", path: path, handler: handler)
     }
     
-    public func delete(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func delete(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
         router.register("DELETE", path: path, handler: handler)
     }
     
-    public func update(path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func update(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
         router.register("UPDATE", path: path, handler: handler)
     }
 
@@ -59,7 +59,7 @@ public class HttpServer: HttpServerIO {
         return router.routes();
     }
 
-    override public func dispatch(method: String, path: String) -> ([String:String], HttpRequest -> HttpResponse) {
+    override public func dispatch(_ method: String, path: String) -> ([String:String], HttpRequest -> HttpResponse) {
         if let result = router.route(method, path: path) {
             return result
         }

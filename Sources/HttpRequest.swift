@@ -17,7 +17,7 @@ public class HttpRequest {
     public var address: String? = ""
     public var params: [String: String] = [:]
     
-    public func hasTokenForHeader(headerName: String, token: String) -> Bool {
+    public func hasTokenForHeader(_ headerName: String, token: String) -> Bool {
         guard let headerValue = headers[headerName] else {
             return false
         }
@@ -55,7 +55,7 @@ public class HttpRequest {
             return valueFor("content-disposition", parameter: "filename")?.unquote()
         }
         
-        private func valueFor(headerName: String, parameter: String) -> String? {
+        private func valueFor(_ headerName: String, parameter: String) -> String? {
             return headers.reduce([String]()) { (combined, header: (key: String, value: String)) -> [String] in
                 guard header.key == headerName else {
                     return combined
@@ -93,7 +93,7 @@ public class HttpRequest {
         return []
     }
     
-    private func parseMultiPartFormData(data: [UInt8], boundary: String) -> [MultiPart] {
+    private func parseMultiPartFormData(_ data: [UInt8], boundary: String) -> [MultiPart] {
         var generator = data.makeIterator()
         var result = [MultiPart]()
         while let part = nextMultiPart(&generator, boundary: boundary, isFirst: result.isEmpty) {
@@ -102,7 +102,7 @@ public class HttpRequest {
         return result
     }
     
-    private func nextMultiPart(generator: inout IndexingIterator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
+    private func nextMultiPart(_ generator: inout IndexingIterator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
         if isFirst {
             guard nextMultiPartLine(&generator) == boundary else {
                 return nil
@@ -123,7 +123,7 @@ public class HttpRequest {
         return MultiPart(headers: headers, body: body)
     }
     
-    private func nextMultiPartLine(generator: inout IndexingIterator<[UInt8]>) -> String? {
+    private func nextMultiPartLine(_ generator: inout IndexingIterator<[UInt8]>) -> String? {
         var result = String()
         while let value = generator.next() {
             if value > HttpRequest.CR {
@@ -139,7 +139,7 @@ public class HttpRequest {
     static let CR = UInt8(13)
     static let NL = UInt8(10)
     
-    private func nextMultiPartBody(generator: inout IndexingIterator<[UInt8]>, boundary: String) -> [UInt8]? {
+    private func nextMultiPartBody(_ generator: inout IndexingIterator<[UInt8]>, boundary: String) -> [UInt8]? {
         var body = [UInt8]()
         let boundaryArray = [UInt8](boundary.utf8)
         var matchOffset = 0;

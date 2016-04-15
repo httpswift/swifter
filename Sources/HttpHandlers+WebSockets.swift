@@ -10,7 +10,7 @@ import Foundation
 extension HttpHandlers {
     
     public class func websocket(
-            text: ((WebSocketSession, String) -> Void)?,
+          _ text: ((WebSocketSession, String) -> Void)?,
         _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> (HttpRequest -> HttpResponse) {
         return { r in
             guard r.hasTokenForHeader("upgrade", token: "websocket") else {
@@ -61,19 +61,19 @@ extension HttpHandlers {
             self.socket = socket
         }
         
-        public func writeText(text: String) -> Void {
+        public func writeText(_ text: String) -> Void {
             self.writeFrame(ArraySlice(text.utf8), OpCode.Text)
         }
     
-        public func writeBinary(binary: [UInt8]) -> Void {
+        public func writeBinary(_ binary: [UInt8]) -> Void {
             self.writeBinary(ArraySlice(binary))
         }
         
-        public func writeBinary(binary: ArraySlice<UInt8>) -> Void {
+        public func writeBinary(_ binary: ArraySlice<UInt8>) -> Void {
             self.writeFrame(binary, OpCode.Binary)
         }
         
-        private func writeFrame(data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
+        private func writeFrame(_ data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
             let finAndOpCode = UInt8(fin ? 0x80 : 0x00) | op.rawValue
             let maskAndLngth = encodeLengthAndMaskFlag(UInt64(data.count), false)
             do {
@@ -85,7 +85,7 @@ extension HttpHandlers {
             }
         }
         
-        private func encodeLengthAndMaskFlag(len: UInt64, _ masked: Bool) -> [UInt8] {
+        private func encodeLengthAndMaskFlag(_ len: UInt64, _ masked: Bool) -> [UInt8] {
             let encodedLngth = UInt8(masked ? 0x80 : 0x00)
             var encodedBytes = [UInt8]()
             switch len {

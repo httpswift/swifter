@@ -7,7 +7,7 @@
 
 import Foundation
 
-public func demoServer(publicDir: String) -> HttpServer {
+public func demoServer(_ publicDir: String) -> HttpServer {
     
     print(publicDir)
     
@@ -88,7 +88,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     }
     
     server["/json"] = { r in
-        let jsonObject: NSDictionary = [NSString(string: "foo"): NSNumber(int: 3), NSString(string: "bar"): NSString(string: "baz")] 
+        let jsonObject: NSDictionary = [NSString(string: "foo"): NSNumber(value: 3), NSString(string: "bar"): NSString(string: "baz")]
         return .OK(.Json(jsonObject))
     }
     

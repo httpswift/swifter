@@ -9,7 +9,7 @@ import Foundation
 
 extension HttpHandlers {
     
-    public class func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> HttpResponse) {
+    public class func shareFilesFromDirectory(_ directoryPath: String) -> (HttpRequest -> HttpResponse) {
         return { r in
             guard let fileRelativePath = r.params.first else {
                 return .NotFound
@@ -30,7 +30,7 @@ extension HttpHandlers {
     
     private static let rangePrefix = "bytes="
     
-    public class func directory(dir: String) -> (HttpRequest -> HttpResponse) {
+    public class func directory(_ dir: String) -> (HttpRequest -> HttpResponse) {
         return { r in
             
             guard let localPath = r.params.first else {
@@ -92,7 +92,7 @@ extension HttpHandlers {
         }
     }
     
-    public class func directoryBrowser(dir: String) -> (HttpRequest -> HttpResponse) {
+    public class func directoryBrowser(_ dir: String) -> (HttpRequest -> HttpResponse) {
         return { r in
             guard let (_, value) = r.params.first else {
                 return HttpResponse.NotFound

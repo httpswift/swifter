@@ -28,7 +28,7 @@ public enum SocketError: ErrorProtocol {
 
 public class Socket: Hashable, Equatable {
     
-    public class func tcpSocketForListen(port: in_port_t, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
+    public class func tcpSocketForListen(_ port: in_port_t, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         
         #if os(Linux)
             let socketFileDescriptor = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
@@ -107,22 +107,25 @@ public class Socket: Hashable, Equatable {
         return Socket(socketFileDescriptor: clientSocket)
     }
     
-    public func writeUTF8(string: String) throws {
+    public func writeUTF8(_ string: String) throws {
         try writeUInt8(ArraySlice(string.utf8))
     }
     
-    public func writeUInt8(data: [UInt8]) throws {
+    public func writeUInt8(_ data: [UInt8]) throws {
         try writeUInt8(ArraySlice(data))
     }
     
-    public func writeUInt8(data: ArraySlice<UInt8>) throws {
+    public func writeUInt8(_ data: ArraySlice<UInt8>) throws {
         try data.withUnsafeBufferPointer {
+            guard let baseAddress = $0.baseAddress else {
+                throw SocketError.WriteFailed("The base address of data slice is nil.")
+            }
             var sent = 0
             while sent < data.count {
                 #if os(Linux)
-                    let s = send(self.socketFileDescriptor, $0.baseAddress + sent, Int(data.count - sent), Int32(MSG_NOSIGNAL))
+                    let s = send(self.socketFileDescriptor, baseAddress + sent, Int(data.count - sent), Int32(MSG_NOSIGNAL))
                 #else
-                    let s = write(self.socketFileDescriptor, $0.baseAddress + sent, Int(data.count - sent))
+                    let s = write(self.socketFileDescriptor, baseAddress + sent, Int(data.count - sent))
                 #endif
                 if s <= 0 {
                     throw SocketError.WriteFailed(Socket.descriptionOfLastError())
@@ -170,7 +173,7 @@ public class Socket: Hashable, Equatable {
         return String(cString: UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
     }
     
-    private class func setNoSigPipe(socket: Int32) {
+    private class func setNoSigPipe(_ socket: Int32) {
         #if os(Linux)
             // There is no SO_NOSIGPIPE in Linux (nor some other systems). You can instead use the MSG_NOSIGNAL flag when calling send(),
             // or use signal(SIGPIPE, SIG_IGN) to make your entire application ignore SIGPIPE.
@@ -181,7 +184,7 @@ public class Socket: Hashable, Equatable {
         #endif
     }
     
-    private class func shutdwn(socket: Int32) {
+    private class func shutdwn(_ socket: Int32) {
         #if os(Linux)
             shutdown(socket, Int32(SHUT_RDWR))
         #else
@@ -189,7 +192,7 @@ public class Socket: Hashable, Equatable {
         #endif
     }
     
-    private class func release(socket: Int32) {
+    private class func release(_ socket: Int32) {
         #if os(Linux)
             shutdown(socket, Int32(SHUT_RDWR))
         #else
@@ -198,7 +201,7 @@ public class Socket: Hashable, Equatable {
         close(socket)
     }
     
-    private class func htonsPort(port: in_port_t) -> in_port_t {
+    private class func htonsPort(_ port: in_port_t) -> in_port_t {
         #if os(Linux)
             return htons(port)
         #else

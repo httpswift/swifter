@@ -22,19 +22,19 @@ public enum FileError: ErrorProtocol {
 
 public class File {
     
-    public static func openNewForWriting(path: String) throws -> File {
+    public static func openNewForWriting(_ path: String) throws -> File {
         return try openFileForMode(path, "wb")
     }
     
-    public static func openForReading(path: String) throws -> File {
+    public static func openForReading(_ path: String) throws -> File {
         return try openFileForMode(path, "rb")
     }
     
-    public static func openForWritingAndReading(path: String) throws -> File {
+    public static func openForWritingAndReading(_ path: String) throws -> File {
         return try openFileForMode(path, "r+b")
     }
     
-    public static func openFileForMode(path: String, _ mode: String) throws -> File {
+    public static func openFileForMode(_ path: String, _ mode: String) throws -> File {
         let file = fopen(path.withCString({ $0 }), mode.withCString({ $0 }))
         guard file != nil else {
             throw FileError.OpenFailed(descriptionOfLastError())
@@ -42,7 +42,7 @@ public class File {
         return File(file)
     }
     
-    public static func isDirectory(path: String) throws -> Bool {
+    public static func isDirectory(_ path: String) throws -> Bool {
         var s = stat()
         guard stat(path, &s) == 0 else {
             throw FileError.IsDirectoryFailed(descriptionOfLastError())
@@ -68,7 +68,7 @@ public class File {
         fclose(pointer)
     }
     
-    public func read(data: inout [UInt8]) throws -> Int {
+    public func read(_ data: inout [UInt8]) throws -> Int {
         if data.count <= 0 {
             return data.count
         }
@@ -85,7 +85,7 @@ public class File {
         throw FileError.ReadFailed("Unknown file read error occured.")
     }
 
-    public func write(data: [UInt8]) throws -> Void {
+    public func write(_ data: [UInt8]) throws -> Void {
         if data.count <= 0 {
             return
         }
@@ -121,7 +121,7 @@ extension File {
         return try withFileOpenedForMode(path, mode: "r+b", f)
     }
     
-    public static func withFileOpenedForMode<Result>(path: String, mode: String, _ f: File throws -> Result) throws -> Result {
+    public static func withFileOpenedForMode<Result>(_ path: String, mode: String, _ f: File throws -> Result) throws -> Result {
         let file = try File.openFileForMode(path, mode)
         defer {
             file.close()
