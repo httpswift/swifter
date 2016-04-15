@@ -47,7 +47,7 @@ extension HttpHandlers {
     public class WebSocketSession {
         
         public enum Error: ErrorProtocol { case UnknownOpCode(String), UnMaskedFrame }
-        public enum OpCode { case Continue, Close, Ping, Pong, Text, Binary }
+        public enum OpCode: UInt8 { case Continue = 0x00, Close = 0x08, Ping = 0x09, Pong = 0x0A, Text = 0x01, Binary = 0x02 }
         
         public class Frame {
             public var opcode = OpCode.Close
@@ -74,7 +74,7 @@ extension HttpHandlers {
         }
         
         private func writeFrame(data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
-            let finAndOpCode = encodeFinAndOpCode(fin, op: op)
+            let finAndOpCode = UInt8(fin ? 0x80 : 0x00) | op.rawValue
             let maskAndLngth = encodeLengthAndMaskFlag(UInt64(data.count), false)
             do {
                 try self.socket.writeUInt8([finAndOpCode])
@@ -83,19 +83,6 @@ extension HttpHandlers {
             } catch {
                 print(error)
             }
-        }
-        
-        private func encodeFinAndOpCode(fin: Bool, op: OpCode) -> UInt8 {
-            var encodedByte = UInt8(fin ? 0x80 : 0x00);
-            switch op {
-            case .Continue : encodedByte |= 0x00 & 0x0F;
-            case .Text     : encodedByte |= 0x01 & 0x0F;
-            case .Binary   : encodedByte |= 0x02 & 0x0F;
-            case .Close    : encodedByte |= 0x08 & 0x0F;
-            case .Ping     : encodedByte |= 0x09 & 0x0F;
-            case .Pong     : encodedByte |= 0x0A & 0x0F;
-            }
-            return encodedByte
         }
         
         private func encodeLengthAndMaskFlag(len: UInt64, _ masked: Bool) -> [UInt8] {
@@ -127,17 +114,12 @@ extension HttpHandlers {
             let fst = try socket.read()
             frm.fin = fst & 0x80 != 0
             let opc = fst & 0x0F
-            switch opc {
-                case 0x00: frm.opcode = OpCode.Continue
-                case 0x01: frm.opcode = OpCode.Text
-                case 0x02: frm.opcode = OpCode.Binary
-                case 0x08: frm.opcode = OpCode.Close
-                case 0x09: frm.opcode = OpCode.Ping
-                case 0x0A: frm.opcode = OpCode.Pong
+            guard let opcode = OpCode(rawValue: opc) else {
                 // "If an unknown opcode is received, the receiving endpoint MUST _Fail the WebSocket Connection_."
                 // http://tools.ietf.org/html/rfc6455#section-5.2 ( Page 29 )
-                default  : throw Error.UnknownOpCode("\(opc)")
+                throw Error.UnknownOpCode("\(opc)")
             }
+            frm.opcode = opcode
             let sec = try socket.read()
             let msk = sec & 0x80 != 0
             guard msk else {
