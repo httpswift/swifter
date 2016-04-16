@@ -153,7 +153,7 @@ public class HttpServerIO {
     func dispatch_async(_ queueId: Int, _ block: (Void -> Void)) {
         let unmanagedDispatchContext = Unmanaged.passRetained(dispatch_context(block))
         let context = UnsafeMutablePointer<Void>(OpaquePointer(bitPattern: unmanagedDispatchContext))
-        var pthread: pthread_t = 0
+        var pthread: pthread_t
         pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Void>!) -> UnsafeMutablePointer<Void>! in
             let unmanaged = Unmanaged<dispatch_context>.fromOpaque(OpaquePointer(context))
             unmanaged.takeUnretainedValue().block()

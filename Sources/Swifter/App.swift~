@@ -52,7 +52,7 @@ public class App {
         
         print("Server started. Waiting for requests....")
         #if os(Linux)
-    	    while true { }
+    	    NSRunLoop.currentRunLoop().run()
 	#else
     	    NSRunLoop.current().run()
 	#endif

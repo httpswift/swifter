@@ -30,10 +30,7 @@ public enum HttpResponseBody {
             switch self {
             case .Json(let object):
 		#if os(Linux)
-    	    	let data = [UInt8]("Not ready for Linux.".utf8)
-		return (data.count, {
-		    $0.write(data)
-		})
+    	    	NSRunLoop.currentRunLoop().run()
 		#else
 		        guard NSJSONSerialization.isValidJSONObject(object) else {
 		            throw SerializationError.InvalidObject
