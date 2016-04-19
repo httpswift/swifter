@@ -33,7 +33,7 @@ public class Socket: Hashable, Equatable {
         #if os(Linux)
             let socketFileDescriptor = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
         #else
-            let socketFileDescriptor = socket(AF_INET, SOCK_STREAM, 0)
+            let socketFileDescriptor = socket(AF_INET6, SOCK_STREAM, 0)
         #endif
         
         if socketFileDescriptor == -1 {
@@ -55,18 +55,24 @@ public class Socket: Hashable, Equatable {
             addr.sin_addr = in_addr(s_addr: in_addr_t(0))
             addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
         #else
-            var addr = sockaddr_in()
-            addr.sin_len = __uint8_t(sizeof(sockaddr_in))
-            addr.sin_family = sa_family_t(AF_INET)
-            addr.sin_port = Socket.htonsPort(port)
-            addr.sin_addr = in_addr(s_addr: inet_addr("0.0.0.0"))
-            addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
+          var addr = sockaddr_in6(
+            sin6_len: UInt8(strideof(sockaddr_in6)),
+            sin6_family: UInt8(AF_INET6),
+            sin6_port: Socket.htonsPort(port),
+            sin6_flowinfo: 0,
+            sin6_addr: in6addr_any,
+            sin6_scope_id: 0
+          )
         #endif
         
-        var bind_addr = sockaddr()
-        memcpy(&bind_addr, &addr, Int(sizeof(sockaddr_in)))
-        
-        if bind(socketFileDescriptor, &bind_addr, socklen_t(sizeof(sockaddr_in))) == -1 {
+        var bind_addr = sockaddr_in6()
+        memcpy(&bind_addr, &addr, Int(sizeof(sockaddr_in6)))
+
+        let bind_result = withUnsafePointer(&bind_addr) { addr in
+          return bind(socketFileDescriptor, UnsafePointer<sockaddr>(addr), socklen_t(sizeof(sockaddr_in6)))
+        }
+
+        if bind_result == -1 {
             let details = Socket.descriptionOfLastError()
             Socket.release(socketFileDescriptor)
             throw SocketError.BindFailed(details)
