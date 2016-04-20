@@ -55,6 +55,8 @@ public class Socket: Hashable, Equatable {
             addr.sin_addr = in_addr(s_addr: in_addr_t(0))
             addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
         #else
+          // “Apple recommends always making an IPv6 socket to listen on.  The OS will automatically 
+          // “downgrade” it to an IPv4 socket if necessary, so there is no need to listen on two different sockets”.
           var addr = sockaddr_in6(
             sin6_len: UInt8(strideof(sockaddr_in6)),
             sin6_family: UInt8(AF_INET6),
