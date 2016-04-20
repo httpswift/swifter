@@ -35,11 +35,11 @@ server.start()
 ### CocoaPods? Yes.
 ```
 use_frameworks!
-pod 'Swifter', '~> 1.1.3'
+pod 'Swifter', '~> 1.1.4'
 ```
 
 ### Carthage? Also yes.
 
 ```
-github "glock45/swifter" == 1.1.3
+github "glock45/swifter" == 1.1.4
 ```
