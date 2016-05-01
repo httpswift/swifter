@@ -14,7 +14,8 @@ public func demoServer(publicDir: String) -> HttpServer {
     let server = HttpServer()
     
     server["/public/:path"] = HttpHandlers.shareFilesFromDirectory(publicDir)
-    
+    server["/public/"] = HttpHandlers.shareFilesFromDirectory(publicDir)    // needed to serve index file at root level
+
     server["/files/:path"] = HttpHandlers.directoryBrowser("/")
 
     server["/"] = { r in
@@ -109,7 +110,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     server["/stream"] = { r in
         return HttpResponse.RAW(200, "OK", nil, { w in
             for i in 0...100 {
-                w.write([UInt8]("[chunk \(i)]".utf8));
+                w.write([UInt8]("[chunk \(i)]".utf8))
             }
         })
     }
