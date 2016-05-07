@@ -117,5 +117,9 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         return .OK(.Html("GET OK"))
     }
     
+    server.notFoundHandler = { r in
+        return .MovedPermanently("https://github.com/404")
+    }
+    
     return server
 }

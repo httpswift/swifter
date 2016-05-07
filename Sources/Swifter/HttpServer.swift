@@ -58,10 +58,15 @@ public class HttpServer: HttpServerIO {
     public var routes: [String] {
         return router.routes();
     }
+    
+    public var notFoundHandler: (HttpRequest -> HttpResponse)?
 
     override public func dispatch(_ method: String, path: String) -> ([String:String], HttpRequest -> HttpResponse) {
         if let result = router.route(method, path: path) {
             return result
+        }
+        if let notFoundHandler = self.notFoundHandler {
+            return ([:], notFoundHandler)
         }
         return super.dispatch(method, path: path)
     }
