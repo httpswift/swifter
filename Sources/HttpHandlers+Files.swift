@@ -11,23 +11,49 @@ extension HttpHandlers {
     
     public class func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> HttpResponse) {
         return { r in
-            guard let fileRelativePath = r.params.first else {
+            guard let absolutePath = self.fileNameToShare(directoryPath, request: r) else {
                 return .NotFound
             }
-            let absolutePath = directoryPath + "/" + fileRelativePath.1
+
             guard let file = try? File.openForReading(absolutePath) else {
                 return .NotFound
             }
             return .RAW(200, "OK", [:], { writer in
                 var buffer = [UInt8](count: 64, repeatedValue: 0)
                 while let count = try? file.read(&buffer) where count > 0 {
-                    writer.write(buffer[0..<count])
+                    writer.write(buffer[0 ..< count])
                 }
                 file.close()
             })
         }
     }
-    
+
+    private class func fileNameToShare(directoryPath: String, request: HttpRequest) -> String? {
+        let path = request.path
+        let fileRelativePath = request.params.first
+
+        if !path.hasSuffix("/"), let fileRelativePath = fileRelativePath {
+            let absolutePath = directoryPath + "/" + fileRelativePath.1
+            return absolutePath
+        }
+
+        let fm = NSFileManager.defaultManager()
+        let possibleIndexFiles = ["index.html", "index.htm"] // add any other files you want to check for here
+        var folderPath = directoryPath
+        if let fileRelativePath = fileRelativePath {
+            folderPath += "/\(fileRelativePath.1)"
+        }
+
+        for indexFile in possibleIndexFiles {
+            let indexPath = "\(folderPath)/\(indexFile)"
+            if fm.fileExistsAtPath(indexPath) {
+                return indexPath
+            }
+        }
+        
+        return nil
+    }
+
     private static let rangePrefix = "bytes="
     
     public class func directory(dir: String) -> (HttpRequest -> HttpResponse) {
