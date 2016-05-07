@@ -1,5 +1,5 @@
 //
-//  HttpServer2.swift
+//  HttpServer.swift
 //  Swifter
 //
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
@@ -9,7 +9,7 @@ import Foundation
 
 public class HttpServer: HttpServerIO {
     
-    public static let VERSION = "1.1.3"
+    public static let VERSION = "1.1.4"
     
     private let router = HttpRouter()
     
@@ -42,10 +42,15 @@ public class HttpServer: HttpServerIO {
     public var routes: [String] {
         return router.routes();
     }
+    
+    public var notFoundHandler: (HttpRequest -> HttpResponse)?
 
     override public func dispatch(method: String, path: String) -> ([String:String], HttpRequest -> HttpResponse) {
         if let result = router.route(method, path: path) {
             return result
+        }
+        if let notFoundHandler = self.notFoundHandler {
+            return ([:], notFoundHandler)
         }
         return super.dispatch(method, path: path)
     }

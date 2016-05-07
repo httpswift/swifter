@@ -121,5 +121,9 @@ public func demoServer(publicDir: String) -> HttpServer {
         session.writeBinary(binary)
     })
     
+    server.notFoundHandler = { r in
+        return .MovedPermanently("https://github.com/404")
+    }
+    
     return server
 }
