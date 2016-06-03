@@ -142,24 +142,26 @@ public class HttpServerIO {
     let DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
     
     private class dispatch_context {
-        let block: (Void -> Void)
-        init(_ block: (Void -> Void)) {
+        let block: ((Void) -> Void)
+        init(_ block: ((Void) -> Void)) {
             self.block = block
         }
     }
     
     func dispatch_get_global_queue(_ queueId: Int, _ arg: Int) -> Int { return 0 }
     
-    func dispatch_async(_ queueId: Int, _ block: (Void -> Void)) {
+    func dispatch_async(_ queueId: Int, _ block: ((Void) -> Void)) {
         let unmanagedDispatchContext = Unmanaged.passRetained(dispatch_context(block))
-        let context = UnsafeMutablePointer<Void>(OpaquePointer(bitPattern: unmanagedDispatchContext))
+        let context = UnsafeMutablePointer<Void>(unmanagedDispatchContext.toOpaque())
         var pthread: pthread_t = 0
-        pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Void>!) -> UnsafeMutablePointer<Void>! in
-            let unmanaged = Unmanaged<dispatch_context>.fromOpaque(OpaquePointer(context))
-            unmanaged.takeUnretainedValue().block()
-            unmanaged.release()
+        pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Void>?) -> UnsafeMutablePointer<Void>! in
+            if let context = context {
+                let unmanaged = Unmanaged<dispatch_context>.fromOpaque(context)
+                unmanaged.takeUnretainedValue().block()
+                unmanaged.release()
+            }
             return context
-            }, context)
+        }, context)
     }
     
 #endif
