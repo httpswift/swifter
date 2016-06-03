@@ -25,18 +25,6 @@ public class DatabaseReflection: DatabaseReflectionProtocol {
 
 public extension DatabaseReflectionProtocol {
     
-    public func schemeWithValuesMethod1() -> (String, [String: Any?]) {
-        let reflections = _reflect(self)
-        
-        var fields = [String: Any?]()
-        for index in stride(from: 0, to: reflections.count, by: 1) {
-            let reflection = reflections[index]
-            fields[reflection.0] = reflection.1.value
-        }
-        
-        return (reflections.summary, fields)
-    }
-    
     public func schemeWithValuesMethod2() -> (String, [String: Any?]) {
         let mirror = Mirror(reflecting: self)
         
@@ -50,7 +38,6 @@ public extension DatabaseReflectionProtocol {
     
     public func schemeWithValuesAsString() -> (String, [(String, String?)]) {
         let (name, fields) = schemeWithValuesMethod2()
-        let (_, _) = schemeWithValuesMethod1()
         var map = [(String, String?)]()
         for (key, value) in fields {
             // TODO - Replace this by extending all supported types by a protocol.
@@ -72,12 +59,6 @@ public extension DatabaseReflectionProtocol {
         return (name, map)
     }
     
-    public static func classInstanceWithSchemeMethod1() -> (Self, String, [String: Any?]) {
-        let instance = Self()
-        let (name, fields) = instance.schemeWithValuesMethod1()
-        return (instance, name, fields)
-    }
-    
     public static func classInstanceWithSchemeMethod2() -> (Self, String, [String: Any?]) {
         let instance = Self()
         let (name, fields) = instance.schemeWithValuesMethod2()
@@ -85,7 +66,7 @@ public extension DatabaseReflectionProtocol {
     }
     
     static func find(id: UInt64) -> Self? {
-        let (instance, _, _) = classInstanceWithSchemeMethod1()
+        let (instance, _, _) = classInstanceWithSchemeMethod2()
         // TODO - make a query to DB
         return instance
     }

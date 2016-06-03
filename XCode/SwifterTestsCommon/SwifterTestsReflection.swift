@@ -21,7 +21,7 @@ class SwifterTestsReflection: XCTestCase {
         let blogPostInstance = BlogPost()
         blogPostInstance.author = "Me"
 
-        let (_, fields) = blogPostInstance.schemeWithValuesMethod1()
+        let (_, fields) = blogPostInstance.schemeWithValuesMethod2()
         XCTAssertEqual((fields["author"] as? String)?.utf8.count, 2)
     }
 }

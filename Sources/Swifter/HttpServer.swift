@@ -24,31 +24,31 @@ public class HttpServer: HttpServerIO {
     
     public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
     
-    public func get(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func get(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
         router.register("GET", path: path, handler: handler)
     }
     
-    public func post(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func post(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
         router.register("POST", path: path, handler: handler)
     }
     
-    public func put(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func put(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
         router.register("PUT", path: path, handler: handler)
     }
     
-    public func head(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func head(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
         router.register("HEAD", path: path, handler: handler)
     }
     
-    public func delete(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func delete(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
         router.register("DELETE", path: path, handler: handler)
     }
     
-    public func update(_ path: String, _ handler: (HttpRequest -> HttpResponse)) {
+    public func update(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
         router.register("UPDATE", path: path, handler: handler)
     }
 
-    public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
+    public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
         set {
             router.register(nil, path: path, handler: newValue)
         }
@@ -59,9 +59,9 @@ public class HttpServer: HttpServerIO {
         return router.routes();
     }
     
-    public var notFoundHandler: (HttpRequest -> HttpResponse)?
+    public var notFoundHandler: ((HttpRequest) -> HttpResponse)?
 
-    override public func dispatch(_ method: String, path: String) -> ([String:String], HttpRequest -> HttpResponse) {
+    override public func dispatch(_ method: String, path: String) -> ([String:String], (HttpRequest) -> HttpResponse) {
         if let result = router.route(method, path: path) {
             return result
         }
@@ -74,7 +74,7 @@ public class HttpServer: HttpServerIO {
     public struct MethodRoute {
         public let method: String
         public let router: HttpRouter
-        public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
+        public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
             set {
                 router.register(method, path: path, handler: newValue)
             }

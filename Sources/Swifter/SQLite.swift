@@ -38,7 +38,7 @@ public class SQLite {
         try exec(sql, nil)
     }
     
-    public func exec(_ sql: String, _ params: [String?]? = nil, _ step: ([String: String?] -> Void)? = nil) throws {
+    public func exec(_ sql: String, _ params: [String?]? = nil, _ step: (([String: String?]) -> Void)? = nil) throws {
         var statementPointer: OpaquePointer? = nil
         let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statementPointer, nil) }
         guard prepareResult == SQLITE_OK else {
@@ -61,11 +61,10 @@ public class SQLite {
                 var content = [String: String?]()
                 for i in 0..<sqlite3_column_count(statement) {
                     let name = String(cString: UnsafePointer<CChar>(sqlite3_column_name(statement, i)))
-                    let pointer = sqlite3_column_text(statement, i)
-                    if pointer == nil {
-                        content[name] = nil
-                    } else {
+                    if let pointer = sqlite3_column_text(statement, i) {
                         content[name] = String(cString: UnsafePointer<CChar>(pointer))
+                    } else {
+                        content[name] = nil
                     }
                 }
                 step?(content)
@@ -102,11 +101,10 @@ public class SQLite {
                 var content = [String: String]()
                 for i in 0..<sqlite3_column_count(statement) {
                     let name = String(cString: UnsafePointer<CChar>(sqlite3_column_name(statement, i)))
-                    let pointer = sqlite3_column_text(statement, i)
-                    if pointer == nil {
-                        content[name] = nil
-                    } else {
+                    if let pointer = sqlite3_column_text(statement, i) {
                         content[name] = String(cString: UnsafePointer<CChar>(pointer))
+                    } else {
+                        content[name] = nil
                     }
                 }
                 return content

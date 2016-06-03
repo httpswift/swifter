@@ -11,7 +11,7 @@ public class Process {
     
     public static var PID: Int { return Int(getpid()) }
     
-    public typealias SignalCallback = Int32 -> Void
+    public typealias SignalCallback = (Int32) -> Void
     
     private static var signalsWatchers = [SignalCallback]()
     private static var signalsObserved = false

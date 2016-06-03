@@ -35,8 +35,7 @@ public class File {
     }
     
     public static func openFileForMode(_ path: String, _ mode: String) throws -> File {
-        let file = fopen(path.withCString({ $0 }), mode.withCString({ $0 }))
-        guard file != nil else {
+        guard let file = fopen(path.withCString({ $0 }), mode.withCString({ $0 })) else {
             throw FileError.OpenFailed(descriptionOfLastError())
         }
         return File(file)
@@ -51,8 +50,7 @@ public class File {
     }
     
     public static func currentWorkingDirectory() throws -> String {
-        let path = getcwd(nil, 0)
-        if path == nil {
+        guard let path = getcwd(nil, 0) else {
             throw FileError.GetCurrentWorkingDirectoryFailed(descriptionOfLastError())
         }
         return String(cString: path)
@@ -109,19 +107,19 @@ public class File {
 
 extension File {
     
-    public static func withNewFileOpenedForWriting<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+    public static func withNewFileOpenedForWriting<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
         return try withFileOpenedForMode(path, mode: "wb", f)
     }
     
-    public static func withFileOpenedForReading<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+    public static func withFileOpenedForReading<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
         return try withFileOpenedForMode(path, mode: "rb", f)
     }
     
-    public static func withFileOpenedForWritingAndReading<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+    public static func withFileOpenedForWritingAndReading<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
         return try withFileOpenedForMode(path, mode: "r+b", f)
     }
     
-    public static func withFileOpenedForMode<Result>(_ path: String, mode: String, _ f: File throws -> Result) throws -> Result {
+    public static func withFileOpenedForMode<Result>(_ path: String, mode: String, _ f: (File) throws -> Result) throws -> Result {
         let file = try File.openFileForMode(path, mode)
         defer {
             file.close()

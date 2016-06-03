@@ -25,7 +25,7 @@ public enum HttpResponseBody {
     case Data([UInt8])
     case Custom(Any, (Any) throws -> String)
     
-    func content() -> (Int, (HttpResponseBodyWriter throws -> Void)?) {
+    func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
         do {
             switch self {
             case .Json(let object):
@@ -77,12 +77,12 @@ public enum HttpResponseBody {
 
 public enum HttpResponse {
     
-    case SwitchProtocols([String: String], Socket -> Void)
+    case SwitchProtocols([String: String], (Socket) -> Void)
     case OK(HttpResponseBody), Created, Accepted
     case MovedPermanently(String)
     case BadRequest(HttpResponseBody?), Unauthorized, Forbidden, NotFound
     case InternalServerError
-    case RAW(Int, String, [String:String]?, (HttpResponseBodyWriter -> Void)? )
+    case RAW(Int, String, [String:String]?, ((HttpResponseBodyWriter) -> Void)? )
     
     func statusCode() -> Int {
         switch self {
@@ -144,7 +144,7 @@ public enum HttpResponse {
         return headers
     }
     
-    func content() -> (length: Int, write: (HttpResponseBodyWriter throws -> Void)?) {
+    func content() -> (length: Int, write: ((HttpResponseBodyWriter) throws -> Void)?) {
         switch self {
         case .OK(let body)             : return body.content()
         case .BadRequest(let body)     : return body?.content() ?? (-1, nil)
@@ -153,7 +153,7 @@ public enum HttpResponse {
         }
     }
     
-    func socketSession() -> (Socket -> Void)?  {
+    func socketSession() -> ((Socket) -> Void)?  {
         switch self {
         case SwitchProtocols(_, let handler) : return handler
         default: return nil

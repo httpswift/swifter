@@ -9,7 +9,7 @@ import Foundation
 
 extension HttpHandlers {
     
-    public class func shareFilesFromDirectory(_ directoryPath: String) -> (HttpRequest -> HttpResponse) {
+    public class func shareFilesFromDirectory(_ directoryPath: String) -> ((HttpRequest) -> HttpResponse) {
         return { r in
             guard let fileRelativePath = r.params.first else {
                 return .NotFound

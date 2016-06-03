@@ -13,7 +13,7 @@ public class HttpServerIO {
     private var clientSockets: Set<Socket> = []
     private let clientSocketsLock = NSLock()
     
-    public typealias MiddlewareCallback = HttpRequest -> HttpResponse?
+    public typealias MiddlewareCallback = (HttpRequest) -> HttpResponse?
     
     public var middleware = [MiddlewareCallback]()
     
@@ -47,7 +47,7 @@ public class HttpServerIO {
         }
     }
     
-    public func dispatch(_ method: String, path: String) -> ([String: String], HttpRequest -> HttpResponse) {
+    public func dispatch(_ method: String, path: String) -> ([String: String], (HttpRequest) -> HttpResponse) {
         return ([:], { _ in HttpResponse.NotFound })
     }
     
