@@ -37,7 +37,7 @@ public class HttpParser {
     }
     
     private func extractQueryParams(_ url: String) -> [(String, String)] {
-        guard let query = url.split("?").last else {
+        guard let query = url.split("?").last where url.split("?").count == 2 else {
             return []
         }
         return query.split("&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
