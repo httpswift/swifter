@@ -39,8 +39,11 @@ public enum HttpResponseBody {
                         throw SerializationError.InvalidObject
                     }
                     let json = try JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions.prettyPrinted)
-                    return (json.count, {
-                        $0.write(json)
+                    let data = json.withUnsafeBytes({ (body: UnsafePointer<UInt8>) -> Array<UInt8> in
+                        return Array(UnsafeBufferPointer(start: body, count: json.count))
+                    })
+                    return (data.count, {
+                        $0.write(data)
                     })
                 #endif
             case .Text(let body):
