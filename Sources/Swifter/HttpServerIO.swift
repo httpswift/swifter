@@ -104,9 +104,6 @@ public class HttpServerIO {
         func write(_ data: [UInt8]) {
             write(ArraySlice(data))
         }
-        func write(_ data: Data) {
-            data.withUnsafeBytes { write(Array(UnsafeBufferPointer(start: $0, count: data.count))) }
-        }
         func write(_ data: ArraySlice<UInt8>) {
             do {
                 try socket.writeUInt8(data)
@@ -148,6 +145,19 @@ public class HttpServerIO {
     
 import Glibc
 
+public class Lock {
+    
+    private var mutex = pthread_mutex_t()
+    
+    init() { pthread_mutex_init(&mutex, nil) }
+    
+    public func lock() { pthread_mutex_lock(&mutex) }
+    
+    public func unlock() { pthread_mutex_unlock(&mutex) }
+    
+    deinit { pthread_mutex_destroy(&mutex) }
+}
+
 public class DispatchQueue {
     
     private static let instance = DispatchQueue()
@@ -170,10 +180,12 @@ public class DispatchQueue {
     public func async(execute work: @convention(block) () -> Swift.Void) {
         let context = UnsafeMutablePointer<Void>(OpaquePointer(bitPattern: Unmanaged.passRetained(DispatchContext(work))))
         var pthread: pthread_t = 0
-        pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Swift.Void>) -> UnsafeMutablePointer<Swift.Void>? in
-            let unmanaged = Unmanaged<DispatchContext>.fromOpaque(OpaquePointer(context))
-            unmanaged.takeUnretainedValue().block()
-            unmanaged.release()
+        pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Swift.Void>?) -> UnsafeMutablePointer<Swift.Void>? in
+	    if let context = context {
+                let unmanaged = Unmanaged<DispatchContext>.fromOpaque(OpaquePointer(context))
+                unmanaged.takeUnretainedValue().block()
+                unmanaged.release()
+            }
             return nil
         }, context)
     }
