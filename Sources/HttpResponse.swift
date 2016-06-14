@@ -5,7 +5,11 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
 public enum SerializationError: ErrorType {
     case InvalidObject
@@ -28,14 +32,21 @@ public enum HttpResponseBody {
         do {
             switch self {
             case .Json(let object):
-                guard NSJSONSerialization.isValidJSONObject(object) else {
-                    throw SerializationError.InvalidObject
-                }
-                let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
-                let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
-                return (data.count, {
-                    $0.write(data)
-                })
+                #if os(Linux)
+                    let data = [UInt8]("Not ready for Linux.".utf8)
+                    return (data.count, {
+                        $0.write(data)
+                    })
+                #else
+                    guard JSONSerialization.isValidJSONObject(object) else {
+                        throw SerializationError.InvalidObject
+                    }
+                    let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
+                    let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
+                    return (data.count, {
+                        $0.write(data)
+                    })
+                #endif
             case .Text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {

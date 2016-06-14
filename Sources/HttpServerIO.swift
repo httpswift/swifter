@@ -7,7 +7,6 @@
 
 #if os(Linux)
     import Glibc
-    import NSLinux
 #else
     import Foundation
 #endif
@@ -16,7 +15,7 @@ public class HttpServerIO {
     
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
-    private let clientSocketsLock = NSLock()
+    private let clientSocketsLock = Lock()
     
     public func start(listenPort: in_port_t = 8080, forceIPv4: Bool = false) throws {
         stop()
@@ -76,7 +75,7 @@ public class HttpServerIO {
         socket.release()
     }
     
-    private func lock(handle: NSLock, closure: () -> ()) {
+    private func lock(handle: Lock, closure: () -> ()) {
         handle.lock()
         closure()
         handle.unlock();
@@ -123,3 +122,46 @@ public class HttpServerIO {
         return keepAlive && content.length != -1;
     }
 }
+
+#if os(Linux)
+    
+    import Glibc
+
+    public class Lock {
+    
+        private var mutex = pthread_mutex_t()
+	    
+        init() { pthread_mutex_init(&mutex, nil) }
+	    
+        public func lock() { pthread_mutex_lock(&mutex) }
+	    
+        public func unlock() { pthread_mutex_unlock(&mutex) }
+	    
+        deinit { pthread_mutex_destroy(&mutex) }
+    }
+
+    
+    let DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
+    
+    private class dispatch_context {
+        let block: ((Void) -> Void)
+        init(_ block: ((Void) -> Void)) {
+            self.block = block
+        }
+    }
+    
+    func dispatch_get_global_queue(queueId: Int, _ arg: Int) -> Int { return 0 }
+    
+    func dispatch_async(queueId: Int, _ block: ((Void) -> Void)) {
+        let unmanagedDispatchContext = Unmanaged.passRetained(dispatch_context(block))
+        let context = UnsafeMutablePointer<Void>(unmanagedDispatchContext.toOpaque())
+        var pthread: pthread_t = 0
+        pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Void>) -> UnsafeMutablePointer<Void> in
+            let unmanaged = Unmanaged<dispatch_context>.fromOpaque(COpaquePointer(context))
+            unmanaged.takeUnretainedValue().block()
+            unmanaged.release()
+            return context
+        }, context)
+    }
+    
+#endif
