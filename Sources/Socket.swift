@@ -31,7 +31,7 @@ public class Socket: Hashable, Equatable {
     public class func tcpSocketForListen(port: in_port_t, forceIPv4: Bool = false, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         
         #if os(Linux)
-            let socketFileDescriptor = socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
+            let socketFileDescriptor = socket(forceIPv4 ? AF_INET : AF_INET6, Int32(SOCK_STREAM.rawValue), 0)
         #else
             let socketFileDescriptor = socket(forceIPv4 ? AF_INET : AF_INET6, SOCK_STREAM, 0)
         #endif
@@ -51,21 +51,25 @@ public class Socket: Hashable, Equatable {
         #if os(Linux)
             var bindResult: Int32 = -1
             if forceIPv4 {
-                var addr = sockaddr_in()
-                addr.sin_family = sa_family_t(AF_INET)
-                addr.sin_port = Socket.htonsPort(port)
-                addr.sin_addr = in_addr(s_addr: in_addr_t(0))
-                addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
+                var addr = sockaddr_in(sin_family: sa_family_t(AF_INET),
+                    sin_port: Socket.htonsPort(port),
+                    sin_addr: in_addr(s_addr: in_addr_t(0)),
+                    sin_zero:(0, 0, 0, 0, 0, 0, 0, 0))
                 
                 bindResult = withUnsafePointer(&addr) { bind(socketFileDescriptor, UnsafePointer<sockaddr>($0), socklen_t(sizeof(sockaddr_in))) }
             } else {
+                var addr = sockaddr_in6(sin6_family: sa_family_t(AF_INET6),
+                    sin6_port: Socket.htonsPort(port),
+                    sin6_flowinfo: 0,
+                    sin6_addr: in6addr_any,
+                    sin6_scope_id: 0)
                 
+                bindResult = withUnsafePointer(&addr) { bind(socketFileDescriptor, UnsafePointer<sockaddr>($0), socklen_t(sizeof(sockaddr_in6))) }
             }
         #else
             var bindResult: Int32 = -1
             if forceIPv4 {
-                var addr = sockaddr_in(
-                    sin_len: UInt8(strideof(sockaddr_in)),
+                var addr = sockaddr_in(sin_len: UInt8(strideof(sockaddr_in)),
                     sin_family: UInt8(AF_INET),
                     sin_port: Socket.htonsPort(port),
                     sin_addr: in_addr(s_addr: in_addr_t(0)),
@@ -73,8 +77,7 @@ public class Socket: Hashable, Equatable {
              
                 bindResult = withUnsafePointer(&addr) { bind(socketFileDescriptor, UnsafePointer<sockaddr>($0), socklen_t(sizeof(sockaddr_in))) }
             } else {
-                var addr = sockaddr_in6(sin6_len:
-                    UInt8(strideof(sockaddr_in6)),
+                var addr = sockaddr_in6(sin6_len: UInt8(strideof(sockaddr_in6)),
                     sin6_family: UInt8(AF_INET6),
                     sin6_port: Socket.htonsPort(port),
                     sin6_flowinfo: 0,
