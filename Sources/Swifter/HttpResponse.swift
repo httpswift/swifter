@@ -15,6 +15,7 @@ public enum SerializationError: ErrorProtocol {
 public protocol HttpResponseBodyWriter {
     func write(_ data: [UInt8])
     func write(_ data: ArraySlice<UInt8>)
+    func write(_ data: Data)
 }
 
 public enum HttpResponseBody {
@@ -29,21 +30,20 @@ public enum HttpResponseBody {
         do {
             switch self {
             case .Json(let object):
-		#if os(Linux)
-    	    	let data = [UInt8]("Not ready for Linux.".utf8)
-		return (data.count, {
-		    $0.write(data)
-		})
-		#else
-		        guard NSJSONSerialization.isValidJSONObject(object) else {
-		            throw SerializationError.InvalidObject
-		        }
-		        let json = try NSJSONSerialization.data(withJSONObject: object, options: NSJSONWritingOptions.prettyPrinted)
-		        let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
-		        return (data.count, {
-		            $0.write(data)
-		        })
-		#endif
+                #if os(Linux)
+                    let data = [UInt8]("Not ready for Linux.".utf8)
+                    return (data.count, {
+                        $0.write(data)
+                    })
+                #else
+                    guard JSONSerialization.isValidJSONObject(object) else {
+                        throw SerializationError.InvalidObject
+                    }
+                    let json = try JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions.prettyPrinted)
+                    return (json.count, {
+                        $0.write(json)
+                    })
+                #endif
             case .Text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {

@@ -12,9 +12,13 @@ do {
     server["/testAfterBaseRoute"] = { request in
         return .OK(.Html("ok !"))
     }
-    try server.start(9080)
+    if #available(OSX 10.10, *) {
+        try server.start(9080)
+    } else {
+        // Fallback on earlier versions
+    }
     print("Server has started ( port = 9080 ). Try to connect now...")
-    NSRunLoop.main().run()
+    RunLoop.main().run()
 } catch {
     print("Server start error: \(error)")
 }

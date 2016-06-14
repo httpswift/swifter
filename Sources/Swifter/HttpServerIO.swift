@@ -5,36 +5,41 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
 public class HttpServerIO {
     
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
-    private let clientSocketsLock = NSLock()
+    private let clientSocketsLock = Lock()
     
     public typealias MiddlewareCallback = (HttpRequest) -> HttpResponse?
     
     public var middleware = [MiddlewareCallback]()
     
-    public func start(_ listenPort: in_port_t = 8080) throws {
+    @available(OSX 10.10, *)
+    public func start(_ listenPort: in_port_t = 8080, forceIPv4: Bool = false) throws {
         stop()
-        listenSocket = try Socket.tcpSocketForListen(listenPort)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
+        listenSocket = try Socket.tcpSocketForListen(listenPort, forceIPv4: forceIPv4)
+        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground).async {
             while let socket = try? self.listenSocket.acceptClientSocket() {
                 self.lock(self.clientSocketsLock) {
                     self.clientSockets.insert(socket)
                 }
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), {
+                DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground).async {
                     self.handleConnection(socket)
                     self.lock(self.clientSocketsLock) {
                         self.clientSockets.remove(socket)
                     }
-                })
+                }
             }
             self.stop()
         }
-        
     }
     
     public func stop() {
@@ -53,6 +58,7 @@ public class HttpServerIO {
     
     private func handleConnection(_ socket: Socket) {
         let address = try? socket.peername()
+        print(address)
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
             request.address = address
@@ -87,7 +93,7 @@ public class HttpServerIO {
         return nil
     }
     
-    private func lock(_ handle: NSLock, closure: () -> ()) {
+    private func lock(_ handle: Lock, closure: () -> ()) {
         handle.lock()
         closure()
         handle.unlock();
@@ -97,6 +103,9 @@ public class HttpServerIO {
         let socket: Socket
         func write(_ data: [UInt8]) {
             write(ArraySlice(data))
+        }
+        func write(_ data: Data) {
+            data.withUnsafeBytes { write(Array(UnsafeBufferPointer(start: $0, count: data.count))) }
         }
         func write(_ data: ArraySlice<UInt8>) {
             do {
@@ -137,31 +146,37 @@ public class HttpServerIO {
 
 #if os(Linux)
     
-    import Glibc
+import Glibc
+
+public class DispatchQueue {
     
-    let DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
+    private static let instance = DispatchQueue()
     
-    private class dispatch_context {
+    public struct GlobalAttributes {
+        public static let qosBackground: DispatchQueue.GlobalAttributes = GlobalAttributes()
+    }
+    
+    public class func global(attributes: DispatchQueue.GlobalAttributes) -> DispatchQueue {
+        return instance
+    }
+    
+    private class DispatchContext {
         let block: ((Void) -> Void)
         init(_ block: ((Void) -> Void)) {
             self.block = block
         }
     }
     
-    func dispatch_get_global_queue(_ queueId: Int, _ arg: Int) -> Int { return 0 }
-    
-    func dispatch_async(_ queueId: Int, _ block: ((Void) -> Void)) {
-        let unmanagedDispatchContext = Unmanaged.passRetained(dispatch_context(block))
-        let context = UnsafeMutablePointer<Void>(unmanagedDispatchContext.toOpaque())
+    public func async(execute work: @convention(block) () -> Swift.Void) {
+        let context = UnsafeMutablePointer<Void>(OpaquePointer(bitPattern: Unmanaged.passRetained(DispatchContext(work))))
         var pthread: pthread_t = 0
-        pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Void>?) -> UnsafeMutablePointer<Void>! in
-            if let context = context {
-                let unmanaged = Unmanaged<dispatch_context>.fromOpaque(context)
-                unmanaged.takeUnretainedValue().block()
-                unmanaged.release()
-            }
-            return context
+        pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Swift.Void>) -> UnsafeMutablePointer<Swift.Void>? in
+            let unmanaged = Unmanaged<DispatchContext>.fromOpaque(OpaquePointer(context))
+            unmanaged.takeUnretainedValue().block()
+            unmanaged.release()
+            return nil
         }, context)
     }
-    
+}
+
 #endif

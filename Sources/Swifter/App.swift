@@ -13,6 +13,7 @@ public class App {
 
     public init() { }
     
+    @available(OSX 10.10, *)
     public func run(port: in_port_t = 9080, _ databasePath: String) throws -> Void {
         
         // Open database connection.
@@ -51,10 +52,11 @@ public class App {
         try self.server.start(port)
         
         print("Server started. Waiting for requests....")
+        
         #if os(Linux)
     	    while true { }
-	#else
-    	    NSRunLoop.current().run()
-	#endif
+        #else
+    	    RunLoop.current().run()
+        #endif
     }
 }
