@@ -15,7 +15,7 @@ public class HttpServerIO {
     
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
-    private let clientSocketsLock = Lock()
+    private let clientSocketsLock = NSLock()
     
     public func start(listenPort: in_port_t = 8080, forceIPv4: Bool = false) throws {
         stop()
@@ -75,7 +75,7 @@ public class HttpServerIO {
         socket.release()
     }
     
-    private func lock(handle: Lock, closure: () -> ()) {
+    private func lock(handle: NSLock, closure: () -> ()) {
         handle.lock()
         closure()
         handle.unlock();
@@ -127,7 +127,7 @@ public class HttpServerIO {
     
     import Glibc
 
-    public class Lock {
+    public class NSLock {
     
         private var mutex = pthread_mutex_t()
 	    

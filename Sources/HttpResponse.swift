@@ -38,7 +38,7 @@ public enum HttpResponseBody {
                         $0.write(data)
                     })
                 #else
-                    guard JSONSerialization.isValidJSONObject(object) else {
+                    guard NSJSONSerialization.isValidJSONObject(object) else {
                         throw SerializationError.InvalidObject
                     }
                     let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
