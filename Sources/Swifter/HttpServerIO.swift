@@ -58,7 +58,6 @@ public class HttpServerIO {
     
     private func handleConnection(_ socket: Socket) {
         let address = try? socket.peername()
-        print(address)
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
             request.address = address
