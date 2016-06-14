@@ -18,9 +18,9 @@ public class HttpServerIO {
     private var clientSockets: Set<Socket> = []
     private let clientSocketsLock = NSLock()
     
-    public func start(listenPort: in_port_t = 8080) throws {
+    public func start(listenPort: in_port_t = 8080, forceIPv4: Bool = false) throws {
         stop()
-        listenSocket = try Socket.tcpSocketForListen(listenPort)
+        listenSocket = try Socket.tcpSocketForListen(listenPort, forceIPv4: forceIPv4)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0)) {
             while let socket = try? self.listenSocket.acceptClientSocket() {
                 self.lock(self.clientSocketsLock) {
