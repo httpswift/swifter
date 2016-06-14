@@ -5,7 +5,7 @@
 Tiny http server engine written in Swift ( https://developer.apple.com/swift/ ) programming language.
 
 ![Platform](https://img.shields.io/badge/Platform-Linux%20&%20OSX-4BC51D.svg?style=flat)
-![Swift](https://img.shields.io/badge/Swift-2.2/3.0--dev-4BC51D.svg?style=flat)
+![Swift](https://img.shields.io/badge/Swift-2.2/3.0--preview--1-4BC51D.svg?style=flat)
 ![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
 [![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)](https://github.com/CocoaPods/Specs/tree/c53b984dfc6dd421d8344c21225920a20e91373d/Specs/Swifter)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
