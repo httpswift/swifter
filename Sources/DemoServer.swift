@@ -125,5 +125,10 @@ public func demoServer(publicDir: String) -> HttpServer {
         return .MovedPermanently("https://github.com/404")
     }
     
+    server.middleware.append { r in
+        print("Middleware:\(r.method) \(r.path)")
+        return nil
+    }
+    
     return server
 }

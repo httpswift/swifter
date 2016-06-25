@@ -46,7 +46,7 @@ public class HttpServerIO {
         }
     }
     
-    public func dispatch(method: String, path: String) -> ([String: String], HttpRequest -> HttpResponse) {
+    public func dispatch(request: HttpRequest) -> ([String: String], HttpRequest -> HttpResponse) {
         return ([:], { _ in HttpResponse.NotFound })
     }
     
@@ -55,7 +55,7 @@ public class HttpServerIO {
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
             let request = request
-            let (params, handler) = self.dispatch(request.method, path: request.path)
+            let (params, handler) = self.dispatch(request)
             request.address = address
             request.params = params;
             let response = handler(request)

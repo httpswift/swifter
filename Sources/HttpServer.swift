@@ -35,7 +35,7 @@ public class HttpServer: HttpServerIO {
     
     public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
     public var delete, update, head, post, get, put : MethodRoute
-
+    
     public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
         set {
             router.register(nil, path: path, handler: newValue)
@@ -48,15 +48,22 @@ public class HttpServer: HttpServerIO {
     }
     
     public var notFoundHandler: (HttpRequest -> HttpResponse)?
+    
+    public var middleware = Array<(HttpRequest) -> HttpResponse?>()
 
-    override public func dispatch(method: String, path: String) -> ([String:String], HttpRequest -> HttpResponse) {
-        if let result = router.route(method, path: path) {
+    override public func dispatch(request: HttpRequest) -> ([String:String], HttpRequest -> HttpResponse) {
+        for layer in middleware {
+            if let response = layer(request) {
+                return ([:], { _ in response })
+            }
+        }
+        if let result = router.route(request.method, path: request.path) {
             return result
         }
         if let notFoundHandler = self.notFoundHandler {
             return ([:], notFoundHandler)
         }
-        return super.dispatch(method, path: path)
+        return super.dispatch(request)
     }
     
     public struct MethodRoute {
