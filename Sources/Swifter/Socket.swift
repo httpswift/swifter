@@ -28,8 +28,6 @@ public enum SocketError: ErrorProtocol {
 
 public class Socket: Hashable, Equatable {
     
-
-    
     public class func tcpSocketForListen(_ port: in_port_t, forceIPv4: Bool = false, maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
 
         #if os(Linux)
@@ -106,7 +104,7 @@ public class Socket: Hashable, Equatable {
         return Socket(socketFileDescriptor: socketFileDescriptor)
     }
     
-    private let socketFileDescriptor: Int32
+    internal let socketFileDescriptor: Int32
     
     public init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
@@ -214,17 +212,21 @@ public class Socket: Hashable, Equatable {
         #if os(Linux)
             shutdown(socket, Int32(SHUT_RDWR))
         #else
-            Darwin.shutdown(socket, SHUT_RDWR)
+            let _ = Darwin.shutdown(socket, SHUT_RDWR)
         #endif
     }
     
     private class func release(_ socket: Int32) {
         #if os(Linux)
             shutdown(socket, Int32(SHUT_RDWR))
+            close(socket)
         #else
-            Darwin.shutdown(socket, SHUT_RDWR)
+            if Darwin.shutdown(socket, SHUT_RDWR) != -1 {
+                // If you close socket which was already closed it produces exception visible in TestFlight's crash log.
+                // This is easily can be fixed by checking result on shutdown function != -1.
+                close(socket)
+            }
         #endif
-        close(socket)
     }
     
     private class func htonsPort(_ port: in_port_t) -> in_port_t {
