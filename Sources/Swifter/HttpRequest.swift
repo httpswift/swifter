@@ -108,7 +108,7 @@ public class HttpRequest {
                 return nil
             }
         } else {
-            nextMultiPartLine(&generator)
+            let /* ignore */ _ = nextMultiPartLine(&generator)
         }
         var headers = [String: String]()
         while let line = nextMultiPartLine(&generator) where !line.isEmpty {

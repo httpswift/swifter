@@ -19,10 +19,7 @@ extension HttpHandlers {
                 return .NotFound
             }
             return .RAW(200, "OK", [:], { writer in
-                var buffer = [UInt8](repeating: 0, count: 64)
-                while let count = try? file.read(&buffer) where count > 0 {
-                    writer.write(buffer[0..<count])
-                }
+                writer.write(file)
                 file.close()
             })
         }

@@ -56,7 +56,7 @@ public class File {
         return String(cString: path)
     }
     
-    private let pointer: UnsafeMutablePointer<FILE>
+    internal let pointer: UnsafeMutablePointer<FILE>
     
     public init(_ pointer: UnsafeMutablePointer<FILE>) {
         self.pointer = pointer
