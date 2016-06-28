@@ -151,6 +151,11 @@ import Glibc
     
 struct sf_hdtr { }
     
+// Linux supports sendfile (http://man7.org/linux/man-pages/man2/sendfile.2.html)
+// but it's not exposed by the module map from the Swift toolchain.
+//
+// TODO - use @_silgen_name to get the sendfile entry point.
+    
 func sendfile(_ source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>!, _: UnsafeMutablePointer<sf_hdtr>!, _: Int32) -> Int32 {
     var buffer = [UInt8](repeating: 0, count: 1024)
     while true {
