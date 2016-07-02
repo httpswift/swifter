@@ -9,14 +9,20 @@ import Foundation
 
 public class Process {
     
-    public static var PID: Int { return Int(getpid()) }
+    public static var PID: Int {
+        return Int(getpid())
+    }
     
-    public typealias SignalCallback = (Int32) -> Void
+    public static var TID: UInt64 {
+        var tid: __uint64_t = 0
+        pthread_threadid_np(nil, &tid);
+        return UInt64(tid)
+    }
     
-    private static var signalsWatchers = [SignalCallback]()
+    private static var signalsWatchers = Array<(Int32) -> Void>()
     private static var signalsObserved = false
     
-    public static func watchSignals(_ callback: SignalCallback) {
+    public static func watchSignals(_ callback: (Int32) -> Void) {
         if !signalsObserved {
             [SIGTERM, SIGHUP, SIGSTOP, SIGINT].forEach { item in
                 signal(item) {

@@ -7,6 +7,8 @@
 
 import Foundation
 
+typealias Elo = ((HttpRequest) -> HttpResponse)
+
 public class HttpServer: HttpServerIO {
     
     public static let VERSION = "1.1.3"

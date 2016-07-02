@@ -75,6 +75,8 @@
 		7C31963A1CC2C68F00DF5406 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */; };
 		7C31963B1CC2C68F00DF5406 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */; };
 		7C31963C1CC2C68F00DF5406 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */; };
+		7C3945641D256FDA003EEABA /* HttpHandlers+Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3945631D256FDA003EEABA /* HttpHandlers+Scopes.swift */; };
+		7C3945651D256FDA003EEABA /* HttpHandlers+Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3945631D256FDA003EEABA /* HttpHandlers+Scopes.swift */; };
 		7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		7C5915221C92A99300D884BC /* SwifterTestsReflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */; };
@@ -196,6 +198,7 @@
 		7C3195F81CC2C68F00DF5406 /* String+BASE64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+BASE64.swift"; sourceTree = "<group>"; };
 		7C3195F91CC2C68F00DF5406 /* String+Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Misc.swift"; sourceTree = "<group>"; };
 		7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
+		7C3945631D256FDA003EEABA /* HttpHandlers+Scopes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpHandlers+Scopes.swift"; sourceTree = "<group>"; };
 		7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsWebSocketSession.swift; sourceTree = "<group>"; };
 		7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsReflection.swift; sourceTree = "<group>"; };
 		7C6B57EA1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsHttpRouter.swift; sourceTree = "<group>"; };
@@ -344,6 +347,7 @@
 				7C3195E81CC2C68F00DF5406 /* DemoServer.swift */,
 				7C3195E91CC2C68F00DF5406 /* File.swift */,
 				7C3195EA1CC2C68F00DF5406 /* HttpHandlers+Files.swift */,
+				7C3945631D256FDA003EEABA /* HttpHandlers+Scopes.swift */,
 				7C3195EB1CC2C68F00DF5406 /* HttpHandlers+WebSockets.swift */,
 				7C3195EC1CC2C68F00DF5406 /* HttpHandlers.swift */,
 				7C3195ED1CC2C68F00DF5406 /* HttpParser.swift */,
@@ -798,6 +802,7 @@
 				7C3196071CC2C68F00DF5406 /* File.swift in Sources */,
 				7C3196041CC2C68F00DF5406 /* DemoServer.swift in Sources */,
 				7C3196281CC2C68F00DF5406 /* Reflection.swift in Sources */,
+				7C3945641D256FDA003EEABA /* HttpHandlers+Scopes.swift in Sources */,
 				7C3196161CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
 				7C3196221CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
 				7C3196101CC2C68F00DF5406 /* HttpHandlers.swift in Sources */,
@@ -825,6 +830,7 @@
 				7C3196081CC2C68F00DF5406 /* File.swift in Sources */,
 				7C3196051CC2C68F00DF5406 /* DemoServer.swift in Sources */,
 				7C3196291CC2C68F00DF5406 /* Reflection.swift in Sources */,
+				7C3945651D256FDA003EEABA /* HttpHandlers+Scopes.swift in Sources */,
 				7C3196171CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
 				7C3196231CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
 				7C3196111CC2C68F00DF5406 /* HttpHandlers.swift in Sources */,

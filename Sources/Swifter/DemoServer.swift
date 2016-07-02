@@ -16,6 +16,7 @@ public func demoServer(_ publicDir: String) -> HttpServer {
     server["/public/:path"] = HttpHandlers.shareFilesFromDirectory(publicDir)
 
     server["/"] = { r in
+        
         var listPage = "Available services:<br><ul>"
         for services in server.routes {
             if services.isEmpty {
@@ -119,6 +120,33 @@ public func demoServer(_ publicDir: String) -> HttpServer {
     
     server.notFoundHandler = { r in
         return .MovedPermanently("https://github.com/404")
+    }
+    
+    server.GET["/scope"] = HttpHandlers.scopes {
+        html {
+            head {
+                stylesheet {
+                    href = "theme.cssśļ"
+                }
+            }
+            body {
+                header {
+                    title { inner = "My Web Page" }
+                }
+                table {
+                    for (index, item) in ["Item1", "Item2"].enumerated() {
+                        tr {
+                            td {
+                                div { inner = "\(index)" }
+                            }
+                            td {
+                                div { inner = item }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     return server
