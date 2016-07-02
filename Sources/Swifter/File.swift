@@ -35,7 +35,7 @@ public class File {
     }
     
     public static func openFileForMode(_ path: String, _ mode: String) throws -> File {
-        guard let file = fopen(path.withCString({ $0 }), mode.withCString({ $0 })) else {
+        guard let file = path.withCString({ pathPointer in mode.withCString({ fopen(pathPointer, $0) }) }) else {
             throw FileError.OpenFailed(descriptionOfLastError())
         }
         return File(file)
