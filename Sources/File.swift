@@ -34,13 +34,7 @@ public class File {
     }
     
     public static func openFileForMode(path: String, _ mode: String) throws -> File {
-        #if os(Linux)
-            let file = fopen(path.withCString({ $0 }), mode.withCString({ $0 }))
-        #else
-            let filename = UnsafePointer<Int8>((path as NSString).UTF8String)
-            let filemode = UnsafePointer<Int8>((mode as NSString).UTF8String)
-            let file = fopen(filename, filemode)
-        #endif
+        let file = path.withCString({ pathPointer in mode.withCString({ fopen(pathPointer, $0) }) })
         guard file != nil else {
             throw FileError.OpenFailed(descriptionOfLastError())
         }
