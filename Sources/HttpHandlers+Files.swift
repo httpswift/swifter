@@ -9,7 +9,7 @@ import Foundation
 
 extension HttpHandlers {
     
-    public class func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> HttpResponse) {
+    public class func shareFilesFromDirectory(directoryPath: String, chunkSize: Int = 64) -> (HttpRequest -> HttpResponse) {
         return { r in
             guard let absolutePath = self.fileNameToShare(directoryPath, request: r) else {
                 return .NotFound
@@ -19,7 +19,7 @@ extension HttpHandlers {
                 return .NotFound
             }
             return .RAW(200, "OK", [:], { writer in
-                var buffer = [UInt8](count: 64, repeatedValue: 0)
+                var buffer = [UInt8](count: chunkSize, repeatedValue: 0)
                 while let count = try? file.read(&buffer) where count > 0 {
                     writer.write(buffer[0 ..< count])
                 }
