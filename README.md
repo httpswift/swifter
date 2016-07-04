@@ -23,6 +23,18 @@ let server = HttpServer()
 server["/desktop/:path"] = HttpHandlers.shareFilesFromDirectory("/Users/me/Desktop")
 server.start()
 ```
+### How to HTML ?
+```swift
+let server = HttpServer()
+server["/my_html"] = HttpHandlers.scopes { 
+  html {
+    body {
+      h1 { inner = "hello" }
+    }
+  }
+}
+server.start()
+```
 ### How to redirect?
 ```swift
 let server = HttpServer()
