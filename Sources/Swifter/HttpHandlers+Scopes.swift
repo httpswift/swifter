@@ -333,7 +333,7 @@ var ScopesBuffer = [UInt64: String]()
 
 private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Closure) {
     
-    // Push the attributes on the stack.
+    // Push the attributes.
     
     let stackid = idd
     let stackdir = dir
@@ -739,7 +739,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
         ScopesBuffer[Process.TID] = output + ">" + current + "</" + node + ">"
     }
     
-    // Pop the attributes on stack.
+    // Pop the attributes.
     
     idd = stackid
     dir = stackdir
