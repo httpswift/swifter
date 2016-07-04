@@ -15,18 +15,16 @@ public func demoServer(_ publicDir: String) -> HttpServer {
     
     server["/public/:path"] = HttpHandlers.shareFilesFromDirectory(publicDir)
 
-    server["/"] = { r in
-        
-        var listPage = "Available services:<br><ul>"
-        for services in server.routes {
-            if services.isEmpty {
-                listPage += "<li><a href=\"/\">/</a></li>"
-            } else {
-                listPage += "<li><a href=\"\(services)\">\(services)</a></li>"
+    server["/"] = HttpHandlers.scopes {
+        html {
+            body {
+                ul(server.routes) { service in
+                    li {
+                        a { href = service; inner = service }
+                    }
+                }
             }
         }
-        listPage += "</ul>"
-        return .OK(.Html(listPage))
     }
     
     server["/magic"] = { .OK(.Html("You asked for " + $0.path)) }
@@ -78,8 +76,15 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joined(separator: "<br>")))
     }
     
-    server["/demo"] = { r in
-        return .OK(.Html("<center><h2>Hello Swift</h2><img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br></center>"))
+    server["/demo"] = HttpHandlers.scopes {
+        html {
+            body {
+                center {
+                    h2 { inner = "Hello Swift" }
+                    img { src = "https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png" }
+                }
+            }
+        }
     }
     
     server["/raw"] = { r in
@@ -122,26 +127,33 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         return .MovedPermanently("https://github.com/404")
     }
     
-    server.GET["/scope"] = HttpHandlers.scopes {
+    server.GET["/scopes-demo"] = HttpHandlers.scopes {
         html {
+            lang = "en"
             head {
+                meta {
+                    name = "Scopes DSL"
+                    content = "Swift"
+                }
+                title {
+                    inner = "Demo Web Page for Scopes DSL"
+                }
                 stylesheet {
-                    href = "theme.cssśļ"
+                    href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
                 }
             }
             body {
-                header {
-                    title { inner = "My Web Page" }
-                }
                 table {
-                    for (index, item) in ["Item1", "Item2"].enumerated() {
+                    thead {
                         tr {
-                            td {
-                                div { inner = "\(index)" }
-                            }
-                            td {
-                                div { inner = item }
-                            }
+                            th { inner = "Number" }
+                            th { inner = "Square" }
+                        }
+                    }
+                    tbody(0..<1000) { i in
+                        tr {
+                            td { inner = "\(i)" }
+                            td { inner = "\(i*i)" }
                         }
                     }
                 }
