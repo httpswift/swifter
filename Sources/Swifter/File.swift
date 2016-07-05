@@ -18,6 +18,7 @@ public enum FileError: ErrorProtocol {
     case SeekFailed(String)
     case GetCurrentWorkingDirectoryFailed(String)
     case IsDirectoryFailed(String)
+    case OpenDirFailed(String)
 }
 
 public class File {
@@ -54,6 +55,47 @@ public class File {
             throw FileError.GetCurrentWorkingDirectoryFailed(descriptionOfLastError())
         }
         return String(cString: path)
+    }
+    
+    public static func isDirectory(path: String) throws -> Bool {
+        var s = stat()
+        guard path.withCString({ stat($0, &s) }) == 0 else {
+            throw FileError.IsDirectoryFailed(descriptionOfLastError())
+        }
+        return s.st_mode & S_IFMT == S_IFDIR
+    }
+    
+    public static func exists(_ path: String) throws -> Bool {
+        var buffer = stat()
+        return path.withCString({ stat($0, &buffer) == 0 })
+    }
+    
+    public static func list(_ path: String) throws -> [String] {
+        let dir = path.withCString { opendir($0) }
+        if dir == nil {
+            throw FileError.OpenDirFailed(descriptionOfLastError())
+        }
+        defer { closedir(dir) }
+        var results = [String]()
+        while true {
+            guard let ent = readdir(dir) else {
+                break
+            }
+            var name = ent.pointee.d_name
+            let fileName = withUnsafePointer(&name) { (ptr) -> String? in
+                #if os(Linux)
+                    return String.fromCString([CChar](UnsafeBufferPointer<CChar>(start: UnsafePointer(unsafeBitCast(ptr, UnsafePointer<CChar>.self)), count: 256)))
+                #else
+                    var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, to: UnsafePointer<CChar>.self), count: Int(ent.pointee.d_namlen)))
+                    buffer.append(0)
+                    return String(validatingUTF8: buffer)
+                #endif
+            }
+            if let fileName = fileName {
+                results.append(fileName)
+            }
+        }
+        return results
     }
     
     internal let pointer: UnsafeMutablePointer<FILE>

@@ -5,17 +5,18 @@
 //  Copyright © 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
-extension HttpHandlers {
-    
-    public class func scopes(_ c: Closure) -> ((HttpRequest) -> HttpResponse) {
-        return { r in
-            ScopesBuffer[Process.TID] = ""
-            c()
-            return .RAW(200, "OK", ["Content-Type": "text/html"],
-                        { $0.write([UInt8](("<!DOCTYPE html>"  + (ScopesBuffer[Process.TID] ?? "")).utf8)) })
-        }
+public func scopes(scope: Closure) -> ((HttpRequest) -> HttpResponse) {
+    return { r in
+        ScopesBuffer[Process.TID] = ""
+        scope()
+        return .RAW(200, "OK", ["Content-Type": "text/html"],
+                    { $0.write([UInt8](("<!DOCTYPE html>"  + (ScopesBuffer[Process.TID] ?? "")).utf8)) })
     }
 }
 
@@ -127,6 +128,7 @@ public var maxlength: String? = nil
 public var valuetype: String? = nil
 public var accesskey: String? = nil
 public var onmouseup: String? = nil
+public var autofocus: String? = nil
 public var onkeypress: String? = nil
 public var ondblclick: String? = nil
 public var onmouseout: String? = nil
@@ -139,6 +141,7 @@ public var onmousedown: String? = nil
 public var frameborder: String? = nil
 public var marginwidth: String? = nil
 public var cellspacing: String? = nil
+public var placeholder: String? = nil
 public var marginheight: String? = nil
 public var acceptCharset: String? = nil
 
@@ -320,7 +323,7 @@ public func template(c: Closure) { element("template", c) }
 public func textarea(c: Closure) { element("textarea", c) }
 
 public func plaintext(c: Closure) { element("plaintext", c) }
-
+public func javascript(c: Closure) { element("script", ["type": "text/javascript"], c) }
 public func blockquote(c: Closure) { element("blockquote", c) }
 public func figcaption(c: Closure) { element("figcaption", c) }
 
@@ -453,6 +456,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     let stackframeborder = frameborder
     let stackmarginwidth = marginwidth
     let stackcellspacing = cellspacing
+    let stackplaceholder = placeholder
     let stackmarginheight = marginheight
     let stackacceptCharset = acceptCharset
     let stackinner = inner
@@ -575,6 +579,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     cellpadding = nil
     onmousedown = nil
     frameborder = nil
+    placeholder = nil
     marginwidth = nil
     cellspacing = nil
     marginheight = nil
@@ -717,16 +722,17 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     if let frameborder = frameborder { mergedAttributes["frameborder"] = frameborder }
     if let marginwidth = marginwidth { mergedAttributes["marginwidth"] = marginwidth }
     if let cellspacing = cellspacing { mergedAttributes["cellspacing"] = cellspacing }
+    if let placeholder = placeholder { mergedAttributes["placeholder"] = placeholder }
     if let marginheight = marginheight { mergedAttributes["marginheight"] = marginheight }
     if let acceptCharset = acceptCharset { mergedAttributes["accept-charset"] = acceptCharset }
-
+    
     for item in attrs.enumerated() {
-        mergedAttributes.updateValue(item.element.value, forKey: item.element.key)
+        mergedAttributes.updateValue(item.element.1, forKey: item.element.0)
     }
     
     output = output + mergedAttributes.reduce("") {
-        if let value = $0.1.value {
-            return $0.0 + " \($0.1.key)=\"\(value)\""
+        if let value = $0.1.1 {
+            return $0.0 + " \($0.1.0)=\"\(value)\""
         } else {
             return $0.0
         }
@@ -857,6 +863,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     cellpadding = stackcellpadding
     onmousedown = stackonmousedown
     frameborder = stackframeborder
+    placeholder = stackplaceholder
     marginwidth = stackmarginwidth
     cellspacing = stackcellspacing
     marginheight = stackmarginheight
