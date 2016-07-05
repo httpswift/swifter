@@ -43,6 +43,14 @@
 		7C73C6BE1C261A2600AEF6CA /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C73C69D1C2619E100AEF6CA /* String+Misc.swift */; };
 		7C7488781C1DA07300CBCD77 /* file.html in Resources */ = {isa = PBXBuildFile; fileRef = 7C7488771C1DA07300CBCD77 /* file.html */; };
 		7C74887B1C1DA08200CBCD77 /* file.html in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7C7488771C1DA07300CBCD77 /* file.html */; };
+		7C76B6DE1D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6DD1D2BB1050030FC98 /* HttpHandlers+Scopes.swift */; };
+		7C76B6DF1D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6DD1D2BB1050030FC98 /* HttpHandlers+Scopes.swift */; };
+		7C76B6E01D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6DD1D2BB1050030FC98 /* HttpHandlers+Scopes.swift */; };
+		7C76B6E11D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6DD1D2BB1050030FC98 /* HttpHandlers+Scopes.swift */; };
+		7C76B6E31D2BB1320030FC98 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6E21D2BB1320030FC98 /* Process.swift */; };
+		7C76B6E41D2BB1320030FC98 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6E21D2BB1320030FC98 /* Process.swift */; };
+		7C76B6E51D2BB1320030FC98 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6E21D2BB1320030FC98 /* Process.swift */; };
+		7C76B6E61D2BB1320030FC98 /* Process.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6E21D2BB1320030FC98 /* Process.swift */; };
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
 		7CA4815819A2EF2B0030B30D /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
 		7CA4815919A2EF560030B30D /* test.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CA4815719A2EF2B0030B30D /* test.json */; };
@@ -135,6 +143,8 @@
 		7C73C69C1C2619E100AEF6CA /* Socket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Socket.swift; sourceTree = "<group>"; };
 		7C73C69D1C2619E100AEF6CA /* String+Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Misc.swift"; sourceTree = "<group>"; };
 		7C7488771C1DA07300CBCD77 /* file.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = file.html; sourceTree = "<group>"; };
+		7C76B6DD1D2BB1050030FC98 /* HttpHandlers+Scopes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HttpHandlers+Scopes.swift"; sourceTree = "<group>"; };
+		7C76B6E21D2BB1320030FC98 /* Process.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Process.swift; sourceTree = "<group>"; };
 		7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterSampleOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -318,6 +328,7 @@
 			children = (
 				7C73C6941C2619E100AEF6CA /* DemoServer.swift */,
 				7CC0F8C81C50136B00B65A94 /* HttpHandlers+Files.swift */,
+				7C76B6DD1D2BB1050030FC98 /* HttpHandlers+Scopes.swift */,
 				7CC0F8CB1C5014A200B65A94 /* HttpHandlers+WebSockets.swift */,
 				7C73C6951C2619E100AEF6CA /* HttpHandlers.swift */,
 				7C73C6961C2619E100AEF6CA /* HttpParser.swift */,
@@ -331,6 +342,7 @@
 				7C73C69D1C2619E100AEF6CA /* String+Misc.swift */,
 				7C2BEC771C518B7C00B8EE90 /* String+SHA1.swift */,
 				7C1A2BFA1C5605F50026D3BF /* String+BASE64.swift */,
+				7C76B6E21D2BB1320030FC98 /* Process.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -575,12 +587,14 @@
 				7C73C6AC1C261A2100AEF6CA /* HttpParser.swift in Sources */,
 				7C73C6AD1C261A2100AEF6CA /* HttpRequest.swift in Sources */,
 				7C73C6AE1C261A2100AEF6CA /* HttpResponse.swift in Sources */,
+				7C76B6E31D2BB1320030FC98 /* Process.swift in Sources */,
 				7C73C6AF1C261A2100AEF6CA /* HttpRouter.swift in Sources */,
 				7CC0F8CC1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */,
 				7C73C6B01C261A2100AEF6CA /* HttpServer.swift in Sources */,
 				7CCD87871C676EE50068099B /* File.swift in Sources */,
 				7C73C6B11C261A2100AEF6CA /* HttpServerIO.swift in Sources */,
 				7C73C6B21C261A2100AEF6CA /* Socket.swift in Sources */,
+				7C76B6DE1D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */,
 				7CC0F8C91C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */,
 				7C73C6B31C261A2100AEF6CA /* String+Misc.swift in Sources */,
 			);
@@ -597,12 +611,14 @@
 				7C73C6B71C261A2600AEF6CA /* HttpParser.swift in Sources */,
 				7C73C6B81C261A2600AEF6CA /* HttpRequest.swift in Sources */,
 				7C73C6B91C261A2600AEF6CA /* HttpResponse.swift in Sources */,
+				7C76B6E41D2BB1320030FC98 /* Process.swift in Sources */,
 				7C73C6BA1C261A2600AEF6CA /* HttpRouter.swift in Sources */,
 				7CC0F8CD1C5014A200B65A94 /* HttpHandlers+WebSockets.swift in Sources */,
 				7C73C6BB1C261A2600AEF6CA /* HttpServer.swift in Sources */,
 				7CCD87881C676EE50068099B /* File.swift in Sources */,
 				7C73C6BC1C261A2600AEF6CA /* HttpServerIO.swift in Sources */,
 				7C73C6BD1C261A2600AEF6CA /* Socket.swift in Sources */,
+				7C76B6DF1D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */,
 				7CC0F8CA1C50136B00B65A94 /* HttpHandlers+Files.swift in Sources */,
 				7C73C6BE1C261A2600AEF6CA /* String+Misc.swift in Sources */,
 			);
@@ -632,6 +648,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */,
+				7C76B6E51D2BB1320030FC98 /* Process.swift in Sources */,
+				7C76B6E01D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */,
 				7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */,
 			);
@@ -642,6 +660,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87841C660ED60068099B /* SwifterTestsHttpParser.swift in Sources */,
+				7C76B6E61D2BB1320030FC98 /* Process.swift in Sources */,
+				7C76B6E11D2BB1050030FC98 /* HttpHandlers+Scopes.swift in Sources */,
 				7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7CCD87851C660ED60068099B /* SwifterTestsStringExtensions.swift in Sources */,
 			);

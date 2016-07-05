@@ -18,17 +18,16 @@ public func demoServer(publicDir: String) -> HttpServer {
 
     server["/files/:path"] = HttpHandlers.directoryBrowser("/")
 
-    server["/"] = { r in
-        var listPage = "Available services:<br><ul>"
-        for services in server.routes {
-            if services.isEmpty {
-                listPage += "<li><a href=\"/\">/</a></li>"
-            } else {
-                listPage += "<li><a href=\"\(services)\">\(services)</a></li>"
+    server["/"] = HttpHandlers.scopes {
+        html {
+            body {
+                ul(server.routes) { service in
+                    li {
+                        a { href = service; inner = service }
+                    }
+                }
             }
         }
-        listPage += "</ul>"
-        return .OK(.Html(listPage))
     }
     
     server["/magic"] = { .OK(.Html("You asked for " + $0.path)) }
@@ -80,8 +79,15 @@ public func demoServer(publicDir: String) -> HttpServer {
         return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
     }
     
-    server["/demo"] = { r in
-        return .OK(.Html("<center><h2>Hello Swift</h2><img src=\"https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png\"/><br></center>"))
+    server["/demo"] = HttpHandlers.scopes {
+        html {
+            body {
+                center {
+                    h2 { inner = "Hello Swift" }
+                    img { src = "https://devimages.apple.com.edgekey.net/swift/images/swift-hero_2x.png" }
+                }
+            }
+        }
     }
     
     server["/raw"] = { r in
