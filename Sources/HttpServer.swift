@@ -13,7 +13,7 @@
 
 public class HttpServer: HttpServerIO {
     
-    public static let VERSION = "1.2.5"
+    public static let VERSION = "1.2.6"
     
     private let router = HttpRouter()
     
