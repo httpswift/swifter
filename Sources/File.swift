@@ -17,6 +17,8 @@ public enum FileError: ErrorType {
     case ReadFailed(String)
     case SeekFailed(String)
     case GetCurrentWorkingDirectoryFailed(String)
+    case IsDirectoryFailed(String)
+    case OpenDirFailed(String)
 }
 
 public class File {
@@ -41,6 +43,14 @@ public class File {
         return File(file)
     }
     
+    public static func isDirectory(path: String) throws -> Bool {
+        var s = stat()
+        guard path.withCString({ stat($0, &s) }) == 0 else {
+            throw FileError.IsDirectoryFailed(descriptionOfLastError())
+        }
+        return s.st_mode & S_IFMT == S_IFDIR
+    }
+    
     public static func currentWorkingDirectory() throws -> String {
         let path = getcwd(nil, 0)
         if path == nil {
@@ -52,7 +62,36 @@ public class File {
         return result
     }
     
-    private let pointer: UnsafeMutablePointer<FILE>
+    public static func exists(path: String) throws -> Bool {
+        var buffer = stat()
+        return path.withCString({ stat($0, &buffer) == 0 })
+    }
+    
+    public static func list(path: String) throws -> [String] {
+        let dir = path.withCString { opendir($0) }
+        if dir == nil {
+            throw FileError.OpenDirFailed(descriptionOfLastError())
+        }
+        defer { closedir(dir) }
+        var results = [String]()
+        while true {
+            let ent = readdir(dir)
+            if ent == nil {
+                break
+            }
+            let fileName = withUnsafePointer(&ent.memory.d_name) { (ptr) -> String? in
+                var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, UnsafePointer<CChar>.self), count: Int(ent.memory.d_namlen)))
+                buffer.append(0)
+                return String.fromCString(buffer)
+            }
+            if let fileName = fileName {
+                results.append(fileName)
+            }
+        }
+        return results
+    }
+    
+    let pointer: UnsafeMutablePointer<FILE>
     
     public init(_ pointer: UnsafeMutablePointer<FILE>) {
         self.pointer = pointer

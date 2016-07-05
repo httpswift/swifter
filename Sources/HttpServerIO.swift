@@ -83,9 +83,16 @@ public class HttpServerIO {
     
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
+        
+        func write(file: File) {
+            var offset: off_t = 0
+            let _ = sendfile(fileno(file.pointer), socket.socketFileDescriptor, 0, &offset, nil, 0)
+        }
+
         func write(data: [UInt8]) {
             write(ArraySlice(data))
         }
+        
         func write(data: ArraySlice<UInt8>) {
             do {
                 try socket.writeUInt8(data)
@@ -126,6 +133,26 @@ public class HttpServerIO {
 #if os(Linux)
     
     import Glibc
+    
+    struct sf_hdtr { }
+    
+    func sendfile(source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>!, _: UnsafeMutablePointer<sf_hdtr>!, _: Int32) -> Int32 {
+        var buffer = [UInt8](repeating: 0, count: 1024)
+        while true {
+            let readResult = read(source, &buffer, buffer.count)
+            guard readResult > 0 else {
+                return Int32(readResult)
+            }
+            var writeCounter = 0
+            while writeCounter < readResult {
+                let writeResult = write(target, &buffer + writeCounter, readResult - writeCounter)
+                guard writeResult > 0 else {
+                    return Int32(writeResult)
+                }
+                writeCounter = writeCounter + writeResult
+            }
+        }
+    }
 
     public class NSLock {
     

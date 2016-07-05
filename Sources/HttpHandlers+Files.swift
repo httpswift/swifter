@@ -9,20 +9,17 @@ import Foundation
 
 extension HttpHandlers {
     
-    public class func shareFilesFromDirectory(directoryPath: String, chunkSize: Int = 64) -> (HttpRequest -> HttpResponse) {
+    public class func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> HttpResponse) {
         return { r in
-            guard let absolutePath = self.fileNameToShare(directoryPath, request: r) else {
+            guard let fileRelativePath = r.params.first else {
                 return .NotFound
             }
-
+            let absolutePath = directoryPath + "/" + fileRelativePath.1
             guard let file = try? File.openForReading(absolutePath) else {
                 return .NotFound
             }
             return .RAW(200, "OK", [:], { writer in
-                var buffer = [UInt8](count: chunkSize, repeatedValue: 0)
-                while let count = try? file.read(&buffer) where count > 0 {
-                    writer.write(buffer[0 ..< count])
-                }
+                writer.write(file)
                 file.close()
             })
         }
@@ -124,28 +121,39 @@ extension HttpHandlers {
                 return HttpResponse.NotFound
             }
             let filePath = dir + "/" + value
-            let fileManager = NSFileManager.defaultManager()
-            var isDir: ObjCBool = false
-            guard fileManager.fileExistsAtPath(filePath, isDirectory: &isDir) else {
-                return HttpResponse.NotFound
-            }
-            if isDir {
-                do {
-                    let files = try fileManager.contentsOfDirectoryAtPath(filePath)
-                    var response = "<h3>\(filePath)</h3></br><table>"
-                    response += files.map({ "<tr><td><a href=\"\(r.path)/\($0)\">\($0)</a></td></tr>"}).joinWithSeparator("")
-                    response += "</table>"
-                    return HttpResponse.OK(.Html(response))
-                } catch {
+            do {
+                guard try File.exists(filePath) else {
                     return HttpResponse.NotFound
                 }
-            } else {
-                if let content = NSData(contentsOfFile: filePath) {
-                    var array = [UInt8](count: content.length, repeatedValue: 0)
-                    content.getBytes(&array, length: content.length)
-                    return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
+                if try File.isDirectory(filePath) {
+                    let files = try File.list(filePath)
+                    return scopes {
+                        html {
+                            body {
+                                table(files) { file in
+                                    tr {
+                                        td {
+                                            a {
+                                                href = r.path + "/" + file
+                                                inner = file
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }(r)
+                } else {
+                    guard let file = try? File.openForReading(filePath) else {
+                        return .NotFound
+                    }
+                    return .RAW(200, "OK", [:], { writer in
+                        writer.write(file)
+                        file.close()
+                    })
                 }
-                return HttpResponse.NotFound
+            } catch {
+                return HttpResponse.InternalServerError
             }
         }
     }

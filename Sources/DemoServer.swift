@@ -18,7 +18,7 @@ public func demoServer(publicDir: String) -> HttpServer {
 
     server["/files/:path"] = HttpHandlers.directoryBrowser("/")
 
-    server["/"] = HttpHandlers.scopes {
+    server["/"] = scopes {
         html {
             body {
                 ul(server.routes) { service in
@@ -33,28 +33,63 @@ public func demoServer(publicDir: String) -> HttpServer {
     server["/magic"] = { .OK(.Html("You asked for " + $0.path)) }
     
     server["/test/:param1/:param2"] = { r in
-        var headersInfo = ""
-        for (name, value) in r.headers {
-            headersInfo += "\(name) : \(value)<br>"
-        }
-        var queryParamsInfo = ""
-        for (name, value) in r.queryParams {
-            queryParamsInfo += "\(name) : \(value)<br>"
-        }
-        var pathParamsInfo = ""
-        for token in r.params {
-            pathParamsInfo += "\(token.0) : \(token.1)<br>"
-        }
-        return .OK(.Html("<h3>Address: \(r.address)</h3><h3>Url:</h3> \(r.path)<h3>Method:</h3>\(r.method)<h3>Headers:</h3>\(headersInfo)<h3>Query:</h3>\(queryParamsInfo)<h3>Path params:</h3>\(pathParamsInfo)"))
+        scopes {
+            html {
+                body {
+                    h3 { inner = "Address: \(r.address)" }
+                    h3 { inner = "Url: \(r.path)" }
+                    h3 { inner = "Method: \(r.method)" }
+                    
+                    h3 { inner = "Query:" }
+                    
+                    table(r.queryParams) { param in
+                        tr {
+                            td { inner = param.0 }
+                            td { inner = param.1 }
+                        }
+                    }
+                    
+                    h3 { inner = "Headers:" }
+                    
+                    table(r.headers) { header in
+                        tr {
+                            td { inner = header.0 }
+                            td { inner = header.1 }
+                        }
+                    }
+                    
+                    h3 { inner = "Route params:" }
+                    
+                    table(r.params) { param in
+                        tr {
+                            td { inner = param.0 }
+                            td { inner = param.1 }
+                        }
+                    }
+                }
+            }
+        }(r)
     }
     
-    server.GET["/upload"] = { r in
-        if let html = NSData(contentsOfFile:"\(publicDir)/file.html") {
-            var array = [UInt8](count: html.length, repeatedValue: 0)
-            html.getBytes(&array, length: html.length)
-            return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
+    server.GET["/upload"] = scopes {
+        html {
+            body {
+                form {
+                    method = "POST"
+                    action = "/upload"
+                    enctype = "multipart/form-data"
+                    
+                    input { name = "my_file1"; type = "file" }
+                    input { name = "my_file2"; type = "file" }
+                    input { name = "my_file3"; type = "file" }
+                    
+                    button {
+                        type = "submit"
+                        inner = "Upload"
+                    }
+                }
+            }
         }
-        return .NotFound
     }
     
     server.POST["/upload"] = { r in
@@ -65,13 +100,37 @@ public func demoServer(publicDir: String) -> HttpServer {
         return HttpResponse.OK(.Html(response))
     }
     
-    server.GET["/login"] = { r in
-        if let html = NSData(contentsOfFile:"\(publicDir)/login.html") {
-            var array = [UInt8](count: html.length, repeatedValue: 0)
-            html.getBytes(&array, length: html.length)
-            return HttpResponse.RAW(200, "OK", nil, { $0.write(array) })
+    server.GET["/login"] = scopes {
+        html {
+            head {
+                script { src = "http://cdn.staticfile.org/jquery/2.1.4/jquery.min.js" }
+                stylesheet { href = "http://cdn.staticfile.org/twitter-bootstrap/3.3.0/css/bootstrap.min.css" }
+            }
+            body {
+                h3 { inner = "Sign In" }
+                
+                form {
+                    method = "POST"
+                    action = "/login"
+                    
+                    fieldset {
+                        input { placeholder = "E-mail"; name = "email"; type = "email"; autofocus = "" }
+                        input { placeholder = "Password"; name = "password"; type = "password"; autofocus = "" }
+                        a {
+                            href = "/login"
+                            button {
+                                type = "submit"
+                                inner = "Login"
+                            }
+                        }
+                    }
+                    
+                }
+                javascript {
+                    src = "http://cdn.staticfile.org/twitter-bootstrap/3.3.0/js/bootstrap.min.js"
+                }
+            }
         }
-        return .NotFound
     }
     
     server.POST["/login"] = { r in
@@ -79,7 +138,7 @@ public func demoServer(publicDir: String) -> HttpServer {
         return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
     }
     
-    server["/demo"] = HttpHandlers.scopes {
+    server["/demo"] = scopes {
         html {
             body {
                 center {
@@ -138,3 +197,4 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     return server
 }
+    

@@ -102,7 +102,7 @@ public class Socket: Hashable, Equatable {
         return Socket(socketFileDescriptor: socketFileDescriptor)
     }
     
-    private let socketFileDescriptor: Int32
+    let socketFileDescriptor: Int32
     
     public init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
