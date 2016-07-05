@@ -127,6 +127,11 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         return .MovedPermanently("https://github.com/404")
     }
     
+    server.middleware.append({ r in
+        print("\(r.method) - \(r.path)")
+        return nil
+    })
+    
     server.GET["/scopes-demo"] = HttpHandlers.scopes {
         html {
             lang = "en"

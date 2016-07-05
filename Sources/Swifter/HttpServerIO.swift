@@ -17,8 +17,6 @@ public class HttpServerIO {
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
     private let clientSocketsLock = Lock()
-        
-    public var middleware = Array<(HttpRequest) -> HttpResponse?>()
     
     @available(OSX 10.10, *)
     public func start(_ listenPort: in_port_t = 8080, forceIPv4: Bool = false) throws {
@@ -50,7 +48,7 @@ public class HttpServerIO {
         }
     }
     
-    public func dispatch(_ method: String, path: String) -> ([String: String], (HttpRequest) -> HttpResponse) {
+    public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
         return ([:], { _ in HttpResponse.NotFound })
     }
     
@@ -58,36 +56,25 @@ public class HttpServerIO {
         let address = try? socket.peername()
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
+            let request = request
+            let (params, handler) = self.dispatch(request)
             request.address = address
-            var response = askMiddlewareForResponse(request)
-            if response == nil {
-                let (params, handler) = self.dispatch(request.method, path: request.path)
-                request.params = params
-                response = handler(request)
-            }
+            request.params = params;
+            let response = handler(request)
             var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
-                keepConnection = try self.respond(socket, response: response!, keepAlive: keepConnection)
+                keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
             } catch {
                 print("Failed to send response: \(error)")
                 break
             }
-            if let session = response!.socketSession() {
+            if let session = response.socketSession() {
                 session(socket)
                 break
             }
             if !keepConnection { break }
         }
         socket.release()
-    }
-
-    private func askMiddlewareForResponse(_ request: HttpRequest) -> HttpResponse? {
-        for layer in middleware {
-            if let response = layer(request) {
-                return response
-            }
-        }
-        return nil
     }
     
     private func lock(_ handle: Lock, closure: () -> ()) {
