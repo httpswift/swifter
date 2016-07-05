@@ -32,6 +32,18 @@ server["/redirect"] = { request in
 }
 server.start()
 ```
+### How to HTML ?
+```swift
+let server = HttpServer()
+server["/my_html"] = HttpHandlers.scopes { 
+  html {
+    body {
+      h1 { inner = "hello" }
+    }
+  }
+}
+server.start()
+```
 ### CocoaPods? Yes.
 ```
 use_frameworks!
