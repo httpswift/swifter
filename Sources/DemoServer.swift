@@ -13,10 +13,10 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     let server = HttpServer()
     
-    server["/public/:path"] = HttpHandlers.shareFilesFromDirectory(publicDir)
-    server["/public/"] = HttpHandlers.shareFilesFromDirectory(publicDir)    // needed to serve index file at root level
+    server["/public/:path"] = shareFilesFromDirectory(publicDir)
+    server["/public/"] = shareFilesFromDirectory(publicDir)    // needed to serve index file at root level
 
-    server["/files/:path"] = HttpHandlers.directoryBrowser("/")
+    server["/files/:path"] = directoryBrowser("/")
 
     server["/"] = scopes {
         html {
@@ -180,7 +180,7 @@ public func demoServer(publicDir: String) -> HttpServer {
         })
     }
     
-    server["/websocket-echo"] = HttpHandlers.websocket({ (session, text) in
+    server["/websocket-echo"] = websocket({ (session, text) in
         session.writeText(text)
     }, { (session, binary) in
         session.writeBinary(binary)
