@@ -79,15 +79,15 @@ public class File {
             if ent == nil {
                 break
             }
-	    var name = ent.memory.d_name
+            var name = ent.memory.d_name
             let fileName = withUnsafePointer(&name) { (ptr) -> String? in
                 #if os(Linux)
-		return String.fromCString([CChar](UnsafeBufferPointer<CChar>(start: UnsafePointer(unsafeBitCast(ptr, UnsafePointer<CChar>.self)), count: Int(NAME_MAX))))
-		#else
-		var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, UnsafePointer<CChar>.self), count: Int(ent.memory.d_namlen)))
-                buffer.append(0)
-                return String.fromCString(buffer)
-		#endif
+                    return String.fromCString([CChar](UnsafeBufferPointer<CChar>(start: UnsafePointer(unsafeBitCast(ptr, UnsafePointer<CChar>.self)), count: Int(NAME_MAX))))
+                #else
+                    var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, UnsafePointer<CChar>.self), count: Int(ent.memory.d_namlen)))
+                    buffer.append(0)
+                    return String.fromCString(buffer)
+                #endif
             }
             if let fileName = fileName {
                 results.append(fileName)
