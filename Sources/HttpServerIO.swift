@@ -136,8 +136,8 @@ public class HttpServerIO {
     
     struct sf_hdtr { }
     
-    func sendfile(source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>!, _: UnsafeMutablePointer<sf_hdtr>!, _: Int32) -> Int32 {
-        var buffer = [UInt8](repeating: 0, count: 1024)
+    func sendfile(source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>, _: UnsafeMutablePointer<sf_hdtr>, _: Int32) -> Int32 {
+        var buffer = [UInt8](count: 1024, repeatedValue: 0)
         while true {
             let readResult = read(source, &buffer, buffer.count)
             guard readResult > 0 else {

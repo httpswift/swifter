@@ -5,7 +5,11 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
 public class Process {
     
@@ -14,9 +18,13 @@ public class Process {
     }
     
     public static var TID: UInt64 {
+	#if os(Linux)
+        return UInt64(pthread_self())
+	#else
         var tid: __uint64_t = 0
         pthread_threadid_np(nil, &tid);
         return UInt64(tid)
+        #endif
     }
     
     private static var signalsWatchers = Array<(Int32) -> Void>()

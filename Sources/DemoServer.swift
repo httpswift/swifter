@@ -5,7 +5,11 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
+#if os(Linux)
+    import Glibc
+#else
+    import Foundation
+#endif
 
 public func demoServer(publicDir: String) -> HttpServer {
     
@@ -151,11 +155,6 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     server["/raw"] = { r in
         return HttpResponse.RAW(200, "OK", ["XXX-Custom-Header": "value"], { $0.write([UInt8]("test".utf8)) })
-    }
-    
-    server["/json"] = { r in
-        let jsonObject: NSDictionary = [NSString(string: "foo"): NSNumber(int: 3), NSString(string: "bar"): NSString(string: "baz")] 
-        return .OK(.Json(jsonObject))
     }
     
     server["/redirect"] = { r in
