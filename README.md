@@ -21,7 +21,7 @@ server.start()
 ### How to share files?
 ```swift
 let server = HttpServer()
-server["/desktop/:path"] = HttpHandlers.shareFilesFromDirectory("/Users/me/Desktop")
+server["/desktop/:path"] = shareFilesFromDirectory("/Users/me/Desktop")
 server.start()
 ```
 ### How to redirect?
@@ -35,13 +35,23 @@ server.start()
 ### How to HTML ?
 ```swift
 let server = HttpServer()
-server["/my_html"] = HttpHandlers.scopes { 
+server["/my_html"] = scopes { 
   html {
     body {
       h1 { inner = "hello" }
     }
   }
 }
+server.start()
+```
+### How to WebSockets ?
+```swift
+let server = HttpServer()
+server["/websocket-echo"] = websocket({ (session, text) in
+  session.writeText(text)
+}, { (session, binary) in
+  session.writeBinary(binary)
+})
 server.start()
 ```
 ### CocoaPods? Yes.
