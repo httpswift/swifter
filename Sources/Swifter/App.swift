@@ -56,7 +56,7 @@ public class App {
         #if os(Linux)
     	    while true { }
         #else
-    	    RunLoop.current().run()
+    	    RunLoop.current.run()
         #endif
     }
 }

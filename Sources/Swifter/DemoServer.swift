@@ -72,7 +72,7 @@ public func demoServer(_ publicDir: String) -> HttpServer {
                     }
                 }
             }
-            }(r)
+        }(r)
     }
     
     server.GET["/upload"] = scopes {
@@ -180,7 +180,7 @@ public func demoServer(_ publicDir: String) -> HttpServer {
     }
     
     server["/websocket-echo"] = websocket({ (session, text) in
-        session.writeText(text)
+            session.writeText(text)
         }, { (session, binary) in
             session.writeBinary(binary)
     })

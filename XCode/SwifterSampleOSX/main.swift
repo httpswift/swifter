@@ -18,7 +18,7 @@ do {
         // Fallback on earlier versions
     }
     print("Server has started ( port = 9080 ). Try to connect now...")
-    RunLoop.main().run()
+    RunLoop.main.run()
 } catch {
     print("Server start error: \(error)")
 }

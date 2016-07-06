@@ -91,19 +91,19 @@ public func memoryLayoutForStructure(object: Any) -> [String: Range<Int>] {
     for case let (label?, value) in Mirror(reflecting: object).children {
         var fieldLength = 0
         // TODO - Replace this with something smarter.
-        if value is Int    { fieldLength = sizeof(Int)   } else
-        if value is UInt   { fieldLength = sizeof(UInt)  } else
-        if value is Int8   { fieldLength = sizeof(Int8)  } else
-        if value is UInt8  { fieldLength = sizeof(UInt8) } else
-        if value is Int16  { fieldLength = sizeof(Int16) } else
-        if value is UInt16 { fieldLength = sizeof(UInt16)} else
-        if value is Int32  { fieldLength = sizeof(Int32) } else
-        if value is UInt32 { fieldLength = sizeof(UInt32)} else
-        if value is Int64  { fieldLength = sizeof(Int64) } else
-        if value is UInt64 { fieldLength = sizeof(UInt64)} else
-        if value is Float  { fieldLength = sizeof(Float) } else
-        if value is Double { fieldLength = sizeof(Double)} else
-        if value is String { fieldLength = sizeof(String)}
+        if value is Int    { fieldLength = sizeof(Int.self)   } else
+        if value is UInt   { fieldLength = sizeof(UInt.self)  } else
+        if value is Int8   { fieldLength = sizeof(Int8.self)  } else
+        if value is UInt8  { fieldLength = sizeof(UInt8.self) } else
+        if value is Int16  { fieldLength = sizeof(Int16.self) } else
+        if value is UInt16 { fieldLength = sizeof(UInt16.self)} else
+        if value is Int32  { fieldLength = sizeof(Int32.self) } else
+        if value is UInt32 { fieldLength = sizeof(UInt32.self)} else
+        if value is Int64  { fieldLength = sizeof(Int64.self) } else
+        if value is UInt64 { fieldLength = sizeof(UInt64.self)} else
+        if value is Float  { fieldLength = sizeof(Float.self) } else
+        if value is Double { fieldLength = sizeof(Double.self)} else
+        if value is String { fieldLength = sizeof(String.self)}
         if fieldLength <= alignment {
             layout[label] = size ..< size + fieldLength
             size = size + fieldLength

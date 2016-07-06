@@ -50,7 +50,7 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
                             }
                         }
                     }
-                    }(r)
+                }(r)
             } else {
                 guard let file = try? File.openForReading(filePath) else {
                     return .NotFound
