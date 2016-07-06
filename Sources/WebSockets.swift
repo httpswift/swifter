@@ -46,7 +46,7 @@ public func websocket(
     }
 }
 
-public class WebSocketSession {
+public class WebSocketSession: Hashable, Equatable  {
     
     public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame }
     public enum OpCode { case Continue, Close, Ping, Pong, Text, Binary }
@@ -169,4 +169,14 @@ public class WebSocketSession {
         }
         return frm
     }
+    
+    public var hashValue: Int {
+        get {
+            return socket.hashValue
+        }
+    }
+}
+
+public func ==(webSocketSession1: WebSocketSession, webSocketSession2: WebSocketSession) -> Bool {
+    return webSocketSession1.socket == webSocketSession2.socket
 }
