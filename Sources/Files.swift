@@ -21,8 +21,8 @@ public func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> Ht
             return .NotFound
         }
         return .RAW(200, "OK", [:], { writer in
-            writer.write(file)
-            file.close()
+            defer { file.close() }
+            try writer.write(file)
         })
     }
 }
@@ -60,8 +60,8 @@ public func directoryBrowser(dir: String) -> (HttpRequest -> HttpResponse) {
                     return .NotFound
                 }
                 return .RAW(200, "OK", [:], { writer in
-                    writer.write(file)
-                    file.close()
+                    defer { file.close() }
+                    try writer.write(file)
                 })
             }
         } catch {
