@@ -14,6 +14,10 @@
 		7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7C73C6921C26179C00AEF6CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
+		7C76B29F1D369BEC00D35BFB /* Socket+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B29E1D369BEC00D35BFB /* Socket+File.swift */; };
+		7C76B2A01D369BEC00D35BFB /* Socket+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B29E1D369BEC00D35BFB /* Socket+File.swift */; };
+		7C76B2A21D369C9D00D35BFB /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
+		7C76B2A31D369C9D00D35BFB /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
 		7C76B70D1D2C456A0030FC98 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6EA1D2C44F30030FC98 /* DemoServer.swift */; };
 		7C76B70E1D2C456B0030FC98 /* DemoServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6EA1D2C44F30030FC98 /* DemoServer.swift */; };
 		7C76B70F1D2C456D0030FC98 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6EB1D2C44F30030FC98 /* File.swift */; };
@@ -112,6 +116,8 @@
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsWebSocketSession.swift; sourceTree = "<group>"; };
+		7C76B29E1D369BEC00D35BFB /* Socket+File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Socket+File.swift"; sourceTree = "<group>"; };
+		7C76B2A11D369C9D00D35BFB /* Errno.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errno.swift; sourceTree = "<group>"; };
 		7C76B6EA1D2C44F30030FC98 /* DemoServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoServer.swift; sourceTree = "<group>"; };
 		7C76B6EB1D2C44F30030FC98 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		7C76B6EC1D2C44F30030FC98 /* Files.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Files.swift; sourceTree = "<group>"; };
@@ -226,10 +232,12 @@
 				7C76B6F31D2C44F30030FC98 /* Process.swift */,
 				7C76B6F41D2C44F30030FC98 /* Scopes.swift */,
 				7C76B6F51D2C44F30030FC98 /* Socket.swift */,
+				7C76B29E1D369BEC00D35BFB /* Socket+File.swift */,
 				7C76B6F61D2C44F30030FC98 /* String+BASE64.swift */,
 				7C76B6F71D2C44F30030FC98 /* String+Misc.swift */,
 				7C76B6F81D2C44F30030FC98 /* String+SHA1.swift */,
 				7C76B6F91D2C44F30030FC98 /* WebSockets.swift */,
+				7C76B2A11D369C9D00D35BFB /* Errno.swift */,
 			);
 			name = Sources;
 			path = ../Sources;
@@ -559,11 +567,13 @@
 				7C76B7151D2C45760030FC98 /* HttpRequest.swift in Sources */,
 				7C76B70D1D2C456A0030FC98 /* DemoServer.swift in Sources */,
 				7C76B70F1D2C456D0030FC98 /* File.swift in Sources */,
+				7C76B29F1D369BEC00D35BFB /* Socket+File.swift in Sources */,
 				7C76B7231D2C45890030FC98 /* Socket.swift in Sources */,
 				7C76B71D1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
 				7C76B7111D2C45710030FC98 /* Files.swift in Sources */,
 				7C76B7191D2C457C0030FC98 /* HttpRouter.swift in Sources */,
 				7C76B7291D2C45920030FC98 /* String+SHA1.swift in Sources */,
+				7C76B2A21D369C9D00D35BFB /* Errno.swift in Sources */,
 				7C76B7251D2C458C0030FC98 /* String+BASE64.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -582,11 +592,13 @@
 				7C76B7161D2C45760030FC98 /* HttpRequest.swift in Sources */,
 				7C76B70E1D2C456B0030FC98 /* DemoServer.swift in Sources */,
 				7C76B7101D2C456D0030FC98 /* File.swift in Sources */,
+				7C76B2A01D369BEC00D35BFB /* Socket+File.swift in Sources */,
 				7C76B7241D2C458A0030FC98 /* Socket.swift in Sources */,
 				7C76B71E1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
 				7C76B7121D2C45710030FC98 /* Files.swift in Sources */,
 				7C76B71A1D2C457C0030FC98 /* HttpRouter.swift in Sources */,
 				7C76B72A1D2C45920030FC98 /* String+SHA1.swift in Sources */,
+				7C76B2A31D369C9D00D35BFB /* Errno.swift in Sources */,
 				7C76B7261D2C458D0030FC98 /* String+BASE64.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
