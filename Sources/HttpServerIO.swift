@@ -5,10 +5,9 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
+import Foundation
 #if os(Linux)
     import Glibc
-#else
-    import Foundation
 #endif
 
 public class HttpServerIO {
@@ -83,22 +82,21 @@ public class HttpServerIO {
     
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
-        
-        func write(file: File) {
+
+        func write(file: File) throws {
             var offset: off_t = 0
-            let _ = sendfile(fileno(file.pointer), socket.socketFileDescriptor, 0, &offset, nil, 0)
+            let result = sendfile(fileno(file.pointer), socket.socketFileDescriptor, 0, &offset, nil, 0)
+            if result == -1 {
+              throw NSError(domain: NSPOSIXErrorDomain, code: Int(errno), userInfo: nil)
+            }
         }
 
-        func write(data: [UInt8]) {
-            write(ArraySlice(data))
+        func write(data: [UInt8]) throws {
+            try write(ArraySlice(data))
         }
-        
-        func write(data: ArraySlice<UInt8>) {
-            do {
-                try socket.writeUInt8(data)
-            } catch {
-                print("\(error)")
-            }
+
+        func write(data: ArraySlice<UInt8>) throws {
+            try socket.writeUInt8(data)
         }
     }
     
