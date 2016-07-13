@@ -17,9 +17,9 @@ public enum SerializationError: ErrorType {
 }
 
 public protocol HttpResponseBodyWriter {
-    func write(file: File)
-    func write(data: [UInt8])
-    func write(data: ArraySlice<UInt8>)
+    func write(file: File) throws
+    func write(data: [UInt8]) throws
+    func write(data: ArraySlice<UInt8>) throws
 }
 
 public enum HttpResponseBody {
@@ -36,7 +36,7 @@ public enum HttpResponseBody {
                 #if os(Linux)
                     let data = [UInt8]("Not ready for Linux.".utf8)
                     return (data.count, {
-                        $0.write(data)
+                        try $0.write(data)
                     })
                 #else
                     guard NSJSONSerialization.isValidJSONObject(object) else {
@@ -45,31 +45,31 @@ public enum HttpResponseBody {
                     let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
                     let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
                     return (data.count, {
-                        $0.write(data)
+                        try $0.write(data)
                     })
                 #endif
             case .Text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {
-                    $0.write(data)
+                    try $0.write(data)
                 })
             case .Html(let body):
                 let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
-                    $0.write(data)
+                    try $0.write(data)
                 })
             case .Custom(let object, let closure):
                 let serialised = try closure(object)
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
-                    $0.write(data)
+                    try $0.write(data)
                 })
             }
         } catch {
             let data = [UInt8]("Serialisation error: \(error)".utf8)
             return (data.count, {
-                $0.write(data)
+                try $0.write(data)
             })
         }
     }
@@ -82,8 +82,8 @@ public enum HttpResponse {
     case MovedPermanently(String)
     case BadRequest(HttpResponseBody?), Unauthorized, Forbidden, NotFound
     case InternalServerError
-    case RAW(Int, String, [String:String]?, (HttpResponseBodyWriter -> Void)? )
-    
+    case RAW(Int, String, [String:String]?, (HttpResponseBodyWriter throws -> Void)? )
+
     func statusCode() -> Int {
         switch self {
         case .SwitchProtocols(_, _)   : return 101

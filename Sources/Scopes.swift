@@ -15,8 +15,7 @@ public func scopes(scope: Closure) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         ScopesBuffer[Process.TID] = ""
         scope()
-        return .RAW(200, "OK", ["Content-Type": "text/html"],
-                    { $0.write([UInt8](("<!DOCTYPE html>"  + (ScopesBuffer[Process.TID] ?? "")).utf8)) })
+        return .RAW(200, "OK", ["Content-Type": "text/html"], { try $0.write([UInt8](("<!DOCTYPE html>"  + (ScopesBuffer[Process.TID] ?? "")).utf8)) })
     }
 }
 
