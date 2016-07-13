@@ -15,10 +15,13 @@ public func websocket(
         text: ((WebSocketSession, String) -> Void)?,
     _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> (HttpRequest -> HttpResponse) {
     return { r in
-        guard r.headers["upgrade"] == "websocket" else {
+        guard let upgradeHeader = r.headers["upgrade"] where
+        upgradeHeader.lowercaseString == "websocket" else {
+            print(r.headers["upgrade"])
             return .BadRequest(.Text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
         }
-        guard r.headers["connection"] == "Upgrade" else {
+        guard let connectionHeader = r.headers["connection"] where
+            connectionHeader.lowercaseString == "upgrade" else {
             return .BadRequest(.Text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
         }
         guard let secWebSocketKey = r.headers["sec-websocket-key"] else {
