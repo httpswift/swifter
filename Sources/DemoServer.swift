@@ -190,7 +190,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     }
     
     server.middleware.append { r in
-        print("Middleware:\(r.method) \(r.path)")
+        print("Middleware: \(r.address) -> \(r.method) -> \(r.path)")
         return nil
     }
     

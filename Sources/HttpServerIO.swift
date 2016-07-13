@@ -55,8 +55,8 @@ public class HttpServerIO {
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
             let request = request
-            let (params, handler) = self.dispatch(request)
             request.address = address
+            let (params, handler) = self.dispatch(request)
             request.params = params;
             let response = handler(request)
             var keepConnection = parser.supportsKeepAlive(request.headers)
