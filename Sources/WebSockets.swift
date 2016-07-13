@@ -145,7 +145,6 @@ public class WebSocketSession: Hashable, Equatable  {
             let b7 = UInt64(try socket.read())
             len = UInt64(littleEndian: b0 << 54 | b1 << 48 | b2 << 40 | b3 << 32 | b4 << 24 | b5 << 16 | b6 << 8 | b7)
         }
-        print(len)
         let mask = [try socket.read(), try socket.read(), try socket.read(), try socket.read()]
         for i in 0..<len {
             frm.payload.append(try socket.read() ^ mask[Int(i % 4)])
