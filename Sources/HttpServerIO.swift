@@ -5,9 +5,10 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-import Foundation
 #if os(Linux)
     import Glibc
+#else
+    import Foundation
 #endif
 
 
@@ -124,4 +125,45 @@ public class HttpServerIO {
         return keepAlive && content.length != -1;
     }
 }
+
+#if os(Linux)
+
+public class NSLock {
+    
+    private var mutex = pthread_mutex_t()
+    
+    init() { pthread_mutex_init(&mutex, nil) }
+    
+    public func lock() { pthread_mutex_lock(&mutex) }
+    
+    public func unlock() { pthread_mutex_unlock(&mutex) }
+    
+    deinit { pthread_mutex_destroy(&mutex) }
+}
+
+
+let DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
+
+private class dispatch_context {
+    let block: ((Void) -> Void)
+    init(_ block: ((Void) -> Void)) {
+        self.block = block
+    }
+}
+
+func dispatch_get_global_queue(queueId: Int, _ arg: Int) -> Int { return 0 }
+
+func dispatch_async(queueId: Int, _ block: ((Void) -> Void)) {
+    let unmanagedDispatchContext = Unmanaged.passRetained(dispatch_context(block))
+    let context = UnsafeMutablePointer<Void>(unmanagedDispatchContext.toOpaque())
+    var pthread: pthread_t = 0
+    pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Void>) -> UnsafeMutablePointer<Void> in
+        let unmanaged = Unmanaged<dispatch_context>.fromOpaque(COpaquePointer(context))
+        unmanaged.takeUnretainedValue().block()
+        unmanaged.release()
+        return context
+        }, context)
+}
+    
+#endif
 
