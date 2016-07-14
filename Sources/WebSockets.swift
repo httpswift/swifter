@@ -26,35 +26,68 @@ public func websocket(
         }
         let protocolSessionClosure: (Socket -> Void) = { socket in
             let session = WebSocketSession(socket)
+            var fragmentedOpCode = WebSocketSession.OpCode.Close
+            var payload = [UInt8]() // Used for fragmented frames.
             do {
                 while true {
                     let frame = try session.readFrame()
                     switch frame.opcode {
+                    case .Continue:
+                        // There is no message to continue, failed immediatelly.
+                        if fragmentedOpCode == .Close {
+                            socket.shutdwn()
+                        }
+                        frame.opcode = fragmentedOpCode
+                        if frame.fin {
+                            payload.appendContentsOf(frame.payload)
+                            frame.payload = payload
+                            // Clean the buffer.
+                            payload = []
+                            // Reset the OpCode.
+                            fragmentedOpCode = WebSocketSession.OpCode.Close
+                        }
+                        fallthrough
                     case .Text:
                         if let handleText = text {
-                            handleText(session, String.fromUInt8(frame.payload))
+                            if frame.fin {
+                                if payload.count > 0 {
+                                    throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
+                                }
+                                handleText(session, String.fromUInt8(frame.payload))
+                            } else {
+                                payload.appendContentsOf(frame.payload)
+                                fragmentedOpCode = .Text
+                            }
                         }
                     case .Binary:
                         if let handleBinary = binary {
-                            handleBinary(session, frame.payload)
+                            if frame.fin {
+                                if payload.count > 0 {
+                                    throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
+                                }
+                                handleBinary(session, frame.payload)
+                            } else {
+                                payload.appendContentsOf(frame.payload)
+                                fragmentedOpCode = .Binary
+                            }
                         }
                     case .Close:
-                        session.writeCloseFrame()
-                    case .Continue:
-                        break
+                        throw WebSocketSession.Control.Close
                     case .Ping:
                         if frame.payload.count > 125 {
                             throw WebSocketSession.Error.ProtocolError("payload gretter than 125 octets.")
                         } else {
                             session.writeFrame(ArraySlice(frame.payload), .Pong)
                         }
-                        break
                     case .Pong:
                         break
                     }
                 }
             } catch let error {
                 switch error {
+                case WebSocketSession.Control.Close:
+                    // Normal close
+                    break
                 case WebSocketSession.Error.UnknownOpCode:
                     print("Unknown Op Code: \(error)")
                 default:
@@ -74,6 +107,7 @@ public class WebSocketSession: Hashable, Equatable  {
     
     public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame, ProtocolError(String) }
     public enum OpCode: UInt8 { case Continue = 0x00, Close = 0x08, Ping = 0x09, Pong = 0x0A, Text = 0x01, Binary = 0x02 }
+    public enum Control: ErrorType { case Close }
     
     public class Frame {
         public var opcode = OpCode.Close
@@ -92,6 +126,7 @@ public class WebSocketSession: Hashable, Equatable  {
     
     deinit {
         writeCloseFrame()
+        socket.shutdwn()
     }
     
     public func writeText(text: String) -> Void {
