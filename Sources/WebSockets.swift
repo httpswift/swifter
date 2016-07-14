@@ -163,6 +163,16 @@ public class WebSocketSession: Hashable, Equatable  {
             // http://tools.ietf.org/html/rfc6455#section-5.2 ( Page 29 )
             throw Error.UnknownOpCode("\(opc)")
         }
+        if frm.fin == false {
+            switch opcode {
+            case .Ping, .Pong, .Close:
+                // Control frames must not be fragmented
+                // https://tools.ietf.org/html/rfc6455#section-5.5 ( Page 35 )
+                throw Error.ProtocolError("control frames must not be framgemted.")
+            default:
+                break
+            }
+        }
         frm.opcode = opcode
         let sec = try socket.read()
         let msk = sec & 0x80 != 0
