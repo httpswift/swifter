@@ -63,6 +63,10 @@ public class WebSocketSession: Hashable, Equatable  {
         self.socket = socket
     }
     
+    deinit {
+        writeCloseFrame()
+    }
+    
     public func writeText(text: String) -> Void {
         self.writeFrame(ArraySlice(text.utf8), OpCode.Text)
     }
@@ -85,6 +89,10 @@ public class WebSocketSession: Hashable, Equatable  {
         } catch {
             print(error)
         }
+    }
+    
+    private func writeCloseFrame() {
+        writeFrame(ArraySlice("".utf8), .Close)
     }
     
     private func encodeLengthAndMaskFlag(len: UInt64, _ masked: Bool) -> [UInt8] {
@@ -125,7 +133,7 @@ public class WebSocketSession: Hashable, Equatable  {
         let sec = try socket.read()
         let msk = sec & 0x80 != 0
         guard msk else {
-            // "...a client MUST mask all frames that it sends to the serve.."
+            // "...a client MUST mask all frames that it sends to the server."
             // http://tools.ietf.org/html/rfc6455#section-5.1
             throw Error.UnMaskedFrame
         }
