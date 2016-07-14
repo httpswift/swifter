@@ -108,6 +108,10 @@ public class Socket: Hashable, Equatable {
         self.socketFileDescriptor = socketFileDescriptor
     }
     
+    deinit {
+        shutdwn()
+    }
+    
     public var hashValue: Int { return Int(self.socketFileDescriptor) }
     
     public func release() {

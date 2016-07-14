@@ -26,18 +26,42 @@ public func websocket(
         }
         let protocolSessionClosure: (Socket -> Void) = { socket in
             let session = WebSocketSession(socket)
-            while let frame = try? session.readFrame() {
-                switch frame.opcode {
-                case .Text:
-                    if let handleText = text {
-                        handleText(session, String.fromUInt8(frame.payload))
+            do {
+                while true {
+                    let frame = try session.readFrame()
+                    switch frame.opcode {
+                    case .Text:
+                        if let handleText = text {
+                            handleText(session, String.fromUInt8(frame.payload))
+                        }
+                    case .Binary:
+                        if let handleBinary = binary {
+                            handleBinary(session, frame.payload)
+                        }
+                    case .Close:
+                        session.writeCloseFrame()
+                    case .Continue:
+                        break
+                    case .Ping:
+                        if frame.payload.count > 125 {
+                            throw WebSocketSession.Error.ProtocolError("payload gretter than 125 octets.")
+                        } else {
+                            session.writeFrame(ArraySlice(frame.payload), .Pong)
+                        }
+                        break
+                    case .Pong:
+                        break
                     }
-                case .Binary:
-                    if let handleBinary = binary {
-                        handleBinary(session, frame.payload)
-                    }
-                default: break
                 }
+            } catch let error {
+                switch error {
+                case WebSocketSession.Error.UnknownOpCode:
+                    print("Unknown Op Code: \(error)")
+                default:
+                    print("Unkown error \(error)")
+                }
+                // If an error occurs, send the close handshake.
+                session.writeCloseFrame()
             }
         }
         let secWebSocketAccept = String.toBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").SHA1())
@@ -48,7 +72,7 @@ public func websocket(
 
 public class WebSocketSession: Hashable, Equatable  {
     
-    public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame }
+    public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame, ProtocolError(String) }
     public enum OpCode: UInt8 { case Continue = 0x00, Close = 0x08, Ping = 0x09, Pong = 0x0A, Text = 0x01, Binary = 0x02 }
     
     public class Frame {
@@ -61,6 +85,10 @@ public class WebSocketSession: Hashable, Equatable  {
     
     public init(_ socket: Socket) {
         self.socket = socket
+    }
+    
+    deinit {
+        writeCloseFrame()
     }
     
     public func writeText(text: String) -> Void {
@@ -85,6 +113,10 @@ public class WebSocketSession: Hashable, Equatable  {
         } catch {
             print(error)
         }
+    }
+    
+    private func writeCloseFrame() {
+        writeFrame(ArraySlice("".utf8), .Close)
     }
     
     private func encodeLengthAndMaskFlag(len: UInt64, _ masked: Bool) -> [UInt8] {
@@ -125,7 +157,7 @@ public class WebSocketSession: Hashable, Equatable  {
         let sec = try socket.read()
         let msk = sec & 0x80 != 0
         guard msk else {
-            // "...a client MUST mask all frames that it sends to the serve.."
+            // "...a client MUST mask all frames that it sends to the server."
             // http://tools.ietf.org/html/rfc6455#section-5.1
             throw Error.UnMaskedFrame
         }
