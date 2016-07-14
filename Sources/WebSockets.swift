@@ -78,6 +78,9 @@ public class WebSocketSession: Hashable, Equatable  {
     public class Frame {
         public var opcode = OpCode.Close
         public var fin = false
+        public var rsv1: UInt8 = 0
+        public var rsv2: UInt8 = 0
+        public var rsv3: UInt8 = 0
         public var payload = [UInt8]()
     }
 
@@ -147,6 +150,13 @@ public class WebSocketSession: Hashable, Equatable  {
         let frm = Frame()
         let fst = try socket.read()
         frm.fin = fst & 0x80 != 0
+        frm.rsv1 = fst & 0x40
+        frm.rsv2 = fst & 0x20
+        frm.rsv3 = fst & 0x10
+        guard frm.rsv1 == 0 && frm.rsv2 == 0 && frm.rsv3 == 0
+            else {
+            throw Error.ProtocolError("Reserved frame bit has not been negocitated.")
+        }
         let opc = fst & 0x0F
         guard let opcode = OpCode(rawValue: opc) else {
             // "If an unknown opcode is received, the receiving endpoint MUST _Fail the WebSocket Connection_."
