@@ -57,6 +57,8 @@ public func websocket(
                                 textFramePayload.append(0)
                                 if let text = String(UTF8String: textFramePayload) {
                                     handleText(session, text)
+                                } else {
+                                    throw WebSocketSession.Error.InvalidUTF8("")
                                 }
                             } else {
                                 payload.appendContentsOf(frame.payload)
@@ -79,7 +81,7 @@ public func websocket(
                         throw WebSocketSession.Control.Close
                     case .Ping:
                         if frame.payload.count > 125 {
-                            throw WebSocketSession.Error.ProtocolError("payload gretter than 125 octets.")
+                            throw WebSocketSession.Error.ProtocolError("Payload gretter than 125 octets.")
                         } else {
                             session.writeFrame(ArraySlice(frame.payload), .Pong)
                         }
@@ -94,6 +96,12 @@ public func websocket(
                     break
                 case WebSocketSession.Error.UnknownOpCode:
                     print("Unknown Op Code: \(error)")
+                case WebSocketSession.Error.UnMaskedFrame:
+                    print("Unmasked frame: \(error)")
+                case WebSocketSession.Error.InvalidUTF8:
+                    print("Invalid UTF8 character: \(error)")
+                case WebSocketSession.Error.ProtocolError:
+                    print("Protocol error: \(error)")
                 default:
                     print("Unkown error \(error)")
                 }
@@ -109,7 +117,7 @@ public func websocket(
 
 public class WebSocketSession: Hashable, Equatable  {
     
-    public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame, ProtocolError(String) }
+    public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame(String), ProtocolError(String), InvalidUTF8(String) }
     public enum OpCode: UInt8 { case Continue = 0x00, Close = 0x08, Ping = 0x09, Pong = 0x0A, Text = 0x01, Binary = 0x02 }
     public enum Control: ErrorType { case Close }
     
@@ -207,7 +215,7 @@ public class WebSocketSession: Hashable, Equatable  {
             case .Ping, .Pong, .Close:
                 // Control frames must not be fragmented
                 // https://tools.ietf.org/html/rfc6455#section-5.5 ( Page 35 )
-                throw Error.ProtocolError("control frames must not be framgemted.")
+                throw Error.ProtocolError("Control frames must not be framgemted.")
             default:
                 break
             }
@@ -218,7 +226,7 @@ public class WebSocketSession: Hashable, Equatable  {
         guard msk else {
             // "...a client MUST mask all frames that it sends to the server."
             // http://tools.ietf.org/html/rfc6455#section-5.1
-            throw Error.UnMaskedFrame
+            throw Error.UnMaskedFrame("A client must mask all frames that it sends to the server.")
         }
         var len = UInt64(sec & 0x7F)
         if len == 0x7E {
