@@ -28,66 +28,79 @@ public func websocket(
             let session = WebSocketSession(socket)
             var fragmentedOpCode = WebSocketSession.OpCode.Close
             var payload = [UInt8]() // Used for fragmented frames.
+            
+            func handleTextPayload(frame: WebSocketSession.Frame) throws {
+                if let handleText = text {
+                    if frame.fin {
+                        if payload.count > 0 {
+                            throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
+                        }
+                        var textFramePayload = frame.payload.map { Int8(bitPattern: $0) }
+                        textFramePayload.append(0)
+                        if let text = String(UTF8String: textFramePayload) {
+                            handleText(session, text)
+                        } else {
+                            throw WebSocketSession.Error.InvalidUTF8("")
+                        }
+                    } else {
+                        payload.appendContentsOf(frame.payload)
+                        fragmentedOpCode = .Text
+                    }
+                }
+            }
+            
+            func handleBinaryPayload(frame: WebSocketSession.Frame) throws {
+                if let handleBinary = binary {
+                    if frame.fin {
+                        if payload.count > 0 {
+                            throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
+                        }
+                        handleBinary(session, frame.payload)
+                    } else {
+                        payload.appendContentsOf(frame.payload)
+                        fragmentedOpCode = .Binary
+                    }
+                }
+            }
+            
+            func handleOperationCode(frame: WebSocketSession.Frame) throws {
+                switch frame.opcode {
+                case .Continue:
+                    // There is no message to continue, failed immediatelly.
+                    if fragmentedOpCode == .Close {
+                        socket.shutdwn()
+                    }
+                    frame.opcode = fragmentedOpCode
+                    if frame.fin {
+                        payload.appendContentsOf(frame.payload)
+                        frame.payload = payload
+                        // Clean the buffer.
+                        payload = []
+                        // Reset the OpCode.
+                        fragmentedOpCode = WebSocketSession.OpCode.Close
+                    }
+                    try handleOperationCode(frame)
+                case .Text:
+                    try handleTextPayload(frame)
+                case .Binary:
+                    try handleBinaryPayload(frame)
+                case .Close:
+                    throw WebSocketSession.Control.Close
+                case .Ping:
+                    if frame.payload.count > 125 {
+                        throw WebSocketSession.Error.ProtocolError("Payload gretter than 125 octets.")
+                    } else {
+                        session.writeFrame(ArraySlice(frame.payload), .Pong)
+                    }
+                case .Pong:
+                    break
+                }
+            }
+            
             do {
                 while true {
                     let frame = try session.readFrame()
-                    switch frame.opcode {
-                    case .Continue:
-                        // There is no message to continue, failed immediatelly.
-                        if fragmentedOpCode == .Close {
-                            socket.shutdwn()
-                        }
-                        frame.opcode = fragmentedOpCode
-                        if frame.fin {
-                            payload.appendContentsOf(frame.payload)
-                            frame.payload = payload
-                            // Clean the buffer.
-                            payload = []
-                            // Reset the OpCode.
-                            fragmentedOpCode = WebSocketSession.OpCode.Close
-                        }
-                        fallthrough
-                    case .Text:
-                        if let handleText = text {
-                            if frame.fin {
-                                if payload.count > 0 {
-                                    throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
-                                }
-                                var textFramePayload = frame.payload.map { Int8(bitPattern: $0) }
-                                textFramePayload.append(0)
-                                if let text = String(UTF8String: textFramePayload) {
-                                    handleText(session, text)
-                                } else {
-                                    throw WebSocketSession.Error.InvalidUTF8("")
-                                }
-                            } else {
-                                payload.appendContentsOf(frame.payload)
-                                fragmentedOpCode = .Text
-                            }
-                        }
-                    case .Binary:
-                        if let handleBinary = binary {
-                            if frame.fin {
-                                if payload.count > 0 {
-                                    throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
-                                }
-                                handleBinary(session, frame.payload)
-                            } else {
-                                payload.appendContentsOf(frame.payload)
-                                fragmentedOpCode = .Binary
-                            }
-                        }
-                    case .Close:
-                        throw WebSocketSession.Control.Close
-                    case .Ping:
-                        if frame.payload.count > 125 {
-                            throw WebSocketSession.Error.ProtocolError("Payload gretter than 125 octets.")
-                        } else {
-                            session.writeFrame(ArraySlice(frame.payload), .Pong)
-                        }
-                    case .Pong:
-                        break
-                    }
+                    try handleOperationCode(frame)
                 }
             } catch let error {
                 switch error {
