@@ -57,7 +57,25 @@ public class HttpServerIO {
         self.listenPort = listenPort
         self.ipv4 = forceIPv4
         self.listenPriority = priority
-        listenSocket = try Socket.tcpSocketForListen(listenPort, forceIPv4: forceIPv4)
+        repeat {
+            do {
+                listenSocket = try Socket.tcpSocketForListen(self.listenPort, forceIPv4: forceIPv4)
+            } catch let error {
+                switch error {
+                case SocketError.BindFailed:
+                    if self.listenPort < in_port_t.max {
+                        self.listenPort = self.listenPort + 1
+                    } else {
+                        self.listenPort = 1024
+                    }
+                    continue
+                default:
+                    break
+                }
+            }
+            break
+        } while true
+        
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
             self.serverStatus = .Running
             while let socket = try? self.listenSocket.acceptClientSocket() {
