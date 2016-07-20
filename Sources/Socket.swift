@@ -144,7 +144,7 @@ public class Socket: Hashable, Equatable {
             #if os(Linux)
                 return ntohs(addr.sin_port)
             #else
-                return Int(OSHostByteOrder()) == OSLittleEndian ? addr.sin_port.littleEndian : addr.sin_port.bigEndian
+                return Int(OSHostByteOrder()) != OSLittleEndian ? addr.sin_port.littleEndian : addr.sin_port.bigEndian
             #endif
         }
     }
