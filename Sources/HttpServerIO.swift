@@ -162,7 +162,7 @@ func dispatch_async(queueId: Int, _ block: ((Void) -> Void)) {
         unmanaged.takeUnretainedValue().block()
         unmanaged.release()
         return context
-        }, context)
+    }, context)
 }
     
 #endif

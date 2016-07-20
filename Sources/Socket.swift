@@ -24,6 +24,7 @@ public enum SocketError: ErrorType {
     case GetNameInfoFailed(String)
     case AcceptFailed(String)
     case RecvFailed(String)
+    case GetSockNameFailed(String)
 }
 
 public class Socket: Hashable, Equatable {
@@ -52,14 +53,14 @@ public class Socket: Hashable, Equatable {
             var bindResult: Int32 = -1
             if forceIPv4 {
                 var addr = sockaddr_in(sin_family: sa_family_t(AF_INET),
-                    sin_port: Socket.htonsPort(port),
+                    sin_port: port.bigEndian,
                     sin_addr: in_addr(s_addr: in_addr_t(0)),
                     sin_zero:(0, 0, 0, 0, 0, 0, 0, 0))
                 
                 bindResult = withUnsafePointer(&addr) { bind(socketFileDescriptor, UnsafePointer<sockaddr>($0), socklen_t(sizeof(sockaddr_in))) }
             } else {
                 var addr = sockaddr_in6(sin6_family: sa_family_t(AF_INET6),
-                    sin6_port: Socket.htonsPort(port),
+                    sin6_port: port.bigEndian,
                     sin6_flowinfo: 0,
                     sin6_addr: in6addr_any,
                     sin6_scope_id: 0)
@@ -71,7 +72,7 @@ public class Socket: Hashable, Equatable {
             if forceIPv4 {
                 var addr = sockaddr_in(sin_len: UInt8(strideof(sockaddr_in)),
                     sin_family: UInt8(AF_INET),
-                    sin_port: Socket.htonsPort(port),
+                    sin_port: port.bigEndian,
                     sin_addr: in_addr(s_addr: in_addr_t(0)),
                     sin_zero:(0, 0, 0, 0, 0, 0, 0, 0))
              
@@ -79,7 +80,7 @@ public class Socket: Hashable, Equatable {
             } else {
                 var addr = sockaddr_in6(sin6_len: UInt8(strideof(sockaddr_in6)),
                     sin6_family: UInt8(AF_INET6),
-                    sin6_port: Socket.htonsPort(port),
+                    sin6_port: port.bigEndian,
                     sin6_flowinfo: 0,
                     sin6_addr: in6addr_any,
                     sin6_scope_id: 0)
@@ -131,6 +132,21 @@ public class Socket: Hashable, Equatable {
         }
         Socket.setNoSigPipe(clientSocket)
         return Socket(socketFileDescriptor: clientSocket)
+    }
+    
+    public func port() throws -> in_port_t {
+        var addr = sockaddr_in()
+        return try withUnsafePointer(&addr) { pointer in
+            var len = socklen_t(sizeof(sockaddr_in))
+            if getsockname(socketFileDescriptor, UnsafeMutablePointer(pointer), &len) != 0 {
+                throw SocketError.GetSockNameFailed(Errno.description())
+            }
+            #if os(Linux)
+                return ntohs(addr.sin_port)
+            #else
+                return Int(OSHostByteOrder()) == OSLittleEndian ? addr.sin_port.littleEndian : addr.sin_port.bigEndian
+            #endif
+        }
     }
     
     public func writeUTF8(string: String) throws {
@@ -222,17 +238,8 @@ public class Socket: Hashable, Equatable {
         #endif
         close(socket)
     }
-    
-    private class func htonsPort(port: in_port_t) -> in_port_t {
-        #if os(Linux)
-            return htons(port)
-        #else
-            let isLittleEndian = Int(OSHostByteOrder()) == OSLittleEndian
-            return isLittleEndian ? _OSSwapInt16(port) : port
-        #endif
-    }
 }
 
-public func ==(socket1: Socket, socket2: Socket) -> Bool {
+public func == (socket1: Socket, socket2: Socket) -> Bool {
     return socket1.socketFileDescriptor == socket2.socketFileDescriptor
 }
