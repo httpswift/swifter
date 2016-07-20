@@ -14,14 +14,70 @@
 
 public class HttpServerIO {
     
+    public enum ServerStatus {
+        case Stopped
+        case Running
+    }
+    
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
     private let clientSocketsLock = NSLock()
+    private var listenPort: in_port_t = 8080
+    private var ipv4 = false
+    private var listenPriority: Int = DISPATCH_QUEUE_PRIORITY_BACKGROUND
+    private var serverStatus: ServerStatus = .Stopped
+    
+    // Returns the port used by the server for listening connection.
+    public var port: Int {
+        get {
+            return Int(listenPort)
+        }
+    }
+    // True if the IPv4 has been forced on start.
+    public var forcedIPv4: Bool {
+        get {
+            return ipv4
+        }
+    }
+    // Returns the priority used for dispatch
+    public var priority: Int {
+        get {
+            return listenPriority
+        }
+    }
+    // Returns the server status (Running or not).
+    public var status: ServerStatus {
+        get {
+            return serverStatus
+        }
+    }
     
     public func start(listenPort: in_port_t = 8080, forceIPv4: Bool = false, priority: Int = DISPATCH_QUEUE_PRIORITY_BACKGROUND) throws {
         stop()
-        listenSocket = try Socket.tcpSocketForListen(listenPort, forceIPv4: forceIPv4)
+        self.listenPort = listenPort
+        self.ipv4 = forceIPv4
+        self.listenPriority = priority
+        repeat {
+            do {
+                listenSocket = try Socket.tcpSocketForListen(self.listenPort, forceIPv4: forceIPv4)
+            } catch let error {
+                switch error {
+                case SocketError.BindFailed:
+                    if self.listenPort < in_port_t.max {
+                        self.listenPort = self.listenPort + 1
+                    } else {
+                        self.listenPort = 1024
+                    }
+                    continue
+                default:
+                    break
+                }
+            }
+            break
+        } while true
+        
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
+            self.serverStatus = .Running
             while let socket = try? self.listenSocket.acceptClientSocket() {
                 self.lock(self.clientSocketsLock) {
                     self.clientSockets.insert(socket)
@@ -34,6 +90,7 @@ public class HttpServerIO {
                 })
             }
             self.stop()
+            self.serverStatus = .Stopped
         }
     }
     
