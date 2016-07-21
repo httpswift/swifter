@@ -74,11 +74,7 @@ public class File {
         }
         defer { closedir(dir) }
         var results = [String]()
-        while true {
-            let ent = readdir(dir)
-            if ent == nil {
-                break
-            }
+        while case let ent = readdir(dir) where ent != nil {
             var name = ent.memory.d_name
             let fileName = withUnsafePointer(&name) { (ptr) -> String? in
                 #if os(Linux)
