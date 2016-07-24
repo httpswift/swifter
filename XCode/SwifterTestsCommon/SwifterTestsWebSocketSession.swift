@@ -82,27 +82,27 @@ class SwifterTestsWebSocketSession: XCTestCase {
         }
         
         do {
-            let session = WebSocketSession(TestSocket([0b0000_1000, 0b1000_0000, 0, 0, 0, 0]))
+            let session = WebSocketSession(TestSocket([0b1000_1000, 0b1000_0000, 0, 0, 0, 0]))
             let frame = try session.readFrame()
             XCTAssertEqual(frame.opcode, WebSocketSession.OpCode.Close, "Parser should accept Close opcode.")
         } catch {
-            XCTAssert(false, "Parser should accept Close opcode without any errors.")
+            XCTAssert(false, "Parser should accept Close opcode without any errors: \(error).")
         }
         
         do {
-            let session = WebSocketSession(TestSocket([0b0000_1001, 0b1000_0000, 0, 0, 0, 0]))
+            let session = WebSocketSession(TestSocket([0b1000_1001, 0b1000_0000, 0, 0, 0, 0]))
             let frame = try session.readFrame()
             XCTAssertEqual(frame.opcode, WebSocketSession.OpCode.Ping, "Parser should accept Ping opcode.")
         } catch {
-            XCTAssert(false, "Parser should accept Ping opcode without any errors.")
+            XCTAssert(false, "Parser should accept Ping opcode without any errors: \(error).")
         }
         
         do {
-            let session = WebSocketSession(TestSocket([0b0000_1010, 0b1000_0000, 0, 0, 0, 0]))
+            let session = WebSocketSession(TestSocket([0b1000_1010, 0b1000_0000, 0, 0, 0, 0]))
             let frame = try session.readFrame()
             XCTAssertEqual(frame.opcode, WebSocketSession.OpCode.Pong, "Parser should accept Pong opcode.")
         } catch {
-            XCTAssert(false, "Parser should accept Pong opcode without any errors.")
+            XCTAssert(false, "Parser should accept Pong opcode without any errors: \(error).")
         }
         
         for opcode in [3, 4, 5, 6, 7, 11, 12, 13, 14, 15] {
