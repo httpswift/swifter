@@ -14,7 +14,8 @@ do {
     }
     
     try server.start(9080, forceIPv4: true)
-    print("Server has started ( port = \(server.port) ). Try to connect now...")
+    
+    print("Server has started ( port = \(try server.port()) ). Try to connect now...")
     
     NSRunLoop.mainRunLoop().run()
     

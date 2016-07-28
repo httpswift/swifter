@@ -13,80 +13,48 @@
 
 public class HttpServerIO {
     
-    public enum ServerStatus {
-        case Stopped
-        case Running
+    private var socket = Socket(socketFileDescriptor: -1)
+    private var sockets = Set<Socket>()
+    
+    public private(set) var running = false
+    
+    public func port() throws -> Int {
+        return Int(try socket.port())
     }
     
-    private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
-    private var listenPort: in_port_t = 8080
-    private var ipv4 = false
-    private var listenPriority: Int = DISPATCH_QUEUE_PRIORITY_BACKGROUND
-    private var serverStatus: ServerStatus = .Stopped
-    
-    private var clientSockets: Set<Socket> = []
-    private let clientSocketsLock = NSLock()
-    
-    // Returns the port used by the server for listening connection.
-    public var port: Int {
-        get {
-            return Int(listenPort)
-        }
+    public func isIPv4() throws -> Bool {
+        return try socket.isIPv4()
     }
     
-    // True if the IPv4 has been forced on start.
-    public var forcedIPv4: Bool {
-        get {
-            return ipv4
-        }
-    }
-    
-    // Returns the priority used for dispatch
-    public var priority: Int {
-        get {
-            return listenPriority
-        }
-    }
-    
-    // Returns the server status (Running or not).
-    public var status: ServerStatus {
-        get {
-            return serverStatus
-        }
+    deinit {
+        stop()
     }
     
     public func start(port: in_port_t = 8080, forceIPv4: Bool = false, priority: Int = DISPATCH_QUEUE_PRIORITY_BACKGROUND) throws {
         stop()
-        self.listenSocket = try Socket.tcpSocketForListen(port, forceIPv4: forceIPv4)
-        self.listenPort = try self.listenSocket.port()
-        self.ipv4 = forceIPv4
-        self.listenPriority = priority
+        self.socket = try Socket.tcpSocketForListen(port, forceIPv4: forceIPv4)
+        self.running = true
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            self.serverStatus = .Running
-            while let socket = try? self.listenSocket.acceptClientSocket() {
-                self.lock(self.clientSocketsLock) {
-                    self.clientSockets.insert(socket)
-                }
+            while let socket = try? self.socket.acceptClientSocket() {
                 dispatch_async(dispatch_get_global_queue(priority, 0), {
+                    self.sockets.insert(socket)
                     self.handleConnection(socket)
-                    self.lock(self.clientSocketsLock) {
-                        self.clientSockets.remove(socket)
-                    }
+                    self.sockets.remove(socket)
                 })
             }
             self.stop()
-            self.serverStatus = .Stopped
+            self.running = false
         }
     }
     
     public func stop() {
-        listenSocket.release()
-        lock(self.clientSocketsLock) {
-            for socket in self.clientSockets {
-                socket.shutdwn()
-            }
-            self.clientSockets.removeAll(keepCapacity: true)
+        // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
+        for socket in self.sockets {
+            socket.shutdwn()
         }
+        self.sockets.removeAll(keepCapacity: true)
+        socket.release()
+        self.running = false
     }
     
     public func dispatch(request: HttpRequest) -> ([String: String], HttpRequest -> HttpResponse) {
@@ -94,13 +62,12 @@ public class HttpServerIO {
     }
     
     private func handleConnection(socket: Socket) {
-        let address = try? socket.peername()
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
             let request = request
-            request.address = address
+            request.address = try? socket.peername()
             let (params, handler) = self.dispatch(request)
-            request.params = params;
+            request.params = params
             let response = handler(request)
             var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
@@ -118,13 +85,8 @@ public class HttpServerIO {
         socket.release()
     }
     
-    private func lock(handle: NSLock, closure: () -> ()) {
-        handle.lock()
-        closure()
-        handle.unlock();
-    }
-    
     private struct InnerWriteContext: HttpResponseBodyWriter {
+        
         let socket: Socket
 
         func write(file: File) throws {
@@ -169,20 +131,6 @@ public class HttpServerIO {
 }
 
 #if os(Linux)
-
-public class NSLock {
-    
-    private var mutex = pthread_mutex_t()
-    
-    init() { pthread_mutex_init(&mutex, nil) }
-    
-    public func lock() { pthread_mutex_lock(&mutex) }
-    
-    public func unlock() { pthread_mutex_unlock(&mutex) }
-    
-    deinit { pthread_mutex_destroy(&mutex) }
-}
-
 
 let DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
 
