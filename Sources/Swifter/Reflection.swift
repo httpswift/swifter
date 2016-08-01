@@ -65,7 +65,7 @@ public extension DatabaseReflectionProtocol {
         return (instance, name, fields)
     }
     
-    static func find(id: UInt64) -> Self? {
+    static func find(_ id: UInt64) -> Self? {
         let (instance, _, _) = classInstanceWithSchemeMethod2()
         // TODO - make a query to DB
         return instance
@@ -73,7 +73,7 @@ public extension DatabaseReflectionProtocol {
     
     public func insert() throws {
         guard let database = DatabaseReflection.sharedDatabase else {
-            throw SQLiteError.OpenFailed("Database connection is not opened.")
+            throw SQLiteError.openFailed("Database connection is not opened.")
         }
         let (name, fields) = schemeWithValuesAsString()
         try database.exec("CREATE TABLE IF NOT EXISTS \(name) (" + fields.map { "\($0.0) TEXT" }.joined(separator: ", ")  + ");")
@@ -84,8 +84,8 @@ public extension DatabaseReflectionProtocol {
     
 }
 
-public func memoryLayoutForStructure(object: Any) -> [String: Range<Int>] {
-    var layout = [String: Range<Int>]()
+public func memoryLayoutForStructure(_ object: Any) -> [String: CountableRange<Int>] {
+    var layout = [String: CountableRange<Int>]()
     var size = 0
     var alignment = 1
     for case let (label?, value) in Mirror(reflecting: object).children {

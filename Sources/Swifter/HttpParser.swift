@@ -12,7 +12,7 @@
 #endif
 
 enum HttpParserError: ErrorProtocol {
-    case InvalidStatusLine(String)
+    case invalidStatusLine(String)
 }
 
 public class HttpParser {
@@ -23,7 +23,7 @@ public class HttpParser {
         let statusLine = try socket.readLine()
         let statusLineTokens = statusLine.split(" ")
         if statusLineTokens.count < 3 {
-            throw HttpParserError.InvalidStatusLine(statusLine)
+            throw HttpParserError.invalidStatusLine(statusLine)
         }
         let request = HttpRequest()
         request.method = statusLineTokens[0]
@@ -42,7 +42,7 @@ public class HttpParser {
         }
         return query.split("&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
             let tokens = s.split(1, separator: "=")
-            if let name = tokens.first, value = tokens.last {
+            if let name = tokens.first, let value = tokens.last {
                 return c + [(name.removePercentEncoding(), value.removePercentEncoding())]
             }
             return c
@@ -63,7 +63,7 @@ public class HttpParser {
                 return headers
             }
             let headerTokens = headerLine.split(1, separator: ":")
-            if let name = headerTokens.first, value = headerTokens.last {
+            if let name = headerTokens.first, let value = headerTokens.last {
                 headers[name.lowercased()] = value.trim()
             }
         } while true

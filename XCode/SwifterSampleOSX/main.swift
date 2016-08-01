@@ -10,7 +10,7 @@ import Swifter
 do {
     let server: HttpServer = demoServer(try File.currentWorkingDirectory())
     server["/testAfterBaseRoute"] = { request in
-        return .OK(.Html("ok !"))
+        return .ok(.html("ok !"))
     }
     if #available(OSX 10.10, *) {
         try server.start(9080)

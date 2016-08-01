@@ -9,9 +9,9 @@ import Foundation
 import CSQLite
 
 public enum SQLiteError: ErrorProtocol {
-    case OpenFailed(String?)
-    case ExecFailed(String?)
-    case BindFailed(String?)
+    case openFailed(String?)
+    case execFailed(String?)
+    case bindFailed(String?)
 }
 
 public class SQLite {
@@ -22,10 +22,10 @@ public class SQLite {
         var databaseConnectionPointer: OpaquePointer? = nil
         let openResult = path.withCString { sqlite3_open($0, &databaseConnectionPointer) }
         guard let databaseConnection = databaseConnectionPointer else {
-            throw SQLiteError.ExecFailed("Invalid pointer.")
+            throw SQLiteError.execFailed("Invalid pointer.")
         }
         guard openResult == SQLITE_OK else {
-            throw SQLiteError.OpenFailed(String(cString: sqlite3_errmsg(databaseConnection)))
+            throw SQLiteError.openFailed(String(cString: sqlite3_errmsg(databaseConnection)))
         }
         return SQLite(databaseConnection)
     }
@@ -42,16 +42,16 @@ public class SQLite {
         var statementPointer: OpaquePointer? = nil
         let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statementPointer, nil) }
         guard prepareResult == SQLITE_OK else {
-            throw SQLiteError.ExecFailed(String(cString: sqlite3_errmsg(databaseConnection)))
+            throw SQLiteError.execFailed(String(cString: sqlite3_errmsg(databaseConnection)))
         }
         guard let statement = statementPointer else {
-            throw SQLiteError.ExecFailed("Invalid pointer.")
+            throw SQLiteError.execFailed("Invalid pointer.")
         }
         for (index, value) in (params ?? [String?]()).enumerated() {
             let bindResult = value?.withCString({ sqlite3_bind_text(statement, index + 1, $0, -1 /* take zero terminator. */) { _ in } })
                     ?? sqlite3_bind_null(statement, index + 1)
             guard bindResult == SQLITE_OK else {
-                throw SQLiteError.BindFailed(String(cString: sqlite3_errmsg(databaseConnection)))
+                throw SQLiteError.bindFailed(String(cString: sqlite3_errmsg(databaseConnection)))
             }
         }
         while true {
@@ -71,9 +71,9 @@ public class SQLite {
             case SQLITE_DONE:
                 return
             case SQLITE_ERROR:
-                throw SQLiteError.ExecFailed("sqlite3_step() returned SQLITE_ERROR.")
+                throw SQLiteError.execFailed("sqlite3_step() returned SQLITE_ERROR.")
             default:
-                throw SQLiteError.ExecFailed("Unknown result for sqlite3_step(): \(stepResult)")
+                throw SQLiteError.execFailed("Unknown result for sqlite3_step(): \(stepResult)")
             }
         }
     }
@@ -83,10 +83,10 @@ public class SQLite {
         var statement: OpaquePointer? = nil
         let prepareResult = sql.withCString { sqlite3_prepare_v2(databaseConnection, $0, Int32(sql.utf8.count), &statement, nil) }
         guard prepareResult == SQLITE_OK else {
-            throw SQLiteError.ExecFailed(String(cString: sqlite3_errmsg(databaseConnection)))
+            throw SQLiteError.execFailed(String(cString: sqlite3_errmsg(databaseConnection)))
         }
         guard let readyStatement = statement else {
-            throw SQLiteError.ExecFailed("Invalid pointer.")
+            throw SQLiteError.execFailed("Invalid pointer.")
         }
         return StatmentSequence(statement: readyStatement)
     }

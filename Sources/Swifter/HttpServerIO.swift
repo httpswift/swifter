@@ -49,7 +49,7 @@ public class HttpServerIO {
     }
     
     public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
-        return ([:], { _ in HttpResponse.NotFound })
+        return ([:], { _ in HttpResponse.notFound })
     }
     
     private func handleConnection(_ socket: Socket) {

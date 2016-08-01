@@ -671,6 +671,7 @@
 					};
 					7AE893FA1C0512C400A29F63 = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Manual;
 					};
 					7C839B6D19422CFF003A6950 = {
@@ -678,6 +679,7 @@
 					};
 					7CA4813A19A2EA8D0030B30D = {
 						CreatedOnToolsVersion = 6.0;
+						LastSwiftMigration = 0800;
 					};
 					7CCD1B641C8F7CEC0016D664 = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -687,6 +689,7 @@
 					};
 					7CCD87781C660EA30068099B = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -708,9 +711,9 @@
 				7CA4813A19A2EA8D0030B30D /* SwifterSampleOSX */,
 				7AE893E61C05127900A29F63 /* SwifteriOS */,
 				7AE893FA1C0512C400A29F63 /* SwifterMac */,
+				7CCD1BA81C8F84E60016D664 /* SwiftertvOS */,
 				7CCD875B1C66099B0068099B /* SwifteriOSTests */,
 				7CCD87781C660EA30068099B /* SwifterOSXTests */,
-				7CCD1BA81C8F84E60016D664 /* SwiftertvOS */,
 			);
 		};
 /* End PBXProject section */
@@ -1043,6 +1046,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1074,6 +1078,7 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1221,6 +1226,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1237,6 +1243,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -1379,6 +1386,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterOSXTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -1398,6 +1406,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

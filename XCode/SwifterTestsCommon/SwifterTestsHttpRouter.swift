@@ -16,7 +16,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssert(router.route(nil, path: "/") != nil)
@@ -27,7 +27,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/b/c/d", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssert(router.route(nil, path: "/") == nil)
@@ -42,7 +42,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/*/c/d", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssert(router.route(nil, path: "/") == nil)
@@ -58,7 +58,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/:arg1/:arg2/b/c/d/:arg3", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssert(router.route(nil, path: "/") == nil)
@@ -74,7 +74,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/**/e/f/g", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssert(router.route(nil, path: "/") == nil)

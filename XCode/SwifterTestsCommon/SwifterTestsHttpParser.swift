@@ -25,7 +25,7 @@ class SwifterTestsHttpParser: XCTestCase {
                 offset = offset + 1
                 return value
             }
-            throw SocketError.RecvFailed("")
+            throw SocketError.recvFailed("")
         }
     }
     
@@ -33,60 +33,60 @@ class SwifterTestsHttpParser: XCTestCase {
         let parser = HttpParser()
         
         do {
-            try parser.readHttpRequest(TestSocket(""))
+            let _ = try parser.readHttpRequest(TestSocket(""))
             XCTAssert(false, "Parser should throw an error if socket is empty.")
         } catch { }
 
         do {
-            try parser.readHttpRequest(TestSocket("12345678"))
+            let _ = try parser.readHttpRequest(TestSocket("12345678"))
             XCTAssert(false, "Parser should throw an error if status line has single token.")
         } catch { }
 
         do {
-            try parser.readHttpRequest(TestSocket("GET HTTP/1.0"))
+            let _ = try parser.readHttpRequest(TestSocket("GET HTTP/1.0"))
             XCTAssert(false, "Parser should throw an error if status line has not enough tokens.")
         } catch { }
 
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0"))
             XCTAssert(false, "Parser should throw an error if there is no next line symbol.")
         } catch { }
             
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0"))
             XCTAssert(false, "Parser should throw an error if there is no next line symbol.")
         } catch { }
         
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\r"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\r"))
             XCTAssert(false, "Parser should throw an error if there is no next line symbol.")
         } catch { }
         
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\n"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\n"))
             XCTAssert(false, "Parser should throw an error if there is no 'Content-Length' header.")
         } catch { }
         
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\r\nContent-Length: 0\r\n\r\n"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\r\nContent-Length: 0\r\n\r\n"))
         } catch {
             XCTAssert(false, "Parser should not throw any errors if there is a valid 'Content-Length' header.")
         }
         
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 0\r\n\n"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 0\r\n\n"))
         } catch {
             XCTAssert(false, "Parser should not throw any errors if there is a valid 'Content-Length' header.")
         }
         
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 5\n\n12345"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 5\n\n12345"))
         } catch {
             XCTAssert(false, "Parser should not throw any errors if there is a valid 'Content-Length' header.")
         }
         
         do {
-            try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 10\r\n\n"))
+            let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 10\r\n\n"))
             XCTAssert(false, "Parser should throw an error if request' body is too short.")
         } catch { }
         

@@ -57,7 +57,7 @@ extension String {
             if scalar == "%" {
                 let first = scalars.popFirst()
                 let secon = scalars.popFirst()
-                if let first = first?.asAlpha(), secon = secon?.asAlpha() {
+                if let first = first?.asAlpha(), let secon = secon?.asAlpha() {
                     decodeBuffer.append(first*16+secon)
                 } else {
                     if !decodeBuffer.isEmpty {

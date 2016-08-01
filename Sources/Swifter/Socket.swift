@@ -14,16 +14,16 @@
 /* Low level routines for POSIX sockets */
 
 public enum SocketError: ErrorProtocol {
-    case SocketCreationFailed(String)
-    case SocketSettingReUseAddrFailed(String)
-    case BindFailed(String)
-    case ListenFailed(String)
-    case WriteFailed(String)
-    case GetPeerNameFailed(String)
-    case ConvertingPeerNameFailed
-    case GetNameInfoFailed(String)
-    case AcceptFailed(String)
-    case RecvFailed(String)
+    case socketCreationFailed(String)
+    case socketSettingReUseAddrFailed(String)
+    case bindFailed(String)
+    case listenFailed(String)
+    case writeFailed(String)
+    case getPeerNameFailed(String)
+    case convertingPeerNameFailed
+    case getNameInfoFailed(String)
+    case acceptFailed(String)
+    case recvFailed(String)
 }
 
 public class Socket: Hashable, Equatable {
@@ -37,14 +37,14 @@ public class Socket: Hashable, Equatable {
         #endif
         
         if socketFileDescriptor == -1 {
-            throw SocketError.SocketCreationFailed(Socket.descriptionOfLastError())
+            throw SocketError.socketCreationFailed(Socket.descriptionOfLastError())
         }
         
         var value: Int32 = 1
         if setsockopt(socketFileDescriptor, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32.self))) == -1 {
             let details = Socket.descriptionOfLastError()
             Socket.release(socketFileDescriptor)
-            throw SocketError.SocketSettingReUseAddrFailed(details)
+            throw SocketError.socketSettingReUseAddrFailed(details)
         }
         Socket.setNoSigPipe(socketFileDescriptor)
         
@@ -93,13 +93,13 @@ public class Socket: Hashable, Equatable {
         if bindResult == -1 {
             let details = Socket.descriptionOfLastError()
             Socket.release(socketFileDescriptor)
-            throw SocketError.BindFailed(details)
+            throw SocketError.bindFailed(details)
         }
         
         if listen(socketFileDescriptor, maxPendingConnection ) == -1 {
             let details = Socket.descriptionOfLastError()
             Socket.release(socketFileDescriptor)
-            throw SocketError.ListenFailed(details)
+            throw SocketError.listenFailed(details)
         }
         return Socket(socketFileDescriptor: socketFileDescriptor)
     }
@@ -125,7 +125,7 @@ public class Socket: Hashable, Equatable {
         var len: socklen_t = 0
         let clientSocket = accept(self.socketFileDescriptor, &addr, &len)
         if clientSocket == -1 {
-            throw SocketError.AcceptFailed(Socket.descriptionOfLastError())
+            throw SocketError.acceptFailed(Socket.descriptionOfLastError())
         }
         Socket.setNoSigPipe(clientSocket)
         return Socket(socketFileDescriptor: clientSocket)
@@ -142,7 +142,7 @@ public class Socket: Hashable, Equatable {
     public func writeUInt8(_ data: ArraySlice<UInt8>) throws {
         try data.withUnsafeBufferPointer {
             guard let baseAddress = $0.baseAddress else {
-                throw SocketError.WriteFailed("The base address of data slice is nil.")
+                throw SocketError.writeFailed("The base address of data slice is nil.")
             }
             var sent = 0
             while sent < data.count {
@@ -152,7 +152,7 @@ public class Socket: Hashable, Equatable {
                     let s = write(self.socketFileDescriptor, baseAddress + sent, Int(data.count - sent))
                 #endif
                 if s <= 0 {
-                    throw SocketError.WriteFailed(Socket.descriptionOfLastError())
+                    throw SocketError.writeFailed(Socket.descriptionOfLastError())
                 }
                 sent += s
             }
@@ -163,7 +163,7 @@ public class Socket: Hashable, Equatable {
         var buffer = [UInt8](repeating: 0, count: 1)
         let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), 0)
         if next <= 0 {
-            throw SocketError.RecvFailed(Socket.descriptionOfLastError())
+            throw SocketError.recvFailed(Socket.descriptionOfLastError())
         }
         return buffer[0]
     }
@@ -184,11 +184,11 @@ public class Socket: Hashable, Equatable {
     public func peername() throws -> String {
         var addr = sockaddr(), len: socklen_t = socklen_t(sizeof(sockaddr.self))
         if getpeername(self.socketFileDescriptor, &addr, &len) != 0 {
-            throw SocketError.GetPeerNameFailed(Socket.descriptionOfLastError())
+            throw SocketError.getPeerNameFailed(Socket.descriptionOfLastError())
         }
         var hostBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
         if getnameinfo(&addr, len, &hostBuffer, socklen_t(hostBuffer.count), nil, 0, NI_NUMERICHOST) != 0 {
-            throw SocketError.GetNameInfoFailed(Socket.descriptionOfLastError())
+            throw SocketError.getNameInfoFailed(Socket.descriptionOfLastError())
         }
         return String(cString: hostBuffer)
     }

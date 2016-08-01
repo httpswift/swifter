@@ -14,7 +14,7 @@ public class App {
     public init() { }
     
     @available(OSX 10.10, *)
-    public func run(port: in_port_t = 9080, _ databasePath: String) throws -> Void {
+    public func run(_ port: in_port_t = 9080, _ databasePath: String) throws -> Void {
         
         // Open database connection.
         

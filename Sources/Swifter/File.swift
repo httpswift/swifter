@@ -12,13 +12,13 @@
 #endif
 
 public enum FileError: ErrorProtocol {
-    case OpenFailed(String)
-    case WriteFailed(String)
-    case ReadFailed(String)
-    case SeekFailed(String)
-    case GetCurrentWorkingDirectoryFailed(String)
-    case IsDirectoryFailed(String)
-    case OpenDirFailed(String)
+    case openFailed(String)
+    case writeFailed(String)
+    case readFailed(String)
+    case seekFailed(String)
+    case getCurrentWorkingDirectoryFailed(String)
+    case isDirectoryFailed(String)
+    case openDirFailed(String)
 }
 
 public class File {
@@ -37,7 +37,7 @@ public class File {
     
     public static func openFileForMode(_ path: String, _ mode: String) throws -> File {
         guard let file = path.withCString({ pathPointer in mode.withCString({ fopen(pathPointer, $0) }) }) else {
-            throw FileError.OpenFailed(descriptionOfLastError())
+            throw FileError.openFailed(descriptionOfLastError())
         }
         return File(file)
     }
@@ -45,24 +45,16 @@ public class File {
     public static func isDirectory(_ path: String) throws -> Bool {
         var s = stat()
         guard stat(path, &s) == 0 else {
-            throw FileError.IsDirectoryFailed(descriptionOfLastError())
+            throw FileError.isDirectoryFailed(descriptionOfLastError())
         }
         return s.st_mode & S_IFMT == S_IFDIR
     }
     
     public static func currentWorkingDirectory() throws -> String {
         guard let path = getcwd(nil, 0) else {
-            throw FileError.GetCurrentWorkingDirectoryFailed(descriptionOfLastError())
+            throw FileError.getCurrentWorkingDirectoryFailed(descriptionOfLastError())
         }
         return String(cString: path)
-    }
-    
-    public static func isDirectory(path: String) throws -> Bool {
-        var s = stat()
-        guard path.withCString({ stat($0, &s) }) == 0 else {
-            throw FileError.IsDirectoryFailed(descriptionOfLastError())
-        }
-        return s.st_mode & S_IFMT == S_IFDIR
     }
     
     public static func exists(_ path: String) throws -> Bool {
@@ -73,7 +65,7 @@ public class File {
     public static func list(_ path: String) throws -> [String] {
         let dir = path.withCString { opendir($0) }
         if dir == nil {
-            throw FileError.OpenDirFailed(descriptionOfLastError())
+            throw FileError.openDirFailed(descriptionOfLastError())
         }
         defer { closedir(dir) }
         var results = [String]()
@@ -120,9 +112,9 @@ public class File {
             return count
         }
         if ferror(self.pointer) != 0 {
-            throw FileError.ReadFailed(File.descriptionOfLastError())
+            throw FileError.readFailed(File.descriptionOfLastError())
         }
-        throw FileError.ReadFailed("Unknown file read error occured.")
+        throw FileError.readFailed("Unknown file read error occured.")
     }
 
     public func write(_ data: [UInt8]) throws -> Void {
@@ -131,14 +123,14 @@ public class File {
         }
         try data.withUnsafeBufferPointer {
             if fwrite($0.baseAddress, 1, data.count, self.pointer) != data.count {
-                throw FileError.WriteFailed(File.descriptionOfLastError())
+                throw FileError.writeFailed(File.descriptionOfLastError())
             }
         }
     }
     
-    public func seek(offset: Int) throws -> Void {
+    public func seek(_ offset: Int) throws -> Void {
         if fseek(self.pointer, offset, SEEK_SET) != 0 {
-            throw FileError.SeekFailed(File.descriptionOfLastError())
+            throw FileError.seekFailed(File.descriptionOfLastError())
         }
     }
     
@@ -149,15 +141,15 @@ public class File {
 
 extension File {
     
-    public static func withNewFileOpenedForWriting<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
+    public static func withNewFileOpenedForWriting<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
         return try withFileOpenedForMode(path, mode: "wb", f)
     }
     
-    public static func withFileOpenedForReading<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
+    public static func withFileOpenedForReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
         return try withFileOpenedForMode(path, mode: "rb", f)
     }
     
-    public static func withFileOpenedForWritingAndReading<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
+    public static func withFileOpenedForWritingAndReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
         return try withFileOpenedForMode(path, mode: "r+b", f)
     }
     

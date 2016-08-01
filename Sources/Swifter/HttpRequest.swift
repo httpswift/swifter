@@ -29,12 +29,12 @@ public class HttpRequest {
             return []
         }
         let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
-        guard let contentType = contentTypeHeaderTokens.first where contentType == "application/x-www-form-urlencoded" else {
+        guard let contentType = contentTypeHeaderTokens.first, contentType == "application/x-www-form-urlencoded" else {
             return []
         }
         return String.fromUInt8(body).split("&").map { param -> (String, String) in
             let tokens = param.split("=")
-            if let name = tokens.first, value = tokens.last where tokens.count == 2 {
+            if let name = tokens.first, let value = tokens.last, tokens.count == 2 {
                 return (name.replace("+", " ").removePercentEncoding(),
                         value.replace("+", " ").removePercentEncoding())
             }
@@ -77,17 +77,17 @@ public class HttpRequest {
             return []
         }
         let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
-        guard let contentType = contentTypeHeaderTokens.first where contentType == "multipart/form-data" else {
+        guard let contentType = contentTypeHeaderTokens.first, contentType == "multipart/form-data" else {
             return []
         }
         var boundary: String? = nil
         contentTypeHeaderTokens.forEach({
             let tokens = $0.split("=")
-            if let key = tokens.first where key == "boundary" && tokens.count == 2 {
+            if let key = tokens.first, key == "boundary" && tokens.count == 2 {
                 boundary = tokens.last
             }
         })
-        if let boundary = boundary where boundary.utf8.count > 0 {
+        if let boundary = boundary, boundary.utf8.count > 0 {
             return parseMultiPartFormData(body, boundary: "--\(boundary)")
         }
         return []
@@ -111,9 +111,9 @@ public class HttpRequest {
             let /* ignore */ _ = nextMultiPartLine(&generator)
         }
         var headers = [String: String]()
-        while let line = nextMultiPartLine(&generator) where !line.isEmpty {
+        while let line = nextMultiPartLine(&generator), !line.isEmpty {
             let tokens = line.split(":")
-            if let name = tokens.first, value = tokens.last where tokens.count == 2 {
+            if let name = tokens.first, let value = tokens.last, tokens.count == 2 {
                 headers[name.lowercased()] = value.trim()
             }
         }
@@ -147,7 +147,7 @@ public class HttpRequest {
             matchOffset = ( x == boundaryArray[matchOffset] ? matchOffset + 1 : 0 )
             body.append(x)
             if matchOffset == boundaryArray.count {
-                body.removeSubrange(Range<Int>(body.count-matchOffset ..< body.count))
+                body.removeSubrange(CountableRange<Int>(body.count-matchOffset ..< body.count))
                 if body.last == HttpRequest.NL {
                     body.removeLast()
                     if body.last == HttpRequest.CR {

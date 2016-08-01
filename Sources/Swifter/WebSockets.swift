@@ -13,23 +13,23 @@ public func websocket(
     _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard r.hasTokenForHeader("upgrade", token: "websocket") else {
-            return .BadRequest(.Text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
+            return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
         }
         guard r.hasTokenForHeader("connection", token: "upgrade") else {
-            return .BadRequest(.Text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
+            return .badRequest(.text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
         }
         guard let secWebSocketKey = r.headers["sec-websocket-key"] else {
-            return .BadRequest(.Text("Invalid value of 'Sec-Websocket-Key' header: \(r.headers["sec-websocket-key"])"))
+            return .badRequest(.text("Invalid value of 'Sec-Websocket-Key' header: \(r.headers["sec-websocket-key"])"))
         }
         let protocolSessionClosure: ((Socket) -> Void) = { socket in
             let session = WebSocketSession(socket)
             while let frame = try? session.readFrame() {
                 switch frame.opcode {
-                case .Text:
+                case .text:
                     if let handleText = text {
                         handleText(session, String.fromUInt8(frame.payload))
                     }
-                case .Binary:
+                case .binary:
                     if let handleBinary = binary {
                         handleBinary(session, frame.payload)
                     }
@@ -39,17 +39,17 @@ public func websocket(
         }
         let secWebSocketAccept = String.toBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").SHA1())
         let headers = [ "Upgrade": "WebSocket", "Connection": "Upgrade", "Sec-WebSocket-Accept": secWebSocketAccept]
-        return HttpResponse.SwitchProtocols(headers, protocolSessionClosure)
+        return HttpResponse.switchProtocols(headers, protocolSessionClosure)
     }
 }
 
 public class WebSocketSession {
     
-    public enum Error: ErrorProtocol { case UnknownOpCode(String), UnMaskedFrame }
-    public enum OpCode: UInt8 { case Continue = 0x00, Close = 0x08, Ping = 0x09, Pong = 0x0A, Text = 0x01, Binary = 0x02 }
+    public enum Error: ErrorProtocol { case unknownOpCode(String), unMaskedFrame }
+    public enum OpCode: UInt8 { case `continue` = 0x00, close = 0x08, ping = 0x09, pong = 0x0A, text = 0x01, binary = 0x02 }
     
     public class Frame {
-        public var opcode = OpCode.Close
+        public var opcode = OpCode.close
         public var fin = false
         public var payload = [UInt8]()
     }
@@ -61,7 +61,7 @@ public class WebSocketSession {
     }
     
     public func writeText(_ text: String) -> Void {
-        self.writeFrame(ArraySlice(text.utf8), OpCode.Text)
+        self.writeFrame(ArraySlice(text.utf8), OpCode.text)
     }
 
     public func writeBinary(_ binary: [UInt8]) -> Void {
@@ -69,7 +69,7 @@ public class WebSocketSession {
     }
     
     public func writeBinary(_ binary: ArraySlice<UInt8>) -> Void {
-        self.writeFrame(binary, OpCode.Binary)
+        self.writeFrame(binary, OpCode.binary)
     }
     
     private func writeFrame(_ data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
@@ -116,7 +116,7 @@ public class WebSocketSession {
         guard let opcode = OpCode(rawValue: opc) else {
             // "If an unknown opcode is received, the receiving endpoint MUST _Fail the WebSocket Connection_."
             // http://tools.ietf.org/html/rfc6455#section-5.2 ( Page 29 )
-            throw Error.UnknownOpCode("\(opc)")
+            throw Error.unknownOpCode("\(opc)")
         }
         frm.opcode = opcode
         let sec = try socket.read()
@@ -124,7 +124,7 @@ public class WebSocketSession {
         guard msk else {
             // "...a client MUST mask all frames that it sends to the serve.."
             // http://tools.ietf.org/html/rfc6455#section-5.1
-            throw Error.UnMaskedFrame
+            throw Error.unMaskedFrame
         }
         var len = UInt64(sec & 0x7F)
         if len == 0x7E {
