@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-enum HttpParserError: ErrorProtocol {
+enum HttpParserError: Error {
     case invalidStatusLine(String)
 }
 

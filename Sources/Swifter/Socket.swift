@@ -13,7 +13,7 @@
 
 /* Low level routines for POSIX sockets */
 
-public enum SocketError: ErrorProtocol {
+public enum SocketError: Error {
     case socketCreationFailed(String)
     case socketSettingReUseAddrFailed(String)
     case bindFailed(String)

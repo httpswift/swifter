@@ -43,7 +43,7 @@ class SwifterTestsWebSocketSession: XCTestCase {
             let session = WebSocketSession(TestSocket([0b0000_0001, 0b0000_0000, 0, 0, 0, 0]))
             let _ = try session.readFrame()
             XCTAssert(false, "Parser should not accept unmasked frames.")
-        } catch WebSocketSession.Error.unMaskedFrame {
+        } catch WebSocketSession.WebSocketError.unMaskedFrame {
             XCTAssert(true, "Parse should throw UnMaskedFrame error for unmasked message.")
         } catch {
             XCTAssert(false, "Parse should throw UnMaskedFrame error for unmasked message.")
@@ -110,7 +110,7 @@ class SwifterTestsWebSocketSession: XCTestCase {
             let session = WebSocketSession(TestSocket([UInt8(opcode), 0b1000_0000, 0, 0, 0, 0]))
                 let _ = try session.readFrame()
                 XCTAssert(false, "Parse should throw an error for unknown opcode: \(opcode)")
-            } catch WebSocketSession.Error.unknownOpCode(_) {
+            } catch WebSocketSession.WebSocketError.unknownOpCode(_) {
                 XCTAssert(true, "Parse should throw UnknownOpCode error for unknown opcode.")
             } catch {
                 XCTAssert(false, "Parse should throw UnknownOpCode error for unknown opcode (was \(error)).")

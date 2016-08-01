@@ -16,18 +16,18 @@ public class HttpServerIO {
     
     private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
     private var clientSockets: Set<Socket> = []
-    private let clientSocketsLock = Lock()
+    private let clientSocketsLock = NSLock()
     
     @available(OSX 10.10, *)
     public func start(_ listenPort: in_port_t = 8080, forceIPv4: Bool = false) throws {
         stop()
         listenSocket = try Socket.tcpSocketForListen(listenPort, forceIPv4: forceIPv4)
-        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground).async {
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
             while let socket = try? self.listenSocket.acceptClientSocket() {
                 self.lock(self.clientSocketsLock) {
                     self.clientSockets.insert(socket)
                 }
-                DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosBackground).async {
+                DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
                     self.handleConnection(socket)
                     self.lock(self.clientSocketsLock) {
                         self.clientSockets.remove(socket)
@@ -77,7 +77,7 @@ public class HttpServerIO {
         socket.release()
     }
     
-    private func lock(_ handle: Lock, closure: () -> ()) {
+    private func lock(_ handle: NSLock, closure: () -> ()) {
         handle.lock()
         closure()
         handle.unlock();
@@ -162,7 +162,7 @@ func sendfile(_ source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointe
     }
 }
 
-public class Lock {
+public class NSLock {
 
     private var mutex = pthread_mutex_t()
     

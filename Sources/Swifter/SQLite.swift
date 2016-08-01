@@ -8,7 +8,7 @@
 import Foundation
 import CSQLite
 
-public enum SQLiteError: ErrorProtocol {
+public enum SQLiteError: Error {
     case openFailed(String?)
     case execFailed(String?)
     case bindFailed(String?)

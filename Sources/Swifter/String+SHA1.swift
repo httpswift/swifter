@@ -67,7 +67,7 @@ extension String {
             // Extend the sixteen 32-bit words into eighty 32-bit words:
             
             for i in 16...79 {
-                let value = words[i-3] ^ words[i-8] ^ words[i-14] ^ words[i-16]
+                let value: UInt32 = ((words[i-3]) ^ (words[i-8]) ^ (words[i-14]) ^ (words[i-16]))
                 words.append(rotateLeft(value, 1))
             }
             

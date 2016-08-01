@@ -61,7 +61,7 @@ public class HttpRequest {
                     return combined
                 }
                 let headerValueParams = header.value.split(";").map { $0.trim() }
-                return headerValueParams.reduce(combined, combine: { (results, token) -> [String] in
+                return headerValueParams.reduce(combined, { (results, token) -> [String] in
                     let parameterTokens = token.split(1, separator: "=")
                     if parameterTokens.first == parameter, let value = parameterTokens.last {
                         return results + [value]

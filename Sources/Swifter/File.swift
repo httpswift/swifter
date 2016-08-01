@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-public enum FileError: ErrorProtocol {
+public enum FileError: Error {
     case openFailed(String)
     case writeFailed(String)
     case readFailed(String)

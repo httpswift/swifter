@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SerializationError: ErrorProtocol {
+public enum SerializationError: Error {
     case invalidObject
     case notSupported
 }
@@ -158,7 +158,7 @@ public enum HttpResponse {
     
     func socketSession() -> ((Socket) -> Void)?  {
         switch self {
-        case switchProtocols(_, let handler) : return handler
+        case .switchProtocols(_, let handler) : return handler
         default: return nil
         }
     }

@@ -45,7 +45,7 @@ public func websocket(
 
 public class WebSocketSession {
     
-    public enum Error: ErrorProtocol { case unknownOpCode(String), unMaskedFrame }
+    public enum WebSocketError: Error { case unknownOpCode(String), unMaskedFrame }
     public enum OpCode: UInt8 { case `continue` = 0x00, close = 0x08, ping = 0x09, pong = 0x0A, text = 0x01, binary = 0x02 }
     
     public class Frame {
@@ -116,7 +116,7 @@ public class WebSocketSession {
         guard let opcode = OpCode(rawValue: opc) else {
             // "If an unknown opcode is received, the receiving endpoint MUST _Fail the WebSocket Connection_."
             // http://tools.ietf.org/html/rfc6455#section-5.2 ( Page 29 )
-            throw Error.unknownOpCode("\(opc)")
+            throw WebSocketError.unknownOpCode("\(opc)")
         }
         frm.opcode = opcode
         let sec = try socket.read()
@@ -124,7 +124,7 @@ public class WebSocketSession {
         guard msk else {
             // "...a client MUST mask all frames that it sends to the serve.."
             // http://tools.ietf.org/html/rfc6455#section-5.1
-            throw Error.unMaskedFrame
+            throw WebSocketError.unMaskedFrame
         }
         var len = UInt64(sec & 0x7F)
         if len == 0x7E {
