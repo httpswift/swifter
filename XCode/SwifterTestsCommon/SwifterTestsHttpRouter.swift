@@ -82,5 +82,28 @@ class SwifterTestsHttpRouter: XCTestCase {
         XCTAssert(router.route(nil, path: "/a/b/c/d/e/f/g") != nil)
         XCTAssert(router.route(nil, path: "/a/e/f/g") == nil)
     }
+    
+    func testHttpRouterEmptyTail() {
+        
+        let router = HttpRouter()
+        
+        router.register(nil, path: "/a/b/", handler: { r in
+            return .ok(.html("OK"))
+        })
+        
+        router.register(nil, path: "/a/b/:var", handler: { r in
+            return .ok(.html("OK"))
+        })
+
+        
+        XCTAssert(router.route(nil, path: "/") == nil)
+        XCTAssert(router.route(nil, path: "/a") == nil)
+        XCTAssert(router.route(nil, path: "/a/b/") != nil)
+        XCTAssert(router.route(nil, path: "/a/e/f/g") == nil)
+        
+        XCTAssert(router.route(nil, path: "/a/b/value1")?.0[":var"] == "value1")
+        
+        XCTAssert(router.route(nil, path: "/a/b/")?.0[":var"] == "")
+    }
 
 }

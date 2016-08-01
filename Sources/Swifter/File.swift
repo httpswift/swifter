@@ -23,6 +23,8 @@ public enum FileError: ErrorProtocol {
 
 public class File {
     
+    public static var PATH_SEPARATOR = "/"
+    
     public static func openNewForWriting(_ path: String) throws -> File {
         return try openFileForMode(path, "wb")
     }

@@ -7,19 +7,28 @@
 
 import Foundation
 
-public func shareFilesFromDirectory(_ directoryPath: String) -> ((HttpRequest) -> HttpResponse) {
+public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] = ["index.html", "default.html"]) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let fileRelativePath = r.params.first else {
             return .notFound
         }
-        let absolutePath = directoryPath + "/" + fileRelativePath.1
-        guard let file = try? File.openForReading(absolutePath) else {
-            return .notFound
+        if fileRelativePath.value.isEmpty {
+            for path in defaults {
+                if let file = try? File.openForReading(directoryPath + File.PATH_SEPARATOR + path) {
+                    return .raw(200, "OK", [:], { writer in
+                        writer.write(file)
+                        file.close()
+                    })
+                }
+            }
         }
-        return .raw(200, "OK", [:], { writer in
-            writer.write(file)
-            file.close()
-        })
+        if let file = try? File.openForReading(directoryPath + File.PATH_SEPARATOR + fileRelativePath.value) {
+            return .raw(200, "OK", [:], { writer in
+                writer.write(file)
+                file.close()
+            })
+        }
+        return .notFound
     }
 }
 
@@ -28,7 +37,7 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
         guard let (_, value) = r.params.first else {
             return HttpResponse.notFound
         }
-        let filePath = dir + "/" + value
+        let filePath = dir + File.PATH_SEPARATOR + value
         do {
             guard try File.exists(filePath) else {
                 return HttpResponse.notFound

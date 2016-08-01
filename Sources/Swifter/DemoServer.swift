@@ -17,8 +17,7 @@ public func demoServer(_ publicDir: String) -> HttpServer {
     
     let server = HttpServer()
     
-    server["/public/:path"] = shareFilesFromDirectory(publicDir)
-    server["/public/"] = shareFilesFromDirectory(publicDir)    // needed to serve index file at root level
+    server["/shared/:path"] = shareFilesFromDirectory(publicDir)
     
     server["/files/:path"] = directoryBrowser("/")
     
