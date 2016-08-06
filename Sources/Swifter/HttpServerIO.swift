@@ -14,38 +14,49 @@
 
 public class HttpServerIO {
     
-    private var listenSocket: Socket = Socket(socketFileDescriptor: -1)
-    private var clientSockets: Set<Socket> = []
-    private let clientSocketsLock = NSLock()
+    private var socket = Socket(socketFileDescriptor: -1)
+    private var sockets = Set<Socket>()
+    
+    public private(set) var running = false
+    
+    public func port() throws -> Int {
+        return Int(try socket.port())
+    }
+    
+    public func isIPv4() throws -> Bool {
+        return try socket.isIPv4()
+    }
+    
+    deinit {
+        stop()
+    }
     
     @available(OSX 10.10, *)
     public func start(_ listenPort: in_port_t = 8080, forceIPv4: Bool = false) throws {
         stop()
-        listenSocket = try Socket.tcpSocketForListen(listenPort, forceIPv4: forceIPv4)
+        socket = try Socket.tcpSocketForListen(listenPort, forceIPv4)
+        self.running = true
         DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
-            while let socket = try? self.listenSocket.acceptClientSocket() {
-                self.lock(self.clientSocketsLock) {
-                    self.clientSockets.insert(socket)
-                }
+            while let socket = try? self.socket.acceptClientSocket() {
                 DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+                    self.sockets.insert(socket)
                     self.handleConnection(socket)
-                    self.lock(self.clientSocketsLock) {
-                        self.clientSockets.remove(socket)
-                    }
+                    self.sockets.remove(socket)
                 }
             }
             self.stop()
+            self.running = false
         }
     }
     
     public func stop() {
-        listenSocket.release()
-        lock(self.clientSocketsLock) {
-            for socket in self.clientSockets {
-                socket.shutdwn()
-            }
-            self.clientSockets.removeAll(keepingCapacity: true)
+        // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
+        for socket in self.sockets {
+            socket.shutdwn()
         }
+        self.sockets.removeAll(keepingCapacity: true)
+        socket.release()
+        self.running = false
     }
     
     public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
@@ -53,13 +64,12 @@ public class HttpServerIO {
     }
     
     private func handleConnection(_ socket: Socket) {
-        let address = try? socket.peername()
         let parser = HttpParser()
         while let request = try? parser.readHttpRequest(socket) {
             let request = request
+            request.address = try? socket.peername()
             let (params, handler) = self.dispatch(request)
-            request.address = address
-            request.params = params;
+            request.params = params
             let response = handler(request)
             var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
@@ -77,31 +87,20 @@ public class HttpServerIO {
         socket.release()
     }
     
-    private func lock(_ handle: NSLock, closure: () -> ()) {
-        handle.lock()
-        closure()
-        handle.unlock();
-    }
-    
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
         
-        func write(_ file: File) {
+        func write(_ file: File) throws {
             var offset: off_t = 0
-            
             let _ = sendfile(fileno(file.pointer), socket.socketFileDescriptor, 0, &offset, nil, 0)
         }
         
-        func write(_ data: [UInt8]) {
-            write(ArraySlice(data))
+        func write(_ data: [UInt8]) throws {
+            try write(ArraySlice(data))
         }
         
-        func write(_ data: ArraySlice<UInt8>) {
-            do {
-                try socket.writeUInt8(data)
-            } catch {
-                print("\(error)")
-            }
+        func write(_ data: ArraySlice<UInt8>) throws {
+            try socket.writeUInt8(data)
         }
     }
     
@@ -134,46 +133,6 @@ public class HttpServerIO {
 }
 
 #if os(Linux)
-    
-import Glibc
-    
-struct sf_hdtr { }
-    
-// Linux supports sendfile (http://man7.org/linux/man-pages/man2/sendfile.2.html)
-// but it's not exposed by the module map from the Swift toolchain.
-//
-// TODO - use @_silgen_name to get the sendfile entry point.
-    
-func sendfile(_ source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>!, _: UnsafeMutablePointer<sf_hdtr>!, _: Int32) -> Int32 {
-    var buffer = [UInt8](repeating: 0, count: 1024)
-    while true {
-        let readResult = read(source, &buffer, buffer.count)
-        guard readResult > 0 else {
-            return Int32(readResult)
-        }
-        var writeCounter = 0
-        while writeCounter < readResult {
-            let writeResult = write(target, &buffer + writeCounter, readResult - writeCounter)
-            guard writeResult > 0 else {
-                return Int32(writeResult)
-            }
-            writeCounter = writeCounter + writeResult
-        }
-    }
-}
-
-public class NSLock {
-
-    private var mutex = pthread_mutex_t()
-    
-    init() { pthread_mutex_init(&mutex, nil) }
-    
-    public func lock() { pthread_mutex_lock(&mutex) }
-    
-    public func unlock() { pthread_mutex_unlock(&mutex) }
-    
-    deinit { pthread_mutex_destroy(&mutex) }
-}
 
 public class DispatchQueue {
     

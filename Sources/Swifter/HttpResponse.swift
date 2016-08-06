@@ -13,9 +13,9 @@ public enum SerializationError: Error {
 }
 
 public protocol HttpResponseBodyWriter {
-    func write(_ file: File)
-    func write(_ data: [UInt8])
-    func write(_ data: ArraySlice<UInt8>)
+    func write(_ file: File) throws
+    func write(_ data: [UInt8]) throws
+    func write(_ data: ArraySlice<UInt8>) throws
 }
 
 public enum HttpResponseBody {
@@ -44,35 +44,35 @@ public enum HttpResponseBody {
                         return Array(UnsafeBufferPointer(start: body, count: json.count))
                     })
                     return (data.count, {
-                        $0.write(data)
+                        try $0.write(data)
                     })
                 #endif
             case .text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {
-                    $0.write(data)
+                    try $0.write(data)
                 })
             case .html(let body):
                 let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
-                    $0.write(data)
+                    try $0.write(data)
                 })
             case .data(let body):
                 return (body.count, {
-                    $0.write(body)
+                    try $0.write(body)
                 })
             case .custom(let object, let closure):
                 let serialised = try closure(object)
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
-                    $0.write(data)
+                    try $0.write(data)
                 })
             }
         } catch {
             let data = [UInt8]("Serialisation error: \(error)".utf8)
             return (data.count, {
-                $0.write(data)
+                try $0.write(data)
             })
         }
     }

@@ -9,11 +9,11 @@ import Foundation
 
 public class Process {
     
-    public static var PID: Int {
+    public static var pid: Int {
         return Int(getpid())
     }
     
-    public static var TID: UInt64 {
+    public static var tid: UInt64 {
         var tid: __uint64_t = 0
         pthread_threadid_np(nil, &tid);
         return UInt64(tid)

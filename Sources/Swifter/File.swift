@@ -141,25 +141,22 @@ public class File {
     }
 }
 
-extension File {
-    
-    public static func withNewFileOpenedForWriting<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
-        return try withFileOpenedForMode(path, mode: "wb", f)
+public func withNewFileOpenedForWriting<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
+    return try withFileOpenedForMode(path, "wb", f)
+}
+
+public func withFileOpenedForReading<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
+    return try withFileOpenedForMode(path, "rb", f)
+}
+
+public func withFileOpenedForWritingAndReading<Result>(path: String, _ f: (File) throws -> Result) throws -> Result {
+    return try withFileOpenedForMode(path, "r+b", f)
+}
+
+public func withFileOpenedForMode<Result>(_ path: String, _ mode: String, _ f: (File) throws -> Result) throws -> Result {
+    let file = try File.openFileForMode(path, mode)
+    defer {
+        file.close()
     }
-    
-    public static func withFileOpenedForReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
-        return try withFileOpenedForMode(path, mode: "rb", f)
-    }
-    
-    public static func withFileOpenedForWritingAndReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
-        return try withFileOpenedForMode(path, mode: "r+b", f)
-    }
-    
-    public static func withFileOpenedForMode<Result>(_ path: String, mode: String, _ f: (File) throws -> Result) throws -> Result {
-        let file = try File.openFileForMode(path, mode)
-        defer {
-            file.close()
-        }
-        return try f(file)
-    }
+    return try f(file)
 }

@@ -57,16 +57,13 @@ public class HttpParser {
     
     private func readHeaders(_ socket: Socket) throws -> [String: String] {
         var headers = [String: String]()
-        repeat {
-            let headerLine = try socket.readLine()
-            if headerLine.isEmpty {
-                return headers
-            }
+        while case let headerLine = try socket.readLine(), !headerLine.isEmpty {
             let headerTokens = headerLine.split(1, separator: ":")
             if let name = headerTokens.first, let value = headerTokens.last {
                 headers[name.lowercased()] = value.trim()
             }
-        } while true
+        }
+        return headers
     }
     
     func supportsKeepAlive(_ headers: [String: String]) -> Bool {

@@ -13,10 +13,10 @@
 
 public func scopes(_ scope: Closure) -> ((HttpRequest) -> HttpResponse) {
     return { r in
-        ScopesBuffer[Process.TID] = ""
+        ScopesBuffer[Process.tid] = ""
         scope()
         return .raw(200, "OK", ["Content-Type": "text/html"],
-                    { $0.write([UInt8](("<!DOCTYPE html>"  + (ScopesBuffer[Process.TID] ?? "")).utf8)) })
+                    { $0.write([UInt8](("<!DOCTYPE html>"  + (ScopesBuffer[Process.tid] ?? "")).utf8)) })
     }
 }
 
@@ -586,15 +586,15 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     acceptCharset = nil
     inner = nil
     
-    ScopesBuffer[Process.TID] = (ScopesBuffer[Process.TID] ?? "") + "<" + node
+    ScopesBuffer[Process.tid] = (ScopesBuffer[Process.tid] ?? "") + "<" + node
     
     // Save the current output before the nested scope evalutation.
     
-    var output = ScopesBuffer[Process.TID] ?? ""
+    var output = ScopesBuffer[Process.tid] ?? ""
     
     // Clear the output buffer for the evalutation.
     
-    ScopesBuffer[Process.TID] = ""
+    ScopesBuffer[Process.tid] = ""
     
     // Evaluate the nested scope.
     
@@ -739,10 +739,10 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     }
     
     if let inner = inner {
-        ScopesBuffer[Process.TID] = output + ">" + (inner) + "</" + node + ">"
+        ScopesBuffer[Process.tid] = output + ">" + (inner) + "</" + node + ">"
     } else {
-        let current = ScopesBuffer[Process.TID]  ?? ""
-        ScopesBuffer[Process.TID] = output + ">" + current + "</" + node + ">"
+        let current = ScopesBuffer[Process.tid]  ?? ""
+        ScopesBuffer[Process.tid] = output + ">" + current + "</" + node + ">"
     }
     
     // Pop the attributes.

@@ -47,7 +47,7 @@ public class App {
         
         // Boot the server.
         
-        print("Starting Swifter (\(HttpServer.VERSION)) at port \(port) with PID \(Process.PID)...")
+        print("Starting Swifter (\(HttpServer.VERSION)) at port \(try server.port()) with PID \(Process.tid)...")
         
         try self.server.start(port)
         
