@@ -153,7 +153,7 @@ public func demoServer(_ publicDir: String) -> HttpServer {
     }
     
     server["/raw"] = { r in
-        return HttpResponse.raw(200, "OK", ["XXX-Custom-Header": "value"], { $0.write([UInt8]("test".utf8)) })
+        return HttpResponse.raw(200, "OK", ["XXX-Custom-Header": "value"], { try? $0.write([UInt8]("test".utf8)) })
     }
     
     server["/redirect"] = { r in
@@ -173,7 +173,7 @@ public func demoServer(_ publicDir: String) -> HttpServer {
     server["/stream"] = { r in
         return HttpResponse.raw(200, "OK", nil, { w in
             for i in 0...100 {
-                w.write([UInt8]("[chunk \(i)]".utf8))
+                try? w.write([UInt8]("[chunk \(i)]".utf8))
             }
         })
     }

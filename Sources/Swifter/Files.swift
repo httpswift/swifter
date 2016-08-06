@@ -16,7 +16,7 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
             for path in defaults {
                 if let file = try? File.openForReading(directoryPath + File.PATH_SEPARATOR + path) {
                     return .raw(200, "OK", [:], { writer in
-                        writer.write(file)
+                        try? writer.write(file)
                         file.close()
                     })
                 }
@@ -24,7 +24,7 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
         }
         if let file = try? File.openForReading(directoryPath + File.PATH_SEPARATOR + fileRelativePath.value) {
             return .raw(200, "OK", [:], { writer in
-                writer.write(file)
+                try? writer.write(file)
                 file.close()
             })
         }
@@ -65,7 +65,7 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
                     return .notFound
                 }
                 return .raw(200, "OK", [:], { writer in
-                    writer.write(file)
+                    try? writer.write(file)
                     file.close()
                 })
             }
