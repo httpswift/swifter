@@ -18,7 +18,8 @@ public struct RSA {
     // RSA
     //
     // https://en.wikipedia.org/wiki/RSA_(cryptosystem)
-    //
+    // TODO 
+    //   - Switch to BigNum.
     
     public struct Config {
         public var n, e, d : Int
