@@ -2,27 +2,32 @@
 //  BigNum.swift
 //  Swifter
 //
-//  Created by Damian Kolakowski on 08/08/16.
+//  Copyright © 2016 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
 
-public struct BigNum {
+public struct BigNum: Equatable, Comparable {
     
-    // 
+    //
     // Big Integer
     //
     // TODO/Improvments
     //  - add init(...) for string literal
-    //  - switch to 'long division'
+    //  - add powmod operation
     //  - fix '+' and '-' operators for negative numbers
     
     internal var digits = [UInt8]()
     internal var signum = 0
     
-    internal init(_ digits: [UInt8]) {
+    internal init(_ digits: [UInt8], _ signum: Int) {
         self.digits.append(contentsOf: digits)
-        self.signum = digits.isEmpty ? 0 : 1
+        self.signum = signum
+    }
+    
+    internal init(_ digits: ArraySlice<UInt8>, _ signum: Int) {
+        self.digits.append(contentsOf: digits)
+        self.signum = signum
     }
     
     public init(_ text: String) {
@@ -44,16 +49,20 @@ public func == (_ left: BigNum, right: BigNum) -> Bool {
     return (left.digits == right.digits) && (left.signum == right.signum)
 }
 
+infix operator != { }
+public func != (_ left: BigNum, right: BigNum) -> Bool {
+    return !(left.digits == right.digits)
+}
+
 infix operator + { }
 public func + (_ left: BigNum, _ right: BigNum) -> BigNum {
     var result = [UInt8]()
     var carry: UInt8 = 0
     for i in 0..<max(left.digits.count, right.digits.count) {
-        let leftDigit = (i < left.digits.count) ? left.digits[i] : 0
-        let rightDigit = (i < right.digits.count) ? right.digits[i] : 0
-        let sum = (leftDigit + rightDigit) + carry
-        if sum > 9 {
-            carry = 1
+        let sum = (((i < left.digits.count) ? left.digits[i] : 0) +
+            ((i < right.digits.count) ? right.digits[i] : 0)) + carry
+        if sum >= 10 {
+            carry = sum / 10
             result.append(sum - 10)
         } else {
             carry = 0
@@ -63,7 +72,7 @@ public func + (_ left: BigNum, _ right: BigNum) -> BigNum {
     if carry != 0 {
         result.append(carry)
     }
-    return BigNum(result)
+    return BigNum(result, 1)
 }
 
 infix operator - { }
@@ -71,23 +80,25 @@ public func - (_ left: BigNum, _ right: BigNum) -> BigNum {
     var result = [UInt8]()
     var carry: Int = 0
     for i in 0..<max(left.digits.count, right.digits.count) {
-        let leftDigit = (i < left.digits.count) ? left.digits[i] : 0
-        let rightDigit = (i < right.digits.count) ? right.digits[i] : 0
-        let diff = (Int(leftDigit) - Int(rightDigit)) + carry
-        if diff < 0 {
+        let sub = (Int((i < left.digits.count) ? left.digits[i] : 0) -
+            Int((i < right.digits.count) ? right.digits[i] : 0)) + carry
+        if sub < 0 {
             carry = -1
-            result.append(UInt8(10+diff))
+            result.append(UInt8(10+sub))
         } else {
             carry = 0
-            result.append(UInt8(diff))
+            result.append(UInt8(sub))
         }
     }
     while let last = result.last, last == 0 { result.removeLast() }
-    return BigNum(result)
+    return BigNum(result, 1)
 }
 
 infix operator * { }
 public func * (_ left: BigNum, _ right: BigNum) -> BigNum {
+    if (left.signum == 0) || (right.signum == 0) {
+        return BigNum([], 0)
+    }
     var mulResults = Array<[UInt8]>()
     for i in 0..<left.digits.count {
         var row = [UInt8](repeating: 0, count: i)
@@ -108,42 +119,53 @@ public func * (_ left: BigNum, _ right: BigNum) -> BigNum {
         }
         mulResults.append(row)
     }
-    var sum = mulResults.reduce(BigNum([0])) { $0.partialResult + BigNum($0.1) }
+    var sum = mulResults.reduce(BigNum([0], 1)) { $0.partialResult + BigNum($0.1, 1) }
     sum.signum = left.signum * right.signum
     return sum
 }
 
 infix operator / { }
-public func / (_ left: BigNum, _ right: BigNum) -> BigNum {
+public func / (_ left: BigNum, _ right: BigNum) -> (quotient: BigNum, reminder: BigNum) {
+    
     if left < right {
-        return BigNum([0])
-    }
-    var quotient = BigNum([0])
-    var remainder = left
-    
-    while remainder >= right {
-        quotient = quotient + BigNum([1])
-        remainder = remainder - right
+        return (BigNum([0], 0), left)
     }
     
-    quotient.signum = left.signum * right.signum
+    if left.digits == right.digits {
+        return (BigNum([1], left.signum * right.signum), BigNum([0], 0))
+    }
     
-    return quotient
+    var shiftIndex = left.digits.count - right.digits.count
+    var tmp = BigNum(left.digits[shiftIndex..<left.digits.count], 1)
+    
+    while tmp < right {
+        shiftIndex = shiftIndex - 1
+        tmp = BigNum(left.digits[shiftIndex..<left.digits.count], 1)
+    }
+    
+    var quotient = [UInt8]()
+    var rest = BigNum([0], 0)
+    
+    while shiftIndex >= 0 {
+        var i: UInt8 = 1
+        while (right * BigNum([i], 1)) < tmp {
+            i = i + 1
+        }
+        quotient.append(i-1)
+        rest = tmp - (right * BigNum([i-1], 1))
+        shiftIndex = shiftIndex - 1
+        if shiftIndex < 0 {
+            break
+        }
+        tmp = BigNum([left.digits[shiftIndex]] + rest.digits, 1)
+    }
+    
+    return (BigNum(quotient.reversed(), left.signum * right.signum), rest)
 }
 
 infix operator % { }
 public func % (_ left: BigNum, _ right: BigNum) -> BigNum {
-    if left < right {
-        return left
-    }
-    var quotient = BigNum([0])
-    var remainder = left
-    
-    while remainder >= right {
-        quotient = quotient + BigNum([1])
-        remainder = remainder - right
-    }
-    return remainder
+    return (left / right).reminder
 }
 
 infix operator > { }
@@ -158,17 +180,12 @@ public func > (_ left: BigNum, _ right: BigNum) -> Bool {
             return left.digits.count > right.digits.count
         }
     }
-    for i in 0..<left.digits.count {
-        if left.digits[i] == right.digits[i] {
-            continue
-        }
-        if left.signum < 0 {
-            if left.digits[i] < right.digits[i] {
-                return true
-            }
-        } else {
-            if left.digits[i] > right.digits[i] {
-                return true
+    for i in (0..<left.digits.count).reversed() {
+        if left.digits[i] != right.digits[i] {
+            if left.signum < 0 {
+                return left.digits[i] < right.digits[i]
+            } else {
+                return left.digits[i] > right.digits[i]
             }
         }
     }
@@ -187,17 +204,12 @@ public func < (_ left: BigNum, _ right: BigNum) -> Bool {
             return left.digits.count < right.digits.count
         }
     }
-    for i in 0..<left.digits.count {
-        if left.digits[i] == right.digits[i] {
-            continue
-        }
-        if left.signum < 0 {
-            if right.digits[i] < left.digits[i] {
-                return true
-            }
-        } else {
-            if right.digits[i] > left.digits[i] {
-                return true
+    for i in (0..<left.digits.count).reversed() {
+        if left.digits[i] != right.digits[i] {
+            if left.signum < 0 {
+                return right.digits[i] < left.digits[i]
+            } else {
+                return right.digits[i] > left.digits[i]
             }
         }
     }

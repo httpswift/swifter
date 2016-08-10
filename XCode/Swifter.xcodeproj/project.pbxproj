@@ -15,9 +15,6 @@
 		7C11459B1D527545000DB965 /* AES128.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1145981D527545000DB965 /* AES128.swift */; };
 		7C13B57C1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C13B57B1C7B069500556443 /* SwifterTestsSQLite.swift */; };
 		7C13B57D1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C13B57B1C7B069500556443 /* SwifterTestsSQLite.swift */; };
-		7C1CA77F1D59BC7100FD38A0 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
-		7C1CA7801D59BC7100FD38A0 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
-		7C1CA7811D59BC7200FD38A0 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
 		7C3195FB1CC2C68F00DF5406 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C3195E31CC2C68F00DF5406 /* sqlite.h */; };
 		7C3195FC1CC2C68F00DF5406 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C3195E31CC2C68F00DF5406 /* sqlite.h */; };
 		7C3195FD1CC2C68F00DF5406 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C3195E31CC2C68F00DF5406 /* sqlite.h */; };
@@ -140,6 +137,9 @@
 		7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */; };
 		7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */; };
 		7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB8111BE2A1D400C8A977 /* ViewController.swift */; };
+		7CE0B9E31D5AFF560070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
+		7CE0B9E41D5AFF570070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
+		7CE0B9E51D5AFF570070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
 		98630C071A1C9A9D00478D08 /* login.html in Resources */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 /* End PBXBuildFile section */
 
@@ -866,7 +866,7 @@
 				7C3196161CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
 				7C5F79071D5627EE00C514AA /* Socket+Server.swift in Sources */,
 				7C3196221CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
-				7C1CA77F1D59BC7100FD38A0 /* BigNum.swift in Sources */,
+				7CE0B9E31D5AFF560070D292 /* BigNum.swift in Sources */,
 				7C31960A1CC2C68F00DF5406 /* Files.swift in Sources */,
 				7CB923CC1D50F11700899E2A /* JSON.swift in Sources */,
 				7C5F790B1D56281200C514AA /* Errno.swift in Sources */,
@@ -901,7 +901,7 @@
 				7C3196171CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
 				7C5F79081D5627EE00C514AA /* Socket+Server.swift in Sources */,
 				7C3196231CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
-				7C1CA7801D59BC7100FD38A0 /* BigNum.swift in Sources */,
+				7CE0B9E41D5AFF570070D292 /* BigNum.swift in Sources */,
 				7C31960B1CC2C68F00DF5406 /* Files.swift in Sources */,
 				7CB923CD1D50F11800899E2A /* JSON.swift in Sources */,
 				7C5F790C1D56281200C514AA /* Errno.swift in Sources */,
@@ -962,7 +962,7 @@
 				7C3196181CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
 				7C5F79091D5627EE00C514AA /* Socket+Server.swift in Sources */,
 				7C3196241CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
-				7C1CA7811D59BC7200FD38A0 /* BigNum.swift in Sources */,
+				7CE0B9E51D5AFF570070D292 /* BigNum.swift in Sources */,
 				7C31960C1CC2C68F00DF5406 /* Files.swift in Sources */,
 				7CB923CE1D50F11800899E2A /* JSON.swift in Sources */,
 				7C5F790D1D56281200C514AA /* Errno.swift in Sources */,
