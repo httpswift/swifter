@@ -1,8 +1,8 @@
 //
-//  String+SHA1.swift
+//  SHA1.swift
 //  Swifter
 //
-//  Copyright 2014-2016 Damian Kołakowski. All rights reserved.
+//  Copyright © 2016 Damian Kołakowski. All rights reserved.
 //
 
 #if os(Linux)
@@ -12,17 +12,13 @@
 #endif
 
 
-extension String {
+public struct SHA1 {
     
-    public func SHA1() -> String {
-        return SHA1().reduce("") { $0 + String(format: "%02x", $1) }
-    }
-    
-    public func SHA1() -> [UInt8] {
-        
+    public static func hash(_ input: [UInt8]) -> [UInt8] {
+            
         // Alghorithm from: https://en.wikipedia.org/wiki/SHA-1
         
-        var message = [UInt8](self.utf8)
+        var message = input
         
         var h0 = UInt32(littleEndian: 0x67452301)
         var h1 = UInt32(littleEndian: 0xEFCDAB89)
@@ -52,7 +48,7 @@ extension String {
         message.append(contentsOf: Array(bytePtr))
         
         // Process the message in successive 512-bit chunks ( 64 bytes chunks ):
-
+        
         for chunkStart in 0..<message.count/64 {
             var words = [UInt32]()
             let chunk = message[chunkStart*64..<chunkStart*64+64]
@@ -83,19 +79,19 @@ extension String {
                 var f = UInt32(0)
                 var k = UInt32(0)
                 switch i {
-                    case 0...19:
-                        f = (b & c) | ((~b) & d)
-                        k = 0x5A827999
-                    case 20...39:
-                        f = b ^ c ^ d
-                        k = 0x6ED9EBA1
-                    case 40...59:
-                        f = (b & c) | (b & d) | (c & d)
-                        k = 0x8F1BBCDC
-                    case 60...79:
-                        f = b ^ c ^ d
-                        k = 0xCA62C1D6
-                    default: break
+                case 0...19:
+                    f = (b & c) | ((~b) & d)
+                    k = 0x5A827999
+                case 20...39:
+                    f = b ^ c ^ d
+                    k = 0x6ED9EBA1
+                case 40...59:
+                    f = (b & c) | (b & d) | (c & d)
+                    k = 0x8F1BBCDC
+                case 60...79:
+                    f = b ^ c ^ d
+                    k = 0xCA62C1D6
+                default: break
                 }
                 let temp = (rotateLeft(a, 5) &+ f &+ e &+ k &+ words[i]) & 0xFFFFFFFF
                 e = d
@@ -129,11 +125,22 @@ extension String {
         result += ([UInt8(h2Big & 0xFF), UInt8((h2Big >> 8) & 0xFF), UInt8((h2Big >> 16) & 0xFF), UInt8((h2Big >> 24) & 0xFF)]);
         result += ([UInt8(h3Big & 0xFF), UInt8((h3Big >> 8) & 0xFF), UInt8((h3Big >> 16) & 0xFF), UInt8((h3Big >> 24) & 0xFF)]);
         result += ([UInt8(h4Big & 0xff), UInt8((h4Big >> 8) & 0xFF), UInt8((h4Big >> 16) & 0xFF), UInt8((h4Big >> 24) & 0xFF)]);
-
-        return result;
+        
+        return result
     }
     
-    func rotateLeft(_ v: UInt32, _ n: UInt32) -> UInt32 {
+    private static func rotateLeft(_ v: UInt32, _ n: UInt32) -> UInt32 {
         return ((v << n) & 0xFFFFFFFF) | (v >> (32 - n))
+    }
+}
+
+extension String {
+    
+    public func sha1() -> String {
+        return self.sha1().reduce("") { $0 + String(format: "%02x", $1) }
+    }
+    
+    public func sha1() -> [UInt8] {
+        return SHA1.hash([UInt8](self.utf8))
     }
 }

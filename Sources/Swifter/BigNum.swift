@@ -44,17 +44,17 @@ public struct BigNum: Equatable, Comparable {
     }
 }
 
-infix operator == { }
+infix operator == { precedence 130 }
 public func == (_ left: BigNum, right: BigNum) -> Bool {
     return (left.digits == right.digits) && (left.signum == right.signum)
 }
 
-infix operator != { }
+infix operator != { precedence 130 }
 public func != (_ left: BigNum, right: BigNum) -> Bool {
     return !(left.digits == right.digits)
 }
 
-infix operator + { }
+infix operator + { associativity left precedence 140 }
 public func + (_ left: BigNum, _ right: BigNum) -> BigNum {
     var result = [UInt8]()
     var carry: UInt8 = 0
@@ -75,7 +75,7 @@ public func + (_ left: BigNum, _ right: BigNum) -> BigNum {
     return BigNum(result, 1)
 }
 
-infix operator - { }
+infix operator - { associativity left precedence 140 }
 public func - (_ left: BigNum, _ right: BigNum) -> BigNum {
     var result = [UInt8]()
     var carry: Int = 0
@@ -94,7 +94,7 @@ public func - (_ left: BigNum, _ right: BigNum) -> BigNum {
     return BigNum(result, 1)
 }
 
-infix operator * { }
+infix operator * { associativity left precedence 150 }
 public func * (_ left: BigNum, _ right: BigNum) -> BigNum {
     if (left.signum == 0) || (right.signum == 0) {
         return BigNum([], 0)
@@ -124,7 +124,7 @@ public func * (_ left: BigNum, _ right: BigNum) -> BigNum {
     return sum
 }
 
-infix operator / { }
+infix operator / { associativity left precedence 150 }
 public func / (_ left: BigNum, _ right: BigNum) -> (quotient: BigNum, reminder: BigNum) {
     
     if left < right {
@@ -163,12 +163,12 @@ public func / (_ left: BigNum, _ right: BigNum) -> (quotient: BigNum, reminder: 
     return (BigNum(quotient.reversed(), left.signum * right.signum), rest)
 }
 
-infix operator % { }
+infix operator % { associativity left precedence 150 }
 public func % (_ left: BigNum, _ right: BigNum) -> BigNum {
     return (left / right).reminder
 }
 
-infix operator > { }
+infix operator > { precedence 130 }
 public func > (_ left: BigNum, _ right: BigNum) -> Bool {
     if left.signum != right.signum {
         return left.signum > right.signum
@@ -192,7 +192,7 @@ public func > (_ left: BigNum, _ right: BigNum) -> Bool {
     return false
 }
 
-infix operator < { }
+infix operator < { precedence 130 }
 public func < (_ left: BigNum, _ right: BigNum) -> Bool {
     if left.signum != right.signum {
         return left.signum < right.signum
@@ -216,12 +216,12 @@ public func < (_ left: BigNum, _ right: BigNum) -> Bool {
     return false
 }
 
-infix operator >= { }
+infix operator >= { precedence 130 }
 public func >= (_ left: BigNum, _ right: BigNum) -> Bool {
     return (left == right) || (left > right)
 }
 
-infix operator <= { }
+infix operator <= { precedence 130 }
 public func <= (_ left: BigNum, _ right: BigNum) -> Bool {
     return (left == right) || (left < right)
 }

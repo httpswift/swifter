@@ -72,9 +72,6 @@
 		7C3196371CC2C68F00DF5406 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195F91CC2C68F00DF5406 /* String+Misc.swift */; };
 		7C3196381CC2C68F00DF5406 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195F91CC2C68F00DF5406 /* String+Misc.swift */; };
 		7C3196391CC2C68F00DF5406 /* String+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195F91CC2C68F00DF5406 /* String+Misc.swift */; };
-		7C31963A1CC2C68F00DF5406 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */; };
-		7C31963B1CC2C68F00DF5406 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */; };
-		7C31963C1CC2C68F00DF5406 /* String+SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */; };
 		7C3945641D256FDA003EEABA /* Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3945631D256FDA003EEABA /* Scopes.swift */; };
 		7C3945651D256FDA003EEABA /* Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3945631D256FDA003EEABA /* Scopes.swift */; };
 		7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
@@ -137,9 +134,17 @@
 		7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */; };
 		7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */; };
 		7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB8111BE2A1D400C8A977 /* ViewController.swift */; };
-		7CE0B9E31D5AFF560070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
-		7CE0B9E41D5AFF570070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
-		7CE0B9E51D5AFF570070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
+		7CE0B9E71D5BAFF10070D292 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9E61D5BAFF10070D292 /* HMAC.swift */; };
+		7CE0B9E81D5BAFF10070D292 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9E61D5BAFF10070D292 /* HMAC.swift */; };
+		7CE0B9E91D5BAFF10070D292 /* HMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9E61D5BAFF10070D292 /* HMAC.swift */; };
+		7CE0B9EB1D5BB6850070D292 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9EA1D5BB6850070D292 /* SHA1.swift */; };
+		7CE0B9EC1D5BB6850070D292 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9EA1D5BB6850070D292 /* SHA1.swift */; };
+		7CE0B9ED1D5BB6850070D292 /* SHA1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9EA1D5BB6850070D292 /* SHA1.swift */; };
+		7CE0B9EF1D5BBAAD0070D292 /* SwifterTestsHMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9EE1D5BBAAD0070D292 /* SwifterTestsHMAC.swift */; };
+		7CE0B9F01D5BBAAD0070D292 /* SwifterTestsHMAC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE0B9EE1D5BBAAD0070D292 /* SwifterTestsHMAC.swift */; };
+		7CE0B9F11D5BBC540070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
+		7CE0B9F21D5BBC550070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
+		7CE0B9F31D5BBC560070D292 /* BigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1CA77B1D589C2200FD38A0 /* BigNum.swift */; };
 		98630C071A1C9A9D00478D08 /* login.html in Resources */ = {isa = PBXBuildFile; fileRef = 98630C061A1C9A9D00478D08 /* login.html */; };
 /* End PBXBuildFile section */
 
@@ -229,7 +234,6 @@
 		7C3195F71CC2C68F00DF5406 /* SQLite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLite.swift; sourceTree = "<group>"; };
 		7C3195F81CC2C68F00DF5406 /* String+BASE64.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+BASE64.swift"; sourceTree = "<group>"; };
 		7C3195F91CC2C68F00DF5406 /* String+Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Misc.swift"; sourceTree = "<group>"; };
-		7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
 		7C3945631D256FDA003EEABA /* Scopes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scopes.swift; sourceTree = "<group>"; };
 		7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsWebSocketSession.swift; sourceTree = "<group>"; };
 		7C5915211C92A99300D884BC /* SwifterTestsReflection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsReflection.swift; sourceTree = "<group>"; };
@@ -270,6 +274,9 @@
 		7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7CDAB8101BE2A1D400C8A977 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CDAB8111BE2A1D400C8A977 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		7CE0B9E61D5BAFF10070D292 /* HMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMAC.swift; sourceTree = "<group>"; };
+		7CE0B9EA1D5BB6850070D292 /* SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SHA1.swift; sourceTree = "<group>"; };
+		7CE0B9EE1D5BBAAD0070D292 /* SwifterTestsHMAC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsHMAC.swift; sourceTree = "<group>"; };
 		98630C061A1C9A9D00478D08 /* login.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = login.html; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -404,13 +411,14 @@
 				7C3195F71CC2C68F00DF5406 /* SQLite.swift */,
 				7C3195F81CC2C68F00DF5406 /* String+BASE64.swift */,
 				7C3195F91CC2C68F00DF5406 /* String+Misc.swift */,
-				7C3195FA1CC2C68F00DF5406 /* String+SHA1.swift */,
 				7C2C85901D50D83D00B32145 /* JSON.swift */,
 				7C1145981D527545000DB965 /* AES128.swift */,
 				7C5F78F11D54C99200C514AA /* RC4.swift */,
 				7C5F78FB1D5520B000C514AA /* RSA.swift */,
 				7C5F790A1D56281200C514AA /* Errno.swift */,
 				7C1CA77B1D589C2200FD38A0 /* BigNum.swift */,
+				7CE0B9E61D5BAFF10070D292 /* HMAC.swift */,
+				7CE0B9EA1D5BB6850070D292 /* SHA1.swift */,
 			);
 			path = Swifter;
 			sourceTree = "<group>";
@@ -509,6 +517,7 @@
 				7CB923CF1D510D6400899E2A /* SwifterTestsJSON.swift */,
 				7C5F78F51D54D21600C514AA /* SwifterTestsRC4.swift */,
 				7C5F78EE1D54BB5600C514AA /* SwifterTestsAES128.swift */,
+				7CE0B9EE1D5BBAAD0070D292 /* SwifterTestsHMAC.swift */,
 				7C5F79031D55F44500C514AA /* SwifterTestsRSA.swift */,
 				7CCD875D1C66099B0068099B /* SwifteriOSTests */,
 			);
@@ -851,8 +860,9 @@
 				7C3196191CC2C68F00DF5406 /* HttpResponse.swift in Sources */,
 				7C5F790F1D56287000C514AA /* Socket+File.swift in Sources */,
 				7C3196131CC2C68F00DF5406 /* HttpParser.swift in Sources */,
-				7C31963A1CC2C68F00DF5406 /* String+SHA1.swift in Sources */,
+				7CE0B9F11D5BBC540070D292 /* BigNum.swift in Sources */,
 				7C31961F1CC2C68F00DF5406 /* HttpServer.swift in Sources */,
+				7CE0B9E71D5BAFF10070D292 /* HMAC.swift in Sources */,
 				7C31960D1CC2C68F00DF5406 /* WebSockets.swift in Sources */,
 				7C3195FE1CC2C68F00DF5406 /* sqlite.c in Sources */,
 				7C3196311CC2C68F00DF5406 /* SQLite.swift in Sources */,
@@ -864,9 +874,9 @@
 				7C3196281CC2C68F00DF5406 /* Reflection.swift in Sources */,
 				7C3945641D256FDA003EEABA /* Scopes.swift in Sources */,
 				7C3196161CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
+				7CE0B9EB1D5BB6850070D292 /* SHA1.swift in Sources */,
 				7C5F79071D5627EE00C514AA /* Socket+Server.swift in Sources */,
 				7C3196221CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
-				7CE0B9E31D5AFF560070D292 /* BigNum.swift in Sources */,
 				7C31960A1CC2C68F00DF5406 /* Files.swift in Sources */,
 				7CB923CC1D50F11700899E2A /* JSON.swift in Sources */,
 				7C5F790B1D56281200C514AA /* Errno.swift in Sources */,
@@ -886,8 +896,9 @@
 				7C31961A1CC2C68F00DF5406 /* HttpResponse.swift in Sources */,
 				7C5F79101D56287000C514AA /* Socket+File.swift in Sources */,
 				7C3196141CC2C68F00DF5406 /* HttpParser.swift in Sources */,
-				7C31963B1CC2C68F00DF5406 /* String+SHA1.swift in Sources */,
+				7CE0B9F21D5BBC550070D292 /* BigNum.swift in Sources */,
 				7C3196201CC2C68F00DF5406 /* HttpServer.swift in Sources */,
+				7CE0B9E81D5BAFF10070D292 /* HMAC.swift in Sources */,
 				7C31960E1CC2C68F00DF5406 /* WebSockets.swift in Sources */,
 				7C3195FF1CC2C68F00DF5406 /* sqlite.c in Sources */,
 				7C3196321CC2C68F00DF5406 /* SQLite.swift in Sources */,
@@ -899,9 +910,9 @@
 				7C3196291CC2C68F00DF5406 /* Reflection.swift in Sources */,
 				7C3945651D256FDA003EEABA /* Scopes.swift in Sources */,
 				7C3196171CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
+				7CE0B9EC1D5BB6850070D292 /* SHA1.swift in Sources */,
 				7C5F79081D5627EE00C514AA /* Socket+Server.swift in Sources */,
 				7C3196231CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
-				7CE0B9E41D5AFF570070D292 /* BigNum.swift in Sources */,
 				7C31960B1CC2C68F00DF5406 /* Files.swift in Sources */,
 				7CB923CD1D50F11800899E2A /* JSON.swift in Sources */,
 				7C5F790C1D56281200C514AA /* Errno.swift in Sources */,
@@ -947,8 +958,9 @@
 				7C31961B1CC2C68F00DF5406 /* HttpResponse.swift in Sources */,
 				7C5F79111D56287000C514AA /* Socket+File.swift in Sources */,
 				7C3196151CC2C68F00DF5406 /* HttpParser.swift in Sources */,
-				7C31963C1CC2C68F00DF5406 /* String+SHA1.swift in Sources */,
+				7CE0B9F31D5BBC560070D292 /* BigNum.swift in Sources */,
 				7C83177B1D2C5DF300630662 /* Scopes.swift in Sources */,
+				7CE0B9E91D5BAFF10070D292 /* HMAC.swift in Sources */,
 				7C3196211CC2C68F00DF5406 /* HttpServer.swift in Sources */,
 				7C31960F1CC2C68F00DF5406 /* WebSockets.swift in Sources */,
 				7C3196001CC2C68F00DF5406 /* sqlite.c in Sources */,
@@ -960,9 +972,9 @@
 				7C3196061CC2C68F00DF5406 /* DemoServer.swift in Sources */,
 				7C31962A1CC2C68F00DF5406 /* Reflection.swift in Sources */,
 				7C3196181CC2C68F00DF5406 /* HttpRequest.swift in Sources */,
+				7CE0B9ED1D5BB6850070D292 /* SHA1.swift in Sources */,
 				7C5F79091D5627EE00C514AA /* Socket+Server.swift in Sources */,
 				7C3196241CC2C68F00DF5406 /* HttpServerIO.swift in Sources */,
-				7CE0B9E51D5AFF570070D292 /* BigNum.swift in Sources */,
 				7C31960C1CC2C68F00DF5406 /* Files.swift in Sources */,
 				7CB923CE1D50F11800899E2A /* JSON.swift in Sources */,
 				7C5F790D1D56281200C514AA /* Errno.swift in Sources */,
@@ -985,6 +997,7 @@
 				7CB923D01D510D6400899E2A /* SwifterTestsJSON.swift in Sources */,
 				7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7C5F78F91D54D24B00C514AA /* SwifterTestsRC4.swift in Sources */,
+				7CE0B9EF1D5BBAAD0070D292 /* SwifterTestsHMAC.swift in Sources */,
 				7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1002,6 +1015,7 @@
 				7CB923D11D510D6400899E2A /* SwifterTestsJSON.swift in Sources */,
 				7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7C5F78FA1D54D24B00C514AA /* SwifterTestsRC4.swift in Sources */,
+				7CE0B9F01D5BBAAD0070D292 /* SwifterTestsHMAC.swift in Sources */,
 				7CCD87851C660ED60068099B /* SwifterTestsStringExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
