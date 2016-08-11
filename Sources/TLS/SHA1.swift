@@ -43,10 +43,10 @@ public struct SHA1 {
         // append ml, in a 64-bit big-endian integer. Thus, the total length is a multiple of 512 bits.
         
         var mlBigEndian = ml.bigEndian
-        let bytePtr = withUnsafePointer(&mlBigEndian) { UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: sizeofValue(mlBigEndian)) }
-        
-        message.append(contentsOf: Array(bytePtr))
-        
+        withUnsafePointer(&mlBigEndian) {
+            message.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 8)))
+        }
+    
         // Process the message in successive 512-bit chunks ( 64 bytes chunks ):
         
         for chunkStart in 0..<message.count/64 {
@@ -137,7 +137,7 @@ public struct SHA1 {
 extension String {
     
     public func sha1() -> String {
-        return self.sha1().reduce("") { $0 + String(format: "%02x", $1) }
+        return self.sha1().hex()
     }
     
     public func sha1() -> [UInt8] {

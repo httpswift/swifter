@@ -16,4 +16,11 @@ class SwifterTestsHMAC: XCTestCase {
         XCTAssertEqual(HMAC.sha1([UInt8]("key".utf8), [UInt8]("The quick brown fox jumps over the lazy dog".utf8)),
                        "de7c9b85b8b78aa6bc8a7a36f70a90701c9db4d9")
     }
+    
+    func testMD5() {
+        
+        XCTAssertEqual(HMAC.md5([UInt8]("".utf8), [UInt8]("".utf8)), "74e6f7298a9c2d168935f58c001bad88")
+        XCTAssertEqual(HMAC.md5([UInt8]("key".utf8), [UInt8]("The quick brown fox jumps over the lazy dog".utf8)),
+                       "80070713463e7749b90c2dc24911e275")
+    }
 }

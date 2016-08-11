@@ -18,13 +18,23 @@ public struct HMAC {
     //
     
     public static func sha1(_ key: [UInt8], _ message: [UInt8]) -> [UInt8] {
-        return generate(key, message, (64, { block in
+        return generate(key, message, (blockSize: 64, { block in
             return SHA1.hash(block)
         }))
     }
     
     public static func sha1(_ key: [UInt8], _ message: [UInt8]) -> String {
-        return sha1(key, message).reduce("") { $0 + String(format: "%02x", $1) }
+        return sha1(key, message).hex()
+    }
+    
+    public static func md5(_ key: [UInt8], _ message: [UInt8]) -> [UInt8] {
+        return generate(key, message, (blockSize: 64, { block in
+            return MD5.hash(block)
+        }))
+    }
+    
+    public static func md5(_ key: [UInt8], _ message: [UInt8]) -> String {
+        return md5(key, message).hex()
     }
     
     public static func generate(_ key: [UInt8], _ message: [UInt8], _ setup: (blockSize: Int, hash: (([UInt8]) -> [UInt8]))) -> [UInt8] {

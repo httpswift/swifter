@@ -7,9 +7,6 @@
 import Foundation
 import Swifter
 
-let output: String = HMAC.sha1([UInt8]("key".utf8), [UInt8]("The quick brown fox jumps over the lazy dog".utf8))
-
-
 do {
     let server: HttpServer = demoServer(try File.currentWorkingDirectory())
     server["/testAfterBaseRoute"] = { request in
