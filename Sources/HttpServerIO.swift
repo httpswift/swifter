@@ -15,8 +15,8 @@ public class HttpServerIO {
     
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
-    
-    public private(set) var running = false
+    public private(set) var state = HttpServerIOState.Stopped
+    public var operating: Bool { get { return self.state == .Running } }
     
     public func port() throws -> Int {
         return Int(try socket.port())
@@ -31,30 +31,37 @@ public class HttpServerIO {
     }
     
     public func start(port: in_port_t = 8080, forceIPv4: Bool = false, priority: Int = DISPATCH_QUEUE_PRIORITY_BACKGROUND) throws {
+        guard !self.operating else { return }
         stop()
+        self.state = .Starting
         self.socket = try Socket.tcpSocketForListen(port, forceIPv4: forceIPv4)
-        self.running = true
-        dispatch_async(dispatch_get_global_queue(priority, 0)) {
-            while let socket = try? self.socket.acceptClientSocket() {
-                dispatch_async(dispatch_get_global_queue(priority, 0), {
-                    self.sockets.insert(socket)
-                    self.handleConnection(socket)
-                    self.sockets.remove(socket)
+        dispatch_async(dispatch_get_global_queue(priority, 0)) { [weak self] in
+            guard let sself = self else { return }
+            guard sself.operating else { return }
+            while let socket = try? sself.socket.acceptClientSocket() {
+                dispatch_async(dispatch_get_global_queue(priority, 0), { [weak self] in
+                    guard let sself = self else { return }
+                    guard sself.operating else { return }
+                    sself.sockets.insert(socket)
+                    sself.handleConnection(socket)
+                    sself.sockets.remove(socket)
                 })
             }
-            self.stop()
-            self.running = false
+            sself.stop()
         }
+        self.state = .Running
     }
     
     public func stop() {
+        guard self.operating else { return }
+        self.state = .Stopping
         // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
         for socket in self.sockets {
             socket.shutdwn()
         }
         self.sockets.removeAll(keepCapacity: true)
         socket.release()
-        self.running = false
+        self.state = .Stopped
     }
     
     public func dispatch(request: HttpRequest) -> ([String: String], HttpRequest -> HttpResponse) {
@@ -63,7 +70,7 @@ public class HttpServerIO {
     
     private func handleConnection(socket: Socket) {
         let parser = HttpParser()
-        while let request = try? parser.readHttpRequest(socket) {
+        while self.operating, let request = try? parser.readHttpRequest(socket) {
             let request = request
             request.address = try? socket.peername()
             let (params, handler) = self.dispatch(request)
@@ -71,7 +78,9 @@ public class HttpServerIO {
             let response = handler(request)
             var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
-                keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
+                if self.operating {
+                    keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
+                }
             } catch {
                 print("Failed to send response: \(error)")
                 break
@@ -103,6 +112,8 @@ public class HttpServerIO {
     }
     
     private func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
+        guard self.operating else { return false }
+
         try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
         
         let content = response.content()
@@ -130,8 +141,15 @@ public class HttpServerIO {
     }
 }
 
-#if os(Linux)
+public enum HttpServerIOState: Int{
+    case Starting
+    case Running
+    case Stopping
+    case Stopped
+}
 
+#if os(Linux)
+    
 let DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
 
 private class dispatch_context {
