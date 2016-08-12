@@ -112,21 +112,32 @@ public struct SHA1 {
         
         // Produce the final hash value (big-endian) as a 160 bit number:
         
-        var result = [UInt8]()
+        var digest = [UInt8]()
         
-        let h0Big = h0.bigEndian
-        let h1Big = h1.bigEndian
-        let h2Big = h2.bigEndian
-        let h3Big = h3.bigEndian
-        let h4Big = h4.bigEndian
+        h0 = h0.bigEndian
+        h1 = h1.bigEndian
+        h2 = h2.bigEndian
+        h3 = h3.bigEndian
+        h4 = h4.bigEndian
         
-        result += ([UInt8(h0Big & 0xFF), UInt8((h0Big >> 8) & 0xFF), UInt8((h0Big >> 16) & 0xFF), UInt8((h0Big >> 24) & 0xFF)]);
-        result += ([UInt8(h1Big & 0xFF), UInt8((h1Big >> 8) & 0xFF), UInt8((h1Big >> 16) & 0xFF), UInt8((h1Big >> 24) & 0xFF)]);
-        result += ([UInt8(h2Big & 0xFF), UInt8((h2Big >> 8) & 0xFF), UInt8((h2Big >> 16) & 0xFF), UInt8((h2Big >> 24) & 0xFF)]);
-        result += ([UInt8(h3Big & 0xFF), UInt8((h3Big >> 8) & 0xFF), UInt8((h3Big >> 16) & 0xFF), UInt8((h3Big >> 24) & 0xFF)]);
-        result += ([UInt8(h4Big & 0xff), UInt8((h4Big >> 8) & 0xFF), UInt8((h4Big >> 16) & 0xFF), UInt8((h4Big >> 24) & 0xFF)]);
+        withUnsafePointer(&h0) {
+            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        }
+        withUnsafePointer(&h1) {
+            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        }
+        withUnsafePointer(&h2) {
+            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        }
+        withUnsafePointer(&h3) {
+            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        }
+        withUnsafePointer(&h4) {
+            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        }
         
-        return result
+        
+        return digest
     }
     
     private static func rotateLeft(_ v: UInt32, _ n: UInt32) -> UInt32 {

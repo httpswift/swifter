@@ -38,6 +38,15 @@ class SwifterTestsStringExtensions: XCTestCase {
             "a377b0c42d685fdc396e29a9eda7101d900947ca")
     }
     
+    func testSHA256() {
+        XCTAssertEqual("".sha256(), "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+        XCTAssertEqual("abc".sha256(), "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+        XCTAssertEqual("hello".sha256(), "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")
+        
+        XCTAssertEqual("hello".sha256(), "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824")
+        XCTAssertEqual("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ornare orci in metus egestas, sed ornare ante sagittis. Etiam pellentesque mauris ac tincidunt interdum. Mauris nec arcu non dolor venenatis placerat. Pellentesque condimentum feugiat lacus ac maximus. Fusce ut nibh lobortis, porta eros ut, rhoncus tellus. Suspendisse nec molestie quam. Nunc dapibus quam felis, viverra blandit nisi auctor quis. Fusce nisl ante, interdum sed congue ac, ullamcorper sit amet purus. Curabitur vestibulum commodo lobortis.".sha256(), "ea7da36063c95f557374fe98975f0b3cab900772c019747918232a0c0127e6db")
+    }
+    
     func testMD5() {
         
         // Values from: https://tools.ietf.org/html/rfc1321

@@ -15,7 +15,6 @@ public struct BigNum: Equatable, Comparable, CustomStringConvertible {
     // TODO/Improvments
     //  - add init(...) for string literal
     //  - add powmod operation
-    //  - fix '+' and '-' operators for negative numbers
     
     internal var digits = [UInt8]()
     internal var signum = 0
