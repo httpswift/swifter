@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct BigNum: Equatable, Comparable {
+public struct BigNum: Equatable, Comparable, CustomStringConvertible {
     
     //
     // Big Integer
@@ -31,7 +31,21 @@ public struct BigNum: Equatable, Comparable {
     }
     
     public init(_ text: String) {
-        self.signum = text.unicodeScalars.isEmpty ? 0 : 1
+        
+        if text.unicodeScalars.isEmpty {
+            self.signum = 0
+            self.digits = [0]
+            return
+        }
+        
+        if text.unicodeScalars.count == 1 && text.unicodeScalars[text.unicodeScalars.startIndex].value == 48 {
+            self.signum = 0
+            self.digits = [0]
+            return
+        }
+        
+        self.signum = 1
+        
         for c in text.unicodeScalars.reversed() {
             switch c.value {
             case 48...57:
@@ -41,6 +55,10 @@ public struct BigNum: Equatable, Comparable {
             default: break
             }
         }
+    }
+    
+    public var description: String {
+        return (self.signum < 0 ? "-" : "") + self.digits.reversed().reduce("") { $0 + String($1) }
     }
 }
 
@@ -56,6 +74,27 @@ public func != (_ left: BigNum, right: BigNum) -> Bool {
 
 infix operator + { associativity left precedence 140 }
 public func + (_ left: BigNum, _ right: BigNum) -> BigNum {
+    
+    if right.signum == 0 {
+        return left
+    }
+    
+    if left.signum == 0 {
+        return right
+    }
+    
+    if left.signum < 0 && right.signum < 0 {
+        return BigNum((BigNum(left.digits, 1) + BigNum(right.digits, 1)).digits, -1)
+    }
+    
+    if left.signum > 0 && right.signum < 0 {
+        return (left - BigNum(right.digits, 1))
+    }
+    
+    if left.signum < 0 && right.signum > 0 {
+        return BigNum((right - BigNum(left.digits, 1)).digits, -1)
+    }
+    
     var result = [UInt8]()
     var carry: UInt8 = 0
     for i in 0..<max(left.digits.count, right.digits.count) {
@@ -72,14 +111,38 @@ public func + (_ left: BigNum, _ right: BigNum) -> BigNum {
     if carry != 0 {
         result.append(carry)
     }
-    return BigNum(result, 1)
+    
+    while let last = result.last, last == 0 { result.removeLast() }
+    
+    return result.isEmpty ? BigNum(result, 0) : BigNum(result, 1)
 }
 
 infix operator - { associativity left precedence 140 }
 public func - (_ left: BigNum, _ right: BigNum) -> BigNum {
+    
+    if right.signum == 0 {
+        return left
+    }
+    
+    if left.signum == 0 {
+        return BigNum(right.digits, right.signum * (-1))
+    }
+    
+    if left == right {
+        return BigNum([0], 0)
+    }
+    
+    if right > left {
+        return BigNum((right - left).digits, -1)
+    }
+    
+    if left.signum < 0 && right.signum > 0 {
+        return BigNum((BigNum(left.digits, 1) + right).digits, -1)
+    }
+    
     var result = [UInt8]()
     var carry: Int = 0
-    for i in 0..<max(left.digits.count, right.digits.count) {
+    for i in 0..<max(right.digits.count, left.digits.count) {
         let sub = (Int((i < left.digits.count) ? left.digits[i] : 0) -
             Int((i < right.digits.count) ? right.digits[i] : 0)) + carry
         if sub < 0 {
@@ -90,8 +153,10 @@ public func - (_ left: BigNum, _ right: BigNum) -> BigNum {
             result.append(UInt8(sub))
         }
     }
+    
     while let last = result.last, last == 0 { result.removeLast() }
-    return BigNum(result, 1)
+    
+    return result.isEmpty ? BigNum(result, 0) : BigNum(result, 1)
 }
 
 infix operator * { associativity left precedence 150 }

@@ -13,6 +13,8 @@
 		7C00AABE1D5D374700EDA547 /* HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C00AABD1D5D374700EDA547 /* HEX.swift */; };
 		7C00AABF1D5D374700EDA547 /* HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C00AABD1D5D374700EDA547 /* HEX.swift */; };
 		7C00AAC01D5D374700EDA547 /* HEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C00AABD1D5D374700EDA547 /* HEX.swift */; };
+		7C00AAC21D5D995900EDA547 /* SwifterTestsBigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C00AAC11D5D995900EDA547 /* SwifterTestsBigNum.swift */; };
+		7C00AAC31D5D995900EDA547 /* SwifterTestsBigNum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C00AAC11D5D995900EDA547 /* SwifterTestsBigNum.swift */; };
 		7C13B57C1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C13B57B1C7B069500556443 /* SwifterTestsSQLite.swift */; };
 		7C13B57D1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C13B57B1C7B069500556443 /* SwifterTestsSQLite.swift */; };
 		7C3195FB1CC2C68F00DF5406 /* sqlite.h in Headers */ = {isa = PBXBuildFile; fileRef = 7C3195E31CC2C68F00DF5406 /* sqlite.h */; };
@@ -224,6 +226,7 @@
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		7C00AABD1D5D374700EDA547 /* HEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HEX.swift; sourceTree = "<group>"; };
+		7C00AAC11D5D995900EDA547 /* SwifterTestsBigNum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsBigNum.swift; sourceTree = "<group>"; };
 		7C13B57B1C7B069500556443 /* SwifterTestsSQLite.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsSQLite.swift; sourceTree = "<group>"; };
 		7C2C85901D50D83D00B32145 /* JSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSON.swift; sourceTree = "<group>"; };
 		7C3195E31CC2C68F00DF5406 /* sqlite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sqlite.h; sourceTree = "<group>"; };
@@ -528,6 +531,7 @@
 				7C5F78F51D54D21600C514AA /* SwifterTestsRC4.swift */,
 				7C5F78EE1D54BB5600C514AA /* SwifterTestsAES128.swift */,
 				7CE0B9EE1D5BBAAD0070D292 /* SwifterTestsHMAC.swift */,
+				7C00AAC11D5D995900EDA547 /* SwifterTestsBigNum.swift */,
 				7C5F79031D55F44500C514AA /* SwifterTestsRSA.swift */,
 				7CCD875D1C66099B0068099B /* SwifteriOSTests */,
 			);
@@ -1030,6 +1034,7 @@
 				7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */,
 				7C5F79041D55F44500C514AA /* SwifterTestsRSA.swift in Sources */,
 				7C6B57EB1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift in Sources */,
+				7C00AAC21D5D995900EDA547 /* SwifterTestsBigNum.swift in Sources */,
 				7C5915221C92A99300D884BC /* SwifterTestsReflection.swift in Sources */,
 				7C13B57C1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */,
 				7CB923D01D510D6400899E2A /* SwifterTestsJSON.swift in Sources */,
@@ -1048,6 +1053,7 @@
 				7CCD87841C660ED60068099B /* SwifterTestsHttpParser.swift in Sources */,
 				7C5F79051D55F44500C514AA /* SwifterTestsRSA.swift in Sources */,
 				7C6B57EC1CA6C3AA0042655C /* SwifterTestsHttpRouter.swift in Sources */,
+				7C00AAC31D5D995900EDA547 /* SwifterTestsBigNum.swift in Sources */,
 				7C5915231C92A99300D884BC /* SwifterTestsReflection.swift in Sources */,
 				7C13B57D1C7B069500556443 /* SwifterTestsSQLite.swift in Sources */,
 				7CB923D11D510D6400899E2A /* SwifterTestsJSON.swift in Sources */,
