@@ -83,7 +83,6 @@ public struct SHA256 {
             var g = h6
             var h = h7
             
-
             for i in 0...63 {
                 
                 let S0 = rotateRight(a, 2) ^ rotateRight(a, 13) ^ rotateRight(a, 22)
@@ -115,49 +114,18 @@ public struct SHA256 {
             h5 = ( h5 &+ f )
             h6 = ( h6 &+ g )
             h7 = ( h7 &+ h )
-            
-            
-            
         }
         
         // Produce the final hash value (big-endian):
         
         var digest = [UInt8]()
         
-        h0 = h0.bigEndian
-        h1 = h1.bigEndian
-        h2 = h2.bigEndian
-        h3 = h3.bigEndian
-        h4 = h4.bigEndian
-        h5 = h5.bigEndian
-        h6 = h6.bigEndian
-        h7 = h7.bigEndian
-        
-        withUnsafePointer(&h0) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        [h0, h1, h2, h3, h4, h5, h6, h7].forEach { value in
+            var bigEndianVersion = value.bigEndian
+            withUnsafePointer(&bigEndianVersion) {
+                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+            }
         }
-        withUnsafePointer(&h1) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h2) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h3) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h4) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h5) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h6) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h7) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        
         
         return digest
     }

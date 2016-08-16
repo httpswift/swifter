@@ -77,22 +77,11 @@ public struct MD5 {
         
         var digest = [UInt8]()
         
-        a0 = a0.littleEndian
-        b0 = b0.littleEndian
-        c0 = c0.littleEndian
-        d0 = d0.littleEndian
-        
-        withUnsafePointer(&a0) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&b0) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&c0) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&d0) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        [a0, b0, c0, d0].forEach { value in
+            var littleEndianVersion = value.littleEndian
+            withUnsafePointer(&littleEndianVersion) {
+                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+            }
         }
         
         return digest

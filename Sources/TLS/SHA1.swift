@@ -114,28 +114,12 @@ public struct SHA1 {
         
         var digest = [UInt8]()
         
-        h0 = h0.bigEndian
-        h1 = h1.bigEndian
-        h2 = h2.bigEndian
-        h3 = h3.bigEndian
-        h4 = h4.bigEndian
-        
-        withUnsafePointer(&h0) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+        [h0, h1, h2, h3, h4].forEach { value in
+            var bigEndianVersion = value.bigEndian
+            withUnsafePointer(&bigEndianVersion) {
+                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+            }
         }
-        withUnsafePointer(&h1) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h2) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h3) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        withUnsafePointer(&h4) {
-            digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
-        }
-        
         
         return digest
     }
