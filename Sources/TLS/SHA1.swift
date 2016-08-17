@@ -43,8 +43,8 @@ public struct SHA1 {
         // append ml, in a 64-bit big-endian integer. Thus, the total length is a multiple of 512 bits.
         
         var mlBigEndian = ml.bigEndian
-        withUnsafePointer(&mlBigEndian) {
-            message.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 8)))
+        withUnsafePointer(to: &mlBigEndian) {
+            message.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer(OpaquePointer($0)), count: 8)))
         }
     
         // Process the message in successive 512-bit chunks ( 64 bytes chunks ):
@@ -56,7 +56,7 @@ public struct SHA1 {
             // break chunk into sixteen 32-bit big-endian words w[i], 0 ≤ i ≤ 15
             
             for i in 0...15 {
-                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>($0.baseAddress! + (i*4)).pointee})
+                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>(OpaquePointer($0.baseAddress! + (i*4))).pointee})
                 words.append(value.bigEndian)
             }
             
@@ -116,8 +116,8 @@ public struct SHA1 {
         
         [h0, h1, h2, h3, h4].forEach { value in
             var bigEndianVersion = value.bigEndian
-            withUnsafePointer(&bigEndianVersion) {
-                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+            withUnsafePointer(to: &bigEndianVersion) {
+                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer(OpaquePointer($0)), count: 4)))
             }
         }
         

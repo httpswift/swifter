@@ -75,7 +75,7 @@ public struct DER {
                 throw DecodeError.invalidData
             }
             
-            return buffer.withUnsafeBufferPointer { UnsafePointer<UInt32>($0.baseAddress!).pointee.littleEndian }
+            return buffer.withUnsafeBufferPointer { UnsafePointer<UInt32>(OpaquePointer($0.baseAddress!)).pointee.littleEndian }
             
         default:
             
@@ -116,7 +116,7 @@ public struct DER {
                 }
                 
                 buffer = buffer.reversed() + /* padding */ [UInt8](repeating: 0, count: 4 - numberOfDigits)
-                let length = buffer.withUnsafeBufferPointer { UnsafePointer<UInt32>($0.baseAddress!).pointee.littleEndian }
+                let length = buffer.withUnsafeBufferPointer { UnsafePointer<UInt32>(OpaquePointer($0.baseAddress!)).pointee.littleEndian }
             
                 var content = [UInt8]()
                 for _ in 0..<length {

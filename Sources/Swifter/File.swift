@@ -76,7 +76,7 @@ public class File {
                 break
             }
             var name = ent.pointee.d_name
-            let fileName = withUnsafePointer(&name) { (ptr) -> String? in
+            let fileName = withUnsafePointer(to: &name) { (ptr) -> String? in
                 #if os(Linux)
                     return String.fromCString([CChar](UnsafeBufferPointer<CChar>(start: UnsafePointer(unsafeBitCast(ptr, UnsafePointer<CChar>.self)), count: 256)))
                 #else
@@ -137,7 +137,7 @@ public class File {
     }
     
     private static func descriptionOfLastError() -> String {
-        return String(cString: UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
+        return String(cString: UnsafePointer(strerror(errno)))
     }
 }
 

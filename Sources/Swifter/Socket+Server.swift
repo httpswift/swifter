@@ -22,12 +22,12 @@ extension Socket {
         #endif
         
         if socketFileDescriptor == -1 {
-            throw SocketError.socketCreationFailed(Errno.description)
+            throw SocketError.socketCreationFailed(Process.lastErrno)
         }
         
         var value: Int32 = 1
-        if setsockopt(socketFileDescriptor, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(sizeof(Int32.self))) == -1 {
-            let details = Errno.description
+        if setsockopt(socketFileDescriptor, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(MemoryLayout<Int32>.size)) == -1 {
+            let details = Process.lastErrno
             Socket.release(socketFileDescriptor)
             throw SocketError.socketSettingReUseAddrFailed(details)
         }
@@ -58,37 +58,37 @@ extension Socket {
         #else
             var bindResult: Int32 = -1
             if forceIPv4 {
-                var addr = sockaddr_in(sin_len: UInt8(strideof(sockaddr_in.self)),
+                var addr = sockaddr_in(sin_len: UInt8(MemoryLayout<sockaddr_in>.stride),
                                        sin_family: UInt8(AF_INET),
                                        sin_port: port.bigEndian,
                                        sin_addr: in_addr(s_addr: in_addr_t(0)),
                                        sin_zero:(0, 0, 0, 0, 0, 0, 0, 0))
                 
-                bindResult = withUnsafePointer(&addr) {
-                    bind(socketFileDescriptor, UnsafePointer<sockaddr>($0), socklen_t(sizeof(sockaddr_in.self)))
+                bindResult = withUnsafePointer(to: &addr) {
+                    bind(socketFileDescriptor, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in>.size))
                 }
             } else {
-                var addr = sockaddr_in6(sin6_len: UInt8(strideof(sockaddr_in6.self)),
+                var addr = sockaddr_in6(sin6_len: UInt8(MemoryLayout<sockaddr_in6>.stride),
                                         sin6_family: UInt8(AF_INET6),
                                         sin6_port: port.bigEndian,
                                         sin6_flowinfo: 0,
                                         sin6_addr: in6addr_any,
                                         sin6_scope_id: 0)
                 
-                bindResult = withUnsafePointer(&addr) {
-                    bind(socketFileDescriptor, UnsafePointer<sockaddr>($0), socklen_t(sizeof(sockaddr_in6.self)))
+                bindResult = withUnsafePointer(to: &addr) {
+                    bind(socketFileDescriptor, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in6>.size))
                 }
             }
         #endif
         
         if bindResult == -1 {
-            let details = Errno.description
+            let details = Process.lastErrno
             Socket.release(socketFileDescriptor)
             throw SocketError.bindFailed(details)
         }
         
         if listen(socketFileDescriptor, maxPendingConnection) == -1 {
-            let details = Errno.description
+            let details = Process.lastErrno
             Socket.release(socketFileDescriptor)
             throw SocketError.listenFailed(details)
         }
@@ -100,7 +100,7 @@ extension Socket {
         var len: socklen_t = 0
         let clientSocket = accept(self.socketFileDescriptor, &addr, &len)
         if clientSocket == -1 {
-            throw SocketError.acceptFailed(Errno.description)
+            throw SocketError.acceptFailed(Process.lastErrno)
         }
         Socket.setNoSigPipe(clientSocket)
         return Socket(socketFileDescriptor: clientSocket)

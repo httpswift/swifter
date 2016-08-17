@@ -12,7 +12,8 @@ do {
     server["/testAfterBaseRoute"] = { request in
         return .ok(.html("ok !"))
     }
-    
+
+
     server["/lightroom"] = { r in
         
         print(String.fromUInt8(r.body))

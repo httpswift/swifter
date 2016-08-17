@@ -46,7 +46,7 @@ extension Socket {
         var offset: off_t = 0
         let result = sendfileImpl(fileno(file.pointer), self.socketFileDescriptor, 0, &offset, nil, 0)
         if result == -1 {
-            throw SocketError.writeFailed("sendfile: " + Errno.description)
+            throw SocketError.writeFailed("sendfile: " + Process.lastErrno)
         }
     }
     

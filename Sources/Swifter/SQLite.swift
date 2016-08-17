@@ -62,7 +62,7 @@ public class SQLite {
                 for i in 0..<sqlite3_column_count(statement) {
                     let name = String(cString: UnsafePointer<CChar>(sqlite3_column_name(statement, i)))
                     if let pointer = sqlite3_column_text(statement, i) {
-                        content[name] = String(cString: UnsafePointer<CChar>(pointer))
+                        content[name] = String(cString: UnsafePointer<CChar>(OpaquePointer(pointer)))
                     } else {
                         content[name] = nil
                     }
@@ -102,7 +102,7 @@ public class SQLite {
                 for i in 0..<sqlite3_column_count(statement) {
                     let name = String(cString: UnsafePointer<CChar>(sqlite3_column_name(statement, i)))
                     if let pointer = sqlite3_column_text(statement, i) {
-                        content[name] = String(cString: UnsafePointer<CChar>(pointer))
+                        content[name] = String(cString: UnsafePointer<CChar>(OpaquePointer(pointer)))
                     } else {
                         content[name] = nil
                     }

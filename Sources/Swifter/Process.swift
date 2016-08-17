@@ -22,7 +22,7 @@ public class Process {
     private static var signalsWatchers = Array<(Int32) -> Void>()
     private static var signalsObserved = false
     
-    public static func watchSignals(_ callback: (Int32) -> Void) {
+    public static func watchSignals(_ callback: @escaping (Int32) -> Void) {
         if !signalsObserved {
             [SIGTERM, SIGHUP, SIGSTOP, SIGINT].forEach { item in
                 signal(item) {
@@ -32,5 +32,9 @@ public class Process {
             signalsObserved = true
         }
         signalsWatchers.append(callback)
+    }
+    
+    public static var lastErrno: String {
+        return String(cString: UnsafePointer(strerror(errno)))
     }
 }

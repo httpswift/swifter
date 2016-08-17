@@ -29,8 +29,8 @@ public struct MD5 {
 
         var originalLengthInBits = UInt64(input.count * 8).littleEndian
         
-        withUnsafePointer(&originalLengthInBits) {
-            message.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 8)))
+        withUnsafePointer(to: &originalLengthInBits) {
+            message.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer(OpaquePointer($0)), count: 8)))
         }
         
         for chunkStart in 0..<message.count/64 {
@@ -39,7 +39,7 @@ public struct MD5 {
             
             for i in 0...15 {
                 words.append(chunk.withUnsafeBufferPointer {
-                    UnsafePointer<UInt32>($0.baseAddress! + (i*4)).pointee
+                    UnsafePointer<UInt32>(OpaquePointer($0.baseAddress! + (i*4))).pointee
                 })
             }
             
@@ -79,8 +79,8 @@ public struct MD5 {
         
         [a0, b0, c0, d0].forEach { value in
             var littleEndianVersion = value.littleEndian
-            withUnsafePointer(&littleEndianVersion) {
-                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: 4)))
+            withUnsafePointer(to: &littleEndianVersion) {
+                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer(OpaquePointer($0)), count: 4)))
             }
         }
         

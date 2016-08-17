@@ -44,10 +44,11 @@ public struct HMAC {
     }
     
     public static func md5(_ key: [UInt8], _ message: [UInt8]) -> String {
-        return md5(key, message).hex()
+        let digest: [UInt8] = md5(key, message)
+        return digest.hex()
     }
     
-    public static func generate(_ key: [UInt8], _ message: [UInt8], _ setup: (blockSize: Int, hash: (([UInt8]) -> [UInt8]))) -> [UInt8] {
+    public static func generate(_ key: [UInt8], _ message: [UInt8], _ setup: (blockSize: Int, hash: ([UInt8]) -> [UInt8])) -> [UInt8] {
         
         var paddedKey = key
         

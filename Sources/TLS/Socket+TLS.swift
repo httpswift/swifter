@@ -26,11 +26,11 @@ public func nextBytes(_ socket: Socket, _ n: Int) throws -> [UInt8] {
 }
 
 public func nextGeneric2<T: HasBigEndian>(_ socket: Socket) throws -> T {
-    return try nextBytes(socket, sizeof(T.self)).withUnsafeBufferPointer() { UnsafePointer<T>($0.baseAddress!).pointee }.bigEndian
+    return try nextBytes(socket, MemoryLayout<T>.size).withUnsafeBufferPointer() { UnsafePointer<T>(OpaquePointer($0.baseAddress!)).pointee }.bigEndian
 }
 
 public func nextUInt16(_ socket: Socket) throws -> UInt16 {
-    return try nextBytes(socket, sizeof(UInt16.self)).withUnsafeBufferPointer() { UnsafePointer<UInt16>($0.baseAddress!).pointee }.bigEndian
+    return try nextBytes(socket, MemoryLayout<UInt16>.size).withUnsafeBufferPointer() { UnsafePointer<UInt16>(OpaquePointer($0.baseAddress!)).pointee }.bigEndian
 }
 
 public struct DataIterator {
@@ -57,7 +57,7 @@ public struct DataIterator {
     }
     
     public mutating func nextUInt16() -> UInt16? {
-        return next(sizeof(UInt16.self))?.withUnsafeBufferPointer() { UnsafePointer<UInt16>($0.baseAddress!).pointee }.bigEndian
+        return next(MemoryLayout<UInt16>.size)?.withUnsafeBufferPointer() { UnsafePointer<UInt16>(OpaquePointer($0.baseAddress!)).pointee }.bigEndian
     }
 }
 
@@ -137,7 +137,7 @@ extension Socket {
         let length1 = try socket.read()
         let length0 = try socket.read()
         
-        let length = [length0, length1, length2, 0].withUnsafeBufferPointer() { UnsafePointer<UInt32>($0.baseAddress!).pointee }.littleEndian
+        let length = [length0, length1, length2, 0].withUnsafeBufferPointer() { UnsafePointer<UInt32>(OpaquePointer($0.baseAddress!)).pointee }.littleEndian
         
         while UInt32(handshake.message.count) < length { handshake.message.append(try socket.read()) }
         

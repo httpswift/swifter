@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsSQLite: XCTestCase {
     
@@ -45,13 +44,13 @@ class SwifterTestsSQLite: XCTestCase {
             for _ in try database.enumerate("SELECT * FROM swifter_tests;") {
                 counter = counter + 1
             }
-            XCTAssert(counter == 2, "Database should have two rows.")
+            XCTAssertEqual(counter, 2, "Database should have two rows.")
             
             counter = 0
             try database.exec("SELECT * FROM swifter_tests;") { content in
                 counter = counter + 1
             }
-            XCTAssert(counter == 2, "Database should have two rows.")
+            XCTAssertEqual(counter, 2, "Database should have two rows.")
             
             database.close()
         } catch {

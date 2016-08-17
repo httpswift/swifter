@@ -172,7 +172,7 @@ public func tr(_ c: Closure) { element("tr", c) }
 public func tt(_ c: Closure) { element("tt", c) }
 public func ul(_ c: Closure) { element("ul", c) }
 
-public func ul<T: Sequence>(_ collection: T, _ c: (T.Iterator.Element) -> Void) {
+public func ul<T: Sequence>(_ collection: T, _ c: @escaping (T.Iterator.Element) -> Void) {
     element("ul", {
         for item in collection {
             c(item)
@@ -245,7 +245,7 @@ public func small(_ c: Closure) { element("small", c) }
 public func style(_ c: Closure) { element("style", c) }
 public func table(_ c: Closure) { element("table", c) }
 
-public func table<T: Sequence>(_ collection: T, c: (T.Iterator.Element) -> Void) {
+public func table<T: Sequence>(_ collection: T, c: @escaping (T.Iterator.Element) -> Void) {
     element("table", {
         for item in collection {
             c(item)
@@ -255,7 +255,7 @@ public func table<T: Sequence>(_ collection: T, c: (T.Iterator.Element) -> Void)
 
 public func tbody(_ c: Closure) { element("tbody", c) }
 
-public func tbody<T: Sequence>(_ collection: T, c: (T.Iterator.Element) -> Void) {
+public func tbody<T: Sequence>(_ collection: T, c: @escaping (T.Iterator.Element) -> Void) {
     element("tbody", {
         for item in collection {
             c(item)

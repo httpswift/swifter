@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsAES: XCTestCase {
     
@@ -42,25 +41,25 @@ class SwifterTestsAES: XCTestCase {
         
         let encrypted = AES128.encryptBlock(text, key)
         
-        XCTAssert(encrypted.s00 == 0x39)
-        XCTAssert(encrypted.s10 == 0x25)
-        XCTAssert(encrypted.s20 == 0x84)
-        XCTAssert(encrypted.s30 == 0x1d)
+        XCTAssertEqual(encrypted.s00, 0x39)
+        XCTAssertEqual(encrypted.s10, 0x25)
+        XCTAssertEqual(encrypted.s20, 0x84)
+        XCTAssertEqual(encrypted.s30, 0x1d)
         
-        XCTAssert(encrypted.s01 == 0x02)
-        XCTAssert(encrypted.s11 == 0xdc)
-        XCTAssert(encrypted.s21 == 0x09)
-        XCTAssert(encrypted.s31 == 0xfb)
+        XCTAssertEqual(encrypted.s01, 0x02)
+        XCTAssertEqual(encrypted.s11, 0xdc)
+        XCTAssertEqual(encrypted.s21, 0x09)
+        XCTAssertEqual(encrypted.s31, 0xfb)
         
-        XCTAssert(encrypted.s02 == 0xdc)
-        XCTAssert(encrypted.s12 == 0x11)
-        XCTAssert(encrypted.s22 == 0x85)
-        XCTAssert(encrypted.s32 == 0x97)
+        XCTAssertEqual(encrypted.s02, 0xdc)
+        XCTAssertEqual(encrypted.s12, 0x11)
+        XCTAssertEqual(encrypted.s22, 0x85)
+        XCTAssertEqual(encrypted.s32, 0x97)
         
-        XCTAssert(encrypted.s03 == 0x19)
-        XCTAssert(encrypted.s13 == 0x6a)
-        XCTAssert(encrypted.s23 == 0x0b)
-        XCTAssert(encrypted.s33 == 0x32)
+        XCTAssertEqual(encrypted.s03, 0x19)
+        XCTAssertEqual(encrypted.s13, 0x6a)
+        XCTAssertEqual(encrypted.s23, 0x0b)
+        XCTAssertEqual(encrypted.s33, 0x32)
         
     }
 }

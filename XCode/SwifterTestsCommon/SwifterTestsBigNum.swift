@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsBigNum: XCTestCase {
     

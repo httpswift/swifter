@@ -6,11 +6,10 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsReflection: XCTestCase {
     
-    class BlogPost: DatabaseReflection {
+    public class BlogPost: DatabaseReflection {
         
         var message: String?
         var author: String?

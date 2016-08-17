@@ -91,19 +91,19 @@ public func memoryLayoutForStructure(_ object: Any) -> [String: CountableRange<I
     for case let (label?, value) in Mirror(reflecting: object).children {
         var fieldLength = 0
         // TODO - Replace this with something smarter.
-        if value is Int    { fieldLength = sizeof(Int.self)   } else
-        if value is UInt   { fieldLength = sizeof(UInt.self)  } else
-        if value is Int8   { fieldLength = sizeof(Int8.self)  } else
-        if value is UInt8  { fieldLength = sizeof(UInt8.self) } else
-        if value is Int16  { fieldLength = sizeof(Int16.self) } else
-        if value is UInt16 { fieldLength = sizeof(UInt16.self)} else
-        if value is Int32  { fieldLength = sizeof(Int32.self) } else
-        if value is UInt32 { fieldLength = sizeof(UInt32.self)} else
-        if value is Int64  { fieldLength = sizeof(Int64.self) } else
-        if value is UInt64 { fieldLength = sizeof(UInt64.self)} else
-        if value is Float  { fieldLength = sizeof(Float.self) } else
-        if value is Double { fieldLength = sizeof(Double.self)} else
-        if value is String { fieldLength = sizeof(String.self)}
+        if value is Int    { fieldLength = MemoryLayout<Int>.size   } else
+        if value is UInt   { fieldLength = MemoryLayout<UInt>.size  } else
+        if value is Int8   { fieldLength = MemoryLayout<Int8>.size  } else
+        if value is UInt8  { fieldLength = MemoryLayout<UInt8>.size } else
+        if value is Int16  { fieldLength = MemoryLayout<Int16>.size } else
+        if value is UInt16 { fieldLength = MemoryLayout<UInt16>.size} else
+        if value is Int32  { fieldLength = MemoryLayout<Int32>.size } else
+        if value is UInt32 { fieldLength = MemoryLayout<UInt32>.size} else
+        if value is Int64  { fieldLength = MemoryLayout<Int64>.size } else
+        if value is UInt64 { fieldLength = MemoryLayout<UInt64>.size} else
+        if value is Float  { fieldLength = MemoryLayout<Float>.size } else
+        if value is Double { fieldLength = MemoryLayout<Double>.size} else
+        if value is String { fieldLength = MemoryLayout<String>.size}
         if fieldLength <= alignment {
             layout[label] = size ..< size + fieldLength
             size = size + fieldLength

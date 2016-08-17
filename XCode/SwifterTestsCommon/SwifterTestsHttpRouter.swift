@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsHttpRouter: XCTestCase {
 
@@ -19,7 +18,7 @@ class SwifterTestsHttpRouter: XCTestCase {
             return .ok(.html("OK"))
         })
         
-        XCTAssert(router.route(nil, path: "/") != nil)
+        XCTAssertNotNil(router.route(nil, path: "/"))
     }
     
     func testHttpRouterSimplePathSegments() {
@@ -30,11 +29,11 @@ class SwifterTestsHttpRouter: XCTestCase {
             return .ok(.html("OK"))
         })
         
-        XCTAssert(router.route(nil, path: "/") == nil)
-        XCTAssert(router.route(nil, path: "/a") == nil)
-        XCTAssert(router.route(nil, path: "/a/b") == nil)
-        XCTAssert(router.route(nil, path: "/a/b/c") == nil)
-        XCTAssert(router.route(nil, path: "/a/b/c/d") != nil)
+        XCTAssertNil(router.route(nil, path: "/"))
+        XCTAssertNil(router.route(nil, path: "/a"))
+        XCTAssertNil(router.route(nil, path: "/a/b"))
+        XCTAssertNil(router.route(nil, path: "/a/b/c"))
+        XCTAssertNotNil(router.route(nil, path: "/a/b/c/d"))
     }
     
     func testHttpRouterSinglePathSegmentWildcard() {
@@ -45,12 +44,12 @@ class SwifterTestsHttpRouter: XCTestCase {
             return .ok(.html("OK"))
         })
         
-        XCTAssert(router.route(nil, path: "/") == nil)
-        XCTAssert(router.route(nil, path: "/a") == nil)
-        XCTAssert(router.route(nil, path: "/a/foo/c/d") != nil)
-        XCTAssert(router.route(nil, path: "/a/b/c/d") != nil)
-        XCTAssert(router.route(nil, path: "/a/b") == nil)
-        XCTAssert(router.route(nil, path: "/a/b/foo/d") == nil)
+        XCTAssertNil(router.route(nil, path: "/"))
+        XCTAssertNil(router.route(nil, path: "/a"))
+        XCTAssertNotNil(router.route(nil, path: "/a/foo/c/d"))
+        XCTAssertNotNil(router.route(nil, path: "/a/b/c/d"))
+        XCTAssertNil(router.route(nil, path: "/a/b"))
+        XCTAssertNil(router.route(nil, path: "/a/b/foo/d"))
     }
     
     func testHttpRouterVariables() {
@@ -61,12 +60,12 @@ class SwifterTestsHttpRouter: XCTestCase {
             return .ok(.html("OK"))
         })
         
-        XCTAssert(router.route(nil, path: "/") == nil)
-        XCTAssert(router.route(nil, path: "/a") == nil)
-        XCTAssert(router.route(nil, path: "/a/b/c/d") == nil)
-        XCTAssert(router.route(nil, path: "/a/value1/value2/b/c/d/value3")?.0[":arg1"] == "value1")
-        XCTAssert(router.route(nil, path: "/a/value1/value2/b/c/d/value3")?.0[":arg2"] == "value2")
-        XCTAssert(router.route(nil, path: "/a/value1/value2/b/c/d/value3")?.0[":arg3"] == "value3")
+        XCTAssertNil(router.route(nil, path: "/"))
+        XCTAssertNil(router.route(nil, path: "/a"))
+        XCTAssertNil(router.route(nil, path: "/a/b/c/d"))
+        XCTAssertEqual(router.route(nil, path: "/a/value1/value2/b/c/d/value3")?.0[":arg1"], "value1")
+        XCTAssertEqual(router.route(nil, path: "/a/value1/value2/b/c/d/value3")?.0[":arg2"], "value2")
+        XCTAssertEqual(router.route(nil, path: "/a/value1/value2/b/c/d/value3")?.0[":arg3"], "value3")
     }
     
     func testHttpRouterMultiplePathSegmentWildcards() {
@@ -77,10 +76,10 @@ class SwifterTestsHttpRouter: XCTestCase {
             return .ok(.html("OK"))
         })
         
-        XCTAssert(router.route(nil, path: "/") == nil)
-        XCTAssert(router.route(nil, path: "/a") == nil)
-        XCTAssert(router.route(nil, path: "/a/b/c/d/e/f/g") != nil)
-        XCTAssert(router.route(nil, path: "/a/e/f/g") == nil)
+        XCTAssertNil(router.route(nil, path: "/"))
+        XCTAssertNil(router.route(nil, path: "/a"))
+        XCTAssertNotNil(router.route(nil, path: "/a/b/c/d/e/f/g"))
+        XCTAssertNil(router.route(nil, path: "/a/e/f/g"))
     }
     
     func testHttpRouterEmptyTail() {
@@ -96,14 +95,14 @@ class SwifterTestsHttpRouter: XCTestCase {
         })
 
         
-        XCTAssert(router.route(nil, path: "/") == nil)
-        XCTAssert(router.route(nil, path: "/a") == nil)
-        XCTAssert(router.route(nil, path: "/a/b/") != nil)
-        XCTAssert(router.route(nil, path: "/a/e/f/g") == nil)
+        XCTAssertNil(router.route(nil, path: "/"))
+        XCTAssertNil(router.route(nil, path: "/a"))
+        XCTAssertNotNil(router.route(nil, path: "/a/b/"))
+        XCTAssertNil(router.route(nil, path: "/a/e/f/g"))
         
-        XCTAssert(router.route(nil, path: "/a/b/value1")?.0[":var"] == "value1")
+        XCTAssertEqual(router.route(nil, path: "/a/b/value1")?.0[":var"], "value1")
         
-        XCTAssert(router.route(nil, path: "/a/b/")?.0[":var"] == "")
+        XCTAssertEqual(router.route(nil, path: "/a/b/")?.0[":var"], "")
     }
 
 }

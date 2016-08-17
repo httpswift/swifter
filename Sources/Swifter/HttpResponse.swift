@@ -20,7 +20,7 @@ public protocol HttpResponseBodyWriter {
 
 public enum HttpResponseBody {
     
-    case json(AnyObject)
+    case json(Any?)
     case html(String)
     case text(String)
     case data([UInt8])
@@ -30,23 +30,23 @@ public enum HttpResponseBody {
         do {
             switch self {
             case .json(let object):
-                #if os(Linux)
-                    let data = [UInt8]("Not ready for Linux.".utf8)
-                    return (data.count, {
-                        $0.write(data)
-                    })
-                #else
-                    guard JSONSerialization.isValidJSONObject(object) else {
-                        throw SerializationError.invalidObject
-                    }
-                    let json = try JSONSerialization.data(withJSONObject: object, options: JSONSerialization.WritingOptions.prettyPrinted)
-                    let data = json.withUnsafeBytes({ (body: UnsafePointer<UInt8>) -> Array<UInt8> in
-                        return Array(UnsafeBufferPointer(start: body, count: json.count))
-                    })
+                switch object {
+                case let array as Array<Any?>:
+                    let data = [UInt8](array.asJson().utf8)
                     return (data.count, {
                         try $0.write(data)
                     })
-                #endif
+                case let dict as Dictionary<String, Any?>:
+                    let data = [UInt8](dict.asJson().utf8)
+                    return (data.count, {
+                        try $0.write(data)
+                    })
+                default:
+                    let data = [UInt8]("Serialisation error: Can't convert \(object) to JSON.".utf8)
+                    return (data.count, {
+                        try $0.write(data)
+                    })
+                }
             case .text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {
