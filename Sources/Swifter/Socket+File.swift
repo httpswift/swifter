@@ -42,7 +42,7 @@
 
 extension Socket {
     
-    public func writeFile(file: File) throws -> Void {
+    public func writeFile(file: String.File) throws -> Void {
         var offset: off_t = 0
         let result = sendfileImpl(fileno(file.pointer), self.socketFileDescriptor, 0, &offset, nil, 0)
         if result == -1 {

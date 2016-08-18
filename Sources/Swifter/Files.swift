@@ -14,7 +14,7 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
         }
         if fileRelativePath.value.isEmpty {
             for path in defaults {
-                if let file = try? File.openForReading(directoryPath + File.PATH_SEPARATOR + path) {
+                if let file = try? (directoryPath + String.PATH_SEPARATOR + path).openForReading() {
                     return .raw(200, "OK", [:], { writer in
                         try? writer.write(file)
                         file.close()
@@ -22,7 +22,7 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
                 }
             }
         }
-        if let file = try? File.openForReading(directoryPath + File.PATH_SEPARATOR + fileRelativePath.value) {
+        if let file = try? (directoryPath + String.PATH_SEPARATOR + fileRelativePath.value).openForReading() {
             return .raw(200, "OK", [:], { writer in
                 try? writer.write(file)
                 file.close()
@@ -37,13 +37,13 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
         guard let (_, value) = r.params.first else {
             return HttpResponse.notFound
         }
-        let filePath = dir + File.PATH_SEPARATOR + value
+        let filePath = dir + String.PATH_SEPARATOR + value
         do {
-            guard try File.exists(filePath) else {
-                return HttpResponse.notFound
+            guard try filePath.exists() else {
+                return .notFound
             }
-            if try File.isDirectory(filePath) {
-                let files = try File.list(filePath)
+            if try filePath.directory() {
+                let files = try filePath.files()
                 return scopes {
                     html {
                         body {
@@ -61,7 +61,7 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
                     }
                 }(r)
             } else {
-                guard let file = try? File.openForReading(filePath) else {
+                guard let file = try? filePath.openForReading() else {
                     return .notFound
                 }
                 return .raw(200, "OK", [:], { writer in

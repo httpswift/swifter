@@ -90,7 +90,7 @@ public class HttpServerIO {
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
         
-        func write(_ file: File) throws {
+        func write(_ file: String.File) throws {
             var offset: off_t = 0
             let _ = sendfile(fileno(file.pointer), socket.socketFileDescriptor, 0, &offset, nil, 0)
         }
