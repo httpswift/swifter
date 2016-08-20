@@ -15,8 +15,17 @@ public class HttpServerIO {
     
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
-    public private(set) var state = HttpServerIOState.Stopped
+    private var stateValue: Int32 = HttpServerIOState.Stopped.rawValue
+    public private(set) var state: HttpServerIOState {
+        get {
+            return HttpServerIOState(rawValue: stateValue)!
+        }
+        set(state) {
+            OSAtomicCompareAndSwapInt(self.state.rawValue, state.rawValue, &stateValue)
+        }
+    }
     public var operating: Bool { get { return self.state == .Running } }
+    private let queue = dispatch_queue_create("swifter.httpserverio.clientsockets", DISPATCH_QUEUE_SERIAL)
     
     public func port() throws -> Int {
         return Int(try socket.port())
@@ -36,18 +45,22 @@ public class HttpServerIO {
         self.state = .Starting
         self.socket = try Socket.tcpSocketForListen(port, forceIPv4: forceIPv4)
         dispatch_async(dispatch_get_global_queue(priority, 0)) { [weak self] in
-            guard let sself = self else { return }
-            guard sself.operating else { return }
-            while let socket = try? sself.socket.acceptClientSocket() {
+            guard let `self` = self else { return }
+            guard self.operating else { return }
+            while let socket = try? self.socket.acceptClientSocket() {
                 dispatch_async(dispatch_get_global_queue(priority, 0), { [weak self] in
-                    guard let sself = self else { return }
-                    guard sself.operating else { return }
-                    sself.sockets.insert(socket)
-                    sself.handleConnection(socket)
-                    sself.sockets.remove(socket)
+                    guard let `self` = self else { return }
+                    guard self.operating else { return }
+                    dispatch_async(self.queue) {
+                        self.sockets.insert(socket)
+                    }
+                    self.handleConnection(socket)
+                    dispatch_async(self.queue) {
+                        self.sockets.remove(socket)
+                    }
                 })
             }
-            sself.stop()
+            self.stop()
         }
         self.state = .Running
     }
@@ -59,7 +72,9 @@ public class HttpServerIO {
         for socket in self.sockets {
             socket.shutdwn()
         }
-        self.sockets.removeAll(keepCapacity: true)
+        dispatch_sync(queue) {
+            self.sockets.removeAll(keepCapacity: true)
+        }
         socket.release()
         self.state = .Stopped
     }
@@ -141,7 +156,7 @@ public class HttpServerIO {
     }
 }
 
-public enum HttpServerIOState: Int{
+public enum HttpServerIOState: Int32 {
     case Starting
     case Running
     case Stopping
