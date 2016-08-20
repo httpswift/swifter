@@ -20,6 +20,7 @@ public protocol HttpResponseBodyWriter {
     func write(file: File) throws
     func write(data: [UInt8]) throws
     func write(data: ArraySlice<UInt8>) throws
+    func write(data: NSData) throws
 }
 
 public enum HttpResponseBody {

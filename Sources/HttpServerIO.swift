@@ -109,6 +109,10 @@ public class HttpServerIO {
         func write(data: ArraySlice<UInt8>) throws {
             try socket.writeUInt8(data)
         }
+
+        func write(data: NSData) throws {
+            try socket.writeData(data)
+        }
     }
     
     private func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
