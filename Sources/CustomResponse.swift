@@ -20,9 +20,9 @@ public class CustomResponse: Response {
         super.init(contentObject: contentObject)
     }
     
-    public override func content() throws -> (contentLength: Int, contentString: String) {
+    public override func content() throws -> (contentLength: Int, contentString: [UInt8]) {
         let serialised = try closure(ObjectIdentifier(contentObject))
         let data = [UInt8](serialised.utf8)
-        return (data.count, serialised)
+        return (data.count, data)
     }
 }

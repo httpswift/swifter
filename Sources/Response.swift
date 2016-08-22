@@ -11,7 +11,7 @@ import Foundation
 public protocol ResponseProtocol {
     var headersArray : [String: String] { get set }
     var contentObject : AnyObject { get set }
-    mutating func content() throws -> (contentLength: Int, contentString: String)
+    mutating func content() throws -> (contentLength: Int, contentString: [UInt8])
     func headers() -> [String: String]
     func statusCode() -> Int
 }
@@ -25,10 +25,10 @@ public class Response: ResponseProtocol {
         self.contentObject = contentObject
     }
     
-    public func content() throws -> (contentLength: Int, contentString: String) {
+    public func content() throws -> (contentLength: Int, contentString: [UInt8]) {
         let contentString = String(contentObject);
         let data = [UInt8](contentString.utf8)
-        return (data.count, contentString)
+        return (data.count, data)
     }
     
     public func headers() -> [String: String] {

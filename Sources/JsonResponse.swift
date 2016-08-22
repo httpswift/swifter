@@ -10,7 +10,7 @@ import Foundation
 
 
 public class JsonResponse: Response {
-    public override func content() throws -> (contentLength: Int, contentString: String) {
+    public override func content() throws -> (contentLength: Int, contentString: Array<UInt8>) {
         #if os(Linux)
             let data = [UInt8]("Not ready for Linux.".utf8)
             return (data.count, {
@@ -23,7 +23,7 @@ public class JsonResponse: Response {
             let json = try NSJSONSerialization.dataWithJSONObject(self.contentObject, options: NSJSONWritingOptions.PrettyPrinted)
             let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
             // To be fixed
-            return (data.count, String(json))
+            return (data.count, data)
         #endif
     }
 }

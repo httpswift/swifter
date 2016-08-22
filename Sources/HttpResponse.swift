@@ -23,7 +23,6 @@ public protocol HttpResponseBodyWriter {
 }
 
 public enum HttpResponseBody {
-    
     case Json(AnyObject)
     case Html(String)
     case Text(String)
@@ -34,19 +33,19 @@ public enum HttpResponseBody {
             let response: ResponseProtocol;
             switch self {
             case .Json(let object):
-                let response = JsonResponse(contentObject: object)
+                response = JsonResponse(contentObject: object)
             case .Text(let body):
-                let response = TextResponse(contentObject: body)
+                response = TextResponse(contentObject: body)
             case .Html(let body):
-                let response = HtmlResponse(contentObject: body)
+                response = HtmlResponse(contentObject: body)
             case .Custom(let object, let closure):
-                let response = CustomResponse(contentObject: object, closure: closure)
-            default:
-                let response = Response(contentObject: "")
+                response = CustomResponse(contentObject: object, closure: closure)
             }
             
             let content = try response.content()
-            return (content.contentLength, { try $0.write(content) })
+            return (content.contentLength, { (writer: HttpResponseBodyWriter) throws -> Void in try
+                writer.write([UInt8](content.contentString))
+            })
         } catch {
             let data = [UInt8]("Serialisation error: \(error)".utf8)
             return (data.count, {

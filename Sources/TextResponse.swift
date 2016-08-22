@@ -9,9 +9,9 @@
 import Foundation
 
 public class TextResponse: Response {
-    public override func content() throws -> (contentLength: Int, contentString: String) {
+    public override func content() throws -> (contentLength: Int, contentString: [UInt8]) {
         let contentString = String(self.contentObject)
         let data = [UInt8](contentString.utf8)
-        return (data.count, contentString)
+        return (data.count, data)
     }
 }
