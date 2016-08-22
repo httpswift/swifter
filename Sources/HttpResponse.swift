@@ -27,29 +27,45 @@ public enum HttpResponseBody {
     case Json(AnyObject)
     case Html(String)
     case Text(String)
-    case Custom(AnyObject, (Any) throws -> String)
+    case Custom(Any, (Any) throws -> String)
     
     func content() -> (Int, (HttpResponseBodyWriter throws -> Void)?) {
         do {
-            print(String(self))
-            let response: ResponseProtocol;
             switch self {
             case .Json(let object):
-                let response = JsonResponse(contentObject: object)
+                #if os(Linux)
+                    let data = [UInt8]("Not ready for Linux.".utf8)
+                    return (data.count, {
+                        try $0.write(data)
+                    })
+                #else
+                    guard NSJSONSerialization.isValidJSONObject(object) else {
+                        throw SerializationError.InvalidObject
+                    }
+                    let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
+                    let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
+                    return (data.count, {
+                        try $0.write(data)
+                    })
+                #endif
             case .Text(let body):
-                let response = TextResponse(contentObject: object!)
+                let data = [UInt8](body.utf8)
+                return (data.count, {
+                    try $0.write(data)
+                })
             case .Html(let body):
-                let response = HtmlResponse(contentObject: object!)
+                let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
+                let data = [UInt8](serialised.utf8)
+                return (data.count, {
+                    try $0.write(data)
+                })
             case .Custom(let object, let closure):
-                let response = CustomResponse(contentObject: object, closure: closure)
-            default:
-                let response = Response(contentObject: "")
+                let serialised = try closure(object)
+                let data = [UInt8](serialised.utf8)
+                return (data.count, {
+                    try $0.write(data)
+                })
             }
-            
-            let content = response.content()
-            return (content.contentLength, {
-                try $0.write(content)
-            })
         } catch {
             let data = [UInt8]("Serialisation error: \(error)".utf8)
             return (data.count, {

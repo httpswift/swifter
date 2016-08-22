@@ -31,21 +31,6 @@
 		269B47981D3AAAE20042D137 /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
 		269B47991D3AAAE20042D137 /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6F61D2C44F30030FC98 /* String+BASE64.swift */; };
 		269B47A71D3AAC4F0042D137 /* SwiftertvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5589AF0D1D62022A00ACB03F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF0B1D62022A00ACB03F /* Response.swift */; };
-		5589AF151D62385F00ACB03F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF0B1D62022A00ACB03F /* Response.swift */; };
-		5589AF161D62386000ACB03F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF0B1D62022A00ACB03F /* Response.swift */; };
-		5589AF171D62388D00ACB03F /* HtmlResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF111D622BBF00ACB03F /* HtmlResponse.swift */; };
-		5589AF181D62388D00ACB03F /* HtmlResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF111D622BBF00ACB03F /* HtmlResponse.swift */; };
-		5589AF191D62388E00ACB03F /* HtmlResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF111D622BBF00ACB03F /* HtmlResponse.swift */; };
-		5589AF1A1D6238A200ACB03F /* CustomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF131D622C0D00ACB03F /* CustomResponse.swift */; };
-		5589AF1B1D6238A300ACB03F /* CustomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF131D622C0D00ACB03F /* CustomResponse.swift */; };
-		5589AF1C1D6238A500ACB03F /* CustomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF131D622C0D00ACB03F /* CustomResponse.swift */; };
-		5589AF1D1D62431400ACB03F /* JsonResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF0F1D6222E200ACB03F /* JsonResponse.swift */; };
-		5589AF1E1D62431500ACB03F /* JsonResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF0F1D6222E200ACB03F /* JsonResponse.swift */; };
-		5589AF1F1D62431600ACB03F /* JsonResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF0F1D6222E200ACB03F /* JsonResponse.swift */; };
-		5589AF221D62454900ACB03F /* TextResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF201D62451500ACB03F /* TextResponse.swift */; };
-		5589AF231D62454900ACB03F /* TextResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF201D62451500ACB03F /* TextResponse.swift */; };
-		5589AF241D62454A00ACB03F /* TextResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589AF201D62451500ACB03F /* TextResponse.swift */; };
 		7AE893EA1C05127900A29F63 /* SwifteriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893E91C05127900A29F63 /* SwifteriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893FD1C0512C400A29F63 /* SwifterMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
@@ -155,11 +140,6 @@
 		269B47A11D3AAAE20042D137 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		269B47A41D3AAC4F0042D137 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftertvOS.h; sourceTree = "<group>"; };
-		5589AF0B1D62022A00ACB03F /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
-		5589AF0F1D6222E200ACB03F /* JsonResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonResponse.swift; sourceTree = "<group>"; };
-		5589AF111D622BBF00ACB03F /* HtmlResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlResponse.swift; sourceTree = "<group>"; };
-		5589AF131D622C0D00ACB03F /* CustomResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomResponse.swift; sourceTree = "<group>"; };
-		5589AF201D62451500ACB03F /* TextResponse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextResponse.swift; sourceTree = "<group>"; };
 		7AE893E71C05127900A29F63 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE893E91C05127900A29F63 /* SwifteriOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifteriOS.h; sourceTree = "<group>"; };
 		7AE893EB1C05127900A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -308,11 +288,6 @@
 				7C76B6F81D2C44F30030FC98 /* String+SHA1.swift */,
 				7C76B6F91D2C44F30030FC98 /* WebSockets.swift */,
 				7C76B2A11D369C9D00D35BFB /* Errno.swift */,
-				5589AF0F1D6222E200ACB03F /* JsonResponse.swift */,
-				5589AF201D62451500ACB03F /* TextResponse.swift */,
-				5589AF131D622C0D00ACB03F /* CustomResponse.swift */,
-				5589AF111D622BBF00ACB03F /* HtmlResponse.swift */,
-				5589AF0B1D62022A00ACB03F /* Response.swift */,
 			);
 			name = Sources;
 			path = ../Sources;
@@ -577,7 +552,6 @@
 					};
 					7AE893FA1C0512C400A29F63 = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = GW7K53MMSU;
 					};
 					7C839B6D19422CFF003A6950 = {
 						CreatedOnToolsVersion = 6.0;
@@ -674,11 +648,8 @@
 				269B47881D3AAAE20042D137 /* HttpResponse.swift in Sources */,
 				269B47891D3AAAE20042D137 /* Scopes.swift in Sources */,
 				269B478A1D3AAAE20042D137 /* Process.swift in Sources */,
-				5589AF1C1D6238A500ACB03F /* CustomResponse.swift in Sources */,
 				269B478B1D3AAAE20042D137 /* HttpParser.swift in Sources */,
-				5589AF161D62386000ACB03F /* Response.swift in Sources */,
 				269B478C1D3AAAE20042D137 /* String+Misc.swift in Sources */,
-				5589AF1F1D62431600ACB03F /* JsonResponse.swift in Sources */,
 				269B478D1D3AAAE20042D137 /* WebSockets.swift in Sources */,
 				269B478E1D3AAAE20042D137 /* HttpServer.swift in Sources */,
 				269B478F1D3AAAE20042D137 /* HttpRequest.swift in Sources */,
@@ -686,9 +657,7 @@
 				269B47911D3AAAE20042D137 /* File.swift in Sources */,
 				269B47921D3AAAE20042D137 /* Socket+File.swift in Sources */,
 				269B47931D3AAAE20042D137 /* Socket.swift in Sources */,
-				5589AF191D62388E00ACB03F /* HtmlResponse.swift in Sources */,
 				269B47941D3AAAE20042D137 /* HttpServerIO.swift in Sources */,
-				5589AF241D62454A00ACB03F /* TextResponse.swift in Sources */,
 				269B47951D3AAAE20042D137 /* Files.swift in Sources */,
 				269B47961D3AAAE20042D137 /* HttpRouter.swift in Sources */,
 				269B47971D3AAAE20042D137 /* String+SHA1.swift in Sources */,
@@ -705,11 +674,8 @@
 				7C76B7171D2C45780030FC98 /* HttpResponse.swift in Sources */,
 				7C76B7211D2C45870030FC98 /* Scopes.swift in Sources */,
 				7C76B71F1D2C45840030FC98 /* Process.swift in Sources */,
-				5589AF1A1D6238A200ACB03F /* CustomResponse.swift in Sources */,
 				7C76B7131D2C45730030FC98 /* HttpParser.swift in Sources */,
-				5589AF151D62385F00ACB03F /* Response.swift in Sources */,
 				7C76B7271D2C458F0030FC98 /* String+Misc.swift in Sources */,
-				5589AF1D1D62431400ACB03F /* JsonResponse.swift in Sources */,
 				7C76B72B1D2C45940030FC98 /* WebSockets.swift in Sources */,
 				7C76B71B1D2C457E0030FC98 /* HttpServer.swift in Sources */,
 				7C76B7151D2C45760030FC98 /* HttpRequest.swift in Sources */,
@@ -717,9 +683,7 @@
 				7C76B70F1D2C456D0030FC98 /* File.swift in Sources */,
 				7C76B29F1D369BEC00D35BFB /* Socket+File.swift in Sources */,
 				7C76B7231D2C45890030FC98 /* Socket.swift in Sources */,
-				5589AF171D62388D00ACB03F /* HtmlResponse.swift in Sources */,
 				7C76B71D1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
-				5589AF221D62454900ACB03F /* TextResponse.swift in Sources */,
 				7C76B7111D2C45710030FC98 /* Files.swift in Sources */,
 				7C76B7191D2C457C0030FC98 /* HttpRouter.swift in Sources */,
 				7C76B7291D2C45920030FC98 /* String+SHA1.swift in Sources */,
@@ -736,11 +700,8 @@
 				7C76B7181D2C45790030FC98 /* HttpResponse.swift in Sources */,
 				7C76B7221D2C45870030FC98 /* Scopes.swift in Sources */,
 				7C76B7201D2C45840030FC98 /* Process.swift in Sources */,
-				5589AF1B1D6238A300ACB03F /* CustomResponse.swift in Sources */,
 				7C76B7141D2C45730030FC98 /* HttpParser.swift in Sources */,
-				5589AF0D1D62022A00ACB03F /* Response.swift in Sources */,
 				7C76B7281D2C458F0030FC98 /* String+Misc.swift in Sources */,
-				5589AF1E1D62431500ACB03F /* JsonResponse.swift in Sources */,
 				7C76B72C1D2C45950030FC98 /* WebSockets.swift in Sources */,
 				7C76B71C1D2C457E0030FC98 /* HttpServer.swift in Sources */,
 				7C76B7161D2C45760030FC98 /* HttpRequest.swift in Sources */,
@@ -748,9 +709,7 @@
 				7C76B7101D2C456D0030FC98 /* File.swift in Sources */,
 				7C76B2A01D369BEC00D35BFB /* Socket+File.swift in Sources */,
 				7C76B7241D2C458A0030FC98 /* Socket.swift in Sources */,
-				5589AF181D62388D00ACB03F /* HtmlResponse.swift in Sources */,
 				7C76B71E1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
-				5589AF231D62454900ACB03F /* TextResponse.swift in Sources */,
 				7C76B7121D2C45710030FC98 /* Files.swift in Sources */,
 				7C76B71A1D2C457C0030FC98 /* HttpRouter.swift in Sources */,
 				7C76B72A1D2C45920030FC98 /* String+SHA1.swift in Sources */,
@@ -948,7 +907,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1.2.5;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -965,7 +923,6 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterMac;
 				PRODUCT_NAME = Swifter;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -977,7 +934,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "Mac Developer";
-				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1.2.5;
@@ -995,7 +951,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterMac;
 				PRODUCT_NAME = Swifter;
-				PROVISIONING_PROFILE = "";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				VERSIONING_SYSTEM = "apple-generic";

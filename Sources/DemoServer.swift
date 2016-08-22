@@ -142,11 +142,6 @@ public func demoServer(publicDir: String) -> HttpServer {
         return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
     }
     
-    server.OPTIONS["/login"] = { r in
-        let response = ""
-        return HttpResponse.OK(.Json(response))
-    }
-    
     server["/demo"] = scopes {
         html {
             body {
@@ -163,7 +158,6 @@ public func demoServer(publicDir: String) -> HttpServer {
     }
     
     server["/redirect"] = { r in
-        HttpResponse.OK(.Html(""))
         return .MovedPermanently("http://www.google.com")
     }
 

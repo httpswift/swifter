@@ -18,25 +18,23 @@ public class HttpServer: HttpServerIO {
     private let router = HttpRouter()
     
     public override init() {
-        self.DELETE  = MethodRoute(method: "DELETE", router: router)
-        self.UPDATE  = MethodRoute(method: "UPDATE", router: router)
-        self.HEAD    = MethodRoute(method: "HEAD", router: router)
-        self.POST    = MethodRoute(method: "POST", router: router)
-        self.GET     = MethodRoute(method: "GET", router: router)
-        self.PUT     = MethodRoute(method: "PUT", router: router)
-        self.OPTIONS = MethodRoute(method: "OPTIONS", router: router)
+        self.DELETE = MethodRoute(method: "DELETE", router: router)
+        self.UPDATE = MethodRoute(method: "UPDATE", router: router)
+        self.HEAD   = MethodRoute(method: "HEAD", router: router)
+        self.POST   = MethodRoute(method: "POST", router: router)
+        self.GET    = MethodRoute(method: "GET", router: router)
+        self.PUT    = MethodRoute(method: "PUT", router: router)
         
-        self.delete  = MethodRoute(method: "DELETE", router: router)
-        self.update  = MethodRoute(method: "UPDATE", router: router)
-        self.head    = MethodRoute(method: "HEAD", router: router)
-        self.post    = MethodRoute(method: "POST", router: router)
-        self.get     = MethodRoute(method: "GET", router: router)
-        self.put     = MethodRoute(method: "PUT", router: router)
-        self.options = MethodRoute(method: "OPTIONS", router: router)
+        self.delete = MethodRoute(method: "DELETE", router: router)
+        self.update = MethodRoute(method: "UPDATE", router: router)
+        self.head   = MethodRoute(method: "HEAD", router: router)
+        self.post   = MethodRoute(method: "POST", router: router)
+        self.get    = MethodRoute(method: "GET", router: router)
+        self.put    = MethodRoute(method: "PUT", router: router)
     }
     
-    public var DELETE, UPDATE, HEAD, POST, GET, PUT, OPTIONS : MethodRoute
-    public var delete, update, head, post, get, put, options : MethodRoute
+    public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
+    public var delete, update, head, post, get, put : MethodRoute
     
     public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
         set {
