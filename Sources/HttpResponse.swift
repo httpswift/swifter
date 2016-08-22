@@ -31,25 +31,22 @@ public enum HttpResponseBody {
     
     func content() -> (Int, (HttpResponseBodyWriter throws -> Void)?) {
         do {
-            print(String(self))
             let response: ResponseProtocol;
             switch self {
             case .Json(let object):
                 let response = JsonResponse(contentObject: object)
             case .Text(let body):
-                let response = TextResponse(contentObject: object!)
+                let response = TextResponse(contentObject: body)
             case .Html(let body):
-                let response = HtmlResponse(contentObject: object!)
+                let response = HtmlResponse(contentObject: body)
             case .Custom(let object, let closure):
                 let response = CustomResponse(contentObject: object, closure: closure)
             default:
                 let response = Response(contentObject: "")
             }
             
-            let content = response.content()
-            return (content.contentLength, {
-                try $0.write(content)
-            })
+            let content = try response.content()
+            return (content.contentLength, { try $0.write(content) })
         } catch {
             let data = [UInt8]("Serialisation error: \(error)".utf8)
             return (data.count, {

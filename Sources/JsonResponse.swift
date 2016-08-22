@@ -10,7 +10,7 @@ import Foundation
 
 
 public class JsonResponse: Response {
-    public override func content() -> (contentLength: Int, contentString: String) {
+    public override func content() throws -> (contentLength: Int, contentString: String) {
         #if os(Linux)
             let data = [UInt8]("Not ready for Linux.".utf8)
             return (data.count, {

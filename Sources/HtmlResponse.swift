@@ -13,7 +13,7 @@
 #endif
 
 public class HtmlResponse: Response {
-    public override func content() -> (contentLength: Int, contentString: String) {
+    public override func content() throws -> (contentLength: Int, contentString: String) {
         let serialised = "<html><meta charset=\"UTF-8\"><body>\(String(self.contentObject))</body></html>"
         let data = [UInt8](serialised.utf8)
         return (data.count, serialised)

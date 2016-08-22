@@ -13,14 +13,14 @@
 #endif
 
 public class CustomResponse: Response {
-    public var closure: (ObjectIdentifier) -> (String)
+    public var closure: (ObjectIdentifier) throws -> (String)
     
     public init(contentObject: AnyObject, closure: (Any) throws -> String) {
         self.closure = closure
         super.init(contentObject: contentObject)
     }
     
-    public override func content() -> (contentLength: Int, contentString: String) {
+    public override func content() throws -> (contentLength: Int, contentString: String) {
         let serialised = try closure(ObjectIdentifier(contentObject))
         let data = [UInt8](serialised.utf8)
         return (data.count, serialised)

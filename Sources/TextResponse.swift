@@ -9,7 +9,7 @@
 import Foundation
 
 public class TextResponse: Response {
-    public override func content() -> (contentLength: Int, contentString: String) {
+    public override func content() throws -> (contentLength: Int, contentString: String) {
         let contentString = String(self.contentObject)
         let data = [UInt8](contentString.utf8)
         return (data.count, contentString)
