@@ -11,56 +11,56 @@
     import Foundation
 #endif
 
-public class HttpRouter {
+open class HttpRouter {
     
-    private class Node {
+    fileprivate class Node {
         var nodes = [String: Node]()
-        var handler: (HttpRequest -> HttpResponse)? = nil
+        var handler: ((HttpRequest) -> HttpResponse)? = nil
     }
     
-    private var rootNode = Node()
+    fileprivate var rootNode = Node()
 
-    public func routes() -> [String] {
+    open func routes() -> [String] {
         var routes = [String]()
         for (_, child) in rootNode.nodes {
-            routes.appendContentsOf(routesForNode(child));
+            routes.append(contentsOf: routesForNode(child));
         }
         return routes
     }
     
-    private func routesForNode(node: Node, prefix: String = "") -> [String] {
+    fileprivate func routesForNode(_ node: Node, prefix: String = "") -> [String] {
         var result = [String]()
         if let _ = node.handler {
             result.append(prefix)
         }
         for (key, child) in node.nodes {
-            result.appendContentsOf(routesForNode(child, prefix: prefix + "/" + key));
+            result.append(contentsOf: routesForNode(child, prefix: prefix + "/" + key));
         }
         return result
     }
     
-    public func register(method: String?, path: String, handler: (HttpRequest -> HttpResponse)?) {
+    open func register(_ method: String?, path: String, handler: ((HttpRequest) -> HttpResponse)?) {
         var pathSegments = stripQuery(path).split("/")
         if let method = method {
-            pathSegments.insert(method, atIndex: 0)
+            pathSegments.insert(method, at: 0)
         } else {
-            pathSegments.insert("*", atIndex: 0)
+            pathSegments.insert("*", at: 0)
         }
-        var pathSegmentsGenerator = pathSegments.generate()
+        var pathSegmentsGenerator = pathSegments.makeIterator()
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
-    public func route(method: String?, path: String) -> ([String: String], HttpRequest -> HttpResponse)? {
+    open func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) -> HttpResponse)? {
         if let method = method {
             let pathSegments = (method + "/" + stripQuery(path)).split("/")
-            var pathSegmentsGenerator = pathSegments.generate()
+            var pathSegmentsGenerator = pathSegments.makeIterator()
             var params = [String:String]()
             if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
                 return (params, handler)
             }
         }
         let pathSegments = ("*/" + stripQuery(path)).split("/")
-        var pathSegmentsGenerator = pathSegments.generate()
+        var pathSegmentsGenerator = pathSegments.makeIterator()
         var params = [String:String]()
         if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
             return (params, handler)
@@ -68,7 +68,7 @@ public class HttpRouter {
         return nil
     }
     
-    private func inflate(inout node: Node, inout generator: IndexingGenerator<[String]>) -> Node {
+    fileprivate func inflate(_ node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {
         if let pathSegment = generator.next() {
             if let _ = node.nodes[pathSegment] {
                 return inflate(&node.nodes[pathSegment]!, generator: &generator)
@@ -80,7 +80,7 @@ public class HttpRouter {
         return node
     }
     
-    private func findHandler(inout node: Node, inout params: [String: String], inout generator: IndexingGenerator<[String]>) -> (HttpRequest -> HttpResponse)? {
+    fileprivate func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
         guard let pathToken = generator.next() else {
             return node.handler
         }
@@ -89,7 +89,7 @@ public class HttpRouter {
             if variableNode.1.nodes.count == 0 {
                 // if it's the last element of the pattern and it's a variable, stop the search and
                 // append a tail as a value for the variable.
-                let tail = generator.joinWithSeparator("/")
+                let tail = generator.joined(separator: "/")
                 if tail.utf8.count > 0 {
                     params[variableNode.0] = pathToken + "/" + tail
                 } else {
@@ -109,7 +109,7 @@ public class HttpRouter {
         return nil
     }
     
-    private func stripQuery(path: String) -> String {
+    fileprivate func stripQuery(_ path: String) -> String {
         if let path = path.split("?").first {
             return path
         }

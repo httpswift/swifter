@@ -12,9 +12,9 @@
     import Foundation
 #endif
 
-public class Errno {
+open class Errno {
     
-    public class func description() -> String {
-        return String.fromCString(UnsafePointer(strerror(errno))) ?? "Error: \(errno)"
+    open class func description() -> String {
+        return String(cString: UnsafePointer(strerror(errno))) 
     }
 }

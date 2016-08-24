@@ -11,13 +11,13 @@
     import Foundation
 #endif
 
-public class Process {
+open class Process {
     
-    public static var PID: Int {
+    open static var PID: Int {
         return Int(getpid())
     }
     
-    public static var TID: UInt64 {
+    open static var TID: UInt64 {
         #if os(Linux)
             return UInt64(pthread_self())
         #else
@@ -27,10 +27,10 @@ public class Process {
         #endif
     }
     
-    private static var signalsWatchers = Array<(Int32) -> Void>()
-    private static var signalsObserved = false
+    fileprivate static var signalsWatchers = Array<(Int32) -> Void>()
+    fileprivate static var signalsObserved = false
     
-    public static func watchSignals(callback: (Int32) -> Void) {
+    open static func watchSignals(_ callback: @escaping (Int32) -> Void) {
         if !signalsObserved {
             [SIGTERM, SIGHUP, SIGSTOP, SIGINT].forEach { item in
                 signal(item) {

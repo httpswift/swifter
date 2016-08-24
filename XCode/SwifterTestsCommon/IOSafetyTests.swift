@@ -28,10 +28,10 @@ class IOSafetyTests: XCTestCase {
         (0...100).forEach { _ in
             server = HttpServer.pingServer()
             try! server.start()
-            XCTAssertFalse(NSURLSession.sharedSession().retryPing())
+            XCTAssertFalse(URLSession.shared.retryPing())
             (0...100).forEach { _ in
-                dispatch_async(dispatch_get_global_queue(0, 0)) {
-                    NSURLSession.sharedSession().pingTask { _, _, _ in }.resume()
+                DispatchQueue.global(qos: DispatchQoS.QoSClass.background).async {
+                    URLSession.shared.pingTask { _, _, _ in }.resume()
                 }
             }
             server.stop()
