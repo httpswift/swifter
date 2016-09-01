@@ -30,6 +30,8 @@ public enum SocketError: ErrorType {
 public class Socket: Hashable, Equatable {
         
     let socketFileDescriptor: Int32
+    private var shutdown = false
+
     
     public init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
@@ -42,10 +44,18 @@ public class Socket: Hashable, Equatable {
     public var hashValue: Int { return Int(self.socketFileDescriptor) }
     
     public func release() {
+        if shutdown {
+            return
+        }
+        shutdown = true
         Socket.release(self.socketFileDescriptor)
     }
     
     public func shutdwn() {
+        if shutdown {
+            return
+        }
+        shutdown = true
         Socket.shutdwn(self.socketFileDescriptor)
     }
     
@@ -96,18 +106,26 @@ public class Socket: Hashable, Equatable {
     
     public func writeUInt8(data: ArraySlice<UInt8>) throws {
         try data.withUnsafeBufferPointer {
-            var sent = 0
-            while sent < data.count {
-                #if os(Linux)
-                    let s = send(self.socketFileDescriptor, $0.baseAddress + sent, Int(data.count - sent), Int32(MSG_NOSIGNAL))
-                #else
-                    let s = write(self.socketFileDescriptor, $0.baseAddress + sent, Int(data.count - sent))
-                #endif
-                if s <= 0 {
-                    throw SocketError.WriteFailed(Errno.description())
-                }
-                sent += s
+            try writeBuffer($0.baseAddress, length: data.count)
+        }
+    }
+
+    public func writeData(data: NSData) throws {
+        try writeBuffer(data.bytes, length: data.length)
+    }
+
+    private func writeBuffer(pointer: UnsafePointer<Void>, length: Int) throws {
+        var sent = 0
+        while sent < length {
+            #if os(Linux)
+                let s = send(self.socketFileDescriptor, pointer + sent, Int(length - sent), Int32(MSG_NOSIGNAL))
+            #else
+                let s = write(self.socketFileDescriptor, pointer + sent, Int(length - sent))
+            #endif
+            if s <= 0 {
+                throw SocketError.WriteFailed(Errno.description())
             }
+            sent += s
         }
     }
     
