@@ -11,12 +11,12 @@
     import Foundation
 #endif
 
-public class HttpServerIO {
+open class HttpServerIO {
     
-    private var socket = Socket(socketFileDescriptor: -1)
-    private var sockets = Set<Socket>()
-    private var stateValue: Int32 = HttpServerIOState.Stopped.rawValue
-    public private(set) var state: HttpServerIOState {
+    fileprivate var socket = Socket(socketFileDescriptor: -1)
+    fileprivate var sockets = Set<Socket>()
+    fileprivate var stateValue: Int32 = HttpServerIOState.stopped.rawValue
+    open fileprivate(set) var state: HttpServerIOState {
         get {
             return HttpServerIOState(rawValue: stateValue)!
         }
@@ -24,14 +24,14 @@ public class HttpServerIO {
             OSAtomicCompareAndSwapInt(self.state.rawValue, state.rawValue, &stateValue)
         }
     }
-    public var operating: Bool { get { return self.state == .Running } }
-    private let queue = dispatch_queue_create("swifter.httpserverio.clientsockets", DISPATCH_QUEUE_SERIAL)
+    open var operating: Bool { get { return self.state == .running } }
+    fileprivate let queue = DispatchQueue(label: "swifter.httpserverio.clientsockets", attributes: [])
     
-    public func port() throws -> Int {
+    open func port() throws -> Int {
         return Int(try socket.port())
     }
     
-    public func isIPv4() throws -> Bool {
+    open func isIPv4() throws -> Bool {
         return try socket.isIPv4()
     }
     
@@ -39,51 +39,51 @@ public class HttpServerIO {
         stop()
     }
     
-    public func start(port: in_port_t = 8080, forceIPv4: Bool = false, priority: Int = DISPATCH_QUEUE_PRIORITY_BACKGROUND) throws {
+    open func start(_ port: in_port_t = 8080, forceIPv4: Bool = false, qosClass: DispatchQoS.QoSClass = DispatchQoS.QoSClass.background) throws {
         guard !self.operating else { return }
         stop()
-        self.state = .Starting
+        self.state = .starting
         self.socket = try Socket.tcpSocketForListen(port, forceIPv4: forceIPv4)
-        dispatch_async(dispatch_get_global_queue(priority, 0)) { [weak self] in
+        DispatchQueue.global(qos: qosClass).async { [weak self] in
             guard let `self` = self else { return }
             guard self.operating else { return }
             while let socket = try? self.socket.acceptClientSocket() {
-                dispatch_async(dispatch_get_global_queue(priority, 0), { [weak self] in
+                DispatchQueue.global(qos: qosClass).async(execute: { [weak self] in
                     guard let `self` = self else { return }
                     guard self.operating else { return }
-                    dispatch_async(self.queue) {
+                    self.queue.async {
                         self.sockets.insert(socket)
                     }
                     self.handleConnection(socket)
-                    dispatch_async(self.queue) {
+                    self.queue.async {
                         self.sockets.remove(socket)
                     }
                 })
             }
             self.stop()
         }
-        self.state = .Running
+        self.state = .running
     }
     
-    public func stop() {
+    open func stop() {
         guard self.operating else { return }
-        self.state = .Stopping
+        self.state = .stopping
         // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
         for socket in self.sockets {
             socket.shutdwn()
         }
-        dispatch_sync(queue) {
-            self.sockets.removeAll(keepCapacity: true)
+        queue.sync {
+            self.sockets.removeAll(keepingCapacity: true)
         }
         socket.release()
-        self.state = .Stopped
+        self.state = .stopped
     }
     
-    public func dispatch(request: HttpRequest) -> ([String: String], HttpRequest -> HttpResponse) {
-        return ([:], { _ in HttpResponse.NotFound })
+    open func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
+        return ([:], { _ in HttpResponse.notFound })
     }
     
-    private func handleConnection(socket: Socket) {
+    fileprivate func handleConnection(_ socket: Socket) {
         let parser = HttpParser()
         while self.operating, let request = try? parser.readHttpRequest(socket) {
             let request = request
@@ -109,28 +109,28 @@ public class HttpServerIO {
         socket.release()
     }
     
-    private struct InnerWriteContext: HttpResponseBodyWriter {
+    fileprivate struct InnerWriteContext: HttpResponseBodyWriter {
         
         let socket: Socket
 
-        func write(file: File) throws {
+        func write(_ file: File) throws {
             try socket.writeFile(file)
         }
 
-        func write(data: [UInt8]) throws {
+        func write(_ data: [UInt8]) throws {
             try write(ArraySlice(data))
         }
 
-        func write(data: ArraySlice<UInt8>) throws {
+        func write(_ data: ArraySlice<UInt8>) throws {
             try socket.writeUInt8(data)
         }
 
-        func write(data: NSData) throws {
+        func write(_ data: Data) throws {
             try socket.writeData(data)
         }
     }
     
-    private func respond(socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
+    fileprivate func respond(_ socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
         guard self.operating else { return false }
 
         try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
@@ -161,10 +161,10 @@ public class HttpServerIO {
 }
 
 public enum HttpServerIOState: Int32 {
-    case Starting
-    case Running
-    case Stopping
-    case Stopped
+    case starting
+    case running
+    case stopping
+    case stopped
 }
 
 #if os(Linux)

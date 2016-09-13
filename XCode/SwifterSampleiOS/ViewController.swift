@@ -9,12 +9,12 @@ import Swifter
 
 class ViewController: UIViewController {
     
-    private var server: HttpServer?
+    fileprivate var server: HttpServer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         do {
-            let server = demoServer(NSBundle.mainBundle().resourcePath!)
+            let server = demoServer(Bundle.main.resourcePath!)
             try server.start(9080)
             self.server = server
         } catch {
@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func likedThis(sender: UIButton) {
+    @IBAction func likedThis(_ sender: UIButton) {
         self.server?.stop()
         self.server = nil
     }

@@ -11,78 +11,78 @@
     import Foundation
 #endif
 
-public enum FileError: ErrorType {
-    case OpenFailed(String)
-    case WriteFailed(String)
-    case ReadFailed(String)
-    case SeekFailed(String)
-    case GetCurrentWorkingDirectoryFailed(String)
-    case IsDirectoryFailed(String)
-    case OpenDirFailed(String)
+public enum FileError: Error {
+    case openFailed(String)
+    case writeFailed(String)
+    case readFailed(String)
+    case seekFailed(String)
+    case getCurrentWorkingDirectoryFailed(String)
+    case isDirectoryFailed(String)
+    case openDirFailed(String)
 }
 
-public class File {
+open class File {
     
-    public static func openNewForWriting(path: String) throws -> File {
+    open static func openNewForWriting(_ path: String) throws -> File {
         return try openFileForMode(path, "wb")
     }
     
-    public static func openForReading(path: String) throws -> File {
+    open static func openForReading(_ path: String) throws -> File {
         return try openFileForMode(path, "rb")
     }
     
-    public static func openForWritingAndReading(path: String) throws -> File {
+    open static func openForWritingAndReading(_ path: String) throws -> File {
         return try openFileForMode(path, "r+b")
     }
     
-    public static func openFileForMode(path: String, _ mode: String) throws -> File {
+    open static func openFileForMode(_ path: String, _ mode: String) throws -> File {
         let file = path.withCString({ pathPointer in mode.withCString({ fopen(pathPointer, $0) }) })
         guard file != nil else {
-            throw FileError.OpenFailed(Errno.description())
+            throw FileError.openFailed(Errno.description())
         }
-        return File(file)
+        return File(file!)
     }
     
-    public static func isDirectory(path: String) throws -> Bool {
+    open static func isDirectory(_ path: String) throws -> Bool {
         var s = stat()
         guard path.withCString({ stat($0, &s) }) == 0 else {
-            throw FileError.IsDirectoryFailed(Errno.description())
+            throw FileError.isDirectoryFailed(Errno.description())
         }
         return s.st_mode & S_IFMT == S_IFDIR
     }
     
-    public static func currentWorkingDirectory() throws -> String {
+    open static func currentWorkingDirectory() throws -> String {
         let path = getcwd(nil, 0)
         if path == nil {
-            throw FileError.GetCurrentWorkingDirectoryFailed(Errno.description())
+            throw FileError.getCurrentWorkingDirectoryFailed(Errno.description())
         }
-        guard let result = String.fromCString(path) else {
-            throw FileError.GetCurrentWorkingDirectoryFailed("Could not convert getcwd(...)'s result to String.")
+        guard let result = String(validatingUTF8: path!) else {
+            throw FileError.getCurrentWorkingDirectoryFailed("Could not convert getcwd(...)'s result to String.")
         }
         return result
     }
     
-    public static func exists(path: String) throws -> Bool {
+    open static func exists(_ path: String) throws -> Bool {
         var buffer = stat()
         return path.withCString({ stat($0, &buffer) == 0 })
     }
     
-    public static func list(path: String) throws -> [String] {
+    open static func list(_ path: String) throws -> [String] {
         let dir = path.withCString { opendir($0) }
         if dir == nil {
-            throw FileError.OpenDirFailed(Errno.description())
+            throw FileError.openDirFailed(Errno.description())
         }
         defer { closedir(dir) }
         var results = [String]()
-        while case let ent = readdir(dir) where ent != nil {
-            var name = ent.memory.d_name
-            let fileName = withUnsafePointer(&name) { (ptr) -> String? in
+        while case let ent = readdir(dir) , ent != nil {
+            var name = ent?.pointee.d_name
+            let fileName = withUnsafePointer(to: &name) { (ptr) -> String? in
                 #if os(Linux)
                     return String.fromCString([CChar](UnsafeBufferPointer<CChar>(start: UnsafePointer(unsafeBitCast(ptr, UnsafePointer<CChar>.self)), count: Int(NAME_MAX))))
                 #else
-                    var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, UnsafePointer<CChar>.self), count: Int(ent.memory.d_namlen)))
+                    var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, to: UnsafePointer<CChar>.self), count: Int((ent?.pointee.d_namlen)!)))
                     buffer.append(0)
-                    return String.fromCString(buffer)
+                    return String(cString: buffer)
                 #endif
             }
             if let fileName = fileName {
@@ -98,11 +98,11 @@ public class File {
         self.pointer = pointer
     }
     
-    public func close() -> Void {
+    open func close() -> Void {
         fclose(pointer)
     }
     
-    public func read(inout data: [UInt8]) throws -> Int {
+    open func read(_ data: inout [UInt8]) throws -> Int {
         if data.count <= 0 {
             return data.count
         }
@@ -114,43 +114,43 @@ public class File {
             return count
         }
         if ferror(self.pointer) != 0 {
-            throw FileError.ReadFailed(Errno.description())
+            throw FileError.readFailed(Errno.description())
         }
-        throw FileError.ReadFailed("Unknown file read error occured.")
+        throw FileError.readFailed("Unknown file read error occured.")
     }
 
-    public func write(data: [UInt8]) throws -> Void {
+    open func write(_ data: [UInt8]) throws -> Void {
         if data.count <= 0 {
             return
         }
         try data.withUnsafeBufferPointer {
             if fwrite($0.baseAddress, 1, data.count, self.pointer) != data.count {
-                throw FileError.WriteFailed(Errno.description())
+                throw FileError.writeFailed(Errno.description())
             }
         }
     }
     
-    public func seek(offset: Int) throws -> Void {
+    open func seek(_ offset: Int) throws -> Void {
         if fseek(self.pointer, offset, SEEK_SET) != 0 {
-            throw FileError.SeekFailed(Errno.description())
+            throw FileError.seekFailed(Errno.description())
         }
     }
 
 }
 
-public func withNewFileOpenedForWriting<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+public func withNewFileOpenedForWriting<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
     return try withFileOpenedForMode(path, mode: "wb", f)
 }
 
-public func withFileOpenedForReading<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+public func withFileOpenedForReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
     return try withFileOpenedForMode(path, mode: "rb", f)
 }
 
-public func withFileOpenedForWritingAndReading<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+public func withFileOpenedForWritingAndReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
     return try withFileOpenedForMode(path, mode: "r+b", f)
 }
 
-public func withFileOpenedForMode<Result>(path: String, mode: String, _ f: File throws -> Result) throws -> Result {
+public func withFileOpenedForMode<Result>(_ path: String, mode: String, _ f: (File) throws -> Result) throws -> Result {
     let file = try File.openFileForMode(path, mode)
     defer {
         file.close()

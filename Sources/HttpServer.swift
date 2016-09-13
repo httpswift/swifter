@@ -11,11 +11,11 @@
     import Foundation
 #endif
 
-public class HttpServer: HttpServerIO {
+open class HttpServer: HttpServerIO {
     
-    public static let VERSION = "1.2.6"
+    open static let VERSION = "1.2.6"
     
-    private let router = HttpRouter()
+    fileprivate let router = HttpRouter()
     
     public override init() {
         self.DELETE = MethodRoute(method: "DELETE", router: router)
@@ -33,25 +33,25 @@ public class HttpServer: HttpServerIO {
         self.put    = MethodRoute(method: "PUT", router: router)
     }
     
-    public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
-    public var delete, update, head, post, get, put : MethodRoute
+    open var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
+    open var delete, update, head, post, get, put : MethodRoute
     
-    public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
+    open subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
         set {
             router.register(nil, path: path, handler: newValue)
         }
         get { return nil }
     }
     
-    public var routes: [String] {
+    open var routes: [String] {
         return router.routes();
     }
     
-    public var notFoundHandler: (HttpRequest -> HttpResponse)?
+    open var notFoundHandler: ((HttpRequest) -> HttpResponse)?
     
-    public var middleware = Array<(HttpRequest) -> HttpResponse?>()
+    open var middleware = Array<(HttpRequest) -> HttpResponse?>()
 
-    override public func dispatch(request: HttpRequest) -> ([String:String], HttpRequest -> HttpResponse) {
+    override open func dispatch(_ request: HttpRequest) -> ([String:String], (HttpRequest) -> HttpResponse) {
         for layer in middleware {
             if let response = layer(request) {
                 return ([:], { _ in response })
@@ -69,7 +69,7 @@ public class HttpServer: HttpServerIO {
     public struct MethodRoute {
         public let method: String
         public let router: HttpRouter
-        public subscript(path: String) -> (HttpRequest -> HttpResponse)? {
+        public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
             set {
                 router.register(method, path: path, handler: newValue)
             }
