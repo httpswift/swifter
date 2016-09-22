@@ -32,27 +32,27 @@ public class HttpServer: HttpServerIO {
     public var DELETE, UPDATE, HEAD, POST, GET, PUT : MethodRoute
     public var delete, update, head, post, get, put : MethodRoute
     
-    public func get(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
+    public func get(_ path: String, _ handler: @escaping ((HttpRequest) -> HttpResponse)) {
         router.register("GET", path: path, handler: handler)
     }
     
-    public func post(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
+    public func post(_ path: String, _ handler: @escaping ((HttpRequest) -> HttpResponse)) {
         router.register("POST", path: path, handler: handler)
     }
     
-    public func put(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
+    public func put(_ path: String, _ handler: @escaping ((HttpRequest) -> HttpResponse)) {
         router.register("PUT", path: path, handler: handler)
     }
     
-    public func head(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
+    public func head(_ path: String, _ handler: @escaping ((HttpRequest) -> HttpResponse)) {
         router.register("HEAD", path: path, handler: handler)
     }
     
-    public func delete(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
+    public func delete(_ path: String, _ handler: @escaping ((HttpRequest) -> HttpResponse)) {
         router.register("DELETE", path: path, handler: handler)
     }
     
-    public func update(_ path: String, _ handler: ((HttpRequest) -> HttpResponse)) {
+    public func update(_ path: String, _ handler: @escaping ((HttpRequest) -> HttpResponse)) {
         router.register("UPDATE", path: path, handler: handler)
     }
 

@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-public func scopes(_ scope: Closure) -> ((HttpRequest) -> HttpResponse) {
+public func scopes(_ scope: @escaping Closure) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         ScopesBuffer[Process.tid] = ""
         scope()
