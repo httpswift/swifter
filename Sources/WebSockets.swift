@@ -26,7 +26,7 @@ public func websocket(
         }
         let protocolSessionClosure: ((Socket) -> Void) = { socket in
             let session = WebSocketSession(socket)
-            var fragmentedOpCode = WebSocketSession.OpCode.Close
+            var fragmentedOpCode = WebSocketSession.OpCode.close
             var payload = [UInt8]() // Used for fragmented frames.
             
             func handleTextPayload(_ frame: WebSocketSession.Frame) throws {
@@ -44,7 +44,7 @@ public func websocket(
                         }
                     } else {
                         payload.append(contentsOf: frame.payload)
-                        fragmentedOpCode = .Text
+                        fragmentedOpCode = .text
                     }
                 }
             }
@@ -58,16 +58,16 @@ public func websocket(
                         handleBinary(session, frame.payload)
                     } else {
                         payload.append(contentsOf: frame.payload)
-                        fragmentedOpCode = .Binary
+                        fragmentedOpCode = .binary
                     }
                 }
             }
             
             func handleOperationCode(_ frame: WebSocketSession.Frame) throws {
                 switch frame.opcode {
-                case .Continue:
+                case .continue:
                     // There is no message to continue, failed immediatelly.
-                    if fragmentedOpCode == .Close {
+                    if fragmentedOpCode == .close {
                         socket.shutdwn()
                     }
                     frame.opcode = fragmentedOpCode
@@ -77,22 +77,22 @@ public func websocket(
                         // Clean the buffer.
                         payload = []
                         // Reset the OpCode.
-                        fragmentedOpCode = WebSocketSession.OpCode.Close
+                        fragmentedOpCode = WebSocketSession.OpCode.close
                     }
                     try handleOperationCode(frame)
-                case .Text:
+                case .text:
                     try handleTextPayload(frame)
-                case .Binary:
+                case .binary:
                     try handleBinaryPayload(frame)
-                case .Close:
+                case .close:
                     throw WebSocketSession.Control.Close
-                case .Ping:
+                case .ping:
                     if frame.payload.count > 125 {
                         throw WebSocketSession.WsError.ProtocolError("Payload gretter than 125 octets.")
                     } else {
-                        session.writeFrame(ArraySlice(frame.payload), .Pong)
+                        session.writeFrame(ArraySlice(frame.payload), .pong)
                     }
-                case .Pong:
+                case .pong:
                     break
                 }
             }
@@ -131,11 +131,11 @@ public func websocket(
 public class WebSocketSession: Hashable, Equatable  {
     
     public enum WsError: Error { case UnknownOpCode(String), UnMaskedFrame(String), ProtocolError(String), InvalidUTF8(String) }
-    public enum OpCode: UInt8 { case Continue = 0x00, Close = 0x08, Ping = 0x09, Pong = 0x0A, Text = 0x01, Binary = 0x02 }
+    public enum OpCode: UInt8 { case `continue` = 0x00, close = 0x08, ping = 0x09, pong = 0x0A, text = 0x01, binary = 0x02 }
     public enum Control: Error { case Close }
     
     public class Frame {
-        public var opcode = OpCode.Close
+        public var opcode = OpCode.close
         public var fin = false
         public var rsv1: UInt8 = 0
         public var rsv2: UInt8 = 0
@@ -155,7 +155,7 @@ public class WebSocketSession: Hashable, Equatable  {
     }
     
     public func writeText(_ text: String) -> Void {
-        self.writeFrame(ArraySlice(text.utf8), OpCode.Text)
+        self.writeFrame(ArraySlice(text.utf8), OpCode.text)
     }
 
     public func writeBinary(_ binary: [UInt8]) -> Void {
@@ -163,7 +163,7 @@ public class WebSocketSession: Hashable, Equatable  {
     }
     
     public func writeBinary(_ binary: ArraySlice<UInt8>) -> Void {
-        self.writeFrame(binary, OpCode.Binary)
+        self.writeFrame(binary, OpCode.binary)
     }
     
     public func writeFrame(_ data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
@@ -179,7 +179,7 @@ public class WebSocketSession: Hashable, Equatable  {
     }
     
     public func writeCloseFrame() {
-        writeFrame(ArraySlice("".utf8), .Close)
+        writeFrame(ArraySlice("".utf8), .close)
     }
     
     private func encodeLengthAndMaskFlag(_ len: UInt64, _ masked: Bool) -> [UInt8] {
@@ -225,7 +225,7 @@ public class WebSocketSession: Hashable, Equatable  {
         }
         if frm.fin == false {
             switch opcode {
-            case .Ping, .Pong, .Close:
+            case .ping, .pong, .close:
                 // Control frames must not be fragmented
                 // https://tools.ietf.org/html/rfc6455#section-5.5 ( Page 35 )
                 throw WsError.ProtocolError("Control frames must not be framgemted.")

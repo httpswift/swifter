@@ -107,11 +107,11 @@ public class HttpRouter {
             params[variableNode.0] = pathToken
             return findHandler(&node.nodes[variableNode.0]!, params: &params, generator: &generator)
         }
-        if let _ = node.nodes[pathToken] {
-            return findHandler(&node.nodes[pathToken]!, params: &params, generator: &generator)
+        if var node = node.nodes[pathToken] {
+            return findHandler(&node, params: &params, generator: &generator)
         }
-        if let _ = node.nodes["*"] {
-            return findHandler(&node.nodes["*"]!, params: &params, generator: &generator)
+        if var node = node.nodes["*"] {
+            return findHandler(&node, params: &params, generator: &generator)
         }
         if let startStarNode = node.nodes["**"] {
             let startStarNodeKeys = startStarNode.nodes.keys
