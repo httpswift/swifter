@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-public func demoServer(publicDir: String) -> HttpServer {
+public func demoServer(_ publicDir: String) -> HttpServer {
     
     print(publicDir)
     
@@ -139,7 +139,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     server.POST["/login"] = { r in
         let formFields = r.parseUrlencodedForm()
-        return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joinWithSeparator("<br>")))
+        return HttpResponse.OK(.Html(formFields.map({ "\($0.0) = \($0.1)" }).joined(separator: "<br>")))
     }
     
     server["/demo"] = scopes {
@@ -181,7 +181,7 @@ public func demoServer(publicDir: String) -> HttpServer {
     
     server["/websocket-echo"] = websocket({ (session, text) in
         session.writeText(text)
-    }, { (session, binary) in
+        }, { (session, binary) in
         session.writeBinary(binary)
     })
     

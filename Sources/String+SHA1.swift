@@ -12,17 +12,13 @@
 #endif
 
 
-extension String {
+public struct SHA1 {
     
-    public func SHA1() -> String {
-        return SHA1().reduce("") { $0 + String(format: "%02x", $1) }
-    }
-    
-    public func SHA1() -> [UInt8] {
+    public static func hash(_ input: [UInt8]) -> [UInt8] {
         
         // Alghorithm from: https://en.wikipedia.org/wiki/SHA-1
         
-        var message = [UInt8](self.utf8)
+        var message = input
         
         var h0 = UInt32(littleEndian: 0x67452301)
         var h1 = UInt32(littleEndian: 0xEFCDAB89)
@@ -42,17 +38,17 @@ extension String {
         
         let padBytesCount = ( message.count + 8 ) % 64
         
-        message.appendContentsOf([UInt8](count: 64 - padBytesCount, repeatedValue: 0))
+        message.append(contentsOf: [UInt8](repeating: 0, count: 64 - padBytesCount))
         
         // append ml, in a 64-bit big-endian integer. Thus, the total length is a multiple of 512 bits.
         
         var mlBigEndian = ml.bigEndian
-        let bytePtr = withUnsafePointer(&mlBigEndian) { UnsafeBufferPointer<UInt8>(start: UnsafePointer($0), count: sizeofValue(mlBigEndian)) }
-        
-        message.appendContentsOf(Array(bytePtr))
+        withUnsafePointer(to: &mlBigEndian) {
+            message.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer(OpaquePointer($0)), count: 8)))
+        }
         
         // Process the message in successive 512-bit chunks ( 64 bytes chunks ):
-
+        
         for chunkStart in 0..<message.count/64 {
             var words = [UInt32]()
             let chunk = message[chunkStart*64..<chunkStart*64+64]
@@ -60,14 +56,14 @@ extension String {
             // break chunk into sixteen 32-bit big-endian words w[i], 0 ≤ i ≤ 15
             
             for i in 0...15 {
-                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>($0.baseAddress + (i*4)).memory })
+                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>(OpaquePointer($0.baseAddress! + (i*4))).pointee})
                 words.append(value.bigEndian)
             }
             
             // Extend the sixteen 32-bit words into eighty 32-bit words:
             
             for i in 16...79 {
-                let value = words[i-3] ^ words[i-8] ^ words[i-14] ^ words[i-16]
+                let value: UInt32 = ((words[i-3]) ^ (words[i-8]) ^ (words[i-14]) ^ (words[i-16]))
                 words.append(rotateLeft(value, 1))
             }
             
@@ -83,19 +79,19 @@ extension String {
                 var f = UInt32(0)
                 var k = UInt32(0)
                 switch i {
-                    case 0...19:
-                        f = (b & c) | ((~b) & d)
-                        k = 0x5A827999
-                    case 20...39:
-                        f = b ^ c ^ d
-                        k = 0x6ED9EBA1
-                    case 40...59:
-                        f = (b & c) | (b & d) | (c & d)
-                        k = 0x8F1BBCDC
-                    case 60...79:
-                        f = b ^ c ^ d
-                        k = 0xCA62C1D6
-                    default: break
+                case 0...19:
+                    f = (b & c) | ((~b) & d)
+                    k = 0x5A827999
+                case 20...39:
+                    f = b ^ c ^ d
+                    k = 0x6ED9EBA1
+                case 40...59:
+                    f = (b & c) | (b & d) | (c & d)
+                    k = 0x8F1BBCDC
+                case 60...79:
+                    f = b ^ c ^ d
+                    k = 0xCA62C1D6
+                default: break
                 }
                 let temp = (rotateLeft(a, 5) &+ f &+ e &+ k &+ words[i]) & 0xFFFFFFFF
                 e = d
@@ -116,24 +112,30 @@ extension String {
         
         // Produce the final hash value (big-endian) as a 160 bit number:
         
-        var result = [UInt8]()
+        var digest = [UInt8]()
         
-        let h0Big = h0.bigEndian
-        let h1Big = h1.bigEndian
-        let h2Big = h2.bigEndian
-        let h3Big = h3.bigEndian
-        let h4Big = h4.bigEndian
+        [h0, h1, h2, h3, h4].forEach { value in
+            var bigEndianVersion = value.bigEndian
+            withUnsafePointer(to: &bigEndianVersion) {
+                digest.append(contentsOf: Array(UnsafeBufferPointer<UInt8>(start: UnsafePointer(OpaquePointer($0)), count: 4)))
+            }
+        }
         
-        result += ([UInt8(h0Big & 0xFF), UInt8((h0Big >> 8) & 0xFF), UInt8((h0Big >> 16) & 0xFF), UInt8((h0Big >> 24) & 0xFF)]);
-        result += ([UInt8(h1Big & 0xFF), UInt8((h1Big >> 8) & 0xFF), UInt8((h1Big >> 16) & 0xFF), UInt8((h1Big >> 24) & 0xFF)]);
-        result += ([UInt8(h2Big & 0xFF), UInt8((h2Big >> 8) & 0xFF), UInt8((h2Big >> 16) & 0xFF), UInt8((h2Big >> 24) & 0xFF)]);
-        result += ([UInt8(h3Big & 0xFF), UInt8((h3Big >> 8) & 0xFF), UInt8((h3Big >> 16) & 0xFF), UInt8((h3Big >> 24) & 0xFF)]);
-        result += ([UInt8(h4Big & 0xff), UInt8((h4Big >> 8) & 0xFF), UInt8((h4Big >> 16) & 0xFF), UInt8((h4Big >> 24) & 0xFF)]);
-
-        return result;
+        return digest
     }
     
-    func rotateLeft(v: UInt32, _ n: UInt32) -> UInt32 {
+    private static func rotateLeft(_ v: UInt32, _ n: UInt32) -> UInt32 {
         return ((v << n) & 0xFFFFFFFF) | (v >> (32 - n))
+    }
+}
+
+extension String {
+    
+    public func sha1() -> [UInt8] {
+        return SHA1.hash([UInt8](self.utf8))
+    }
+    
+    public func sha1() -> String {
+        return self.sha1().reduce("") { $0 + String(format: "%02x", $1) }
     }
 }

@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-public func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> HttpResponse) {
+public func shareFilesFromDirectory(_ directoryPath: String) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let fileRelativePath = r.params.first else {
             return .NotFound
@@ -27,7 +27,7 @@ public func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> Ht
     }
 }
 
-public func directoryBrowser(dir: String) -> (HttpRequest -> HttpResponse) {
+public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let (_, value) = r.params.first else {
             return HttpResponse.NotFound

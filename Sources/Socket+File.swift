@@ -38,11 +38,11 @@
 
 extension Socket {
     
-    public func writeFile(file: File) throws -> Void {
+    public func writeFile(_ file: File) throws -> Void {
         var offset: off_t = 0
         let result = sendfileImpl(fileno(file.pointer), self.socketFileDescriptor, 0, &offset, nil, 0)
         if result == -1 {
-            throw SocketError.WriteFailed("sendfile: " + Errno.description())
+            throw SocketError.writeFailed("sendfile: " + Errno.description())
         }
     }
     

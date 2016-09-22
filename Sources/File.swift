@@ -11,7 +11,7 @@
     import Foundation
 #endif
 
-public enum FileError: ErrorType {
+public enum FileError: Error {
     case OpenFailed(String)
     case WriteFailed(String)
     case ReadFailed(String)
@@ -23,27 +23,26 @@ public enum FileError: ErrorType {
 
 public class File {
     
-    public static func openNewForWriting(path: String) throws -> File {
+    public static func openNewForWriting(_ path: String) throws -> File {
         return try openFileForMode(path, "wb")
     }
     
-    public static func openForReading(path: String) throws -> File {
+    public static func openForReading(_ path: String) throws -> File {
         return try openFileForMode(path, "rb")
     }
     
-    public static func openForWritingAndReading(path: String) throws -> File {
+    public static func openForWritingAndReading(_ path: String) throws -> File {
         return try openFileForMode(path, "r+b")
     }
     
-    public static func openFileForMode(path: String, _ mode: String) throws -> File {
-        let file = path.withCString({ pathPointer in mode.withCString({ fopen(pathPointer, $0) }) })
-        guard file != nil else {
+    public static func openFileForMode(_ path: String, _ mode: String) throws -> File {
+        guard let file = path.withCString({ pathPointer in mode.withCString({ fopen(pathPointer, $0) }) }) else {
             throw FileError.OpenFailed(Errno.description())
         }
         return File(file)
     }
     
-    public static func isDirectory(path: String) throws -> Bool {
+    public static func isDirectory(_ path: String) throws -> Bool {
         var s = stat()
         guard path.withCString({ stat($0, &s) }) == 0 else {
             throw FileError.IsDirectoryFailed(Errno.description())
@@ -52,37 +51,32 @@ public class File {
     }
     
     public static func currentWorkingDirectory() throws -> String {
-        let path = getcwd(nil, 0)
-        if path == nil {
+        guard let path = getcwd(nil, 0) else {
             throw FileError.GetCurrentWorkingDirectoryFailed(Errno.description())
         }
-        guard let result = String.fromCString(path) else {
-            throw FileError.GetCurrentWorkingDirectoryFailed("Could not convert getcwd(...)'s result to String.")
-        }
-        return result
+        return String(cString: path)
     }
     
-    public static func exists(path: String) throws -> Bool {
+    public static func exists(_ path: String) throws -> Bool {
         var buffer = stat()
         return path.withCString({ stat($0, &buffer) == 0 })
     }
     
-    public static func list(path: String) throws -> [String] {
-        let dir = path.withCString { opendir($0) }
-        if dir == nil {
+    public static func list(_ path: String) throws -> [String] {
+        guard let dir = path.withCString({ opendir($0) }) else {
             throw FileError.OpenDirFailed(Errno.description())
         }
         defer { closedir(dir) }
         var results = [String]()
-        while case let ent = readdir(dir) where ent != nil {
-            var name = ent.memory.d_name
-            let fileName = withUnsafePointer(&name) { (ptr) -> String? in
+        while let ent = readdir(dir) {
+            var name = ent.pointee.d_name
+            let fileName = withUnsafePointer(to: &name) { (ptr) -> String? in
                 #if os(Linux)
-                    return String.fromCString([CChar](UnsafeBufferPointer<CChar>(start: UnsafePointer(unsafeBitCast(ptr, UnsafePointer<CChar>.self)), count: Int(NAME_MAX))))
+                    return String.fromCString([CChar](UnsafeBufferPointer<CChar>(start: UnsafePointer(unsafeBitCast(ptr, UnsafePointer<CChar>.self)), count: 256)))
                 #else
-                    var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, UnsafePointer<CChar>.self), count: Int(ent.memory.d_namlen)))
+                    var buffer = [CChar](UnsafeBufferPointer(start: unsafeBitCast(ptr, to: UnsafePointer<CChar>.self), count: Int(ent.pointee.d_namlen)))
                     buffer.append(0)
-                    return String.fromCString(buffer)
+                    return String(validatingUTF8: buffer)
                 #endif
             }
             if let fileName = fileName {
@@ -102,7 +96,7 @@ public class File {
         fclose(pointer)
     }
     
-    public func read(inout data: [UInt8]) throws -> Int {
+    public func read( data: inout [UInt8]) throws -> Int {
         if data.count <= 0 {
             return data.count
         }
@@ -138,19 +132,19 @@ public class File {
 
 }
 
-public func withNewFileOpenedForWriting<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+public func withNewFileOpenedForWriting<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
     return try withFileOpenedForMode(path, mode: "wb", f)
 }
 
-public func withFileOpenedForReading<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+public func withFileOpenedForReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
     return try withFileOpenedForMode(path, mode: "rb", f)
 }
 
-public func withFileOpenedForWritingAndReading<Result>(path: String, _ f: File throws -> Result) throws -> Result {
+public func withFileOpenedForWritingAndReading<Result>(_ path: String, _ f: (File) throws -> Result) throws -> Result {
     return try withFileOpenedForMode(path, mode: "r+b", f)
 }
 
-public func withFileOpenedForMode<Result>(path: String, mode: String, _ f: File throws -> Result) throws -> Result {
+public func withFileOpenedForMode<Result>(_ path: String, mode: String, _ f: (File) throws -> Result) throws -> Result {
     let file = try File.openFileForMode(path, mode)
     defer {
         file.close()

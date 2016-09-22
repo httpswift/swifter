@@ -11,16 +11,17 @@
     import Foundation
 #endif
 
-public enum SerializationError: ErrorType {
-    case InvalidObject
-    case NotSupported
+public enum SerializationError: Error {
+    case invalidObject
+    case notSupported
 }
 
 public protocol HttpResponseBodyWriter {
-    func write(file: File) throws
-    func write(data: [UInt8]) throws
-    func write(data: ArraySlice<UInt8>) throws
-    func write(data: NSData) throws
+    func write(_ file: File) throws
+    func write(_ data: [UInt8]) throws
+    func write(_ data: ArraySlice<UInt8>) throws
+    func write(_ data: NSData) throws
+    func write(_ data: Data) throws
 }
 
 public enum HttpResponseBody {
@@ -30,7 +31,7 @@ public enum HttpResponseBody {
     case Text(String)
     case Custom(Any, (Any) throws -> String)
     
-    func content() -> (Int, (HttpResponseBodyWriter throws -> Void)?) {
+    func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
         do {
             switch self {
             case .Json(let object):
@@ -40,11 +41,10 @@ public enum HttpResponseBody {
                         try $0.write(data)
                     })
                 #else
-                    guard NSJSONSerialization.isValidJSONObject(object) else {
-                        throw SerializationError.InvalidObject
+                    guard JSONSerialization.isValidJSONObject(object) else {
+                        throw SerializationError.invalidObject
                     }
-                    let json = try NSJSONSerialization.dataWithJSONObject(object, options: NSJSONWritingOptions.PrettyPrinted)
-                    let data = Array(UnsafeBufferPointer(start: UnsafePointer<UInt8>(json.bytes), count: json.length))
+                    let data = try JSONSerialization.data(withJSONObject: object)
                     return (data.count, {
                         try $0.write(data)
                     })
@@ -78,12 +78,12 @@ public enum HttpResponseBody {
 
 public enum HttpResponse {
     
-    case SwitchProtocols([String: String], Socket -> Void)
+    case SwitchProtocols([String: String], (Socket) -> Void)
     case OK(HttpResponseBody), Created, Accepted
     case MovedPermanently(String)
     case BadRequest(HttpResponseBody?), Unauthorized, Forbidden, NotFound
     case InternalServerError
-    case RAW(Int, String, [String:String]?, (HttpResponseBodyWriter throws -> Void)? )
+    case RAW(Int, String, [String:String]?, ((HttpResponseBodyWriter) throws -> Void)? )
 
     func statusCode() -> Int {
         switch self {
@@ -143,7 +143,7 @@ public enum HttpResponse {
         return headers
     }
     
-    func content() -> (length: Int, write: (HttpResponseBodyWriter throws -> Void)?) {
+    func content() -> (length: Int, write: ((HttpResponseBodyWriter) throws -> Void)?) {
         switch self {
         case .OK(let body)             : return body.content()
         case .BadRequest(let body)     : return body?.content() ?? (-1, nil)
@@ -152,9 +152,9 @@ public enum HttpResponse {
         }
     }
     
-    func socketSession() -> (Socket -> Void)?  {
+    func socketSession() -> ((Socket) -> Void)?  {
         switch self {
-        case SwitchProtocols(_, let handler) : return handler
+        case .SwitchProtocols(_, let handler) : return handler
         default: return nil
         }
     }
