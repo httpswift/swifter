@@ -6,6 +6,7 @@
 //
 
 import XCTest
+import Swifter
 
 class SwifterTestsHttpParser: XCTestCase {
     

@@ -15,7 +15,7 @@ public class HttpServerIO {
     
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
-    private var stateValue: Int32 = HttpServerIOState.Stopped.rawValue
+    private var stateValue: Int32 = HttpServerIOState.stopped.rawValue
     public private(set) var state: HttpServerIOState {
         get {
             return HttpServerIOState(rawValue: stateValue)!
@@ -24,7 +24,7 @@ public class HttpServerIO {
             OSAtomicCompareAndSwapInt(self.state.rawValue, state.rawValue, &stateValue)
         }
     }
-    public var operating: Bool { get { return self.state == .Running } }
+    public var operating: Bool { get { return self.state == .running } }
     private let queue = DispatchQueue(label: "swifter.httpserverio.clientsockets")
     
     public func port() throws -> Int {
@@ -43,7 +43,7 @@ public class HttpServerIO {
     public func start(_ port: in_port_t = 8080, forceIPv4: Bool = false, priority: DispatchQoS.QoSClass = DispatchQoS.QoSClass.background) throws {
         guard !self.operating else { return }
         stop()
-        self.state = .Starting
+        self.state = .starting
         self.socket = try Socket.tcpSocketForListen(port, forceIPv4)
         DispatchQueue.global(qos: priority).async { [weak self] in
             guard let `self` = self else { return }
@@ -63,12 +63,12 @@ public class HttpServerIO {
             }
             self.stop()
         }
-        self.state = .Running
+        self.state = .running
     }
     
     public func stop() {
         guard self.operating else { return }
-        self.state = .Stopping
+        self.state = .stopping
         // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
         for socket in self.sockets {
             socket.shutdwn()
@@ -77,11 +77,11 @@ public class HttpServerIO {
             self.sockets.removeAll(keepingCapacity: true)
         }
         socket.release()
-        self.state = .Stopped
+        self.state = .stopped
     }
     
     public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
-        return ([:], { _ in HttpResponse.NotFound })
+        return ([:], { _ in HttpResponse.notFound })
     }
     
     private func handleConnection(_ socket: Socket) {
@@ -166,10 +166,10 @@ public class HttpServerIO {
 }
 
 public enum HttpServerIOState: Int32 {
-    case Starting
-    case Running
-    case Stopping
-    case Stopped
+    case starting
+    case running
+    case stopping
+    case stopped
 }
 
 #if os(Linux)

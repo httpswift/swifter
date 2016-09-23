@@ -14,25 +14,25 @@ extension HttpServer {
     class func pingServer() -> HttpServer {
         let server = HttpServer()
         server.GET["/ping"] = { request in
-            return HttpResponse.OK(.Text("pong!"))
+            return HttpResponse.ok(.text("pong!"))
         }
         return server
     }
 }
 
-let defaultLocalhost = NSURL(string:"http://localhost:8080")!
+let defaultLocalhost = URL(string:"http://localhost:8080")!
 
 // Client
 extension URLSession {
     func pingTask(
-        hostURL: NSURL = defaultLocalhost,
+        hostURL: URL = defaultLocalhost,
         completionHandler handler: @escaping (Data?, URLResponse?, Error?) -> Void
     ) -> URLSessionDataTask {
-        return self.dataTask(with: hostURL.appendingPathComponent("/ping")!, completionHandler: handler)
+        return self.dataTask(with: hostURL.appendingPathComponent("/ping"), completionHandler: handler)
     }
     
     func retryPing(
-        hostURL: NSURL = defaultLocalhost,
+        hostURL: URL = defaultLocalhost,
         timeout: Double = 2.0
     ) -> Bool {
         let semaphore = DispatchSemaphore(value: 0)
@@ -52,7 +52,7 @@ extension URLSession {
         return timedOut
     }
     
-    func signalIfPongReceived(_ semaphore: DispatchSemaphore, hostURL: NSURL) {
+    func signalIfPongReceived(_ semaphore: DispatchSemaphore, hostURL: URL) {
         pingTask(hostURL: hostURL) { data, response, error in
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 semaphore.signal()

@@ -10,7 +10,7 @@ import Swifter
 do {
     let server = demoServer(try File.currentWorkingDirectory())
     server["/testAfterBaseRoute"] = { request in
-        return .OK(.Html("ok !"))
+        return .ok(.html("ok !"))
     }
     
     if #available(OSXApplicationExtension 10.10, *) {

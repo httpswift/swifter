@@ -11,7 +11,10 @@
     import Foundation
 #endif
 
-public class HttpRouter {
+open class HttpRouter {
+    
+    public init() {
+    }
     
     private class Node {
         var nodes = [String: Node]()
