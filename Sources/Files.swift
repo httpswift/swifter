@@ -14,13 +14,13 @@
 public func shareFilesFromDirectory(_ directoryPath: String) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let fileRelativePath = r.params.first else {
-            return .NotFound
+            return .notFound
         }
         let absolutePath = directoryPath + "/" + fileRelativePath.1
         guard let file = try? File.openForReading(absolutePath) else {
-            return .NotFound
+            return .notFound
         }
-        return .RAW(200, "OK", [:], { writer in
+        return .raw(200, "OK", [:], { writer in
             defer { file.close() }
             try writer.write(file)
         })
@@ -30,12 +30,12 @@ public func shareFilesFromDirectory(_ directoryPath: String) -> ((HttpRequest) -
 public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let (_, value) = r.params.first else {
-            return HttpResponse.NotFound
+            return HttpResponse.notFound
         }
         let filePath = dir + "/" + value
         do {
             guard try File.exists(filePath) else {
-                return HttpResponse.NotFound
+                return HttpResponse.notFound
             }
             if try File.isDirectory(filePath) {
                 let files = try File.list(filePath)
@@ -57,15 +57,15 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
                 }(r)
             } else {
                 guard let file = try? File.openForReading(filePath) else {
-                    return .NotFound
+                    return .notFound
                 }
-                return .RAW(200, "OK", [:], { writer in
+                return .raw(200, "OK", [:], { writer in
                     defer { file.close() }
                     try writer.write(file)
                 })
             }
         } catch {
-            return HttpResponse.InternalServerError
+            return HttpResponse.internalServerError
         }
     }
 }

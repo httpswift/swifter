@@ -26,15 +26,15 @@ public protocol HttpResponseBodyWriter {
 
 public enum HttpResponseBody {
     
-    case Json(AnyObject)
-    case Html(String)
-    case Text(String)
-    case Custom(Any, (Any) throws -> String)
+    case json(AnyObject)
+    case html(String)
+    case text(String)
+    case custom(Any, (Any) throws -> String)
     
     func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
         do {
             switch self {
-            case .Json(let object):
+            case .json(let object):
                 #if os(Linux)
                     let data = [UInt8]("Not ready for Linux.".utf8)
                     return (data.count, {
@@ -49,18 +49,18 @@ public enum HttpResponseBody {
                         try $0.write(data)
                     })
                 #endif
-            case .Text(let body):
+            case .text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {
                     try $0.write(data)
                 })
-            case .Html(let body):
+            case .html(let body):
                 let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
                     try $0.write(data)
                 })
-            case .Custom(let object, let closure):
+            case .custom(let object, let closure):
                 let serialised = try closure(object)
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
@@ -78,61 +78,61 @@ public enum HttpResponseBody {
 
 public enum HttpResponse {
     
-    case SwitchProtocols([String: String], (Socket) -> Void)
-    case OK(HttpResponseBody), Created, Accepted
-    case MovedPermanently(String)
-    case BadRequest(HttpResponseBody?), Unauthorized, Forbidden, NotFound
-    case InternalServerError
-    case RAW(Int, String, [String:String]?, ((HttpResponseBodyWriter) throws -> Void)? )
+    case switchProtocols([String: String], (Socket) -> Void)
+    case ok(HttpResponseBody), created, accepted
+    case movedPermanently(String)
+    case badRequest(HttpResponseBody?), unauthorized, forbidden, notFound
+    case internalServerError
+    case raw(Int, String, [String:String]?, ((HttpResponseBodyWriter) throws -> Void)? )
 
     func statusCode() -> Int {
         switch self {
-        case .SwitchProtocols(_, _)   : return 101
-        case .OK(_)                   : return 200
-        case .Created                 : return 201
-        case .Accepted                : return 202
-        case .MovedPermanently        : return 301
-        case .BadRequest(_)           : return 400
-        case .Unauthorized            : return 401
-        case .Forbidden               : return 403
-        case .NotFound                : return 404
-        case .InternalServerError     : return 500
-        case .RAW(let code, _ , _, _) : return code
+        case .switchProtocols(_, _)   : return 101
+        case .ok(_)                   : return 200
+        case .created                 : return 201
+        case .accepted                : return 202
+        case .movedPermanently        : return 301
+        case .badRequest(_)           : return 400
+        case .unauthorized            : return 401
+        case .forbidden               : return 403
+        case .notFound                : return 404
+        case .internalServerError     : return 500
+        case .raw(let code, _ , _, _) : return code
         }
     }
     
     func reasonPhrase() -> String {
         switch self {
-        case .SwitchProtocols(_, _)    : return "Switching Protocols"
-        case .OK(_)                    : return "OK"
-        case .Created                  : return "Created"
-        case .Accepted                 : return "Accepted"
-        case .MovedPermanently         : return "Moved Permanently"
-        case .BadRequest(_)            : return "Bad Request"
-        case .Unauthorized             : return "Unauthorized"
-        case .Forbidden                : return "Forbidden"
-        case .NotFound                 : return "Not Found"
-        case .InternalServerError      : return "Internal Server Error"
-        case .RAW(_, let phrase, _, _) : return phrase
+        case .switchProtocols(_, _)    : return "Switching Protocols"
+        case .ok(_)                    : return "OK"
+        case .created                  : return "Created"
+        case .accepted                 : return "Accepted"
+        case .movedPermanently         : return "Moved Permanently"
+        case .badRequest(_)            : return "Bad Request"
+        case .unauthorized             : return "Unauthorized"
+        case .forbidden                : return "Forbidden"
+        case .notFound                 : return "Not Found"
+        case .internalServerError      : return "Internal Server Error"
+        case .raw(_, let phrase, _, _) : return phrase
         }
     }
     
     func headers() -> [String: String] {
         var headers = ["Server" : "Swifter \(HttpServer.VERSION)"]
         switch self {
-        case .SwitchProtocols(let switchHeaders, _):
+        case .switchProtocols(let switchHeaders, _):
             for (key, value) in switchHeaders {
                 headers[key] = value
             }
-        case .OK(let body):
+        case .ok(let body):
             switch body {
-            case .Json(_)   : headers["Content-Type"] = "application/json"
-            case .Html(_)   : headers["Content-Type"] = "text/html"
+            case .json(_)   : headers["Content-Type"] = "application/json"
+            case .html(_)   : headers["Content-Type"] = "text/html"
             default:break
             }
-        case .MovedPermanently(let location):
+        case .movedPermanently(let location):
             headers["Location"] = location
-        case .RAW(_, _, let rawHeaders, _):
+        case .raw(_, _, let rawHeaders, _):
             if let rawHeaders = rawHeaders {
                 for (k, v) in rawHeaders {
                     headers.updateValue(v, forKey: k)
@@ -145,16 +145,16 @@ public enum HttpResponse {
     
     func content() -> (length: Int, write: ((HttpResponseBodyWriter) throws -> Void)?) {
         switch self {
-        case .OK(let body)             : return body.content()
-        case .BadRequest(let body)     : return body?.content() ?? (-1, nil)
-        case .RAW(_, _, _, let writer) : return (-1, writer)
+        case .ok(let body)             : return body.content()
+        case .badRequest(let body)     : return body?.content() ?? (-1, nil)
+        case .raw(_, _, _, let writer) : return (-1, writer)
         default                        : return (-1, nil)
         }
     }
     
     func socketSession() -> ((Socket) -> Void)?  {
         switch self {
-        case .SwitchProtocols(_, let handler) : return handler
+        case .switchProtocols(_, let handler) : return handler
         default: return nil
         }
     }

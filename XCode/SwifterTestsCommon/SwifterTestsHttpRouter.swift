@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Swifter
 
 class SwifterTestsHttpRouter: XCTestCase {
     
@@ -15,7 +16,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssertNotNil(router.route(nil, path: "/"))
@@ -26,7 +27,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/b/c/d", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssertNil(router.route(nil, path: "/"))
@@ -41,7 +42,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/*/c/d", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssertNil(router.route(nil, path: "/"))
@@ -57,7 +58,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/:arg1/:arg2/b/c/d/:arg3", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssertNil(router.route(nil, path: "/"))
@@ -73,7 +74,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/**/e/f/g", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         XCTAssertNil(router.route(nil, path: "/"))
@@ -87,11 +88,11 @@ class SwifterTestsHttpRouter: XCTestCase {
         let router = HttpRouter()
         
         router.register(nil, path: "/a/b/", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         router.register(nil, path: "/a/b/:var", handler: { r in
-            return .OK(.Html("OK"))
+            return .ok(.html("OK"))
         })
         
         

@@ -27,7 +27,7 @@ public enum SocketError: Error {
     case getSockNameFailed(String)
 }
 
-public class Socket: Hashable, Equatable {
+open class Socket: Hashable, Equatable {
         
     let socketFileDescriptor: Int32
     private var shutdown = false
@@ -124,7 +124,7 @@ public class Socket: Hashable, Equatable {
         }
     }
     
-    public func read() throws -> UInt8 {
+    open func read() throws -> UInt8 {
         var buffer = [UInt8](repeating: 0, count: 1)
         let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), 0)
         if next <= 0 {
