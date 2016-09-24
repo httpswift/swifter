@@ -38,7 +38,7 @@
 
 extension Socket {
     
-    public func writeFile(_ file: File) throws -> Void {
+    public func writeFile(_ file: String.File) throws -> Void {
         var offset: off_t = 0
         var sf: sf_hdtr = sf_hdtr()
         let result = sendfileImpl(fileno(file.pointer), self.socketFileDescriptor, 0, &offset, &sf

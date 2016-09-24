@@ -11,19 +11,29 @@
     import Foundation
 #endif
 
-public func shareFilesFromDirectory(_ directoryPath: String) -> ((HttpRequest) -> HttpResponse) {
+
+public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] = ["index.html", "default.html"]) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let fileRelativePath = r.params.first else {
             return .notFound
         }
-        let absolutePath = directoryPath + "/" + fileRelativePath.1
-        guard let file = try? File.openForReading(absolutePath) else {
-            return .notFound
+        if fileRelativePath.value.isEmpty {
+            for path in defaults {
+                if let file = try? (directoryPath + String.pathSeparator + path).openForReading() {
+                    return .raw(200, "OK", [:], { writer in
+                        try? writer.write(file)
+                        file.close()
+                    })
+                }
+            }
         }
-        return .raw(200, "OK", [:], { writer in
-            defer { file.close() }
-            try writer.write(file)
-        })
+        if let file = try? (directoryPath + String.pathSeparator + fileRelativePath.value).openForReading() {
+            return .raw(200, "OK", [:], { writer in
+                try? writer.write(file)
+                file.close()
+            })
+        }
+        return .notFound
     }
 }
 
@@ -32,13 +42,13 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
         guard let (_, value) = r.params.first else {
             return HttpResponse.notFound
         }
-        let filePath = dir + "/" + value
+        let filePath = dir + String.pathSeparator + value
         do {
-            guard try File.exists(filePath) else {
-                return HttpResponse.notFound
+            guard try filePath.exists() else {
+                return .notFound
             }
-            if try File.isDirectory(filePath) {
-                let files = try File.list(filePath)
+            if try filePath.directory() {
+                let files = try filePath.files()
                 return scopes {
                     html {
                         body {
@@ -54,14 +64,14 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
                             }
                         }
                     }
-                }(r)
+                    }(r)
             } else {
-                guard let file = try? File.openForReading(filePath) else {
+                guard let file = try? filePath.openForReading() else {
                     return .notFound
                 }
                 return .raw(200, "OK", [:], { writer in
-                    defer { file.close() }
-                    try writer.write(file)
+                    try? writer.write(file)
+                    file.close()
                 })
             }
         } catch {

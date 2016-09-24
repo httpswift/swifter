@@ -8,7 +8,7 @@ import Foundation
 import Swifter
 
 do {
-    let server = demoServer(try File.currentWorkingDirectory())
+    let server = demoServer(try String.File.currentWorkingDirectory())
     server["/testAfterBaseRoute"] = { request in
         return .ok(.html("ok !"))
     }
