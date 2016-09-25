@@ -5,11 +5,7 @@
 //  Copyright © 2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
 public class Errno {
     

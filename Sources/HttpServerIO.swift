@@ -5,26 +5,39 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
+import Dispatch
 
 public class HttpServerIO {
     
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
+
+    public enum HttpServerIOState: Int32 {
+        case starting
+        case running
+        case stopping
+        case stopped
+    }
+    
     private var stateValue: Int32 = HttpServerIOState.stopped.rawValue
+    
     public private(set) var state: HttpServerIOState {
         get {
             return HttpServerIOState(rawValue: stateValue)!
         }
         set(state) {
+            #if !os(Linux)
             OSAtomicCompareAndSwapInt(self.state.rawValue, state.rawValue, &stateValue)
+            #else
+            //TODO - hehe :)
+            self.stateValue = state.rawValue
+            #endif
         }
     }
+    
     public var operating: Bool { get { return self.state == .running } }
+    
     private let queue = DispatchQueue(label: "swifter.httpserverio.clientsockets")
     
     public func port() throws -> Int {
@@ -164,38 +177,3 @@ public class HttpServerIO {
         return keepAlive && content.length != -1;
     }
 }
-
-public enum HttpServerIOState: Int32 {
-    case starting
-    case running
-    case stopping
-    case stopped
-}
-
-#if os(Linux)
-    
-let DISPATCH_QUEUE_PRIORITY_BACKGROUND = 0
-
-private class dispatch_context {
-    let block: ((Void) -> Void)
-    init(_ block: ((Void) -> Void)) {
-        self.block = block
-    }
-}
-
-func dispatch_get_global_queue(queueId: Int, _ arg: Int) -> Int { return 0 }
-
-func dispatch_async(queueId: Int, _ block: ((Void) -> Void)) {
-    let unmanagedDispatchContext = Unmanaged.passRetained(dispatch_context(block))
-    let context = UnsafeMutablePointer<Void>(unmanagedDispatchContext.toOpaque())
-    var pthread: pthread_t = 0
-    pthread_create(&pthread, nil, { (context: UnsafeMutablePointer<Void>) -> UnsafeMutablePointer<Void> in
-        let unmanaged = Unmanaged<dispatch_context>.fromOpaque(COpaquePointer(context))
-        unmanaged.takeUnretainedValue().block()
-        unmanaged.release()
-        return context
-    }, context)
-}
-    
-#endif
-

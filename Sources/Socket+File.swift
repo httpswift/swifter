@@ -5,13 +5,10 @@
 //  Created by Damian Kolakowski on 13/07/16.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
-#if os(iOS) || os (Linux)
+#if os(iOS) || os(Linux)
+    
     struct sf_hdtr { }
     
     private func sendfileImpl(_ source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>, _: UnsafeMutablePointer<sf_hdtr>, _: Int32) -> Int32 {
@@ -33,7 +30,6 @@
     }
 #else
     private let sendfileImpl = sendfile
-
 #endif
 
 extension Socket {

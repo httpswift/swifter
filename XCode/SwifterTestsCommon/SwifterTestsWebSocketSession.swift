@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsWebSocketSession: XCTestCase {
     
@@ -82,7 +81,7 @@ class SwifterTestsWebSocketSession: XCTestCase {
         }
         
         do {
-            let session = WebSocketSession(TestSocket([0b0000_1000, 0b1000_0000, 0, 0, 0, 0]))
+            let session = WebSocketSession(TestSocket([0b1000_1000, 0b1000_0000, 0, 0, 0, 0]))
             let frame = try session.readFrame()
             XCTAssertEqual(frame.opcode, WebSocketSession.OpCode.close, "Parser should accept Close opcode.")
         } catch let e {
@@ -90,7 +89,7 @@ class SwifterTestsWebSocketSession: XCTestCase {
         }
         
         do {
-            let session = WebSocketSession(TestSocket([0b0000_1001, 0b1000_0000, 0, 0, 0, 0]))
+            let session = WebSocketSession(TestSocket([0b1000_1001, 0b1000_0000, 0, 0, 0, 0]))
             let frame = try session.readFrame()
             XCTAssertEqual(frame.opcode, WebSocketSession.OpCode.ping, "Parser should accept Ping opcode.")
         } catch let e {
@@ -98,7 +97,7 @@ class SwifterTestsWebSocketSession: XCTestCase {
         }
         
         do {
-            let session = WebSocketSession(TestSocket([0b0000_1010, 0b1000_0000, 0, 0, 0, 0]))
+            let session = WebSocketSession(TestSocket([0b1000_1010, 0b1000_0000, 0, 0, 0, 0]))
             let frame = try session.readFrame()
             XCTAssertEqual(frame.opcode, WebSocketSession.OpCode.pong, "Parser should accept Pong opcode.")
         } catch let e {

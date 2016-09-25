@@ -5,11 +5,7 @@
 //  Copyright © 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
 public func scopes(_ scope: @escaping Closure) -> ((HttpRequest) -> HttpResponse) {
     return { r in

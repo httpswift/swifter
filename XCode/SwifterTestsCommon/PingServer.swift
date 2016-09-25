@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Swifter
 
 // Server
 extension HttpServer {

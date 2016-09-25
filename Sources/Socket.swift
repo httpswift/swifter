@@ -5,13 +5,8 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
-/* Low level routines for POSIX sockets */
 
 public enum SocketError: Error {
     case socketCreationFailed(String)
@@ -171,7 +166,7 @@ open class Socket: Hashable, Equatable {
     
     public class func shutdwn(_ socket: Int32) {
         #if os(Linux)
-            shutdown(socket, Int32(SHUT_RDWR))
+            let _ = Glibc.shutdown(socket, Int32(SHUT_RDWR))
         #else
             let _ = Darwin.shutdown(socket, SHUT_RDWR)
         #endif
@@ -179,8 +174,8 @@ open class Socket: Hashable, Equatable {
     
     public class func release(_ socket: Int32) {
         #if os(Linux)
-            shutdown(socket, Int32(SHUT_RDWR))
-            close(socket)
+            let _ = Glibc.shutdown(socket, Int32(SHUT_RDWR))
+            let _ = Glibc.close(socket)
         #else
             if Darwin.shutdown(socket, SHUT_RDWR) != -1 {
                 // If you close socket which was already closed it produces exception visible in TestFlight's crash log.

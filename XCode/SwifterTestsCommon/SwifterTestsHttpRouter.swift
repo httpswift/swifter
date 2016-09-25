@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsHttpRouter: XCTestCase {
     
