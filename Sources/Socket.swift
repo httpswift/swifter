@@ -25,7 +25,7 @@ public enum SocketError: Error {
 open class Socket: Hashable, Equatable {
         
     let socketFileDescriptor: Int32
-    private var shutdown = false
+    private var released = false
 
     
     public init(socketFileDescriptor: Int32) {
@@ -39,18 +39,17 @@ open class Socket: Hashable, Equatable {
     public var hashValue: Int { return Int(self.socketFileDescriptor) }
     
     public func release() {
-        if shutdown {
+        if released {
             return
         }
-        shutdown = true
+        released = true
         Socket.release(self.socketFileDescriptor)
     }
     
     public func shutdwn() {
-        if shutdown {
+        if released {
             return
         }
-        shutdown = true
         Socket.shutdwn(self.socketFileDescriptor)
     }
     
