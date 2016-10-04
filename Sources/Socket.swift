@@ -33,25 +33,17 @@ open class Socket: Hashable, Equatable {
     }
     
     deinit {
-        shutdwn()
+        close()
     }
     
     public var hashValue: Int { return Int(self.socketFileDescriptor) }
     
-    public func release() {
+    public func close() {
         if shutdown {
             return
         }
         shutdown = true
-        Socket.release(self.socketFileDescriptor)
-    }
-    
-    public func shutdwn() {
-        if shutdown {
-            return
-        }
-        shutdown = true
-        Socket.shutdwn(self.socketFileDescriptor)
+        Socket.close(self.socketFileDescriptor)
     }
     
     public func port() throws -> in_port_t {
@@ -164,24 +156,11 @@ open class Socket: Hashable, Equatable {
         #endif
     }
     
-    public class func shutdwn(_ socket: Int32) {
+    public class func close(_ socket: Int32) {
         #if os(Linux)
-            let _ = Glibc.shutdown(socket, Int32(SHUT_RDWR))
-        #else
-            let _ = Darwin.shutdown(socket, SHUT_RDWR)
-        #endif
-    }
-    
-    public class func release(_ socket: Int32) {
-        #if os(Linux)
-            let _ = Glibc.shutdown(socket, Int32(SHUT_RDWR))
             let _ = Glibc.close(socket)
         #else
-            if Darwin.shutdown(socket, SHUT_RDWR) != -1 {
-                // If you close socket which was already closed it produces exception visible in TestFlight's crash log.
-                // This is easily can be fixed by checking result on shutdown function != -1.
-                close(socket)
-            }
+            let _ = Darwin.close(socket)
         #endif
     }
 }

@@ -310,6 +310,7 @@
 				7C76B6E91D2C44F30030FC98 /* Sources */,
 				7CA4815619A2EF2B0030B30D /* Resources */,
 				7CCD876C1C660B250068099B /* SwifterTestsCommon */,
+				7CCD875D1C66099B0068099B /* SwifteriOSTests */,
 				7CCD877A1C660EA30068099B /* SwifterOSXTests */,
 				7C839B6F19422CFF003A6950 /* Products */,
 				7AE893FC1C0512C400A29F63 /* SwifterMac */,
@@ -355,8 +356,7 @@
 			children = (
 				7CCD87601C66099B0068099B /* Info.plist */,
 			);
-			name = SwifteriOSTests;
-			path = ../SwifteriOSTests;
+			path = SwifteriOSTests;
 			sourceTree = "<group>";
 		};
 		7CCD876C1C660B250068099B /* SwifterTestsCommon */ = {
@@ -368,7 +368,6 @@
 				7CCD876E1C660B250068099B /* SwifterTestsStringExtensions.swift */,
 				7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */,
 				0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */,
-				7CCD875D1C66099B0068099B /* SwifteriOSTests */,
 			);
 			path = SwifterTestsCommon;
 			sourceTree = "<group>";

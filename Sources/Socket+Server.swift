@@ -24,7 +24,7 @@ extension Socket {
         var value: Int32 = 1
         if setsockopt(socketFileDescriptor, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(MemoryLayout<Int32>.size)) == -1 {
             let details = Errno.description()
-            Socket.release(socketFileDescriptor)
+            Socket.close(socketFileDescriptor)
             throw SocketError.socketSettingReUseAddrFailed(details)
         }
         Socket.setNoSigPipe(socketFileDescriptor)
@@ -73,13 +73,13 @@ extension Socket {
         
         if bindResult == -1 {
             let details = Errno.description()
-            Socket.release(socketFileDescriptor)
+            Socket.close(socketFileDescriptor)
             throw SocketError.bindFailed(details)
         }
         
         if listen(socketFileDescriptor, maxPendingConnection) == -1 {
             let details = Errno.description()
-            Socket.release(socketFileDescriptor)
+            Socket.close(socketFileDescriptor)
             throw SocketError.listenFailed(details)
         }
         return Socket(socketFileDescriptor: socketFileDescriptor)

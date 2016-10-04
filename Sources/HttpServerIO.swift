@@ -84,12 +84,12 @@ public class HttpServerIO {
         self.state = .stopping
         // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
         for socket in self.sockets {
-            socket.shutdwn()
+            socket.close()
         }
         self.queue.sync {
             self.sockets.removeAll(keepingCapacity: true)
         }
-        socket.release()
+        socket.close()
         self.state = .stopped
     }
     
@@ -120,7 +120,7 @@ public class HttpServerIO {
             }
             if !keepConnection { break }
         }
-        socket.release()
+        socket.close()
     }
     
     private struct InnerWriteContext: HttpResponseBodyWriter {

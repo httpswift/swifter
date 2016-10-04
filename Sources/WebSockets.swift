@@ -65,7 +65,7 @@ public func websocket(
                 case .continue:
                     // There is no message to continue, failed immediatelly.
                     if fragmentedOpCode == .close {
-                        socket.shutdwn()
+                        socket.close()
                     }
                     frame.opcode = fragmentedOpCode
                     if frame.fin {
@@ -148,7 +148,7 @@ public class WebSocketSession: Hashable, Equatable  {
     
     deinit {
         writeCloseFrame()
-        socket.shutdwn()
+        socket.close()
     }
     
     public func writeText(_ text: String) -> Void {
