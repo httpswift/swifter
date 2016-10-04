@@ -9,7 +9,7 @@ import Foundation
 
 public class HttpServer: HttpServerIO {
     
-    public static let VERSION = "1.2.6"
+    public static let VERSION = "1.3.0"
     
     private let router = HttpRouter()
     
