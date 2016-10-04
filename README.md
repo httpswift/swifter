@@ -61,8 +61,20 @@ pod 'Swifter', '~> 1.3.1'
 ```
 
 ### Carthage? Also yes.
-
 ```
 # Use version >= 0.18 (https://github.com/Carthage/Carthage/releases/tag/0.18)
 github "glock45/swifter" == 1.3.1
 ```
+
+### Swift Package Manager.
+```
+import PackageDescription
+
+let package = Package(
+    name: "MyServer",
+    dependencies: [
+        .Package(url: "https://github.com/httpswift/swifter.git", majorVersion: 1)
+    ]
+)
+```
+
