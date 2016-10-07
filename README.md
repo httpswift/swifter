@@ -15,7 +15,7 @@ Tiny http server engine written in Swift ( https://developer.apple.com/swift/ ) 
 ### How to start?
 ```swift
 let server = HttpServer()
-server["/hello"] = { .OK(.Html("You asked for " + $0.url)) }
+server["/hello"] = { .ok(.html("You asked for \($0)"))  }
 server.start()
 ```
 ### How to share files?
@@ -28,7 +28,7 @@ server.start()
 ```swift
 let server = HttpServer()
 server["/redirect"] = { request in
-  return .MovedPermanently("http://www.google.com")
+  return .movedPermanently("http://www.google.com")
 }
 server.start()
 ```
