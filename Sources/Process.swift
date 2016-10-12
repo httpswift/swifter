@@ -5,19 +5,15 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
 public class Process {
     
-    public static var PID: Int {
+    public static var pid: Int {
         return Int(getpid())
     }
     
-    public static var TID: UInt64 {
+    public static var tid: UInt64 {
         #if os(Linux)
             return UInt64(pthread_self())
         #else
@@ -30,7 +26,7 @@ public class Process {
     private static var signalsWatchers = Array<(Int32) -> Void>()
     private static var signalsObserved = false
     
-    public static func watchSignals(callback: (Int32) -> Void) {
+    public static func watchSignals(_ callback: @escaping (Int32) -> Void) {
         if !signalsObserved {
             [SIGTERM, SIGHUP, SIGSTOP, SIGINT].forEach { item in
                 signal(item) {

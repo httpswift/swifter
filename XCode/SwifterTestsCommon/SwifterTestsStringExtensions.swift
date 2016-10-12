@@ -6,19 +6,18 @@
 //
 
 import XCTest
-import Swifter
 
 class SwifterTestsStringExtensions: XCTestCase {
     
     func testSHA1() {
-        XCTAssertEqual("".SHA1(), "da39a3ee5e6b4b0d3255bfef95601890afd80709")
-        XCTAssertEqual("test".SHA1(), "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3")
+        XCTAssertEqual("".sha1(), "da39a3ee5e6b4b0d3255bfef95601890afd80709")
+        XCTAssertEqual("test".sha1(), "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3")
         
         // Values copied from OpenSSL:
         // https://github.com/openssl/openssl/blob/master/test/sha1test.c
         
-        XCTAssertEqual("abc".SHA1(), "a9993e364706816aba3e25717850c26c9cd0d89d")
-        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".SHA1(),
+        XCTAssertEqual("abc".sha1(), "a9993e364706816aba3e25717850c26c9cd0d89d")
+        XCTAssertEqual("abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq".sha1(),
             "84983e441c3bd26ebaae4aa1f95129e5e54670f1")
         
         XCTAssertEqual(
@@ -34,7 +33,7 @@ class SwifterTestsStringExtensions: XCTestCase {
              "a9993e364706816aba3e25717850c26c9cd0d89d" +
              "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq" +
              "a9993e364706816aba3e25717850c26c9cd0d89d" +
-             "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq").SHA1(),
+             "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq").sha1(),
             "a377b0c42d685fdc396e29a9eda7101d900947ca")
     }
     
@@ -82,11 +81,11 @@ class SwifterTestsStringExtensions: XCTestCase {
     }
 
     func testMiscReplace() {
-        XCTAssertEqual("".replace("+", "-"), "")
-        XCTAssertEqual("test".replace("+", "-"), "test")
-        XCTAssertEqual("+++".replace("+", "-"), "---")
-        XCTAssertEqual("t&e&s&t12%3%".replace("&", "+").replace("%", "+"), "t+e+s+t12+3+")
-        XCTAssertEqual("test 1234 #$%^&*( test   ".replace(" ", "_"), "test_1234_#$%^&*(_test___")
+        XCTAssertEqual("".replace(old: "+", "-"), "")
+        XCTAssertEqual("test".replace(old: "+", "-"), "test")
+        XCTAssertEqual("+++".replace(old: "+", "-"), "---")
+        XCTAssertEqual("t&e&s&t12%3%".replace(old: "&", "+").replace(old: "%", "+"), "t+e+s+t12+3+")
+        XCTAssertEqual("test 1234 #$%^&*( test   ".replace(old: " ", "_"), "test_1234_#$%^&*(_test___")
     }
     
     func testMiscRemovePercentEncoding() {

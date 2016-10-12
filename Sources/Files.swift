@@ -5,40 +5,45 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
-public func shareFilesFromDirectory(directoryPath: String) -> (HttpRequest -> HttpResponse) {
+public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] = ["index.html", "default.html"]) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let fileRelativePath = r.params.first else {
-            return .NotFound
+            return .notFound
         }
-        let absolutePath = directoryPath + "/" + fileRelativePath.1
-        guard let file = try? File.openForReading(absolutePath) else {
-            return .NotFound
+        if fileRelativePath.value.isEmpty {
+            for path in defaults {
+                if let file = try? (directoryPath + String.pathSeparator + path).openForReading() {
+                    return .raw(200, "OK", [:], { writer in
+                        try? writer.write(file)
+                        file.close()
+                    })
+                }
+            }
         }
-        return .RAW(200, "OK", [:], { writer in
-            defer { file.close() }
-            try writer.write(file)
-        })
+        if let file = try? (directoryPath + String.pathSeparator + fileRelativePath.value).openForReading() {
+            return .raw(200, "OK", [:], { writer in
+                try? writer.write(file)
+                file.close()
+            })
+        }
+        return .notFound
     }
 }
 
-public func directoryBrowser(dir: String) -> (HttpRequest -> HttpResponse) {
+public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let (_, value) = r.params.first else {
-            return HttpResponse.NotFound
+            return HttpResponse.notFound
         }
-        let filePath = dir + "/" + value
+        let filePath = dir + String.pathSeparator + value
         do {
-            guard try File.exists(filePath) else {
-                return HttpResponse.NotFound
+            guard try filePath.exists() else {
+                return .notFound
             }
-            if try File.isDirectory(filePath) {
-                let files = try File.list(filePath)
+            if try filePath.directory() {
+                let files = try filePath.files()
                 return scopes {
                     html {
                         body {
@@ -54,18 +59,18 @@ public func directoryBrowser(dir: String) -> (HttpRequest -> HttpResponse) {
                             }
                         }
                     }
-                }(r)
+                    }(r)
             } else {
-                guard let file = try? File.openForReading(filePath) else {
-                    return .NotFound
+                guard let file = try? filePath.openForReading() else {
+                    return .notFound
                 }
-                return .RAW(200, "OK", [:], { writer in
-                    defer { file.close() }
-                    try writer.write(file)
+                return .raw(200, "OK", [:], { writer in
+                    try? writer.write(file)
+                    file.close()
                 })
             }
         } catch {
-            return HttpResponse.InternalServerError
+            return HttpResponse.internalServerError
         }
     }
 }

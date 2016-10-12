@@ -8,16 +8,20 @@ import Foundation
 import Swifter
 
 do {
-    let server = demoServer(try File.currentWorkingDirectory())
+    let server = demoServer(try String.File.currentWorkingDirectory())
     server["/testAfterBaseRoute"] = { request in
-        return .OK(.Html("ok !"))
+        return .ok(.html("ok !"))
     }
     
-    try server.start(9080, forceIPv4: true)
+    if #available(OSXApplicationExtension 10.10, *) {
+        try server.start(9080, forceIPv4: true)
+    } else {
+        // Fallback on earlier versions
+    }
     
     print("Server has started ( port = \(try server.port()) ). Try to connect now...")
     
-    NSRunLoop.mainRunLoop().run()
+    RunLoop.main.run()
     
 } catch {
     print("Server start error: \(error)")

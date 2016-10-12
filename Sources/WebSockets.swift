@@ -5,94 +5,91 @@
 //  Copyright © 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
+
 
 public func websocket(
-        text: ((WebSocketSession, String) -> Void)?,
-    _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> (HttpRequest -> HttpResponse) {
+      _ text: ((WebSocketSession, String) -> Void)?,
+    _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard r.hasTokenForHeader("upgrade", token: "websocket") else {
-            return .BadRequest(.Text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
+            return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
         }
         guard r.hasTokenForHeader("connection", token: "upgrade") else {
-            return .BadRequest(.Text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
+            return .badRequest(.text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
         }
         guard let secWebSocketKey = r.headers["sec-websocket-key"] else {
-            return .BadRequest(.Text("Invalid value of 'Sec-Websocket-Key' header: \(r.headers["sec-websocket-key"])"))
+            return .badRequest(.text("Invalid value of 'Sec-Websocket-Key' header: \(r.headers["sec-websocket-key"])"))
         }
-        let protocolSessionClosure: (Socket -> Void) = { socket in
+        let protocolSessionClosure: ((Socket) -> Void) = { socket in
             let session = WebSocketSession(socket)
-            var fragmentedOpCode = WebSocketSession.OpCode.Close
+            var fragmentedOpCode = WebSocketSession.OpCode.close
             var payload = [UInt8]() // Used for fragmented frames.
             
-            func handleTextPayload(frame: WebSocketSession.Frame) throws {
+            func handleTextPayload(_ frame: WebSocketSession.Frame) throws {
                 if let handleText = text {
                     if frame.fin {
                         if payload.count > 0 {
-                            throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
+                            throw WebSocketSession.WsError.protocolError("Continuing fragmented frame cannot have an operation code.")
                         }
                         var textFramePayload = frame.payload.map { Int8(bitPattern: $0) }
                         textFramePayload.append(0)
-                        if let text = String(UTF8String: textFramePayload) {
+                        if let text = String(validatingUTF8: textFramePayload) {
                             handleText(session, text)
                         } else {
-                            throw WebSocketSession.Error.InvalidUTF8("")
+                            throw WebSocketSession.WsError.invalidUTF8("")
                         }
                     } else {
-                        payload.appendContentsOf(frame.payload)
-                        fragmentedOpCode = .Text
+                        payload.append(contentsOf: frame.payload)
+                        fragmentedOpCode = .text
                     }
                 }
             }
             
-            func handleBinaryPayload(frame: WebSocketSession.Frame) throws {
+            func handleBinaryPayload(_ frame: WebSocketSession.Frame) throws {
                 if let handleBinary = binary {
                     if frame.fin {
                         if payload.count > 0 {
-                            throw WebSocketSession.Error.ProtocolError("Continuing fragmented frame cannot have an operation code.")
+                            throw WebSocketSession.WsError.protocolError("Continuing fragmented frame cannot have an operation code.")
                         }
                         handleBinary(session, frame.payload)
                     } else {
-                        payload.appendContentsOf(frame.payload)
-                        fragmentedOpCode = .Binary
+                        payload.append(contentsOf: frame.payload)
+                        fragmentedOpCode = .binary
                     }
                 }
             }
             
-            func handleOperationCode(frame: WebSocketSession.Frame) throws {
+            func handleOperationCode(_ frame: WebSocketSession.Frame) throws {
                 switch frame.opcode {
-                case .Continue:
+                case .continue:
                     // There is no message to continue, failed immediatelly.
-                    if fragmentedOpCode == .Close {
-                        socket.shutdwn()
+                    if fragmentedOpCode == .close {
+                        socket.close()
                     }
                     frame.opcode = fragmentedOpCode
                     if frame.fin {
-                        payload.appendContentsOf(frame.payload)
+                        payload.append(contentsOf: frame.payload)
                         frame.payload = payload
                         // Clean the buffer.
                         payload = []
                         // Reset the OpCode.
-                        fragmentedOpCode = WebSocketSession.OpCode.Close
+                        fragmentedOpCode = WebSocketSession.OpCode.close
                     }
                     try handleOperationCode(frame)
-                case .Text:
+                case .text:
                     try handleTextPayload(frame)
-                case .Binary:
+                case .binary:
                     try handleBinaryPayload(frame)
-                case .Close:
-                    throw WebSocketSession.Control.Close
-                case .Ping:
+                case .close:
+                    throw WebSocketSession.Control.close
+                case .ping:
                     if frame.payload.count > 125 {
-                        throw WebSocketSession.Error.ProtocolError("Payload gretter than 125 octets.")
+                        throw WebSocketSession.WsError.protocolError("Payload gretter than 125 octets.")
                     } else {
-                        session.writeFrame(ArraySlice(frame.payload), .Pong)
+                        session.writeFrame(ArraySlice(frame.payload), .pong)
                     }
-                case .Pong:
+                case .pong:
                     break
                 }
             }
@@ -104,16 +101,16 @@ public func websocket(
                 }
             } catch let error {
                 switch error {
-                case WebSocketSession.Control.Close:
+                case WebSocketSession.Control.close:
                     // Normal close
                     break
-                case WebSocketSession.Error.UnknownOpCode:
+                case WebSocketSession.WsError.unknownOpCode:
                     print("Unknown Op Code: \(error)")
-                case WebSocketSession.Error.UnMaskedFrame:
+                case WebSocketSession.WsError.unMaskedFrame:
                     print("Unmasked frame: \(error)")
-                case WebSocketSession.Error.InvalidUTF8:
+                case WebSocketSession.WsError.invalidUTF8:
                     print("Invalid UTF8 character: \(error)")
-                case WebSocketSession.Error.ProtocolError:
+                case WebSocketSession.WsError.protocolError:
                     print("Protocol error: \(error)")
                 default:
                     print("Unkown error \(error)")
@@ -122,20 +119,20 @@ public func websocket(
                 session.writeCloseFrame()
             }
         }
-        let secWebSocketAccept = String.toBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").SHA1())
+        let secWebSocketAccept = String.toBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").sha1())
         let headers = [ "Upgrade": "WebSocket", "Connection": "Upgrade", "Sec-WebSocket-Accept": secWebSocketAccept]
-        return HttpResponse.SwitchProtocols(headers, protocolSessionClosure)
+        return HttpResponse.switchProtocols(headers, protocolSessionClosure)
     }
 }
 
 public class WebSocketSession: Hashable, Equatable  {
     
-    public enum Error: ErrorType { case UnknownOpCode(String), UnMaskedFrame(String), ProtocolError(String), InvalidUTF8(String) }
-    public enum OpCode: UInt8 { case Continue = 0x00, Close = 0x08, Ping = 0x09, Pong = 0x0A, Text = 0x01, Binary = 0x02 }
-    public enum Control: ErrorType { case Close }
+    public enum WsError: Error { case unknownOpCode(String), unMaskedFrame(String), protocolError(String), invalidUTF8(String) }
+    public enum OpCode: UInt8 { case `continue` = 0x00, close = 0x08, ping = 0x09, pong = 0x0A, text = 0x01, binary = 0x02 }
+    public enum Control: Error { case close }
     
     public class Frame {
-        public var opcode = OpCode.Close
+        public var opcode = OpCode.close
         public var fin = false
         public var rsv1: UInt8 = 0
         public var rsv2: UInt8 = 0
@@ -143,7 +140,7 @@ public class WebSocketSession: Hashable, Equatable  {
         public var payload = [UInt8]()
     }
 
-    private let socket: Socket
+    let socket: Socket
     
     public init(_ socket: Socket) {
         self.socket = socket
@@ -151,22 +148,22 @@ public class WebSocketSession: Hashable, Equatable  {
     
     deinit {
         writeCloseFrame()
-        socket.shutdwn()
+        socket.close()
     }
     
-    public func writeText(text: String) -> Void {
-        self.writeFrame(ArraySlice(text.utf8), OpCode.Text)
+    public func writeText(_ text: String) -> Void {
+        self.writeFrame(ArraySlice(text.utf8), OpCode.text)
     }
 
-    public func writeBinary(binary: [UInt8]) -> Void {
+    public func writeBinary(_ binary: [UInt8]) -> Void {
         self.writeBinary(ArraySlice(binary))
     }
     
-    public func writeBinary(binary: ArraySlice<UInt8>) -> Void {
-        self.writeFrame(binary, OpCode.Binary)
+    public func writeBinary(_ binary: ArraySlice<UInt8>) -> Void {
+        self.writeFrame(binary, OpCode.binary)
     }
     
-    private func writeFrame(data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
+    public func writeFrame(_ data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
         let finAndOpCode = UInt8(fin ? 0x80 : 0x00) | op.rawValue
         let maskAndLngth = encodeLengthAndMaskFlag(UInt64(data.count), false)
         do {
@@ -178,11 +175,11 @@ public class WebSocketSession: Hashable, Equatable  {
         }
     }
     
-    private func writeCloseFrame() {
-        writeFrame(ArraySlice("".utf8), .Close)
+    public func writeCloseFrame() {
+        writeFrame(ArraySlice("".utf8), .close)
     }
     
-    private func encodeLengthAndMaskFlag(len: UInt64, _ masked: Bool) -> [UInt8] {
+    private func encodeLengthAndMaskFlag(_ len: UInt64, _ masked: Bool) -> [UInt8] {
         let encodedLngth = UInt8(masked ? 0x80 : 0x00)
         var encodedBytes = [UInt8]()
         switch len {
@@ -215,20 +212,20 @@ public class WebSocketSession: Hashable, Equatable  {
         frm.rsv3 = fst & 0x10
         guard frm.rsv1 == 0 && frm.rsv2 == 0 && frm.rsv3 == 0
             else {
-            throw Error.ProtocolError("Reserved frame bit has not been negocitated.")
+            throw WsError.protocolError("Reserved frame bit has not been negocitated.")
         }
         let opc = fst & 0x0F
         guard let opcode = OpCode(rawValue: opc) else {
             // "If an unknown opcode is received, the receiving endpoint MUST _Fail the WebSocket Connection_."
             // http://tools.ietf.org/html/rfc6455#section-5.2 ( Page 29 )
-            throw Error.UnknownOpCode("\(opc)")
+            throw WsError.unknownOpCode("\(opc)")
         }
         if frm.fin == false {
             switch opcode {
-            case .Ping, .Pong, .Close:
+            case .ping, .pong, .close:
                 // Control frames must not be fragmented
                 // https://tools.ietf.org/html/rfc6455#section-5.5 ( Page 35 )
-                throw Error.ProtocolError("Control frames must not be framgemted.")
+                throw WsError.protocolError("Control frames must not be fragmented.")
             default:
                 break
             }
@@ -239,7 +236,7 @@ public class WebSocketSession: Hashable, Equatable  {
         guard msk else {
             // "...a client MUST mask all frames that it sends to the server."
             // http://tools.ietf.org/html/rfc6455#section-5.1
-            throw Error.UnMaskedFrame("A client must mask all frames that it sends to the server.")
+            throw WsError.unMaskedFrame("A client must mask all frames that it sends to the server.")
         }
         var len = UInt64(sec & 0x7F)
         if len == 0x7E {

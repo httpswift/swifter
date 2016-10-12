@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import Swifter
 
 class IOSafetyTests: XCTestCase {
     var server: HttpServer!
@@ -25,16 +24,20 @@ class IOSafetyTests: XCTestCase {
     }
 
     func testStopWithActiveConnections() {
-        (0...100).forEach { _ in
+        (0...100).forEach { cpt in
             server = HttpServer.pingServer()
-            try! server.start()
-            XCTAssertFalse(NSURLSession.sharedSession().retryPing())
-            (0...100).forEach { _ in
-                dispatch_async(dispatch_get_global_queue(0, 0)) {
-                    NSURLSession.sharedSession().pingTask { _, _, _ in }.resume()
+            do {
+                try server.start()
+                XCTAssertFalse(URLSession.shared.retryPing())
+                (0...100).forEach { _ in
+                    DispatchQueue.global(qos: DispatchQoS.default.qosClass).sync {
+                        URLSession.shared.pingTask { _, _, _ in }.resume()
+                    }
                 }
+                server.stop()
+            } catch let e {
+                XCTFail("\(cpt): \(e)")
             }
-            server.stop()
         }
     }
 }
