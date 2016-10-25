@@ -55,7 +55,7 @@ server["/websocket-echo"] = websocket({ (session, text) in
 server.start()
 ```
 ### CocoaPods? Yes.
-```
+```ruby
 # Use version >= 1.1.0.rc.2 (sudo gem install cocoapods --pre)
 use_frameworks!
 pod 'Swifter', '~> 1.3.2'
@@ -68,7 +68,7 @@ github "glock45/swifter" == 1.3.2
 ```
 
 ### Swift Package Manager.
-```
+```swift
 import PackageDescription
 
 let package = Package(
