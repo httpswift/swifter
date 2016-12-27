@@ -34,9 +34,9 @@ public class HttpRequest {
         }
         return String.fromUInt8(body).split("&").map { param -> (String, String) in
             let tokens = param.split("=")
-            if let name = tokens.first, let value = tokens.last, tokens.count == 2 {
-                return (name.replace(old: "+", " ").removePercentEncoding(),
-                        value.replace(old: "+", " ").removePercentEncoding())
+            if let name = tokens.first?.removingPercentEncoding, let value = tokens.last?.removingPercentEncoding, tokens.count == 2 {
+                return (name.replace(old: "+", " "),
+                        value.replace(old: "+", " "))
             }
             return ("","")
         }

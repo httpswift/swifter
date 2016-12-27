@@ -46,38 +46,6 @@ extension String {
         return array.reduce("", { $0.0 + String(UnicodeScalar($0.1)) })
     }
     
-    public func removePercentEncoding() -> String {
-        var scalars = self.unicodeScalars
-        var output = ""
-        var decodeBuffer = [UInt8]()
-        while let scalar = scalars.popFirst() {
-            if scalar == "%" {
-                let first = scalars.popFirst()
-                let secon = scalars.popFirst()
-                if let first = first?.asAlpha(), let secon = secon?.asAlpha() {
-                    decodeBuffer.append(first*16+secon)
-                } else {
-                    if !decodeBuffer.isEmpty {
-                        output.append(String.fromUInt8(decodeBuffer))
-                        decodeBuffer.removeAll()
-                    }
-                    if let first = first { output.append(Character(first)) }
-                    if let secon = secon { output.append(Character(secon)) }
-                }
-            } else {
-                if !decodeBuffer.isEmpty {
-                    output.append(String.fromUInt8(decodeBuffer))
-                    decodeBuffer.removeAll()
-                }
-                output.append(Character(scalar))
-            }
-        }
-        if !decodeBuffer.isEmpty {
-            output.append(String.fromUInt8(decodeBuffer))
-            decodeBuffer.removeAll()
-        }
-        return output
-    }
 }
 
 extension UnicodeScalar {
@@ -92,16 +60,4 @@ extension UnicodeScalar {
         return nil
     }
     
-    public func asAlpha() -> UInt8? {
-        if self.value >= 48 && self.value <= 57 {
-            return UInt8(self.value) - 48
-        }
-        if self.value >= 97 && self.value <= 102 {
-            return UInt8(self.value) - 87
-        }
-        if self.value >= 65 && self.value <= 70 {
-            return UInt8(self.value) - 55
-        }
-        return nil
-    }
 }

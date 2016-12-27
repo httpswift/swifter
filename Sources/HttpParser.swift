@@ -38,8 +38,8 @@ public class HttpParser {
         }
         return query.split("&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
             let tokens = s.split(1, separator: "=")
-            if let name = tokens.first, let value = tokens.last {
-                return c + [(name.removePercentEncoding(), value.removePercentEncoding())]
+            if let name = tokens.first?.removingPercentEncoding, let value = tokens.last?.removingPercentEncoding {
+                return c + [(name, value)]
             }
             return c
         }
