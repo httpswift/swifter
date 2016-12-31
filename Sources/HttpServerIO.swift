@@ -8,7 +8,13 @@
 import Foundation
 import Dispatch
 
+protocol HttpServerIODelegate {
+    func socketConnectionReceived(_ socket: Socket)
+}
+
 public class HttpServerIO {
+
+    public weak var delegate : HttpServerIODelegate?
     
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
@@ -115,6 +121,7 @@ public class HttpServerIO {
                 break
             }
             if let session = response.socketSession() {
+                delegate?.socketConnectionReceived(socket)
                 session(socket)
                 break
             }
