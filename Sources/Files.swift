@@ -7,6 +7,18 @@
 
 import Foundation
 
+public func shareFile(_ path: String) -> ((HttpRequest) -> HttpResponse) {
+    return { r in
+        if let file = try? path.openForReading() {
+            return .raw(200, "OK", [:], { writer in
+                try? writer.write(file)
+                file.close()
+            })
+        }
+        return .notFound
+    }
+}
+
 public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] = ["index.html", "default.html"]) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard let fileRelativePath = r.params.first else {
