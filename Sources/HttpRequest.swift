@@ -124,16 +124,16 @@ public class HttpRequest {
     }
     
     private func nextMultiPartLine(_ generator: inout IndexingIterator<[UInt8]>) -> String? {
-        var result = String()
+        var temp = [UInt8]()
         while let value = generator.next() {
             if value > HttpRequest.CR {
-                result.append(Character(UnicodeScalar(value)))
+                temp.append(value)
             }
             if value == HttpRequest.NL {
                 break
             }
         }
-        return result
+        return String(bytes: temp, encoding: String.Encoding.utf8)
     }
     
     static let CR = UInt8(13)
