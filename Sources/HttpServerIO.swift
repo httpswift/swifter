@@ -15,7 +15,7 @@ public protocol HttpServerIODelegate: class {
 public class HttpServerIO {
 
     public weak var delegate : HttpServerIODelegate?
-    
+
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
 
@@ -25,9 +25,9 @@ public class HttpServerIO {
         case stopping
         case stopped
     }
-    
+
     private var stateValue: Int32 = HttpServerIOState.stopped.rawValue
-    
+
     public private(set) var state: HttpServerIOState {
         get {
             return HttpServerIOState(rawValue: stateValue)!
@@ -41,29 +41,40 @@ public class HttpServerIO {
             #endif
         }
     }
-    
+
     public var operating: Bool { get { return self.state == .running } }
-    
+
+    /// String representation of the IPv4 address to receive requests from.
+    /// It's only used when the server is started with `forceIPv4` option set to true.
+    /// Otherwise, `listenAddressIPv6` will be used.
+    public var listenAddressIPv4: String?
+
+    /// String representation of the IPv6 address to receive requests from.
+    /// It's only used when the server is started with `forceIPv4` option set to false.
+    /// Otherwise, `listenAddressIPv4` will be used.
+    public var listenAddressIPv6: String?
+
     private let queue = DispatchQueue(label: "swifter.httpserverio.clientsockets")
-    
+
     public func port() throws -> Int {
         return Int(try socket.port())
     }
-    
+
     public func isIPv4() throws -> Bool {
         return try socket.isIPv4()
     }
-    
+
     deinit {
         stop()
     }
-    
+
     @available(macOS 10.10, *)
     public func start(_ port: in_port_t = 8080, forceIPv4: Bool = false, priority: DispatchQoS.QoSClass = DispatchQoS.QoSClass.background) throws {
         guard !self.operating else { return }
         stop()
         self.state = .starting
-        self.socket = try Socket.tcpSocketForListen(port, forceIPv4)
+        let address = forceIPv4 ? listenAddressIPv4 : listenAddressIPv6
+        self.socket = try Socket.tcpSocketForListen(port, forceIPv4, SOMAXCONN, address)
         DispatchQueue.global(qos: priority).async { [weak self] in
             guard let `self` = self else { return }
             guard self.operating else { return }
@@ -84,7 +95,7 @@ public class HttpServerIO {
         }
         self.state = .running
     }
-    
+
     public func stop() {
         guard self.operating else { return }
         self.state = .stopping
@@ -98,11 +109,11 @@ public class HttpServerIO {
         socket.close()
         self.state = .stopped
     }
-    
+
     public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
         return ([:], { _ in HttpResponse.notFound })
     }
-    
+
     private func handleConnection(_ socket: Socket) {
         let parser = HttpParser()
         while self.operating, let request = try? parser.readHttpRequest(socket) {
@@ -129,7 +140,7 @@ public class HttpServerIO {
         }
         socket.close()
     }
-    
+
     private struct InnerWriteContext: HttpResponseBodyWriter {
         
         let socket: Socket
@@ -149,38 +160,38 @@ public class HttpServerIO {
         func write(_ data: NSData) throws {
             try socket.writeData(data)
         }
-        
+
         func write(_ data: Data) throws {
             try socket.writeData(data)
         }
     }
-    
+
     private func respond(_ socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
         guard self.operating else { return false }
 
         try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
-        
+
         let content = response.content()
-        
+
         if content.length >= 0 {
             try socket.writeUTF8("Content-Length: \(content.length)\r\n")
         }
-        
+
         if keepAlive && content.length != -1 {
             try socket.writeUTF8("Connection: keep-alive\r\n")
         }
-        
+
         for (name, value) in response.headers() {
             try socket.writeUTF8("\(name): \(value)\r\n")
         }
-        
+
         try socket.writeUTF8("\r\n")
-    
+
         if let writeClosure = content.write {
             let context = InnerWriteContext(socket: socket)
             try writeClosure(context)
         }
-        
+
         return keepAlive && content.length != -1;
     }
 }
