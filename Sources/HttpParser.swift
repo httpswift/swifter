@@ -17,7 +17,7 @@ public class HttpParser {
     
     public func readHttpRequest(_ socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
-        let statusLineTokens = statusLine.split(" ")
+        let statusLineTokens = statusLine.components(separatedBy: " ")
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
         }
@@ -33,13 +33,16 @@ public class HttpParser {
     }
     
     private func extractQueryParams(_ url: String) -> [(String, String)] {
-        guard let query = url.split("?").last else {
+        let tokens = url.components(separatedBy: "?")
+        guard let query = tokens.last, tokens.count >= 2 else {
             return []
         }
-        return query.split("&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
-            let tokens = s.split(1, separator: "=")
-            if let name = tokens.first?.removingPercentEncoding, let value = tokens.last?.removingPercentEncoding {
-                return c + [(name, value)]
+        return query.components(separatedBy: "&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
+            let tokens = s.components(separatedBy: "=")
+            let name = tokens.first?.removingPercentEncoding
+            let value = tokens.count > 1 ? (tokens.last?.removingPercentEncoding ?? "") : ""
+            if let nameFound = name {
+                return c + [(nameFound, value)]
             }
             return c
         }
@@ -54,9 +57,9 @@ public class HttpParser {
     private func readHeaders(_ socket: Socket) throws -> [String: String] {
         var headers = [String: String]()
         while case let headerLine = try socket.readLine() , !headerLine.isEmpty {
-            let headerTokens = headerLine.split(1, separator: ":")
+            let headerTokens = headerLine.components(separatedBy: ":")
             if let name = headerTokens.first, let value = headerTokens.last {
-                headers[name.lowercased()] = value.trim()
+                headers[name.lowercased()] = value.trimmingCharacters(in: .whitespaces)
             }
         }
         return headers
@@ -64,7 +67,7 @@ public class HttpParser {
     
     func supportsKeepAlive(_ headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
-            return "keep-alive" == value.trim()
+            return "keep-alive" == value.trimmingCharacters(in: .whitespaces)
         }
         return false
     }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 open class HttpRouter {
     
     public init() {
@@ -124,9 +125,17 @@ open class HttpRouter {
     }
     
     private func stripQuery(_ path: String) -> String {
-        if let path = path.split("?").first {
+        if let path = path.components(separatedBy: "?").first {
             return path
         }
         return path
     }
+}
+
+extension String {
+    
+    public func split(_ separator: Character) -> [String] {
+        return self.characters.split { $0 == separator }.map(String.init)
+    }
+    
 }

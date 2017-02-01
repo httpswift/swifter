@@ -21,22 +21,26 @@ public class HttpRequest {
         guard let headerValue = headers[headerName] else {
             return false
         }
-        return headerValue.split(",").filter({ $0.trim().lowercased() == token }).count > 0
+        return headerValue.components(separatedBy: ",").filter({ $0.trimmingCharacters(in: .whitespaces).lowercased() == token }).count > 0
     }
     
     public func parseUrlencodedForm() -> [(String, String)] {
         guard let contentTypeHeader = headers["content-type"] else {
             return []
         }
-        let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
+        let contentTypeHeaderTokens = contentTypeHeader.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
         guard let contentType = contentTypeHeaderTokens.first, contentType == "application/x-www-form-urlencoded" else {
             return []
         }
-        return String.fromUInt8(body).split("&").map { param -> (String, String) in
-            let tokens = param.split("=")
+        guard let utf8String = String(bytes: body, encoding: .utf8) else {
+            // Consider to throw an exception here (examine the encoding from headers).
+            return []
+        }
+        return utf8String.components(separatedBy: "&").map { param -> (String, String) in
+            let tokens = param.components(separatedBy: "=")
             if let name = tokens.first?.removingPercentEncoding, let value = tokens.last?.removingPercentEncoding, tokens.count == 2 {
-                return (name.replace(old: "+", " "),
-                        value.replace(old: "+", " "))
+                return (name.replacingOccurrences(of: "+", with: " "),
+                        value.replacingOccurrences(of: "+", with: " "))
             }
             return ("","")
         }
@@ -60,9 +64,9 @@ public class HttpRequest {
                 guard header.key == headerName else {
                     return combined
                 }
-                let headerValueParams = header.value.split(";").map { $0.trim() }
+                let headerValueParams = header.value.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
                 return headerValueParams.reduce(combined, { (results, token) -> [String] in
-                    let parameterTokens = token.split(1, separator: "=")
+                    let parameterTokens = token.components(separatedBy: "=")
                     if parameterTokens.first == parameter, let value = parameterTokens.last {
                         return results + [value]
                     }
@@ -76,13 +80,13 @@ public class HttpRequest {
         guard let contentTypeHeader = headers["content-type"] else {
             return []
         }
-        let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
+        let contentTypeHeaderTokens = contentTypeHeader.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
         guard let contentType = contentTypeHeaderTokens.first, contentType == "multipart/form-data" else {
             return []
         }
         var boundary: String? = nil
         contentTypeHeaderTokens.forEach({
-            let tokens = $0.split("=")
+            let tokens = $0.components(separatedBy: "=")
             if let key = tokens.first, key == "boundary" && tokens.count == 2 {
                 boundary = tokens.last
             }
@@ -104,17 +108,17 @@ public class HttpRequest {
     
     private func nextMultiPart(_ generator: inout IndexingIterator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
         if isFirst {
-            guard nextMultiPartLine(&generator) == boundary else {
+            guard nextUTF8MultiPartLine(&generator) == boundary else {
                 return nil
             }
         } else {
-            let /* ignore */ _ = nextMultiPartLine(&generator)
+            let /* ignore */ _ = nextUTF8MultiPartLine(&generator)
         }
         var headers = [String: String]()
-        while let line = nextMultiPartLine(&generator), !line.isEmpty {
-            let tokens = line.split(":")
+        while let line = nextUTF8MultiPartLine(&generator), !line.isEmpty {
+            let tokens = line.components(separatedBy: ":")
             if let name = tokens.first, let value = tokens.last, tokens.count == 2 {
-                headers[name.lowercased()] = value.trim()
+                headers[name.lowercased()] = value.trimmingCharacters(in: .whitespaces)
             }
         }
         guard let body = nextMultiPartBody(&generator, boundary: boundary) else {
@@ -123,7 +127,7 @@ public class HttpRequest {
         return MultiPart(headers: headers, body: body)
     }
     
-    private func nextMultiPartLine(_ generator: inout IndexingIterator<[UInt8]>) -> String? {
+    private func nextUTF8MultiPartLine(_ generator: inout IndexingIterator<[UInt8]>) -> String? {
         var temp = [UInt8]()
         while let value = generator.next() {
             if value > HttpRequest.CR {
