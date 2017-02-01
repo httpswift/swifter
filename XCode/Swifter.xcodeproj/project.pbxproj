@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		0858E7F41D68BB2600491CD1 /* IOSafetyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */; };
 		0858E7F51D68BB2600491CD1 /* IOSafetyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */; };
-		0858E7F71D68BC2600491CD1 /* PingServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F61D68BC2600491CD1 /* PingServer.swift */; };
 		0858E7F81D68BC2600491CD1 /* PingServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F61D68BC2600491CD1 /* PingServer.swift */; };
 		0858E7F91D68BC2600491CD1 /* PingServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F61D68BC2600491CD1 /* PingServer.swift */; };
 		269B47881D3AAAE20042D137 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6EF1D2C44F30030FC98 /* HttpResponse.swift */; };
@@ -79,7 +78,6 @@
 		7CA4813E19A2EA8D0030B30D /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA4813D19A2EA8D0030B30D /* main.swift */; };
 		7CB102E01A17381D00CBA3B4 /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
 		7CCB8C5E1D97B852008B9712 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
-		7CCB8C601D97B8CC008B9712 /* SwifterTestsHttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB8C5F1D97B8CC008B9712 /* SwifterTestsHttpRouter.swift */; };
 		7CCB8C621D97B8E9008B9712 /* SwifterTestsHttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB8C5F1D97B8CC008B9712 /* SwifterTestsHttpRouter.swift */; };
 		7CCD87611C66099B0068099B /* Swifter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE893E71C05127900A29F63 /* Swifter.framework */; };
 		7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD876D1C660B250068099B /* SwifterTestsHttpParser.swift */; };
@@ -736,8 +734,6 @@
 			files = (
 				7C73C6921C26179C00AEF6CA /* AppDelegate.swift in Sources */,
 				7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */,
-				0858E7F71D68BC2600491CD1 /* PingServer.swift in Sources */,
-				7CCB8C601D97B8CC008B9712 /* SwifterTestsHttpRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
