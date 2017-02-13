@@ -7,18 +7,16 @@
 
 import Foundation
 
+public class RouteNode<T> {
+    var nodes = [String: RouteNode<T>]()
+    var handler: T? = nil
+}
 
-open class HttpRouter {
+public class Router<T> {
     
-    public init() {
-    }
+    public init() { }
     
-    private class Node {
-        var nodes = [String: Node]()
-        var handler: ((HttpRequest) -> HttpResponse)? = nil
-    }
-    
-    private var rootNode = Node()
+    private var rootNode = RouteNode<T>()
 
     public func routes() -> [String] {
         var routes = [String]()
@@ -28,7 +26,7 @@ open class HttpRouter {
         return routes
     }
     
-    private func routesForNode(_ node: Node, prefix: String = "") -> [String] {
+    private func routesForNode(_ node: RouteNode<T>, prefix: String = "") -> [String] {
         var result = [String]()
         if let _ = node.handler {
             result.append(prefix)
@@ -39,7 +37,7 @@ open class HttpRouter {
         return result
     }
     
-    public func register(_ method: String?, path: String, handler: ((HttpRequest) -> HttpResponse)?) {
+    public func attach(_ method: String?, path: String, handler: T?) {
         var pathSegments = stripQuery(path).split("/")
         if let method = method {
             pathSegments.insert(method, at: 0)
@@ -50,7 +48,7 @@ open class HttpRouter {
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
-    public func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) -> HttpResponse)? {
+    public func route(_ method: String?, path: String) -> ([String: String], T)? {
         if let method = method {
             let pathSegments = (method + "/" + stripQuery(path)).split("/")
             var pathSegmentsGenerator = pathSegments.makeIterator()
@@ -68,19 +66,19 @@ open class HttpRouter {
         return nil
     }
     
-    private func inflate(_ node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {
+    private func inflate(_ node: inout RouteNode<T>, generator: inout IndexingIterator<[String]>) -> RouteNode<T> {
         if let pathSegment = generator.next() {
             if let _ = node.nodes[pathSegment] {
                 return inflate(&node.nodes[pathSegment]!, generator: &generator)
             }
-            var nextNode = Node()
+            var nextNode = RouteNode<T>()
             node.nodes[pathSegment] = nextNode
             return inflate(&nextNode, generator: &generator)
         }
         return node
     }
     
-    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
+    private func findHandler(_ node: inout RouteNode<T>, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> T? {
         guard let pathToken = generator.next() else {
             // if it's the last element of the requested URL, check if there is a pattern with variable tail.
             if let variableNode = node.nodes.filter({ $0.0.characters.first == ":" }).first {

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/*
 public func shareFile(_ path: String) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         if let file = try? path.openForReading() {
@@ -85,4 +85,4 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
             return HttpResponse.internalServerError
         }
     }
-}
+}*/

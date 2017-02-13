@@ -7,22 +7,45 @@
 import Foundation
 import Swifter
 
-do {
-    let server = demoServer(try String.File.currentWorkingDirectory())
-    server["/testAfterBaseRoute"] = { request in
-        return .ok(.html("ok !"))
-    }
+let server = try Swifter()
+
+server.get("/") { _, request, responder in
+    responder(html {
+        "body" ~ {
+            "h1" ~ "Hello World !"
+        }
+    })
+}
+
+server.get("/stream") { _, request, responder in
+    responder(WebsocketResponse(request) { event in
+        switch event {
+            case .text(let value):
+                print("Got text message: \(value)")
+            case .binary(let value):
+                print("Got binary message: \(value)")
+            case .disconnected(_, _):
+                print("Peer disconneted")
+        }
+    })
+}
+
+server.get("/background") { _, _, closure in
     
     if #available(OSXApplicationExtension 10.10, *) {
-        try server.start(9080, forceIPv4: true)
+        DispatchQueue.global(qos: .background).async {
+            // Simulate http request to other service or a database query.
+            sleep(2)
+            closure(TextResponse(200, "Waited 2 secs for a response."))
+        }
     } else {
         // Fallback on earlier versions
     }
     
-    print("Server has started ( port = \(try server.port()) ). Try to connect now...")
-    
-    RunLoop.main.run()
-    
-} catch {
-    print("Server start error: \(error)")
 }
+
+while true {
+    try server.loop()
+}
+
+

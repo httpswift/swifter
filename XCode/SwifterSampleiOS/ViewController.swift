@@ -9,21 +9,27 @@ import Swifter
 
 class ViewController: UIViewController {
     
-    private var server: HttpServer?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        do {
-            let server = demoServer(Bundle.main.resourcePath!)
-            try server.start(9080)
-            self.server = server
-        } catch {
-            print("Server start error: \(error)")
+        
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let server = try demoServer(Bundle.main.resourcePath!)
+                server.get("/") { params, request, responder in
+                    responder(html {
+                        "h1" ~ "Hello World !"
+                    })
+                }
+                while true {
+                    try server.loop()
+                }
+            } catch {
+                print("Server start error: \(error)")
+            }
         }
     }
     
     @IBAction func likedThis(sender: UIButton) {
-        self.server?.stop()
-        self.server = nil
+        
     }
 }
