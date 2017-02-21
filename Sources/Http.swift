@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Request {
+open class Request {
     
     public enum HttpVersion { case http10, http11 }
     
@@ -36,7 +36,7 @@ public class Request {
     }
 }
 
-public class Response {
+open class Response {
     
     public init() { }
     
