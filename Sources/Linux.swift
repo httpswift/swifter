@@ -15,7 +15,7 @@ public class LinuxAsyncServer: TcpServer {
     private var descriptors = [pollfd]()
     private let server: Int32
     
-    public required init(_ port: in_port_t) throws {
+    public required init(_ port: in_port_t, forceIPv4: Bool, bindAddress: String? = nil) throws {
         
         self.server = try LinuxAsyncServer.nonBlockingSocketForListenening(port)
         

@@ -15,7 +15,7 @@ public class Server {
     
     public init(_ port: in_port_t = 8080, forceIPv4: Bool = false) throws {
         #if os(Linux)
-            self.server = try LinuxAsyncServer(port)
+            self.server = try LinuxAsyncServer(port, forceIPv4: forceIPv4)
         #else
             self.server = try MacOSAsyncTCPServer(port, forceIPv4: forceIPv4)
         #endif
