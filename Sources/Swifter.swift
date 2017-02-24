@@ -55,9 +55,11 @@ public class Swifter {
     }
     
     public func loop() throws {
+        
         try self.server.serve { request, responder in
             
             var middlewareResponse: Response? = nil
+            
             for layer in self.middleware {
                 if let responseFound = layer(request) {
                     middlewareResponse = responseFound

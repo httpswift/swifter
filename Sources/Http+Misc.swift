@@ -1,31 +1,31 @@
 //
-//  HttpRequest.swift
+//  HttpPost.swift
 //  Swifter
 //
-//  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
+//  Created by Damian Kolakowski on 24/02/2017.
+//  Copyright © 2017 Damian Kołakowski. All rights reserved.
 //
 
 import Foundation
 
-public class HttpRequest {
+
+extension Request {
     
-    public var path: String = ""
-    public var queryParams: [(String, String)] = []
-    public var method: String = ""
-    public var headers: [String: String] = [:]
-    public var body: [UInt8] = []
-    public var address: String? = ""
-    public var params: [String: String] = [:]
-    
-    public func hasTokenForHeader(_ headerName: String, token: String) -> Bool {
-        guard let headerValue = headers[headerName] else {
+    public func hasToken(_ token: String, forHeader headerName: String) -> Bool {
+        guard let (_, value) = headers.filter({ $0.0 == headerName }).first else {
             return false
         }
-        return headerValue.components(separatedBy: ",").filter({ $0.trimmingCharacters(in: .whitespaces).lowercased() == token }).count > 0
+        return value
+            .components(separatedBy: ",")
+            .filter({ $0.trimmingCharacters(in: .whitespaces).lowercased() == token })
+            .count > 0
     }
+}
+
+extension Request {
     
     public func parseUrlencodedForm() -> [(String, String)] {
-        guard let contentTypeHeader = headers["content-type"] else {
+        guard let (_, contentTypeHeader) = headers.filter({ $0.0 == "content-type"}).last else {
             return []
         }
         let contentTypeHeaderTokens = contentTypeHeader.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
@@ -45,6 +45,36 @@ public class HttpRequest {
             return ("","")
         }
     }
+}
+
+extension String {
+    
+    public func unquote() -> String {
+        var scalars = self.unicodeScalars;
+        if scalars.first == "\"" && scalars.last == "\"" && scalars.count >= 2 {
+            scalars.removeFirst();
+            scalars.removeLast();
+            return String(scalars)
+        }
+        return self
+    }
+}
+
+extension UnicodeScalar {
+    
+    public func asWhitespace() -> UInt8? {
+        if self.value >= 9 && self.value <= 13 {
+            return UInt8(self.value)
+        }
+        if self.value == 32 {
+            return UInt8(self.value)
+        }
+        return nil
+    }
+    
+}
+
+extension Request {
     
     public struct MultiPart {
         
@@ -77,7 +107,7 @@ public class HttpRequest {
     }
     
     public func parseMultiPartFormData() -> [MultiPart] {
-        guard let contentTypeHeader = headers["content-type"] else {
+        guard let (_, contentTypeHeader) = headers.filter({ $0.0 == "content-type"}).last else {
             return []
         }
         let contentTypeHeaderTokens = contentTypeHeader.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
@@ -130,10 +160,10 @@ public class HttpRequest {
     private func nextUTF8MultiPartLine(_ generator: inout IndexingIterator<[UInt8]>) -> String? {
         var temp = [UInt8]()
         while let value = generator.next() {
-            if value > HttpRequest.CR {
+            if value > UInt8.cr {
                 temp.append(value)
             }
-            if value == HttpRequest.NL {
+            if value == UInt8.lf {
                 break
             }
         }
@@ -152,9 +182,9 @@ public class HttpRequest {
             body.append(x)
             if matchOffset == boundaryArray.count {
                 body.removeSubrange(CountableRange<Int>(body.count-matchOffset ..< body.count))
-                if body.last == HttpRequest.NL {
+                if body.last == UInt8.lf {
                     body.removeLast()
-                    if body.last == HttpRequest.CR {
+                    if body.last == UInt8.cr {
                         body.removeLast()
                     }
                 }

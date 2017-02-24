@@ -64,19 +64,7 @@ extension String {
     
     public static var pathSeparator = "/"
     
-    public func openNewForWriting() throws -> File {
-        return try openFileForMode(self, "wb")
-    }
-    
-    public func openForReading() throws -> File {
-        return try openFileForMode(self, "rb")
-    }
-    
-    public func openForWritingAndReading() throws -> File {
-        return try openFileForMode(self, "r+b")
-    }
-    
-    public func openFileForMode(_ path: String, _ mode: String) throws -> File {
+    public func openFile(_ path: String, _ mode: String) throws -> File {
         guard let file = path.withCString({ pathPointer in mode.withCString({ fopen(pathPointer, $0) }) }) else {
             throw FileError.error(errno)
         }

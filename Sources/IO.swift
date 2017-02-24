@@ -7,23 +7,23 @@
 
 import Foundation
 
-public protocol TcpServer: class {
+public protocol IO: class {
     
     init(_ port: in_port_t, forceIPv4: Bool, bindAddress: String?) throws
     
-    func wait(_ callback: ((TcpServerEvent) -> Void)) throws
+    func wait(_ callback: ((IOEvent) -> Void)) throws
     
-    func write(_ socket: Int32, _ data: Array<UInt8>, _ done: @escaping ((Void) -> TcpWriteDoneAction)) throws
+    func write(_ socket: Int32, _ data: Array<UInt8>, _ done: @escaping ((Void) -> IODoneAction)) throws
     
     func finish(_ socket: Int32)
 }
 
-public enum TcpWriteDoneAction {
+public enum IODoneAction {
     
     case `continue`, terminate
 }
 
-public enum TcpServerEvent {
+public enum IOEvent {
     
     case connect(String, Int32)
     

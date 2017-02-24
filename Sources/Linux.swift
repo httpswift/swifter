@@ -9,15 +9,17 @@
     
 import Glibc
 
-public class LinuxAsyncServer: TcpServer {
+public class LinuxIO: IO {
     
-    private var backlog = [Int32: Array<(chunk: [UInt8], done: ((Void) -> TcpWriteDoneAction))>]()
+    private var backlog = [Int32: Array<(chunk: [UInt8], done: ((Void) -> IODoneAction))>]()
+    
     private var descriptors = [pollfd]()
+    
     private let server: Int32
     
     public required init(_ port: in_port_t, forceIPv4: Bool, bindAddress: String? = nil) throws {
         
-        self.server = try LinuxAsyncServer.nonBlockingSocketForListenening(port)
+        self.server = try LinuxAsyncServer.nonBlockingSocketForListenening(port, forceIPv4: forceIPv4, address: bindAddress)
         
         self.descriptors.append(pollfd(fd: self.server, events: Int16(POLLIN), revents: 0))
     }
@@ -26,7 +28,7 @@ public class LinuxAsyncServer: TcpServer {
         cleanup()
     }
     
-    public func write(_ socket: Int32, _ data: Array<UInt8>, _ done: @escaping ((Void) -> TcpWriteDoneAction)) throws {
+    public func write(_ socket: Int32, _ data: Array<UInt8>, _ done: @escaping ((Void) -> IODoneAction)) throws {
         let result = Glibc.write(socket, data, data.count)
         if result == -1 {
             defer { self.finish(socket) }
@@ -48,7 +50,7 @@ public class LinuxAsyncServer: TcpServer {
         }
     }
     
-    public func wait(_ callback: ((TcpServerEvent) -> Void)) throws {
+    public func wait(_ callback: ((IOEvent) -> Void)) throws {
         guard poll(&descriptors, UInt(descriptors.count), -1) != -1 else {
             throw AsyncError.async(Process.error)
         }
@@ -61,13 +63,13 @@ public class LinuxAsyncServer: TcpServer {
                     try LinuxAsyncServer.setSocketNonBlocking(client)
                     self.backlog[Int32(client)] = []
                     descriptors.append(pollfd(fd: client, events: Int16(POLLIN), revents: 0))
-                    callback(TcpServerEvent.connect("", Int32(client)))
+                    callback(IOEvent.connect("", Int32(client)))
                 }
                 if errno != EWOULDBLOCK { throw AsyncError.acceptFailed(Process.error) }
             } else {
                 if (descriptors[i].revents & Int16(POLLERR) != 0) || (descriptors[i].revents & Int16(POLLHUP) != 0) || (descriptors[i].revents & Int16(POLLNVAL) != 0) {
                     self.finish(descriptors[i].fd)
-                    callback(TcpServerEvent.disconnect("", descriptors[i].fd))
+                    callback(IOEvent.disconnect("", descriptors[i].fd))
                     descriptors[i].fd = -1
                     continue
                 }
@@ -78,18 +80,18 @@ public class LinuxAsyncServer: TcpServer {
                         switch result {
                         case -1:
                             if errno != EWOULDBLOCK {
-                                callback(TcpServerEvent.disconnect("", descriptors[i].fd))
+                                callback(IOEvent.disconnect("", descriptors[i].fd))
                                 self.finish(descriptors[i].fd)
                                 descriptors[i].fd = -1
                             }
                             break readLoop
                         case 0:
-                            callback(TcpServerEvent.disconnect("", descriptors[i].fd))
+                            callback(IOEvent.disconnect("", descriptors[i].fd))
                             self.finish(descriptors[i].fd)
                             descriptors[i].fd = -1
                             break readLoop
                         default:
-                            callback(TcpServerEvent.data("", descriptors[i].fd, buffer[0..<result]))
+                            callback(IOEvent.data("", descriptors[i].fd, buffer[0..<result]))
                         }
                     }
                 }
@@ -99,7 +101,7 @@ public class LinuxAsyncServer: TcpServer {
                         let result = Glibc.write(Int32(descriptors[i].fd), chunk, chunk.count)
                         if result == -1 {
                             finish(Int32(descriptors[i].fd))
-                            callback(TcpServerEvent.disconnect("", Int32(descriptors[i].fd)))
+                            callback(IOEvent.disconnect("", Int32(descriptors[i].fd)))
                             descriptors[i].fd = -1
                             return
                         }
@@ -112,7 +114,7 @@ public class LinuxAsyncServer: TcpServer {
                         self.backlog[Int32(descriptors[i].fd)]?.removeFirst()
                         if backlogElement.done() == .terminate {
                             finish(Int32(descriptors[i].fd))
-                            callback(TcpServerEvent.disconnect("", Int32(descriptors[i].fd)))
+                            callback(IOEvent.disconnect("", Int32(descriptors[i].fd)))
                             descriptors[i].fd = -1
                             return
                         }
@@ -140,9 +142,9 @@ public class LinuxAsyncServer: TcpServer {
         let _ = Glibc.close(Int32(server))
     }
     
-    public static func nonBlockingSocketForListenening(_ port: in_port_t = 8080) throws -> Int32 {
+    public static func nonBlockingSocketForListenening(_ port: in_port_t = 8080, forceIPv4: Bool = false, address: String? = nil) throws -> Int32 {
         
-        let server = Glibc.socket(AF_INET, Int32(SOCK_STREAM.rawValue), 0)
+        let server = Glibc.socket(forceIPv4 ? AF_INET : AF_INET6, Int32(SOCK_STREAM.rawValue), 0)
         
         guard server != -1 else {
             throw AsyncError.socketCreation(Process.error)
@@ -154,16 +156,16 @@ public class LinuxAsyncServer: TcpServer {
             throw AsyncError.setReuseAddrFailed(Process.error)
         }
         
-        if Glibc.fcntl(server, F_SETFL, fcntl(server, F_GETFL, 0) | O_NONBLOCK) == -1 {
-            defer { let _ = Glibc.close(server) }
-            throw AsyncError.setNonBlockFailed(Process.error)
-        }
-        
-        var addr = anyAddrForPort(port)
-        
-        if withUnsafePointer(to: &addr, { bind(server, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in>.size)) })  == -1 {
-            defer { let _ = Glibc.close(server) }
-            throw AsyncError.bindFailed(Process.error)
+        do {
+            try setSocketNonBlocking(server)
+            if forceIPv4 {
+                try bind(toSocket: server, port: port, andIPv4Address: address)
+            } else {
+                try bind(toSocket: server, port: port, andAddress: address)
+            }
+        } catch {
+            let _ = Glibc.close(server)
+            throw error
         }
         
         if Glibc.listen(server, SOMAXCONN) == -1 {
@@ -174,15 +176,58 @@ public class LinuxAsyncServer: TcpServer {
         return server
     }
     
-    public static func anyAddrForPort(_ port: in_port_t) -> sockaddr_in {
+    public static func bind(toSocket socket: Int32, port: in_port_t, andIPv4Address address: String? = nil) throws  {
+        
         var addr = sockaddr_in()
+        
         addr.sin_family = sa_family_t(AF_INET)
         addr.sin_port = port.bigEndian
-        addr.sin_addr = in_addr(s_addr: in_addr_t(0))
+        
+        if let addressFound = address {
+            guard addressFound.withCString({ inet_pton(AF_INET, $0, &addr.sin_addr) }) == 1 else {
+                throw AsyncError.inetPtonFailed(Errno.description())
+            }
+        } else {
+            addr.sin_addr = in_addr(s_addr: in_addr_t(0))
+        }
+        
         addr.sin_zero = (0, 0, 0, 0, 0, 0, 0, 0)
-        return addr
+        
+        let bindResult = withUnsafePointer(to: &addr) {
+            Glibc.bind(socket, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in>.size))
+        }
+        
+        guard bindResult != -1 else {
+            throw AsyncError.bindFailed(Errno.description())
+        }
     }
     
+    public static func bind(toSocket socket: Int32, port: in_port_t, andAddress address: String? = nil) throws {
+        
+        var addr = sockaddr_in6()
+        
+        addr.sin6_family = sa_family_t(AF_INET6)
+        addr.sin6_port = port.bigEndian
+        
+        if let addressFound = address {
+            guard addressFound.withCString({ inet_pton(AF_INET6, $0, &addr.sin6_addr) }) == 1 else {
+                throw AsyncError.inetPtonFailed(Errno.description())
+            }
+        } else {
+            addr.sin6_addr = in6addr_any
+        }
+        
+        addr.sin6_scope_id = 0
+        
+        let bindResult = withUnsafePointer(to: &addr) {
+            Glibc.bind(socket, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in6>.size))
+        }
+        
+        guard bindResult != -1 else {
+            throw AsyncError.bindFailed(Errno.description())
+        }
+    }
+
     public static func setSocketNonBlocking(_ socket: Int32) throws {
         if Glibc.fcntl(socket, F_SETFL, fcntl(socket, F_GETFL, 0) | O_NONBLOCK) == -1 {
             throw AsyncError.setNonBlockFailed(Process.error)

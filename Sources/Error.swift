@@ -7,7 +7,8 @@
 
 import Foundation
 
-public enum AsyncError: Error {
+public enum SwifterError: Error {
+    
     case parse(String)
     case async(String)
     case socketCreation(String)
@@ -24,4 +25,12 @@ public enum AsyncError: Error {
     case acceptFailed(String)
     case readFailed(String)
     case httpError(String)
+    case inetPtonFailed(String)
+}
+
+public class Errno {
+    
+    public class func description() -> String {
+        return String(cString: UnsafePointer(strerror(errno)))
+    }
 }

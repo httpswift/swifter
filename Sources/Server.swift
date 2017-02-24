@@ -11,19 +11,19 @@ public class Server {
     
     private var processors = [Int32 : IncomingDataProcessor]()
     
-    private let server: TcpServer
+    private let io: IO
     
     public init(_ port: in_port_t = 8080, forceIPv4: Bool = false) throws {
         #if os(Linux)
-            self.server = try LinuxAsyncServer(port, forceIPv4: forceIPv4)
+            self.io = try LinuxAsyncServer(port, forceIPv4: forceIPv4)
         #else
-            self.server = try MacOSAsyncTCPServer(port, forceIPv4: forceIPv4)
+            self.io = try MacOSIO(port, forceIPv4: forceIPv4)
         #endif
     }
     
     public func serve(_ callback: @escaping ((request: Request, responder: @escaping ((Response) -> Void))) -> Void) throws {
         
-        try self.server.wait { event in
+        try self.io.wait { event in
             
             switch event {
                 
@@ -33,19 +33,18 @@ public class Server {
                     callback((request, { response in
                         let keepIOSession = self.supportsKeepAlive(request.headers) || request.httpVersion == .http11
                         var data = [UInt8]()
-                        data.reserveCapacity(1024)
+                        data.reserveCapacity(1024 + response.body.count)
                         data.append(contentsOf: [UInt8]("HTTP/\(request.httpVersion == .http10 ? "1.0" : "1.1") \(response.status) OK\r\n".utf8))
                         for (name, value) in response.headers {
                             data.append(contentsOf: [UInt8]("\(name): \(value)\r\n".utf8))
                         }
-                        if (keepIOSession) {
+                        if keepIOSession {
                             data.append(contentsOf: [UInt8]("Connection: keep-alive\r\n".utf8))
                         }
-                        data.append(contentsOf: [UInt8]("Content-Length: \(response.body.count)\r\n".utf8))
-                        data.append(contentsOf: [13, 10])
+                        data.append(contentsOf: [UInt8]("Content-Length: \(response.body.count)\r\n\r\n".utf8))
                         data.append(contentsOf: response.body)
                         do {
-                            try self.server.write(socket, data) {
+                            try self.io.write(socket, data) {
                                 if let sucessor = response.processingSuccesor {
                                     self.processors[socket] = sucessor
                                     return .continue
@@ -68,7 +67,7 @@ public class Server {
                     try self.processors[socket]?.process(chunk)
                 } catch {
                     self.processors.removeValue(forKey: socket)
-                    self.server.finish(socket)
+                    self.io.finish(socket)
                 }
             }
         }
