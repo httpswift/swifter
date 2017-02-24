@@ -44,6 +44,22 @@ server.get("/background") { _, _, closure in
     
 }
 
+server.post("/post") { _, request, responder in
+    
+    let post = request.parseUrlencodedForm()
+    
+    responder(html(200) {
+        "body" ~ {
+            "h4" ~ "You sent: "
+            "ul" ~ {
+                post.forEach { item in
+                    "li" ~ "\(item.0) -> \(item.1)"
+                }
+            }
+        }
+    })
+}
+
 while true {
     try server.loop()
 }

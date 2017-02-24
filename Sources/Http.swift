@@ -114,7 +114,7 @@ public class HttpIncomingDataPorcessor: Hashable, IncomingDataProcessor {
         case .waitingForHeaders:
             
             guard self.buffer.count + chunk.count < 4096 else {
-                throw SwifterError.parse("Headers size exceeds the limit.")
+                throw SwifterError.httpError("Headers size exceeds the limit.")
             }
             
             var iterator = chunk.makeIterator()
@@ -137,7 +137,7 @@ public class HttpIncomingDataPorcessor: Hashable, IncomingDataProcessor {
         case .waitingForBody:
             
             guard self.request.body.count + chunk.count <= request.contentLength else {
-                throw SwifterError.parse("Peer sent more data then required ('Content-Length' = \(request.contentLength).")
+                throw SwifterError.httpError("Peer sent more data then required ('Content-Length' = \(request.contentLength).")
             }
             
             request.body.append(contentsOf: chunk)
@@ -170,7 +170,7 @@ public class HttpIncomingDataPorcessor: Hashable, IncomingDataProcessor {
         } else if requestLineTokens[2] == [0x48, 0x54,  0x54,  0x50, 0x2f, 0x31, 0x2e, 0x31] {
             request.httpVersion = .http11
         } else {
-            throw SwifterError.parse("Invalid http version: \(requestLineTokens[2])")
+            throw SwifterError.httpError("Invalid http version: \(requestLineTokens[2])")
         }
         
         request.headers = lines
@@ -190,19 +190,19 @@ public class HttpIncomingDataPorcessor: Hashable, IncomingDataProcessor {
             .filter({ $0.0 == "content-length" })
             .first {
             guard let contentLength = Int(value) else {
-                throw SwifterError.parse("Invalid 'Content-Length' header value \(value).")
+                throw SwifterError.httpError("Invalid 'Content-Length' header value \(value).")
             }
             request.contentLength = contentLength
         }
         
         guard let method = String(bytes: requestLineTokens[0], encoding: .ascii) else {
-            throw SwifterError.parse("Invalid 'method' value \(requestLineTokens[0]).")
+            throw SwifterError.httpError("Invalid 'method' value \(requestLineTokens[0]).")
         }
         
         request.method = method
         
         guard let path = String(bytes: requestLineTokens[1], encoding: .ascii) else {
-            throw SwifterError.parse("Invalid 'path' value \(requestLineTokens[1]).")
+            throw SwifterError.httpError("Invalid 'path' value \(requestLineTokens[1]).")
         }
         
         let queryComponents = path.components(separatedBy: "?")

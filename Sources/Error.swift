@@ -9,7 +9,6 @@ import Foundation
 
 public enum SwifterError: Error {
     
-    case parse(String)
     case async(String)
     case socketCreation(String)
     case setReUseAddr(String)
