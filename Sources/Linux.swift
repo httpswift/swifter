@@ -19,7 +19,7 @@ public class LinuxIO: IO {
     
     public required init(_ port: in_port_t, forceIPv4: Bool, bindAddress: String? = nil) throws {
         
-        self.server = try LinuxAsyncServer.nonBlockingSocketForListenening(port, forceIPv4: forceIPv4, address: bindAddress)
+        self.server = try LinuxIO.nonBlockingSocketForListenening(port, forceIPv4: forceIPv4, address: bindAddress)
         
         self.descriptors.append(pollfd(fd: self.server, events: Int16(POLLIN), revents: 0))
     }
@@ -32,7 +32,7 @@ public class LinuxIO: IO {
         let result = Glibc.write(socket, data, data.count)
         if result == -1 {
             defer { self.finish(socket) }
-            throw AsyncError.writeFailed(Process.error)
+            throw SwifterError.writeFailed(Process.error)
         }
         if result == data.count {
             if done() == .terminate {
@@ -52,7 +52,7 @@ public class LinuxIO: IO {
     
     public func wait(_ callback: ((IOEvent) -> Void)) throws {
         guard poll(&descriptors, UInt(descriptors.count), -1) != -1 else {
-            throw AsyncError.async(Process.error)
+            throw SwifterError.async(Process.error)
         }
         for i in 0..<descriptors.count {
             if descriptors[i].revents == 0 {
@@ -60,12 +60,12 @@ public class LinuxIO: IO {
             }
             if descriptors[i].fd == server {
                 while case let client = accept(server, nil, nil), client > 0 {
-                    try LinuxAsyncServer.setSocketNonBlocking(client)
+                    try LinuxIO.setSocketNonBlocking(client)
                     self.backlog[Int32(client)] = []
                     descriptors.append(pollfd(fd: client, events: Int16(POLLIN), revents: 0))
                     callback(IOEvent.connect("", Int32(client)))
                 }
-                if errno != EWOULDBLOCK { throw AsyncError.acceptFailed(Process.error) }
+                if errno != EWOULDBLOCK { throw SwifterError.acceptFailed(Process.error) }
             } else {
                 if (descriptors[i].revents & Int16(POLLERR) != 0) || (descriptors[i].revents & Int16(POLLHUP) != 0) || (descriptors[i].revents & Int16(POLLNVAL) != 0) {
                     self.finish(descriptors[i].fd)
@@ -147,13 +147,13 @@ public class LinuxIO: IO {
         let server = Glibc.socket(forceIPv4 ? AF_INET : AF_INET6, Int32(SOCK_STREAM.rawValue), 0)
         
         guard server != -1 else {
-            throw AsyncError.socketCreation(Process.error)
+            throw SwifterError.socketCreation(Process.error)
         }
         
         var value: Int32 = 1
         if Glibc.setsockopt(server, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(MemoryLayout<Int32>.size)) == -1 {
             defer { let _ = Glibc.close(server) }
-            throw AsyncError.setReuseAddrFailed(Process.error)
+            throw SwifterError.setReuseAddrFailed(Process.error)
         }
         
         do {
@@ -170,7 +170,7 @@ public class LinuxIO: IO {
         
         if Glibc.listen(server, SOMAXCONN) == -1 {
             defer { let _ = Glibc.close(server) }
-            throw AsyncError.listenFailed(Process.error)
+            throw SwifterError.listenFailed(Process.error)
         }
         
         return server
@@ -185,7 +185,7 @@ public class LinuxIO: IO {
         
         if let addressFound = address {
             guard addressFound.withCString({ inet_pton(AF_INET, $0, &addr.sin_addr) }) == 1 else {
-                throw AsyncError.inetPtonFailed(Errno.description())
+                throw SwifterError.inetPtonFailed(Errno.description())
             }
         } else {
             addr.sin_addr = in_addr(s_addr: in_addr_t(0))
@@ -198,7 +198,7 @@ public class LinuxIO: IO {
         }
         
         guard bindResult != -1 else {
-            throw AsyncError.bindFailed(Errno.description())
+            throw SwifterError.bindFailed(Errno.description())
         }
     }
     
@@ -211,7 +211,7 @@ public class LinuxIO: IO {
         
         if let addressFound = address {
             guard addressFound.withCString({ inet_pton(AF_INET6, $0, &addr.sin6_addr) }) == 1 else {
-                throw AsyncError.inetPtonFailed(Errno.description())
+                throw SwifterError.inetPtonFailed(Errno.description())
             }
         } else {
             addr.sin6_addr = in6addr_any
@@ -224,13 +224,13 @@ public class LinuxIO: IO {
         }
         
         guard bindResult != -1 else {
-            throw AsyncError.bindFailed(Errno.description())
+            throw SwifterError.bindFailed(Errno.description())
         }
     }
 
     public static func setSocketNonBlocking(_ socket: Int32) throws {
         if Glibc.fcntl(socket, F_SETFL, fcntl(socket, F_GETFL, 0) | O_NONBLOCK) == -1 {
-            throw AsyncError.setNonBlockFailed(Process.error)
+            throw SwifterError.setNonBlockFailed(Process.error)
         }
     }
 }
