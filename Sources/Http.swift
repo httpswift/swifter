@@ -26,9 +26,13 @@ open class Request {
     public var contentLength = 0
 }
 
-open class Response {
+open class Response: ExpressibleByIntegerLiteral {
     
     public init() { }
+    
+    public required init(integerLiteral value: Int) {
+        self.status = value
+    }
     
     public init(_ status: Status = Status.ok) {
         self.status = status.rawValue
@@ -55,8 +59,31 @@ open class Response {
     public var processingSuccesor: IncomingDataProcessor? = nil
 }
 
-public class TextResponse: Response {
+public class TextResponse: Response, ExpressibleByStringLiteral {
     
+    public required init(integerLiteral value: Int) {
+        super.init(200)
+        self.headers.append(("Content-Type", "text/plain"))
+    }
+    
+    public required init(stringLiteral value: String) {
+        super.init(200)
+        self.headers.append(("Content-Type", "text/plain"))
+        self.body = [UInt8](value.utf8)
+    }
+
+    public required init(unicodeScalarLiteral value: String) {
+        super.init(200)
+        self.headers.append(("Content-Type", "text/plain"))
+        self.body = [UInt8](value.utf8)
+    }
+    
+    public required init(extendedGraphemeClusterLiteral value: String) {
+        super.init(200)
+        self.headers.append(("Content-Type", "text/plain"))
+        self.body = [UInt8](value.utf8)
+    }
+
     public init(_ status: Int = Status.ok.rawValue, _ text: String) {
         super.init(status)
         self.headers.append(("Content-Type", "text/plain"))

@@ -54,6 +54,10 @@ public class WebsocketResponse: Response {
         
         self.processingSuccesor = WebsocketDataPorcessor(WebsocketFramesProcessor(closure))
     }
+    
+    public required init(integerLiteral value: Int) {
+        fatalError("init(integerLiteral:) has not been implemented")
+    }
 }
 
 public class WebSocketFrame {

@@ -11,6 +11,11 @@ private var htmlStackBuffer = [UInt64: [UInt8]]()
 
 public class HtmlResponse: Response {
     
+    public required init(integerLiteral value: Int) {
+        super.init(200)
+        self.headers.append(("Content-Type", "text/html"))
+    }
+    
     public init(_ status: Int = Status.ok.rawValue, _ closure: ((Void) -> Void)) {
         
         super.init(status)

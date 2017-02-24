@@ -17,6 +17,10 @@ server.get("/") { _, request, responder in
     })
 }
 
+server.get("/hello") { _, _, responder in
+    responder(200)
+}
+
 server.get("/stream") { _, request, responder in
     responder(WebsocketResponse(request) { event in
         switch event {
