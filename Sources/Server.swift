@@ -21,7 +21,7 @@ public class Server {
         #endif
     }
     
-    public func serve(_ callback: @escaping ((request: Request, responder: @escaping ((Response) -> Void))) -> Void) throws {
+    public func serve(_ callback: @escaping ((request: Request, responder: ((Response) -> Void))) -> Void) throws {
         
         try self.server.wait { event in
             
