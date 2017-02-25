@@ -9,6 +9,9 @@
 import XCTest
 
 class IOSafetyTests: XCTestCase {
+    
+    
+    /*
     var server: HttpServer!
 
     override func setUp() {
@@ -40,4 +43,6 @@ class IOSafetyTests: XCTestCase {
             }
         }
     }
+ 
+    */
 }

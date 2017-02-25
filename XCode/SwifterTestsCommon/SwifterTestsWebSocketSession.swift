@@ -9,6 +9,8 @@ import XCTest
 
 class SwifterTestsWebSocketSession: XCTestCase {
     
+    /*
+    
     class TestSocket: Socket {
         var content = [UInt8]()
         var offset = 0
@@ -116,4 +118,6 @@ class SwifterTestsWebSocketSession: XCTestCase {
             }
         }
     }
+     
+     */
 }

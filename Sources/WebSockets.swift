@@ -23,7 +23,7 @@ public class WebsocketResponse: Response {
     public init(_ request: Request, _ closure: @escaping ((WebsocketEvent) -> Void)) {
         
         super.init()
-        
+            
         guard request.hasToken("websocket", forHeader: "upgrade") else {
             self.status = Status.badRequest.rawValue
             self.body = [UInt8](("Invalid value of 'Upgrade' header.").utf8)

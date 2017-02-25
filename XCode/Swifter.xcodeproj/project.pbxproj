@@ -59,6 +59,8 @@
 		7C0324491E51D36900325E4F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0324461E51D36900325E4F /* Error.swift */; };
 		7C03244A1E51D36900325E4F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0324461E51D36900325E4F /* Error.swift */; };
 		7C03244B1E51D36900325E4F /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0324461E51D36900325E4F /* Error.swift */; };
+		7C2F837C1E61D0D8001B744C /* Http+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4965311E6098C50043503A /* Http+Misc.swift */; };
+		7C2F837D1E61D0D8001B744C /* Http+Misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4965311E6098C50043503A /* Http+Misc.swift */; };
 		7C377E181D964B96009C6148 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
 		7C377E191D964B9F009C6148 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
 		7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
@@ -754,6 +756,7 @@
 				7C03243F1E51D21D00325E4F /* MacOS.swift in Sources */,
 				7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */,
+				7C2F837C1E61D0D8001B744C /* Http+Misc.swift in Sources */,
 				7C0324431E51D24A00325E4F /* Html.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -781,6 +784,7 @@
 				7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				7C0324331E51D21100325E4F /* Server.swift in Sources */,
 				7C03243E1E51D21C00325E4F /* MacOS.swift in Sources */,
+				7C2F837D1E61D0D8001B744C /* Http+Misc.swift in Sources */,
 				7C03244B1E51D36900325E4F /* Error.swift in Sources */,
 				7CCD87851C660ED60068099B /* SwifterTestsStringExtensions.swift in Sources */,
 			);

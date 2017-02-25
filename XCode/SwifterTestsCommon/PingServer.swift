@@ -9,11 +9,12 @@
 import Foundation
 
 // Server
-extension HttpServer {
-    class func pingServer() -> HttpServer {
-        let server = HttpServer()
-        server.GET["/ping"] = { request in
-            return HttpResponse.ok(.text("pong!"))
+extension Swifter {
+    
+    class func pingServer() throws -> Swifter {
+        let server = try Swifter()
+        server.get("/ping") { _, request, responder in
+            responder(TextResponse(200, "pong!"))
         }
         return server
     }
