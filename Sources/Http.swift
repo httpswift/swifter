@@ -232,20 +232,22 @@ public class HttpIncomingDataPorcessor: Hashable, IncomingDataProcessor {
             throw SwifterError.httpError("Invalid 'path' value \(requestLineTokens[1]).")
         }
         
-        let queryComponents = path.components(separatedBy: "?")
-        
-        if queryComponents.count > 1, let first = queryComponents.first, let last = queryComponents.last {
-            request.path = first
-            request.query = last
-                .components(separatedBy: "&")
-                .reduce([(String, String)]()) { (c, s) -> [(String, String)] in
-                    let tokens = s.components(separatedBy: "=")
-                    if let name = tokens.first, let value = tokens.last {
-                        if let nameDecoded = name.removingPercentEncoding, let valueDecoded = value.removingPercentEncoding {
-                            return c + [(nameDecoded, tokens.count > 1 ? valueDecoded : "")]
+        if let firstQuestionMark = path.characters.index(of: "?") {
+            request.path = String(path.characters[path.startIndex..<firstQuestionMark])
+            let queryStartIndex = path.characters.index(after: firstQuestionMark)
+            if path.endIndex > queryStartIndex {
+                let query = String(path.characters[queryStartIndex..<path.endIndex])
+                request.query = query
+                    .components(separatedBy: "&")
+                    .reduce([(String, String)]()) { (c, s) -> [(String, String)] in
+                        let tokens = s.components(separatedBy: "=")
+                        if let name = tokens.first, let value = tokens.last {
+                            if let nameDecoded = name.removingPercentEncoding, let valueDecoded = value.removingPercentEncoding {
+                                return c + [(nameDecoded, tokens.count > 1 ? valueDecoded : "")]
+                            }
                         }
-                    }
-                    return c
+                        return c
+                }
             }
         } else {
             request.path = path
