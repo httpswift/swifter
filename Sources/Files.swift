@@ -6,8 +6,9 @@
 //
 
 import Foundation
+
 /*
-public func shareFile(_ path: String) -> ((HttpRequest) -> HttpResponse) {
+public func shareFile(_ path: String) {
     return { r in
         if let file = try? path.openForReading() {
             return .raw(200, "OK", [:], { writer in
@@ -17,34 +18,65 @@ public func shareFile(_ path: String) -> ((HttpRequest) -> HttpResponse) {
         }
         return .notFound
     }
-}
+}*/
 
-public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] = ["index.html", "default.html"]) -> ((HttpRequest) -> HttpResponse) {
-    return { r in
-        guard let fileRelativePath = r.params.first else {
-            return .notFound
+#if os(iOS) || os(Linux)
+    
+func fileZeroCopy(from: Int32, to: Int32) {
+    var buffer = [UInt8](repeating: 0, count: 1024)
+    while true {
+        let readResult = read(source, &buffer, buffer.count)
+        guard readResult > 0 else {
+            return Int32(readResult)
         }
-        if fileRelativePath.value.isEmpty {
-            for path in defaults {
-                if let file = try? (directoryPath + String.pathSeparator + path).openForReading() {
-                    return .raw(200, "OK", [:], { writer in
-                        try? writer.write(file)
-                        file.close()
-                    })
-                }
+        var writeCounter = 0
+        while writeCounter < readResult {
+            let writeResult = write(target, &buffer + writeCounter, readResult - writeCounter)
+            guard writeResult > 0 else {
+                return Int32(writeResult)
             }
+            writeCounter = writeCounter + writeResult
         }
-        if let file = try? (directoryPath + String.pathSeparator + fileRelativePath.value).openForReading() {
-            return .raw(200, "OK", [:], { writer in
-                try? writer.write(file)
-                file.close()
-            })
-        }
-        return .notFound
     }
 }
 
-public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
+#else
+
+func fileZeroCopy(from: Int32, to: Int32) {
+    var offset: off_t = 0
+    var sf: sf_hdtr = sf_hdtr()
+    sendfile(from, to, 0, &offset, &sf, 0)
+}
+
+#endif
+
+@available(OSXApplicationExtension 10.10, *)
+public func share(filesAtPath path: String, defaults: [String] = ["index.html", "default.html"]) -> (([String: String], Request, @escaping ((Response) -> Void)) -> Void) {
+        return { (params, request, responder) in
+            DispatchQueue.global(qos: .background).async {
+                guard let fileRelativePath = params.first else {
+                    return responder(404)
+                }
+                if fileRelativePath.value.isEmpty {
+                    for path in defaults {
+                        if let file = try? (path + String.pathSeparator + path).openFile(forMode: "r+b") {
+                            fileZeroCopy(from: fileno(file.pointer), to: 0)
+                            file.close()
+                        }
+                    }
+                }
+                if let file = try? (path + String.pathSeparator + fileRelativePath.value).openFile(forMode: "r+b") {
+                    fileZeroCopy(from: fileno(file.pointer), to: 0)
+                    file.close()
+                }
+                return responder(404)
+            }
+        }
+}
+
+/*
+
+public func directoryBrowser(_ dir: String) -> (([String: String], Request, @escaping ((Response) -> Void)) -> Void) {
     return { r in
         guard let (_, value) = r.params.first else {
             return HttpResponse.notFound
