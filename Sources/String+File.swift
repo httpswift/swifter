@@ -26,6 +26,10 @@ extension String {
             fclose(pointer)
         }
         
+        public func seek(_ offset: Int) -> Bool {
+            return (fseek(pointer, offset, SEEK_SET) == 0)
+        }
+        
         public func read(_ data: inout [UInt8]) throws -> Int {
             if data.count <= 0 {
                 return data.count
