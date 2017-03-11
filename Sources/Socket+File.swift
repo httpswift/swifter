@@ -7,14 +7,13 @@
 
 import Foundation
 
-#if os(iOS) || os(Linux)
-    
+#if os(iOS) || os(Linux)    
     struct sf_hdtr { }
     
-    private func sendfileImpl(_ source: Int32, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>, _: UnsafeMutablePointer<sf_hdtr>, _: Int32) -> Int32 {
+    private func sendfileImpl(_ source: UnsafeMutablePointer<FILE>, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>, _: UnsafeMutablePointer<sf_hdtr>, _: Int32) -> Int32 {
         var buffer = [UInt8](repeating: 0, count: 1024)
         while true {
-            let readResult = read(source, &buffer, buffer.count)
+            let readResult = fread(&buffer, 1, buffer.count, source)
             guard readResult > 0 else {
                 return Int32(readResult)
             }
@@ -28,8 +27,6 @@ import Foundation
             }
         }
     }
-#else
-    private let sendfileImpl = sendfile
 #endif
 
 extension Socket {
@@ -37,8 +34,13 @@ extension Socket {
     public func writeFile(_ file: String.File) throws -> Void {
         var offset: off_t = 0
         var sf: sf_hdtr = sf_hdtr()
-        let result = sendfileImpl(fileno(file.pointer), self.socketFileDescriptor, 0, &offset, &sf
-            , 0)
+        
+        #if os(iOS) || os(Linux)
+        let result = sendfileImpl(file.pointer, self.socketFileDescriptor, 0, &offset, &sf, 0)
+        #else
+        let result = sendfile(fileno(file.pointer), self.socketFileDescriptor, 0, &offset, &sf, 0)
+        #endif
+        
         if result == -1 {
             throw SocketError.writeFailed("sendfile: " + Errno.description())
         }
