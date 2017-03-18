@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7CCD1BA81C8F84E60016D664"
-               BuildableName = "SwiftertvOS.framework"
+               BuildableName = "Swifter.framework"
                BlueprintName = "SwiftertvOS"
                ReferencedContainer = "container:Swifter.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7CCD1BA81C8F84E60016D664"
-            BuildableName = "SwiftertvOS.framework"
+            BuildableName = "Swifter.framework"
             BlueprintName = "SwiftertvOS"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "7CCD1BA81C8F84E60016D664"
-            BuildableName = "SwiftertvOS.framework"
+            BuildableName = "Swifter.framework"
             BlueprintName = "SwiftertvOS"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>
