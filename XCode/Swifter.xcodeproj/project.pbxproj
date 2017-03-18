@@ -321,7 +321,7 @@
 		7CCD1B701C8F7CEC0016D664 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CCD1B7F1C8F7E520016D664 /* SwiftertvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftertvOS.h; sourceTree = "<group>"; };
 		7CCD1B811C8F7E520016D664 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7CCD1BC41C8F84E60016D664 /* SwiftertvOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftertvOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7CCD1BC41C8F84E60016D664 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCD1BC51C8F84E60016D664 /* SwifteriOS copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SwifteriOS copy-Info.plist"; path = "/Users/damiankolakowski/Desktop/swifter/SwifteriOS copy-Info.plist"; sourceTree = "<absolute>"; };
 		7CCD875C1C66099B0068099B /* SwifteriOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwifteriOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CCD87601C66099B0068099B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -510,7 +510,7 @@
 				7CCD875C1C66099B0068099B /* SwifteriOSTests.xctest */,
 				7CCD87791C660EA30068099B /* SwifterOSXTests.xctest */,
 				7CCD1B651C8F7CEC0016D664 /* SwifterSampletvOS.app */,
-				7CCD1BC41C8F84E60016D664 /* SwiftertvOS.framework */,
+				7CCD1BC41C8F84E60016D664 /* Swifter.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -761,7 +761,7 @@
 			);
 			name = SwiftertvOS;
 			productName = SwifteriOS;
-			productReference = 7CCD1BC41C8F84E60016D664 /* SwiftertvOS.framework */;
+			productReference = 7CCD1BC41C8F84E60016D664 /* Swifter.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		7CCD875B1C66099B0068099B /* SwifteriOSTests */ = {
@@ -1568,7 +1568,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwiftertvOS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Swifter;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
@@ -1599,7 +1599,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwiftertvOS;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Swifter;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
