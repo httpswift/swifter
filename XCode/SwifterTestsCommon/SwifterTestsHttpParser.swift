@@ -89,9 +89,11 @@ class SwifterTestsHttpParser: XCTestCase {
             XCTAssert(false, "Parser should throw an error if request' body is too short.")
         } catch { }
         
-        var r = try? parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 10\n\n1234567890"))
+        var r = try? parser.readHttpRequest(TestSocket("GET /open?link=https://www.youtube.com/watch?v=D2cUBG4PnOA HTTP/1.0\nContent-Length: 10\n\n1234567890"))
+        
+        XCTAssertEqual(r?.queryParams.filter({ $0.0 == "link"}).first?.1, "https://www.youtube.com/watch?v=D2cUBG4PnOA")
         XCTAssertEqual(r?.method, "GET", "Parser should extract HTTP method name from the status line.")
-        XCTAssertEqual(r?.path, "/", "Parser should extract HTTP path value from the status line.")
+        XCTAssertEqual(r?.path, "/open?link=https://www.youtube.com/watch?v=D2cUBG4PnOA", "Parser should extract HTTP path value from the status line.")
         XCTAssertEqual(r?.headers["content-length"], "10", "Parser should extract Content-Length header value.")
         
         r = try? parser.readHttpRequest(TestSocket("POST / HTTP/1.0\nContent-Length: 10\n\n1234567890"))
