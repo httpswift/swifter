@@ -1,16 +1,20 @@
-### What is Swift?
-
->Swift is an innovative new programming language for Cocoa and Cocoa Touch. Writing code is interactive and fun, the syntax is concise yet expressive, and apps run lightning-fast. Swift is ready for your next iOS and OS X project — or for addition into your current app — because Swift code works side-by-side with Objective-C.
+![Platform](https://img.shields.io/badge/Platform-Linux%20&%20OSX%20&%20tvOS-4BC51D.svg?style=flat)
+![Swift](https://img.shields.io/badge/Swift-3.x-4BC51D.svg?style=flat)
+![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
+[![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)]()
+[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ### What is Swifter?
 
 Tiny http server engine written in Swift ( https://developer.apple.com/swift/ ) programming language.
 
-![Platform](https://img.shields.io/badge/Platform-Linux%20&%20OSX-4BC51D.svg?style=flat)
-![Swift](https://img.shields.io/badge/Swift-2.2/3.0--dev-4BC51D.svg?style=flat)
-![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
-[![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)]()
-[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+### Branches
+`* stable` - lands on CocoaPods and others. Supports the latest non-beta XCode and SPM. Stable.
+
+`* master` - stable branch plus experimental web-framework layer.
+
+`* 2.0   ` - next version of Swifter (async IO). Experimental.
+
 
 ### How to start?
 ```swift
