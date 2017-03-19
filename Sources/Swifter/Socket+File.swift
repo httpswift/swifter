@@ -12,7 +12,7 @@
 #endif
 
 
-#if os(iOS) || os (Linux)
+#if os(iOS) || os(tvOS) || os (Linux)
     
     struct sf_hdtr { }
     
@@ -40,7 +40,7 @@
     
 #endif
 
-#if os(iOS) || os (Linux)
+#if os(iOS) || os(tvOS) || os (Linux)
 
 extension Socket {
     
