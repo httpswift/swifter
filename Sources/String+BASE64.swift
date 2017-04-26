@@ -5,24 +5,20 @@
 //  Copyright © 2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
 
 extension String {
     
     private static let CODES = [UInt8]("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".utf8)
     
-    public static func toBase64(data: [UInt8]) -> String {
+    public static func toBase64(_ data: [UInt8]) -> String? {
         
         // Based on: https://en.wikipedia.org/wiki/Base64#Sample_Implementation_in_Java
         
         var result = [UInt8]()
         var tmp: UInt8
-        for index in 0.stride(to: data.count, by: 3) {
+        for index in stride(from: 0, to: data.count, by: 3) {
             let byte = data[index]
             tmp = (byte & 0xFC) >> 2;
             result.append(CODES[Int(tmp)])
@@ -38,13 +34,13 @@ extension String {
                     result.append(CODES[Int(tmp)]);
                 } else  {
                     result.append(CODES[Int(tmp)]);
-                    result.appendContentsOf([UInt8]("=".utf8));
+                    result.append(contentsOf: [UInt8]("=".utf8));
                 }
             } else {
                 result.append(CODES[Int(tmp)]);
-                result.appendContentsOf([UInt8]("==".utf8));
+                result.append(contentsOf: [UInt8]("==".utf8));
             }
         }
-        return String.fromUInt8(result)
+        return String(bytes: result, encoding: .utf8)
     }
 }

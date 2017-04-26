@@ -5,13 +5,9 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
-enum HttpParserError: ErrorType {
+enum HttpParserError: Error {
     case InvalidStatusLine(String)
 }
 
@@ -19,9 +15,9 @@ public class HttpParser {
     
     public init() { }
     
-    public func readHttpRequest(socket: Socket) throws -> HttpRequest {
+    public func readHttpRequest(_ socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
-        let statusLineTokens = statusLine.split(" ")
+        let statusLineTokens = statusLine.components(separatedBy: " ")
         if statusLineTokens.count < 3 {
             throw HttpParserError.InvalidStatusLine(statusLine)
         }
@@ -36,42 +32,69 @@ public class HttpParser {
         return request
     }
     
-    private func extractQueryParams(url: String) -> [(String, String)] {
-        guard let query = url.split("?").last else {
+    private func extractQueryParams(_ url: String) -> [(String, String)] {
+        guard let questionMark = url.characters.index(of: "?") else {
             return []
         }
-        return query.split("&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
-            let tokens = s.split(1, separator: "=")
-            if let name = tokens.first, value = tokens.last {
-                return c + [(name.removePercentEncoding(), value.removePercentEncoding())]
-            }
-            return c
+        let queryStart = url.characters.index(after: questionMark)
+        guard url.endIndex > queryStart else {
+            return []
         }
+        let query = String(url.characters[queryStart..<url.endIndex])
+        return query.components(separatedBy: "&")
+            .reduce([(String, String)]()) { (c, s) -> [(String, String)] in
+                guard let nameEndIndex = s.characters.index(of: "=") else {
+                    return c
+                }
+                guard let name = String(s.characters[s.startIndex..<nameEndIndex]).removingPercentEncoding else {
+                    return c
+                }
+                let valueStartIndex = s.index(nameEndIndex, offsetBy: 1)
+                guard valueStartIndex < s.endIndex else {
+                    return c + [(name, "")]
+                }
+                guard let value = String(s.characters[valueStartIndex..<s.endIndex]).removingPercentEncoding else {
+                    return c + [(name, "")]
+                }
+                return c + [(name, value)]
+        }
+        
+        
+//        let tokens = url.components(separatedBy: "?")
+//        guard let query = tokens.last, tokens.count >= 2 else {
+//            return []
+//        }
+//        return query.components(separatedBy: "&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
+//            let tokens = s.components(separatedBy: "=")
+//            let name = tokens.first?.removingPercentEncoding
+//            let value = tokens.count > 1 ? (tokens.last?.removingPercentEncoding ?? "") : ""
+//            if let nameFound = name {
+//                return c + [(nameFound, value)]
+//            }
+//            return c
+//        }
     }
     
-    private func readBody(socket: Socket, size: Int) throws -> [UInt8] {
+    private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
         var body = [UInt8]()
         for _ in 0..<size { body.append(try socket.read()) }
         return body
     }
     
-    private func readHeaders(socket: Socket) throws -> [String: String] {
+    private func readHeaders(_ socket: Socket) throws -> [String: String] {
         var headers = [String: String]()
-        repeat {
-            let headerLine = try socket.readLine()
-            if headerLine.isEmpty {
-                return headers
+        while case let headerLine = try socket.readLine() , !headerLine.isEmpty {
+            let headerTokens = headerLine.components(separatedBy: ":")
+            if let name = headerTokens.first, let value = headerTokens.last {
+                headers[name.lowercased()] = value.trimmingCharacters(in: .whitespaces)
             }
-            let headerTokens = headerLine.split(1, separator: ":")
-            if let name = headerTokens.first, value = headerTokens.last {
-                headers[name.lowercaseString] = value.trim()
-            }
-        } while true
+        }
+        return headers
     }
     
-    func supportsKeepAlive(headers: [String: String]) -> Bool {
+    func supportsKeepAlive(_ headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
-            return "keep-alive" == value.trim()
+            return "keep-alive" == value.trimmingCharacters(in: .whitespaces)
         }
         return false
     }

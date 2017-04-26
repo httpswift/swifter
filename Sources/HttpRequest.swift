@@ -5,11 +5,7 @@
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
-#if os(Linux)
-    import Glibc
-#else
-    import Foundation
-#endif
+import Foundation
 
 public class HttpRequest {
     
@@ -21,19 +17,30 @@ public class HttpRequest {
     public var address: String? = ""
     public var params: [String: String] = [:]
     
+    public func hasTokenForHeader(_ headerName: String, token: String) -> Bool {
+        guard let headerValue = headers[headerName] else {
+            return false
+        }
+        return headerValue.components(separatedBy: ",").filter({ $0.trimmingCharacters(in: .whitespaces).lowercased() == token }).count > 0
+    }
+    
     public func parseUrlencodedForm() -> [(String, String)] {
         guard let contentTypeHeader = headers["content-type"] else {
             return []
         }
-        let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
-        guard let contentType = contentTypeHeaderTokens.first where contentType == "application/x-www-form-urlencoded" else {
+        let contentTypeHeaderTokens = contentTypeHeader.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
+        guard let contentType = contentTypeHeaderTokens.first, contentType == "application/x-www-form-urlencoded" else {
             return []
         }
-        return String.fromUInt8(body).split("&").map { param -> (String, String) in
-            let tokens = param.split("=")
-            if let name = tokens.first, value = tokens.last where tokens.count == 2 {
-                return (name.replace("+", " ").removePercentEncoding(),
-                        value.replace("+", " ").removePercentEncoding())
+        guard let utf8String = String(bytes: body, encoding: .utf8) else {
+            // Consider to throw an exception here (examine the encoding from headers).
+            return []
+        }
+        return utf8String.components(separatedBy: "&").map { param -> (String, String) in
+            let tokens = param.components(separatedBy: "=")
+            if let name = tokens.first?.removingPercentEncoding, let value = tokens.last?.removingPercentEncoding, tokens.count == 2 {
+                return (name.replacingOccurrences(of: "+", with: " "),
+                        value.replacingOccurrences(of: "+", with: " "))
             }
             return ("","")
         }
@@ -52,20 +59,20 @@ public class HttpRequest {
             return valueFor("content-disposition", parameter: "filename")?.unquote()
         }
         
-        private func valueFor(headerName: String, parameter: String) -> String? {
+        private func valueFor(_ headerName: String, parameter: String) -> String? {
             return headers.reduce([String]()) { (combined, header: (key: String, value: String)) -> [String] in
                 guard header.key == headerName else {
                     return combined
                 }
-                let headerValueParams = header.value.split(";").map { $0.trim() }
-                return headerValueParams.reduce(combined, combine: { (results, token) -> [String] in
-                    let parameterTokens = token.split(1, separator: "=")
+                let headerValueParams = header.value.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
+                return headerValueParams.reduce(combined, { (results, token) -> [String] in
+                    let parameterTokens = token.components(separatedBy: "=")
                     if parameterTokens.first == parameter, let value = parameterTokens.last {
                         return results + [value]
                     }
                     return results
                 })
-            }.first
+                }.first
         }
     }
     
@@ -73,25 +80,25 @@ public class HttpRequest {
         guard let contentTypeHeader = headers["content-type"] else {
             return []
         }
-        let contentTypeHeaderTokens = contentTypeHeader.split(";").map { $0.trim() }
-        guard let contentType = contentTypeHeaderTokens.first where contentType == "multipart/form-data" else {
+        let contentTypeHeaderTokens = contentTypeHeader.components(separatedBy: ";").map { $0.trimmingCharacters(in: .whitespaces) }
+        guard let contentType = contentTypeHeaderTokens.first, contentType == "multipart/form-data" else {
             return []
         }
         var boundary: String? = nil
         contentTypeHeaderTokens.forEach({
-            let tokens = $0.split("=")
-            if let key = tokens.first where key == "boundary" && tokens.count == 2 {
+            let tokens = $0.components(separatedBy: "=")
+            if let key = tokens.first, key == "boundary" && tokens.count == 2 {
                 boundary = tokens.last
             }
         })
-        if let boundary = boundary where boundary.utf8.count > 0 {
+        if let boundary = boundary, boundary.utf8.count > 0 {
             return parseMultiPartFormData(body, boundary: "--\(boundary)")
         }
         return []
     }
     
-    private func parseMultiPartFormData(data: [UInt8], boundary: String) -> [MultiPart] {
-        var generator = data.generate()
+    private func parseMultiPartFormData(_ data: [UInt8], boundary: String) -> [MultiPart] {
+        var generator = data.makeIterator()
         var result = [MultiPart]()
         while let part = nextMultiPart(&generator, boundary: boundary, isFirst: result.isEmpty) {
             result.append(part)
@@ -99,19 +106,19 @@ public class HttpRequest {
         return result
     }
     
-    private func nextMultiPart(inout generator: IndexingGenerator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
+    private func nextMultiPart(_ generator: inout IndexingIterator<[UInt8]>, boundary: String, isFirst: Bool) -> MultiPart? {
         if isFirst {
-            guard nextMultiPartLine(&generator) == boundary else {
+            guard nextUTF8MultiPartLine(&generator) == boundary else {
                 return nil
             }
         } else {
-            nextMultiPartLine(&generator)
+            let /* ignore */ _ = nextUTF8MultiPartLine(&generator)
         }
         var headers = [String: String]()
-        while let line = nextMultiPartLine(&generator) where !line.isEmpty {
-            let tokens = line.split(":")
-            if let name = tokens.first, value = tokens.last where tokens.count == 2 {
-                headers[name.lowercaseString] = value.trim()
+        while let line = nextUTF8MultiPartLine(&generator), !line.isEmpty {
+            let tokens = line.components(separatedBy: ":")
+            if let name = tokens.first, let value = tokens.last, tokens.count == 2 {
+                headers[name.lowercased()] = value.trimmingCharacters(in: .whitespaces)
             }
         }
         guard let body = nextMultiPartBody(&generator, boundary: boundary) else {
@@ -120,23 +127,23 @@ public class HttpRequest {
         return MultiPart(headers: headers, body: body)
     }
     
-    private func nextMultiPartLine(inout generator: IndexingGenerator<[UInt8]>) -> String? {
-        var result = String()
+    private func nextUTF8MultiPartLine(_ generator: inout IndexingIterator<[UInt8]>) -> String? {
+        var temp = [UInt8]()
         while let value = generator.next() {
             if value > HttpRequest.CR {
-                result.append(Character(UnicodeScalar(value)))
+                temp.append(value)
             }
             if value == HttpRequest.NL {
                 break
             }
         }
-        return result
+        return String(bytes: temp, encoding: String.Encoding.utf8)
     }
     
     static let CR = UInt8(13)
     static let NL = UInt8(10)
     
-    private func nextMultiPartBody(inout generator: IndexingGenerator<[UInt8]>, boundary: String) -> [UInt8]? {
+    private func nextMultiPartBody(_ generator: inout IndexingIterator<[UInt8]>, boundary: String) -> [UInt8]? {
         var body = [UInt8]()
         let boundaryArray = [UInt8](boundary.utf8)
         var matchOffset = 0;
@@ -144,7 +151,7 @@ public class HttpRequest {
             matchOffset = ( x == boundaryArray[matchOffset] ? matchOffset + 1 : 0 )
             body.append(x)
             if matchOffset == boundaryArray.count {
-                body.removeRange(Range<Int>(body.count-matchOffset ..< body.count))
+                body.removeSubrange(CountableRange<Int>(body.count-matchOffset ..< body.count))
                 if body.last == HttpRequest.NL {
                     body.removeLast()
                     if body.last == HttpRequest.CR {
