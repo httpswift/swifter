@@ -17,6 +17,8 @@ public class HttpRequest {
     public var address: String? = ""
     public var params: [String: String] = [:]
     
+    public init() {}
+    
     public func hasTokenForHeader(_ headerName: String, token: String) -> Bool {
         guard let headerValue = headers[headerName] else {
             return false
