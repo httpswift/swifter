@@ -66,8 +66,16 @@ public class HttpServerIO {
         return Int(try socket.port())
     }
 
+    public func localPath() throws -> String {
+        return try socket.localPath()
+    }
+
     public func isIPv4() throws -> Bool {
         return try socket.isIPv4()
+    }
+
+    public func isLocal() throws -> Bool {
+        return try socket.isLocal()
     }
 
     deinit {
@@ -85,15 +93,11 @@ public class HttpServerIO {
     }
 
     @available(macOS 10.10, *)
-    public func startLocal(_ socketPath: String? = nil, priority: DispatchQoS.QoSClass = DispatchQoS.QoSClass.background) throws {
-        guard let path = socketPath ?? self.listenLocalPath else {
-            // Caller did not specify local path property or parameter
-            throw SocketError.noLocalPath
-        }
+    public func startLocal(_ socketPath: String, priority: DispatchQoS.QoSClass = DispatchQoS.QoSClass.background) throws {
         guard !self.operating else { return }
         stop()
         self.state = .starting
-        self.socket = try Socket.localSocketForListen(path, SOMAXCONN)
+        self.socket = try Socket.localSocketForListen(socketPath, SOMAXCONN)
         startListener(priority)
     }
 
