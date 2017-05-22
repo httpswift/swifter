@@ -104,7 +104,11 @@ extension Socket {
     
     public class func localSocketForListen(_ path: String, _ maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         // Create a local (Unix domain) socket
-        let socketFileDescriptor = socket(AF_LOCAL, SOCK_STREAM, 0)
+        #if os(Linux)
+            let socketFileDescriptor = socket(AF_LOCAL, Int32(SOCK_STREAM.rawValue), 0)
+        #else
+            let socketFileDescriptor = socket(AF_LOCAL, SOCK_STREAM, 0)
+        #endif
         // Verify the socket was created successfully
         if socketFileDescriptor == -1 {
             throw SocketError.socketCreationFailed(Errno.description())
@@ -136,8 +140,8 @@ extension Socket {
         }
         let sun_len = socklen_t(MemoryLayout<sockaddr_un>.size - pathMax + pathLen)
         #if !os(Linux)
-        // Apple has an extra field in sockaddr_un
-        addr.sun_len = UInt8(sun_len)
+            // Apple has an extra field in sockaddr_un
+            addr.sun_len = UInt8(sun_len)
         #endif
         // Bind the socket to the path
         let bindResult = withUnsafePointer(to: &addr) {
