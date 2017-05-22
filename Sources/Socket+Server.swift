@@ -102,7 +102,7 @@ extension Socket {
         return Socket(socketFileDescriptor: socketFileDescriptor)
     }
     
-    public class func localSocketForListen(path: String, _ maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
+    public class func localSocketForListen(_ path: String, _ maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
         // Create a local (Unix domain) socket
         let socketFileDescriptor = socket(AF_LOCAL, SOCK_STREAM, 0)
         // Verify the socket was created successfully
@@ -134,11 +134,15 @@ extension Socket {
             Socket.close(socketFileDescriptor)
             throw SocketError.localPathTooLong("\"\(path)\" is \(pathLen) bytes but max is \(pathMax) bytes")
         }
-        addr.sun_len = UInt8(MemoryLayout<sockaddr_un>.size - pathMax + pathLen)
+        let sun_len = socklen_t(MemoryLayout<sockaddr_un>.size - pathMax + pathLen)
+        #if !os(Linux)
+        // Apple has an extra field in sockaddr_un
+        addr.sun_len = UInt8(sun_len)
+        #endif
         // Bind the socket to the path
         let bindResult = withUnsafePointer(to: &addr) {
             $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-                return bind(socketFileDescriptor, $0, socklen_t(addr.sun_len))
+                return bind(socketFileDescriptor, $0, sun_len)
             }
         }
         if bindResult == -1 {
