@@ -54,6 +54,12 @@ public class HttpServerIO {
     /// Otherwise, `listenAddressIPv4` will be used.
     public var listenAddressIPv6: String?
 
+    /// Path to a local (Unix domain) socket to listen on.
+    /// It's only used when the server is started with the `startLocal` function.
+    /// There is no default value.
+    /// For local sockets the path muxt be specified here or in the function call
+    public var listenLocalPath: String?
+
     private let queue = DispatchQueue(label: "swifter.httpserverio.clientsockets")
 
     public func port() throws -> Int {
@@ -75,6 +81,24 @@ public class HttpServerIO {
         self.state = .starting
         let address = forceIPv4 ? listenAddressIPv4 : listenAddressIPv6
         self.socket = try Socket.tcpSocketForListen(port, forceIPv4, SOMAXCONN, address)
+        startListener(priority)
+    }
+
+    @available(macOS 10.10, *)
+    public func startLocal(_ socketPath: String? = nil, priority: DispatchQoS.QoSClass = DispatchQoS.QoSClass.background) throws {
+        guard let path = socketPath ?? self.listenLocalPath else {
+            // Caller did not specify local path property or parameter
+            throw SocketError.noLocalPath
+        }
+        guard !self.operating else { return }
+        stop()
+        self.state = .starting
+        self.socket = try Socket.localSocketForListen(path, SOMAXCONN)
+        startListener(priority)
+    }
+
+    @available(macOS 10.10, *)
+    private func startListener(_ priority: DispatchQoS.QoSClass) {
         DispatchQueue.global(qos: priority).async { [weak self] in
             guard let strongSelf = self else { return }
             guard strongSelf.operating else { return }
