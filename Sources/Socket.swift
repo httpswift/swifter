@@ -11,6 +11,7 @@ import Foundation
 public enum SocketError: Error {
     case socketCreationFailed(String)
     case socketSettingReUseAddrFailed(String)
+    case localPathTooLong(String)
     case bindFailed(String)
     case listenFailed(String)
     case writeFailed(String)
@@ -20,6 +21,8 @@ public enum SocketError: Error {
     case acceptFailed(String)
     case recvFailed(String)
     case getSockNameFailed(String)
+    case notNetworkSocket
+    case notLocalSocket
 }
 
 open class Socket: Hashable, Equatable {
@@ -45,9 +48,37 @@ open class Socket: Hashable, Equatable {
         shutdown = true
         Socket.close(self.socketFileDescriptor)
     }
-    
-    public func port() throws -> in_port_t {
+
+    private func getSockaddrIn() throws -> sockaddr_in {
         var addr = sockaddr_in()
+        try withUnsafePointer(to: &addr) { pointer in
+            var len = socklen_t(MemoryLayout<sockaddr_in>.size)
+            if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
+                throw SocketError.getSockNameFailed(Errno.description())
+            }
+        }
+        guard (Int32(addr.sin_family) == AF_INET) || (Int32(addr.sin_family) == AF_INET6) else {
+            throw SocketError.notNetworkSocket
+        }
+        return addr
+    }
+    
+    private func getSockaddrUn() throws -> sockaddr_un {
+        var addr = sockaddr_un()
+        try withUnsafePointer(to: &addr) { pointer in
+            var len = socklen_t(MemoryLayout<sockaddr_un>.size)
+            if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
+                throw SocketError.getSockNameFailed(Errno.description())
+            }
+        }
+        guard Int32(addr.sun_family) == AF_LOCAL else {
+            throw SocketError.notLocalSocket
+        }
+        return addr
+    }
+
+    public func port() throws -> in_port_t {
+        var addr = try getSockaddrIn()
         return try withUnsafePointer(to: &addr) { pointer in
             var len = socklen_t(MemoryLayout<sockaddr_in>.size)
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
@@ -62,14 +93,42 @@ open class Socket: Hashable, Equatable {
     }
     
     public func isIPv4() throws -> Bool {
-        var addr = sockaddr_in()
+        var addr: sockaddr_in
+        do {
+            addr = try getSockaddrIn()
+        } catch SocketError.notNetworkSocket {
+            return false
+        } catch {
+            throw error
+        }
+        return Int32(addr.sin_family) == AF_INET
+    }
+
+    public func localPath() throws -> String {
+        var addr = try getSockaddrUn()
         return try withUnsafePointer(to: &addr) { pointer in
-            var len = socklen_t(MemoryLayout<sockaddr_in>.size)
+            var len = socklen_t(MemoryLayout<sockaddr_un>.size)
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
                 throw SocketError.getSockNameFailed(Errno.description())
             }
-            return Int32(addr.sin_family) == AF_INET
+            return withUnsafePointer(to: &addr.sun_path) { path in
+                let pathLen = MemoryLayout.size(ofValue: addr.sun_path)
+                return path.withMemoryRebound(to: UInt8.self, capacity: pathLen) { bytes in
+                    return String(cString: bytes)
+                }
+            }
         }
+    }
+
+    public func isLocal() throws -> Bool {
+        do {
+            let _ = try getSockaddrUn()
+        } catch SocketError.notLocalSocket {
+            return false
+        } catch {
+            throw error
+        }
+        return true
     }
     
     public func writeUTF8(_ string: String) throws {
