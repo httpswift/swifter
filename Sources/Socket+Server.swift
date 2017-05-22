@@ -102,6 +102,59 @@ extension Socket {
         return Socket(socketFileDescriptor: socketFileDescriptor)
     }
     
+    public class func localSocketForListen(path: String, _ maxPendingConnection: Int32 = SOMAXCONN) throws -> Socket {
+        // Create a local (Unix domain) socket
+        let socketFileDescriptor = socket(AF_LOCAL, SOCK_STREAM, 0)
+        // Verify the socket was created successfully
+        if socketFileDescriptor == -1 {
+            throw SocketError.socketCreationFailed(Errno.description())
+        }
+        // Set the Re-Use Address socket option
+        var value: Int32 = 1
+        if setsockopt(socketFileDescriptor, SOL_SOCKET, SO_REUSEADDR, &value, socklen_t(MemoryLayout<Int32>.size)) == -1 {
+            // setsockopt failed; close the file discriptor and throw an error
+            let details = Errno.description()
+            Socket.close(socketFileDescriptor)
+            throw SocketError.socketSettingReUseAddrFailed(details)
+        }
+        // Prevent crashes when blocking calls are pending and the app gets paused
+        Socket.setNoSigPipe(socketFileDescriptor)
+        // Create the Unix path socket address
+        var addr = sockaddr_un()
+        addr.sun_family = sa_family_t(AF_LOCAL)
+        let pathMax = MemoryLayout.size(ofValue: addr.sun_path)
+        let pathLen = Int(withUnsafeMutablePointer(to: &addr.sun_path) {
+            $0.withMemoryRebound(to: Int8.self, capacity: pathMax) {
+                // Include the null terminator
+                return strlcpy($0, path, pathMax) + UInt(1)
+            }
+        })
+        // Ensure the path didn't get truncated
+        if pathLen > pathMax {
+            Socket.close(socketFileDescriptor)
+            throw SocketError.localPathTooLong("\"\(path)\" is \(pathLen) bytes but max is \(pathMax) bytes")
+        }
+        addr.sun_len = UInt8(MemoryLayout<sockaddr_un>.size - pathMax + pathLen)
+        // Bind the socket to the path
+        let bindResult = withUnsafePointer(to: &addr) {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                return bind(socketFileDescriptor, $0, socklen_t(addr.sun_len))
+            }
+        }
+        if bindResult == -1 {
+            let details = Errno.description()
+            Socket.close(socketFileDescriptor)
+            throw SocketError.bindFailed(details)
+        }
+        // Enter the listening state
+        if listen(socketFileDescriptor, maxPendingConnection) == -1 {
+            let details = Errno.description()
+            Socket.close(socketFileDescriptor)
+            throw SocketError.listenFailed(details)
+        }
+        return Socket(socketFileDescriptor: socketFileDescriptor)
+    }
+
     public func acceptClientSocket() throws -> Socket {
         var addr = sockaddr()
         var len: socklen_t = 0

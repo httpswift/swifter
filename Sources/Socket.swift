@@ -11,6 +11,7 @@ import Foundation
 public enum SocketError: Error {
     case socketCreationFailed(String)
     case socketSettingReUseAddrFailed(String)
+    case localPathTooLong(String)
     case bindFailed(String)
     case listenFailed(String)
     case writeFailed(String)
