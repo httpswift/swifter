@@ -13,13 +13,13 @@ public func websocket(
     _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard r.hasTokenForHeader("upgrade", token: "websocket") else {
-            return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"])"))
+            return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"] ?? "unknown")"))
         }
         guard r.hasTokenForHeader("connection", token: "upgrade") else {
-            return .badRequest(.text("Invalid value of 'Connection' header: \(r.headers["connection"])"))
+            return .badRequest(.text("Invalid value of 'Connection' header: \(r.headers["connection"] ?? "unknown")"))
         }
         guard let secWebSocketKey = r.headers["sec-websocket-key"] else {
-            return .badRequest(.text("Invalid value of 'Sec-Websocket-Key' header: \(r.headers["sec-websocket-key"])"))
+            return .badRequest(.text("Invalid value of 'Sec-Websocket-Key' header: \(r.headers["sec-websocket-key"] ?? "unknown")"))
         }
         let protocolSessionClosure: ((Socket) -> Void) = { socket in
             let session = WebSocketSession(socket)
