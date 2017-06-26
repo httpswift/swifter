@@ -17,7 +17,7 @@ public func scopes(_ scope: @escaping Closure) -> ((HttpRequest) -> HttpResponse
     }
 }
 
-public typealias Closure = (Void) -> Void
+public typealias Closure = () -> Void
 
 public var idd: String? = nil
 public var dir: String? = nil
