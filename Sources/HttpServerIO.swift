@@ -142,7 +142,7 @@ public class HttpServerIO {
     }
 
     private struct InnerWriteContext: HttpResponseBodyWriter {
-        
+
         let socket: Socket
 
         func write(_ file: String.File) throws {
@@ -169,23 +169,27 @@ public class HttpServerIO {
     private func respond(_ socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
         guard self.operating else { return false }
 
-        try socket.writeUTF8("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
+        var string = String()
+
+        string.append("HTTP/1.1 \(response.statusCode()) \(response.reasonPhrase())\r\n")
 
         let content = response.content()
 
         if content.length >= 0 {
-            try socket.writeUTF8("Content-Length: \(content.length)\r\n")
+            string.append("Content-Length: \(content.length)\r\n")
         }
 
         if keepAlive && content.length != -1 {
-            try socket.writeUTF8("Connection: keep-alive\r\n")
+            string.append("Connection: keep-alive\r\n")
         }
 
         for (name, value) in response.headers() {
-            try socket.writeUTF8("\(name): \(value)\r\n")
+            string.append("\(name): \(value)\r\n")
         }
 
-        try socket.writeUTF8("\r\n")
+        string.append("\r\n")
+
+        try socket.writeUTF8(string)
 
         if let writeClosure = content.write {
             let context = InnerWriteContext(socket: socket)
