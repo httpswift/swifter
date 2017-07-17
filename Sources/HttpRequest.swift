@@ -16,8 +16,15 @@ public class HttpRequest {
     public var body: [UInt8] = []
     public var address: String? = ""
     public var params: [String: String] = [:]
+    public var tempFile: String?
     
     public init() {}
+    
+    public func removeTempFileIfExists() throws {
+        if let path = tempFile, try path.exists() {
+            try FileManager.default.removeItem(atPath: path)
+        }
+    }
     
     public func hasTokenForHeader(_ headerName: String, token: String) -> Bool {
         guard let headerValue = headers[headerName] else {

@@ -122,6 +122,7 @@ public class HttpServerIO {
             let (params, handler) = self.dispatch(request)
             request.params = params
             let response = handler(request)
+            try? request.removeTempFileIfExists()
             var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
                 if self.operating {

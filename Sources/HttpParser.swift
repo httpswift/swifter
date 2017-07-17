@@ -27,7 +27,11 @@ public class HttpParser {
         request.queryParams = extractQueryParams(request.path)
         request.headers = try readHeaders(socket)
         if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
-            request.body = try readBody(socket, size: contentLengthValue)
+            if request.headers["content-type"] == "application/octet-stream" {
+                request.tempFile = try readFile(socket, length: contentLengthValue)
+            } else {
+                request.body = try readBody(socket, size: contentLengthValue)
+            }
         }
         return request
     }
@@ -73,6 +77,22 @@ public class HttpParser {
 //            }
 //            return c
 //        }
+    }
+    
+    private func readFile(_ socket: Socket, length: Int) throws -> String {
+        var offset = 0
+        let bufferLength = 1024
+        let filePath = NSTemporaryDirectory() + "/" + NSUUID().uuidString
+        let file = try filePath.openNewForWriting()
+        
+        while offset < length {
+            let length = offset + bufferLength < length ? bufferLength : length - offset
+            let result = try socket.read(length: length)
+            try file.write(result.buffer, count: result.count)
+            offset += result.count
+        }
+        file.close()
+        return filePath
     }
     
     private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
