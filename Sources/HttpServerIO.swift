@@ -53,6 +53,14 @@ public class HttpServerIO {
     /// It's only used when the server is started with `forceIPv4` option set to false.
     /// Otherwise, `listenAddressIPv4` will be used.
     public var listenAddressIPv6: String?
+    
+    /// Bool representation of whether the file upload is preprocessed.
+    /// `true` if the file upload requires preprocessing when `content-type` is
+    /// `application/octet-stream`. `HttpParser` will create a temp file(`tempFile`) in
+    /// `NSTemporaryDirectory()`, and is deleted after the request ends.
+    /// Together, `body` will be empty.
+    /// `false` otherwise.
+    public var filePreprocess: Bool = false
 
     private let queue = DispatchQueue(label: "swifter.httpserverio.clientsockets")
 
@@ -119,10 +127,22 @@ public class HttpServerIO {
         while self.operating, let request = try? parser.readHttpRequest(socket) {
             let request = request
             request.address = try? socket.peername()
+            
+            do {
+                try parser.readContent(socket, request: request, filePreprocess: filePreprocess)
+            } catch {
+                print("Failed to read content: \(error)")
+                break
+            }
+            
             let (params, handler) = self.dispatch(request)
             request.params = params
             let response = handler(request)
-            try? request.removeTempFileIfExists()
+            
+            if filePreprocess {
+                try? request.removeTempFileIfExists()
+            }
+            
             var keepConnection = parser.supportsKeepAlive(request.headers)
             do {
                 if self.operating {

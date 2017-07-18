@@ -58,17 +58,6 @@ extension String {
             }
         }
         
-        public func write(_ data: [UInt8], count: Int) throws -> Void {
-            if count <= 0 || data.count <= 0 {
-                return
-            }
-            try data.withUnsafeBufferPointer {
-                if fwrite($0.baseAddress, 1, count, self.pointer) != count {
-                    throw FileError.error(errno)
-                }
-            }
-        }
-        
         public static func currentWorkingDirectory() throws -> String {
             guard let path = getcwd(nil, 0) else {
                 throw FileError.error(errno)

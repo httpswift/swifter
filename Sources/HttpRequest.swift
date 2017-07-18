@@ -24,6 +24,7 @@ public class HttpRequest {
         if let path = tempFile, try path.exists() {
             try FileManager.default.removeItem(atPath: path)
         }
+        tempFile = nil
     }
     
     public func hasTokenForHeader(_ headerName: String, token: String) -> Bool {

@@ -101,6 +101,45 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         return HttpResponse.ok(.html(response))
     }
     
+    server.GET["/upload/logo"] = { r in
+        guard let resourceURL = Bundle.main.resourceURL else {
+            return .notFound
+        }
+        
+        let logoURL = resourceURL.appendingPathComponent("logo.png")
+        guard let exists = try? logoURL.path.exists(), true == exists else {
+            return .notFound
+        }
+        
+        guard let url = URL(string: "http://127.0.0.1:9080/upload/logo"), let body = try? Data(contentsOf: logoURL) else {
+            return .notFound
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = body
+        request.setValue("application/octet-stream", forHTTPHeaderField: "Content-Type")
+        guard let data = try? NSURLConnection.sendSynchronousRequest(request, returning: nil) else {
+            return .badRequest(.html("Failed to send data"))
+        }
+        return .raw(200, "OK", [:], { writter in
+            try writter.write(data)
+        })
+    }
+    
+    server.filePreprocess = true
+    server.POST["/upload/logo"] = { r in
+        guard let path = r.tempFile else {
+            return .badRequest(.html("no file"))
+        }
+        guard let file = try? path.openForReading() else {
+            return .notFound
+        }
+        return .raw(200, "OK", [:], { writter in
+            try writter.write(file)
+        })
+    }
+    
     server.GET["/login"] = scopes {
         html {
             head {

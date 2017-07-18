@@ -40,7 +40,7 @@ public class HttpServer: HttpServerIO {
     }
     
     public var routes: [String] {
-        return router.routes();
+        return router.routes()
     }
     
     public var notFoundHandler: ((HttpRequest) -> HttpResponse)?
