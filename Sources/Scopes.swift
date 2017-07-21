@@ -727,11 +727,11 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
         mergedAttributes.updateValue(item.element.1, forKey: item.element.0)
     }
     
-    output = output + mergedAttributes.reduce("") {
-        if let value = $0.1.1 {
-            return $0.0 + " \($0.1.0)=\"\(value)\""
+    output = output + mergedAttributes.reduce("") { result, item in
+        if let value = item.value {
+            return result + " \(item.key)=\"\(value)\""
         } else {
-            return $0.0
+            return result
         }
     }
     
