@@ -142,7 +142,7 @@ public class WebSocketSession: Hashable, Equatable  {
         public var payload = [UInt8]()
     }
 
-    let socket: Socket
+    public let socket: Socket
     
     public init(_ socket: Socket) {
         self.socket = socket
