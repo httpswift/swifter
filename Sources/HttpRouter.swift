@@ -83,7 +83,7 @@ open class HttpRouter {
     private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
         guard let pathToken = generator.next() else {
             // if it's the last element of the requested URL, check if there is a pattern with variable tail.
-            if let variableNode = node.nodes.filter({ $0.0.characters.first == ":" }).first {
+            if let variableNode = node.nodes.filter({ $0.0.first == ":" }).first {
                 if variableNode.value.nodes.isEmpty {
                     params[variableNode.0] = ""
                     return variableNode.value.handler
@@ -91,13 +91,13 @@ open class HttpRouter {
             }
             return node.handler
         }
-        let variableNodes = node.nodes.filter { $0.0.characters.first == ":" }
+        let variableNodes = node.nodes.filter { $0.0.first == ":" }
         if let variableNode = variableNodes.first {
             if variableNode.1.nodes.count == 0 {
                 // if it's the last element of the pattern and it's a variable, stop the search and
                 // append a tail as a value for the variable.
                 let tail = generator.joined(separator: "/")
-                if tail.characters.count > 0 {
+                if tail.count > 0 {
                     params[variableNode.0] = pathToken + "/" + tail
                 } else {
                     params[variableNode.0] = pathToken
@@ -135,7 +135,7 @@ open class HttpRouter {
 extension String {
     
     public func split(_ separator: Character) -> [String] {
-        return self.characters.split { $0 == separator }.map(String.init)
+        return self.split { $0 == separator }.map(String.init)
     }
     
 }
