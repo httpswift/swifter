@@ -113,7 +113,7 @@ open class Socket: Hashable, Equatable {
     
     open func read() throws -> UInt8 {
         var buffer = [UInt8](repeating: 0, count: 1)
-        let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), 0)
+        let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), Int32(MSG_NOSIGNAL))
         if next <= 0 {
             throw SocketError.recvFailed(Errno.description())
         }
