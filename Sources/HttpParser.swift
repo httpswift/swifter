@@ -84,7 +84,7 @@ public class HttpParser {
     private func readHeaders(_ socket: Socket) throws -> [String: String] {
         var headers = [String: String]()
         while case let headerLine = try socket.readLine() , !headerLine.isEmpty {
-            let headerTokens = headerLine.components(separatedBy: ":")
+            let headerTokens = headerLine.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true).map(String.init)
             if let name = headerTokens.first, let value = headerTokens.last {
                 headers[name.lowercased()] = value.trimmingCharacters(in: .whitespaces)
             }
