@@ -33,27 +33,27 @@ public class HttpParser {
     }
     
     private func extractQueryParams(_ url: String) -> [(String, String)] {
-        guard let questionMark = url.characters.index(of: "?") else {
+        guard let questionMark = url.index(of: "?") else {
             return []
         }
-        let queryStart = url.characters.index(after: questionMark)
+        let queryStart = url.index(after: questionMark)
         guard url.endIndex > queryStart else {
             return []
         }
-        let query = String(url.characters[queryStart..<url.endIndex])
+        let query = String(url[queryStart..<url.endIndex])
         return query.components(separatedBy: "&")
             .reduce([(String, String)]()) { (c, s) -> [(String, String)] in
-                guard let nameEndIndex = s.characters.index(of: "=") else {
+                guard let nameEndIndex = s.index(of: "=") else {
                     return c
                 }
-                guard let name = String(s.characters[s.startIndex..<nameEndIndex]).removingPercentEncoding else {
+                guard let name = String(s[s.startIndex..<nameEndIndex]).removingPercentEncoding else {
                     return c
                 }
                 let valueStartIndex = s.index(nameEndIndex, offsetBy: 1)
                 guard valueStartIndex < s.endIndex else {
                     return c + [(name, "")]
                 }
-                guard let value = String(s.characters[valueStartIndex..<s.endIndex]).removingPercentEncoding else {
+                guard let value = String(s[valueStartIndex..<s.endIndex]).removingPercentEncoding else {
                     return c + [(name, "")]
                 }
                 return c + [(name, value)]
