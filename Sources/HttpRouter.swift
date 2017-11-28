@@ -81,7 +81,7 @@ open class HttpRouter {
     }
     
     private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
-        guard let pathToken = generator.next() else {
+        guard let pathToken = generator.next()?.removingPercentEncoding else {
             // if it's the last element of the requested URL, check if there is a pattern with variable tail.
             if let variableNode = node.nodes.filter({ $0.0.characters.first == ":" }).first {
                 if variableNode.value.nodes.isEmpty {
