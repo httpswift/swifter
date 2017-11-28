@@ -105,4 +105,16 @@ class SwifterTestsHttpRouter: XCTestCase {
         XCTAssertEqual(router.route(nil, path: "/a/b/")?.0[":var"], "")
     }
     
+    func testHttpRouterPercentEnocedPathSegments() {
+        
+        let router = HttpRouter()
+        
+        router.register(nil, path: "/a/<>/^", handler: { r in
+            return .ok(.html("OK"))
+        })
+        XCTAssertNil(router.route(nil, path: "/"))
+        XCTAssertNil(router.route(nil, path: "/a"))
+        XCTAssertNotNil(router.route(nil, path: "/a/%3C%3E/%5E"))
+    }
+    
 }
