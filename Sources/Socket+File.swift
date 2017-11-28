@@ -19,7 +19,7 @@ import Foundation
             }
             var writeCounter = 0
             while writeCounter < readResult {
-                let writeResult = write(target, &buffer + writeCounter, readResult - writeCounter)
+                let writeResult = send(target, &buffer + writeCounter, readResult - writeCounter, Int32(MSG_NOSIGNAL))
                 guard writeResult > 0 else {
                     return Int32(writeResult)
                 }
