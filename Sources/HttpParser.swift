@@ -58,21 +58,6 @@ public class HttpParser {
                 }
                 return c + [(name, value)]
         }
-        
-        
-//        let tokens = url.components(separatedBy: "?")
-//        guard let query = tokens.last, tokens.count >= 2 else {
-//            return []
-//        }
-//        return query.components(separatedBy: "&").reduce([(String, String)]()) { (c, s) -> [(String, String)] in
-//            let tokens = s.components(separatedBy: "=")
-//            let name = tokens.first?.removingPercentEncoding
-//            let value = tokens.count > 1 ? (tokens.last?.removingPercentEncoding ?? "") : ""
-//            if let nameFound = name {
-//                return c + [(nameFound, value)]
-//            }
-//            return c
-//        }
     }
     
     private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
