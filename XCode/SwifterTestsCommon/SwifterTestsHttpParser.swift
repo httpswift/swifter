@@ -99,6 +99,9 @@ class SwifterTestsHttpParser: XCTestCase {
         r = try? parser.readHttpRequest(TestSocket("POST / HTTP/1.0\nContent-Length: 10\n\n1234567890"))
         XCTAssertEqual(r?.method, "POST", "Parser should extract HTTP method name from the status line.")
         
+        r = try? parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nHeader1: 1:1:34\nHeader2: 12345\nContent-Length: 0\n\n"))
+        XCTAssertEqual(r?.headers["header1"], "1:1:34", "Parser should properly extract header name and value in case the value has ':' character.")
+        
         r = try? parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nHeader1: 1\nHeader2: 2\nContent-Length: 0\n\n"))
         XCTAssertEqual(r?.headers["header1"], "1", "Parser should extract multiple headers from the request.")
         XCTAssertEqual(r?.headers["header2"], "2", "Parser should extract multiple headers from the request.")
