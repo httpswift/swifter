@@ -83,3 +83,8 @@ let package = Package(
 )
 ```
 
+### Docker.
+```
+docker run -d -p 9080:9080 -v `pwd`:/Swifter -w /Swifter --name Swifter swift bash -c "swift run"
+```
+
