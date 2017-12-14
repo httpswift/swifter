@@ -94,11 +94,15 @@ public func websocket(
                 }
             }
             
-            do {
+            func read() throws {
                 while true {
                     let frame = try session.readFrame()
                     try handleOperationCode(frame)
                 }
+            }
+            
+            do {
+                try read()
             } catch let error {
                 switch error {
                 case WebSocketSession.Control.close:
