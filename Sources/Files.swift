@@ -55,7 +55,8 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
                 return .notFound
             }
             if try filePath.directory() {
-                let files = try filePath.files()
+                var files = try filePath.files()
+                files.sort(by: {$0.lowercased() < $1.lowercased()})
                 return scopes {
                     html {
                         body {
