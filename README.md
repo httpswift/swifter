@@ -78,7 +78,7 @@ import PackageDescription
 let package = Package(
     name: "MyServer",
     dependencies: [
-        .Package(url: "https://github.com/httpswift/swifter.git", majorVersion: 1)
+        .package(url: "https://github.com/httpswift/swifter.git", from: "1.0.0")
     ]
 )
 ```
