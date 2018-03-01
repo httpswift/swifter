@@ -30,6 +30,11 @@
 		269B47981D3AAAE20042D137 /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
 		269B47991D3AAAE20042D137 /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6F61D2C44F30030FC98 /* String+BASE64.swift */; };
 		269B47A71D3AAC4F0042D137 /* SwiftertvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6AE2FF722048013000302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
+		6AE2FF732048013000302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
+		6AE2FF742048013100302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
+		6AE2FF752048013300302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
+		6AE2FF762048013500302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
 		7AE893EA1C05127900A29F63 /* SwifteriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893E91C05127900A29F63 /* SwifteriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893FD1C0512C400A29F63 /* SwifterMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
@@ -150,6 +155,7 @@
 		269B47A11D3AAAE20042D137 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		269B47A41D3AAC4F0042D137 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftertvOS.h; sourceTree = "<group>"; };
+		6AE2FF702048011A00302EC4 /* MimeTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeTypes.swift; sourceTree = "<group>"; };
 		7AE893E71C05127900A29F63 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE893E91C05127900A29F63 /* SwifteriOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifteriOS.h; sourceTree = "<group>"; };
 		7AE893EB1C05127900A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -177,7 +183,7 @@
 		7C76B6F71D2C44F30030FC98 /* String+Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Misc.swift"; sourceTree = "<group>"; };
 		7C76B6F81D2C44F30030FC98 /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
 		7C76B6F91D2C44F30030FC98 /* WebSockets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSockets.swift; sourceTree = "<group>"; };
-		7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C839B6E19422CFF003A6950 /* .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = .app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterSampleOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CB102DF1A17381D00CBA3B4 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
@@ -298,6 +304,7 @@
 				7C76B6F91D2C44F30030FC98 /* WebSockets.swift */,
 				7C76B2A11D369C9D00D35BFB /* Errno.swift */,
 				7C377E161D964B6A009C6148 /* String+File.swift */,
+				6AE2FF702048011A00302EC4 /* MimeTypes.swift */,
 			);
 			name = Sources;
 			path = ../Sources;
@@ -323,7 +330,7 @@
 		7C839B6F19422CFF003A6950 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */,
+				7C839B6E19422CFF003A6950 /* .app */,
 				7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */,
 				7AE893E71C05127900A29F63 /* Swifter.framework */,
 				7AE893FB1C0512C400A29F63 /* Swifter.framework */,
@@ -491,7 +498,7 @@
 			);
 			name = SwifterSampleiOS;
 			productName = Swifter;
-			productReference = 7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */;
+			productReference = 7C839B6E19422CFF003A6950 /* .app */;
 			productType = "com.apple.product-type.application";
 		};
 		7CA4813A19A2EA8D0030B30D /* SwifterSampleOSX */ = {
@@ -671,6 +678,7 @@
 				269B47951D3AAAE20042D137 /* Files.swift in Sources */,
 				2659FC1A1DADC077003F3930 /* String+File.swift in Sources */,
 				269B47961D3AAAE20042D137 /* HttpRouter.swift in Sources */,
+				6AE2FF742048013100302EC4 /* MimeTypes.swift in Sources */,
 				269B47971D3AAAE20042D137 /* String+SHA1.swift in Sources */,
 				7C458EFE1D4A7526006A68E5 /* Socket+Server.swift in Sources */,
 				269B47981D3AAAE20042D137 /* Errno.swift in Sources */,
@@ -697,6 +705,7 @@
 				7C76B71D1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
 				7C76B7111D2C45710030FC98 /* Files.swift in Sources */,
 				7C76B7191D2C457C0030FC98 /* HttpRouter.swift in Sources */,
+				6AE2FF722048013000302EC4 /* MimeTypes.swift in Sources */,
 				7C76B7291D2C45920030FC98 /* String+SHA1.swift in Sources */,
 				7C458EFC1D4A7526006A68E5 /* Socket+Server.swift in Sources */,
 				7C76B2A21D369C9D00D35BFB /* Errno.swift in Sources */,
@@ -723,6 +732,7 @@
 				7C76B71E1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
 				7C76B7121D2C45710030FC98 /* Files.swift in Sources */,
 				7C76B71A1D2C457C0030FC98 /* HttpRouter.swift in Sources */,
+				6AE2FF732048013000302EC4 /* MimeTypes.swift in Sources */,
 				7C76B72A1D2C45920030FC98 /* String+SHA1.swift in Sources */,
 				7C458EFD1D4A7526006A68E5 /* Socket+Server.swift in Sources */,
 				7C76B2A31D369C9D00D35BFB /* Errno.swift in Sources */,
@@ -752,6 +762,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */,
+				6AE2FF752048013300302EC4 /* MimeTypes.swift in Sources */,
 				0858E7F81D68BC2600491CD1 /* PingServer.swift in Sources */,
 				0858E7F41D68BB2600491CD1 /* IOSafetyTests.swift in Sources */,
 				7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
@@ -773,6 +784,7 @@
 				7CEBB8741D94612D00370A6B /* HttpServer.swift in Sources */,
 				7CEBB8751D94612D00370A6B /* HttpServerIO.swift in Sources */,
 				7CEBB8761D94612D00370A6B /* Process.swift in Sources */,
+				6AE2FF762048013500302EC4 /* MimeTypes.swift in Sources */,
 				7CEBB8771D94612D00370A6B /* Scopes.swift in Sources */,
 				7CEBB8781D94612D00370A6B /* Socket.swift in Sources */,
 				7CEBB8791D94612D00370A6B /* Socket+File.swift in Sources */,
@@ -1110,12 +1122,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SwifterSampleiOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.12;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
+				SDKROOT = macosx10.13;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1125,11 +1138,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = "$(SRCROOT)/SwifterSampleiOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.12;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
+				SDKROOT = macosx10.13;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
