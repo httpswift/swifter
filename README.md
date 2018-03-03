@@ -1,5 +1,5 @@
 ![Platform](https://img.shields.io/badge/Platform-Linux%20&%20OSX%20&%20tvOS-4BC51D.svg?style=flat)
-![Swift](https://img.shields.io/badge/Swift-3.x-4BC51D.svg?style=flat)
+![Swift](https://img.shields.io/badge/Swift-4.x-4BC51D.svg?style=flat)
 ![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
 [![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)]()
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
@@ -60,15 +60,15 @@ server.start()
 ```
 ### CocoaPods? Yes.
 ```ruby
-# Use version >= 1.1.0.rc.2 (sudo gem install cocoapods --pre)
+# Use version >= 1.4.0 (sudo gem install cocoapods)
 use_frameworks!
-pod 'Swifter', '~> 1.3.3'
+pod 'Swifter', '~> 1.4.0'
 ```
 
 ### Carthage? Also yes.
 ```
 # Use version >= 0.18 (https://github.com/Carthage/Carthage/releases/tag/0.18)
-github "glock45/swifter" == 1.3.3
+github "glock45/swifter" == 1.4.0
 ```
 
 ### Swift Package Manager.
@@ -78,7 +78,7 @@ import PackageDescription
 let package = Package(
     name: "MyServer",
     dependencies: [
-        .package(url: "https://github.com/httpswift/swifter.git", from: "1.0.0")
+        .package(url: "https://github.com/httpswift/swifter.git", .upToNextMajor(from: "1.4.0"))
     ]
 )
 ```
