@@ -30,6 +30,8 @@
 		269B47981D3AAAE20042D137 /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
 		269B47991D3AAAE20042D137 /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6F61D2C44F30030FC98 /* String+BASE64.swift */; };
 		269B47A71D3AAC4F0042D137 /* SwiftertvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6A0D4512204E9988000A0726 /* MimeTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D4511204E9988000A0726 /* MimeTypesTests.swift */; };
+		6A0D4513204E9988000A0726 /* MimeTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D4511204E9988000A0726 /* MimeTypesTests.swift */; };
 		6AE2FF722048013000302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
 		6AE2FF732048013000302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
 		6AE2FF742048013100302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
@@ -155,6 +157,7 @@
 		269B47A11D3AAAE20042D137 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		269B47A41D3AAC4F0042D137 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftertvOS.h; sourceTree = "<group>"; };
+		6A0D4511204E9988000A0726 /* MimeTypesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeTypesTests.swift; sourceTree = "<group>"; };
 		6AE2FF702048011A00302EC4 /* MimeTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MimeTypes.swift; sourceTree = "<group>"; };
 		7AE893E71C05127900A29F63 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE893E91C05127900A29F63 /* SwifteriOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifteriOS.h; sourceTree = "<group>"; };
@@ -374,6 +377,7 @@
 				7CCD876E1C660B250068099B /* SwifterTestsStringExtensions.swift */,
 				7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */,
 				0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */,
+				6A0D4511204E9988000A0726 /* MimeTypesTests.swift */,
 			);
 			path = SwifterTestsCommon;
 			sourceTree = "<group>";
@@ -762,6 +766,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7CCD87701C660B250068099B /* SwifterTestsHttpParser.swift in Sources */,
+				6A0D4512204E9988000A0726 /* MimeTypesTests.swift in Sources */,
 				6AE2FF752048013300302EC4 /* MimeTypes.swift in Sources */,
 				0858E7F81D68BC2600491CD1 /* PingServer.swift in Sources */,
 				0858E7F41D68BB2600491CD1 /* IOSafetyTests.swift in Sources */,
@@ -789,6 +794,7 @@
 				7CEBB8781D94612D00370A6B /* Socket.swift in Sources */,
 				7CEBB8791D94612D00370A6B /* Socket+File.swift in Sources */,
 				7CEBB87A1D94612D00370A6B /* Socket+Server.swift in Sources */,
+				6A0D4513204E9988000A0726 /* MimeTypesTests.swift in Sources */,
 				7CEBB87B1D94612D00370A6B /* String+BASE64.swift in Sources */,
 				7CEBB87C1D94612D00370A6B /* String+Misc.swift in Sources */,
 				7CEBB87D1D94612D00370A6B /* String+SHA1.swift in Sources */,
