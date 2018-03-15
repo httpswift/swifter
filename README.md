@@ -62,7 +62,7 @@ server.start()
 ```ruby
 # Use version >= 1.4.0 (sudo gem install cocoapods)
 use_frameworks!
-pod 'Swifter', '~> 1.4.0'
+pod 'Swifter', '~> 1.3.3'
 ```
 
 ### Carthage? Also yes.
