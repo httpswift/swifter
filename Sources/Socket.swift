@@ -23,11 +23,12 @@ public enum SocketError: Error {
 }
 
 open class Socket: Hashable, Equatable {
-        
+
     let socketFileDescriptor: Int32
+    internal var onShutdown: (() -> Void)?
     private var shutdown = false
 
-    
+
     public init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
     }
@@ -44,6 +45,7 @@ open class Socket: Hashable, Equatable {
         }
         shutdown = true
         Socket.close(self.socketFileDescriptor)
+        onShutdown?()
     }
     
     public func port() throws -> in_port_t {
