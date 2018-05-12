@@ -35,7 +35,9 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
             }
         }
         if let file = try? (directoryPath + String.pathSeparator + fileRelativePath.value).openForReading() {
-            return .raw(200, "OK", [:], { writer in
+            let mimeType = fileRelativePath.value.mimeType();
+            
+            return .raw(200, "OK", ["Content-Type": mimeType], { writer in
                 try? writer.write(file)
                 file.close()
             })
