@@ -180,7 +180,10 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         session.writeText(text)
         }, { (session, binary) in
         session.writeBinary(binary)
-    })
+        }, { (session, pong) in
+        // Got a pong frame
+        }
+    )
     
     server.notFoundHandler = { r in
         return .movedPermanently("https://github.com/404")

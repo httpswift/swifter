@@ -10,7 +10,8 @@ import Foundation
 
 public func websocket(
       _ text: ((WebSocketSession, String) -> Void)?,
-    _ binary: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
+    _ binary: ((WebSocketSession, [UInt8]) -> Void)?,
+      _ pong: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard r.hasTokenForHeader("upgrade", token: "websocket") else {
             return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"] ?? "unknown")"))
@@ -90,6 +91,9 @@ public func websocket(
                         session.writeFrame(ArraySlice(frame.payload), .pong)
                     }
                 case .pong:
+                    if let handlePong = pong {
+                       handlePong(session, frame.payload)
+                    }
                     break
                 }
             }
