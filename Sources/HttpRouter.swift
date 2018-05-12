@@ -134,7 +134,7 @@ open class HttpRouter {
 
 extension String {
     
-    public func split(_ separator: Character) -> [String] {
+    func split(_ separator: Character) -> [String] {
         return self.split { $0 == separator }.map(String.init)
     }
     
