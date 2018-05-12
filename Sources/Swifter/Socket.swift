@@ -51,27 +51,29 @@ public class Socket: Hashable, Equatable {
     
     public func port() throws -> in_port_t {
         var addr = sockaddr_in()
+        let addr_copy = addr
         return try withUnsafePointer(to: &addr) { pointer in
             var len = socklen_t(MemoryLayout<sockaddr_in>.size)
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
                 throw SocketError.getSockNameFailed(Process.lastErrno)
             }
             #if os(Linux)
-                return ntohs(addr.sin_port)
+                return ntohs(addr_copy.sin_port)
             #else
-                return Int(OSHostByteOrder()) != OSLittleEndian ? addr.sin_port.littleEndian : addr.sin_port.bigEndian
+                return Int(OSHostByteOrder()) != OSLittleEndian ? addr_copy.sin_port.littleEndian : addr_copy.sin_port.bigEndian
             #endif
         }
     }
     
     public func isIPv4() throws -> Bool {
         var addr = sockaddr_in()
+        let addr_copy = addr
         return try withUnsafePointer(to: &addr) { pointer in
             var len = socklen_t(MemoryLayout<sockaddr_in>.size)
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
                 throw SocketError.getSockNameFailed(Process.lastErrno)
             }
-            return Int32(addr.sin_family) == AF_INET
+            return Int32(addr_copy.sin_family) == AF_INET
         }
     }
     
