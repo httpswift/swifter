@@ -25,6 +25,7 @@ public enum HttpResponseBody {
     case json(AnyObject)
     case html(String)
     case text(String)
+    case data(Data)
     case custom(Any, (Any) throws -> String)
     
     func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
@@ -53,6 +54,10 @@ public enum HttpResponseBody {
             case .html(let body):
                 let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
                 let data = [UInt8](serialised.utf8)
+                return (data.count, {
+                    try $0.write(data)
+                })
+            case .data(let data):
                 return (data.count, {
                     try $0.write(data)
                 })
