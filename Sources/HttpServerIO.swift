@@ -75,6 +75,7 @@ public class HttpServerIO {
         self.state = .starting
         let address = forceIPv4 ? listenAddressIPv4 : listenAddressIPv6
         self.socket = try Socket.tcpSocketForListen(port, forceIPv4, SOMAXCONN, address)
+        self.state = .running
         DispatchQueue.global(qos: priority).async { [weak self] in
             guard let strongSelf = self else { return }
             guard strongSelf.operating else { return }
@@ -93,7 +94,6 @@ public class HttpServerIO {
             }
             strongSelf.stop()
         }
-        self.state = .running
     }
 
     public func stop() {
