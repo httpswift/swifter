@@ -56,7 +56,8 @@ open class Socket: Hashable, Equatable {
             #if os(Linux)
                 return ntohs(addr.sin_port)
             #else
-                return Int(OSHostByteOrder()) != OSLittleEndian ? addr.sin_port.littleEndian : addr.sin_port.bigEndian
+                let sin_port = pointer.pointee.sin_port
+                return Int(OSHostByteOrder()) != OSLittleEndian ? sin_port.littleEndian : sin_port.bigEndian
             #endif
         }
     }
@@ -68,7 +69,7 @@ open class Socket: Hashable, Equatable {
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
                 throw SocketError.getSockNameFailed(Errno.description())
             }
-            return Int32(addr.sin_family) == AF_INET
+            return Int32(pointer.pointee.sin_family) == AF_INET
         }
     }
     
