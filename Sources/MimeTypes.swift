@@ -136,7 +136,7 @@ extension NSString {
 
 extension String {
     public func mimeType() -> String {
-        return (self as NSString).mimeType()
+        return (NSString(string: self)).mimeType()
     }
 }
 
