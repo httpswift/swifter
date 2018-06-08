@@ -176,14 +176,17 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         })
     }
     
-    server["/websocket-echo"] = websocket({ (session, text) in
+    server["/websocket-echo"] = websocket(text: { (session, text) in
         session.writeText(text)
-        }, { (session, binary) in
+    }, binary: { (session, binary) in
         session.writeBinary(binary)
-        }, { (session, pong) in
+    }, pong: { (session, pong) in
         // Got a pong frame
-        }
-    )
+    }, connected: { (session) in
+        // New client connected
+    }, disconnected: { (session) in
+        // Client disconnected
+    })
     
     server.notFoundHandler = { r in
         return .movedPermanently("https://github.com/404")

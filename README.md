@@ -51,9 +51,9 @@ server.start()
 ### How to WebSockets ?
 ```swift
 let server = HttpServer()
-server["/websocket-echo"] = websocket({ (session, text) in
+server["/websocket-echo"] = websocket(text: { session, text in
   session.writeText(text)
-}, { (session, binary) in
+}, binary: { session, binary in
   session.writeBinary(binary)
 })
 server.start()
