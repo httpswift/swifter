@@ -53,10 +53,10 @@ open class Socket: Hashable, Equatable {
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
                 throw SocketError.getSockNameFailed(Errno.description())
             }
+            let sin_port = pointer.pointee.sin_port
             #if os(Linux)
-                return ntohs(addr.sin_port)
+                return ntohs(sin_port)
             #else
-                let sin_port = pointer.pointee.sin_port
                 return Int(OSHostByteOrder()) != OSLittleEndian ? sin_port.littleEndian : sin_port.bigEndian
             #endif
         }
