@@ -22,7 +22,7 @@ public protocol HttpResponseBodyWriter {
 
 public enum HttpResponseBody {
     
-    enum RawDataType {
+    public enum RawDataType {
         case any
         case json
     }
@@ -58,7 +58,7 @@ public enum HttpResponseBody {
                 return (data.count, {
                     try $0.write(data)
                 })
-            case .data(let data):
+            case .rawData(let data, _):
                 return (data.count, {
                     try $0.write(data)
                 })
@@ -128,7 +128,7 @@ public enum HttpResponse {
             }
         case .ok(let body):
             switch body {
-            case .data(_, type): 
+            case .rawData(_, let type): 
                 if case .json = type {
                     headers["Content-Type"] = "application/json"
                 }
