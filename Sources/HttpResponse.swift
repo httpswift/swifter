@@ -22,30 +22,31 @@ public protocol HttpResponseBodyWriter {
 
 public enum HttpResponseBody {
     
-    case json(AnyObject)
+    enum RawDataType {
+        case any
+        case json
+    }
+
+    static func json<Body: Encodable>(_ body: Body) throws -> HttpResponseBody {
+        let encoder = JSONEncoder()
+
+        let data = try encoder.encode(object)
+
+        return .data(data, .json)
+    }
+
+    static func data(_ data: Data, _ type: RawDataType = .any) -> HttpResponseBody {
+        return .rawData(data, type)
+    }
+
     case html(String)
     case text(String)
-    case data(Data)
+    case rawData(Data, RawDataType)
     case custom(Any, (Any) throws -> String)
     
     func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
         do {
             switch self {
-            case .json(let object):
-                #if os(Linux)
-                    let data = [UInt8]("Not ready for Linux.".utf8)
-                    return (data.count, {
-                        try $0.write(data)
-                    })
-                #else
-                    guard JSONSerialization.isValidJSONObject(object) else {
-                        throw SerializationError.invalidObject
-                    }
-                    let data = try JSONSerialization.data(withJSONObject: object)
-                    return (data.count, {
-                        try $0.write(data)
-                    })
-                #endif
             case .text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {
@@ -127,9 +128,14 @@ public enum HttpResponse {
             }
         case .ok(let body):
             switch body {
-            case .json(_)   : headers["Content-Type"] = "application/json"
-            case .html(_)   : headers["Content-Type"] = "text/html"
-            default:break
+            case .data(_, type): 
+                if case .json = type {
+                    headers["Content-Type"] = "application/json"
+                }
+            case .html: 
+                headers["Content-Type"] = "text/html"
+            default:
+                break
             }
         case .movedPermanently(let location):
             headers["Location"] = location
