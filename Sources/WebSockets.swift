@@ -250,17 +250,17 @@ public class WebSocketSession: Hashable, Equatable  {
         }
         var len = UInt64(sec & 0x7F)
         if len == 0x7E {
-            let b0 = UInt64(try socket.read() << 8)
+            let b0 = UInt64(try socket.read()) << 8
             let b1 = UInt64(try socket.read())
             len = UInt64(littleEndian: b0 | b1)
         } else if len == 0x7F {
-            let b0 = UInt64(try socket.read() << 54)
-            let b1 = UInt64(try socket.read() << 48)
-            let b2 = UInt64(try socket.read() << 40)
-            let b3 = UInt64(try socket.read() << 32)
-            let b4 = UInt64(try socket.read() << 24)
-            let b5 = UInt64(try socket.read() << 16)
-            let b6 = UInt64(try socket.read() << 8)
+            let b0 = UInt64(try socket.read()) << 54
+            let b1 = UInt64(try socket.read()) << 48
+            let b2 = UInt64(try socket.read()) << 40
+            let b3 = UInt64(try socket.read()) << 32
+            let b4 = UInt64(try socket.read()) << 24
+            let b5 = UInt64(try socket.read()) << 16
+            let b6 = UInt64(try socket.read()) << 8
             let b7 = UInt64(try socket.read())
             len = UInt64(littleEndian: b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7)
         }
