@@ -38,9 +38,8 @@ public class HttpParser {
         }
         let queryStart = url.index(after: questionMark)
 
-        guard url.endIndex > queryStart,
-            let query = String(url[queryStart..<url.endIndex])
-            else { return [] }
+        guard url.endIndex > queryStart else { return [] }
+        let query = String(url[queryStart..<url.endIndex])
         
         return query.components(separatedBy: "&")
             .reduce([(String, String)]()) { (c, s) -> [(String, String)] in

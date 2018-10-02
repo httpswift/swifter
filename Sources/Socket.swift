@@ -53,6 +53,7 @@ open class Socket: Hashable, Equatable {
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
                 throw SocketError.getSockNameFailed(Errno.description())
             }
+            let addr = pointer.pointee
             #if os(Linux)
                 return ntohs(addr.sin_port)
             #else
@@ -68,7 +69,7 @@ open class Socket: Hashable, Equatable {
             if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
                 throw SocketError.getSockNameFailed(Errno.description())
             }
-            return Int32(addr.sin_family) == AF_INET
+            return Int32(pointer.pointee.sin_family) == AF_INET
         }
     }
     
