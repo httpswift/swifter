@@ -40,6 +40,7 @@
 		7AE893EA1C05127900A29F63 /* SwifteriOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893E91C05127900A29F63 /* SwifteriOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893FD1C0512C400A29F63 /* SwifterMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
+		7B74CFA82163C40F001BE07B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
 		7C377E181D964B96009C6148 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
 		7C377E191D964B9F009C6148 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
 		7C458EFC1D4A7526006A68E5 /* Socket+Server.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C458EFB1D4A7526006A68E5 /* Socket+Server.swift */; };
@@ -48,7 +49,6 @@
 		7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		7C4785EA1C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		7C71C5B11A1EC49B00682BF0 /* logo.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7CB102DF1A17381D00CBA3B4 /* logo.png */; };
-		7C73C6921C26179C00AEF6CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
 		7C76B29F1D369BEC00D35BFB /* Socket+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B29E1D369BEC00D35BFB /* Socket+File.swift */; };
 		7C76B2A01D369BEC00D35BFB /* Socket+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B29E1D369BEC00D35BFB /* Socket+File.swift */; };
 		7C76B2A21D369C9D00D35BFB /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
@@ -186,7 +186,7 @@
 		7C76B6F71D2C44F30030FC98 /* String+Misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Misc.swift"; sourceTree = "<group>"; };
 		7C76B6F81D2C44F30030FC98 /* String+SHA1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+SHA1.swift"; sourceTree = "<group>"; };
 		7C76B6F91D2C44F30030FC98 /* WebSockets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSockets.swift; sourceTree = "<group>"; };
-		7C839B6E19422CFF003A6950 /* .app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = .app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwifterSampleiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwifterSampleOSX; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CA4813D19A2EA8D0030B30D /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		7CB102DF1A17381D00CBA3B4 /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = "<group>"; };
@@ -333,7 +333,7 @@
 		7C839B6F19422CFF003A6950 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7C839B6E19422CFF003A6950 /* .app */,
+				7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */,
 				7CA4813B19A2EA8D0030B30D /* SwifterSampleOSX */,
 				7AE893E71C05127900A29F63 /* Swifter.framework */,
 				7AE893FB1C0512C400A29F63 /* Swifter.framework */,
@@ -502,7 +502,7 @@
 			);
 			name = SwifterSampleiOS;
 			productName = Swifter;
-			productReference = 7C839B6E19422CFF003A6950 /* .app */;
+			productReference = 7C839B6E19422CFF003A6950 /* SwifterSampleiOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 		7CA4813A19A2EA8D0030B30D /* SwifterSampleOSX */ = {
@@ -565,27 +565,35 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Damian Kołakowski";
 				TargetAttributes = {
+					269B47861D3AAAE20042D137 = {
+						LastSwiftMigration = 1000;
+					};
 					7AE893E61C05127900A29F63 = {
 						CreatedOnToolsVersion = 7.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 1000;
 					};
 					7AE893FA1C0512C400A29F63 = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 1000;
 					};
 					7C839B6D19422CFF003A6950 = {
 						CreatedOnToolsVersion = 6.0;
+						LastSwiftMigration = 1000;
 					};
 					7CA4813A19A2EA8D0030B30D = {
 						CreatedOnToolsVersion = 6.0;
+						LastSwiftMigration = 1000;
 					};
 					7CCD875B1C66099B0068099B = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 1000;
 					};
 					7CCD87781C660EA30068099B = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -748,7 +756,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C73C6921C26179C00AEF6CA /* AppDelegate.swift in Sources */,
+				7B74CFA82163C40F001BE07B /* AppDelegate.swift in Sources */,
 				7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -860,7 +868,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -888,7 +896,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -916,7 +924,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -943,7 +951,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -971,7 +979,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1000,7 +1008,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -1020,12 +1028,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1079,12 +1089,14 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -1127,9 +1139,13 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.12;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski.${PRODUCT_NAME:rfc1034identifier}";
-				SDKROOT = macosx;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1143,8 +1159,12 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.12;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "pl.kolakowski.${PRODUCT_NAME:rfc1034identifier}";
-				SDKROOT = macosx;
+				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1166,6 +1186,7 @@
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1181,6 +1202,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -1197,6 +1219,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1214,6 +1237,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifteriOSTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
@@ -1231,6 +1255,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterOSXTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -1249,6 +1274,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = pl.kolakowski.SwifterOSXTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
