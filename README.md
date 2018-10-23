@@ -62,13 +62,14 @@ server.start()
 ```ruby
 # Use version >= 1.4.0 (sudo gem install cocoapods)
 use_frameworks!
+
 pod 'Swifter', '~> 1.4.1'
 ```
 
 ### Carthage? Also yes.
 ```
 # Use version >= 0.18 (https://github.com/Carthage/Carthage/releases/tag/0.18)
-github "glock45/swifter" == 1.4.0
+github "httpswift/swifter" ~> 1.4.0
 ```
 
 ### Swift Package Manager.
