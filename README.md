@@ -60,16 +60,14 @@ server.start()
 ```
 ### CocoaPods? Yes.
 ```ruby
-# Use version >= 1.4.0 (sudo gem install cocoapods)
 use_frameworks!
 
-pod 'Swifter', '~> 1.4.1'
+pod 'Swifter', '~> 1.4.5'
 ```
 
 ### Carthage? Also yes.
 ```
-# Use version >= 0.18 (https://github.com/Carthage/Carthage/releases/tag/0.18)
-github "httpswift/swifter" ~> 1.4.0
+github "httpswift/swifter" ~> 1.4.5
 ```
 
 ### Swift Package Manager.
@@ -79,7 +77,7 @@ import PackageDescription
 let package = Package(
     name: "MyServer",
     dependencies: [
-        .package(url: "https://github.com/httpswift/swifter.git", .upToNextMajor(from: "1.4.0"))
+        .package(url: "https://github.com/httpswift/swifter.git", .upToNextMajor(from: "1.4.5"))
     ]
 )
 ```
