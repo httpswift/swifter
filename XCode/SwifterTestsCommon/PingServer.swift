@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Swifter
 
 // Server
 extension HttpServer {
@@ -43,8 +44,15 @@ extension URLSession {
                 timedOut = true
                 break
             }
+            
+            #if swift(>=4.2)
+            let mode = RunLoop.Mode.common
+            #else
+            let mode = RunLoopMode.commonModes
+            #endif
+            
             RunLoop.current.run(
-                mode: RunLoopMode.commonModes,
+                mode: mode,
                 before: NSDate.distantFuture
             )
         }
