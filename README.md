@@ -1,7 +1,7 @@
 ![Platform](https://img.shields.io/badge/Platform-Linux%20&%20OSX%20&%20tvOS-4BC51D.svg?style=flat)
 ![Swift](https://img.shields.io/badge/Swift-4.x-4BC51D.svg?style=flat)
 ![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
-[![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)]()
+[![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)](https://cocoapods.org/pods/Swifter)
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ### What is Swifter?
@@ -51,9 +51,9 @@ server.start()
 ### How to WebSockets ?
 ```swift
 let server = HttpServer()
-server["/websocket-echo"] = websocket({ (session, text) in
+server["/websocket-echo"] = websocket(text: { session, text in
   session.writeText(text)
-}, { (session, binary) in
+}, binary: { session, binary in
   session.writeBinary(binary)
 })
 server.start()
@@ -62,7 +62,8 @@ server.start()
 ```ruby
 # Use version >= 1.4.0 (sudo gem install cocoapods)
 use_frameworks!
-pod 'Swifter', '~> 1.4.0'
+
+pod 'Swifter', '~> 1.4.1'
 ```
 
 ### Carthage? Also yes.

@@ -7,11 +7,19 @@
 
 import Foundation
 
+@available(*, deprecated, message: "Use websocket(text:binary:pong:connected:disconnected:) instead.")
+public func websocket(_ text: @escaping (WebSocketSession, String) -> Void,
+                      _ binary: @escaping (WebSocketSession, [UInt8]) -> Void,
+                      _ pong: @escaping (WebSocketSession, [UInt8]) -> Void) -> ((HttpRequest) -> HttpResponse) {
+    return websocket(text: text, binary: binary, pong: pong)
+}
 
 public func websocket(
-      _ text: ((WebSocketSession, String) -> Void)?,
-    _ binary: ((WebSocketSession, [UInt8]) -> Void)?,
-      _ pong: ((WebSocketSession, [UInt8]) -> Void)?) -> ((HttpRequest) -> HttpResponse) {
+    text: ((WebSocketSession, String) -> Void)? = nil,
+    binary: ((WebSocketSession, [UInt8]) -> Void)? = nil,
+    pong: ((WebSocketSession, [UInt8]) -> Void)? = nil,
+    connected: ((WebSocketSession) -> Void)? = nil,
+    disconnected: ((WebSocketSession) -> Void)? = nil) -> ((HttpRequest) -> HttpResponse) {
     return { r in
         guard r.hasTokenForHeader("upgrade", token: "websocket") else {
             return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"] ?? "unknown")"))
@@ -105,6 +113,8 @@ public func websocket(
                 }
             }
             
+            connected?(session)
+            
             do {
                 try read()
             } catch let error {
@@ -126,6 +136,8 @@ public func websocket(
                 // If an error occurs, send the close handshake.
                 session.writeCloseFrame()
             }
+            
+            disconnected?(session)
         }
         guard let secWebSocketAccept = String.toBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").sha1()) else {
             return HttpResponse.internalServerError
@@ -250,17 +262,17 @@ public class WebSocketSession: Hashable, Equatable  {
         }
         var len = UInt64(sec & 0x7F)
         if len == 0x7E {
-            let b0 = UInt64(try socket.read() << 8)
+            let b0 = UInt64(try socket.read()) << 8
             let b1 = UInt64(try socket.read())
             len = UInt64(littleEndian: b0 | b1)
         } else if len == 0x7F {
-            let b0 = UInt64(try socket.read() << 54)
-            let b1 = UInt64(try socket.read() << 48)
-            let b2 = UInt64(try socket.read() << 40)
-            let b3 = UInt64(try socket.read() << 32)
-            let b4 = UInt64(try socket.read() << 24)
-            let b5 = UInt64(try socket.read() << 16)
-            let b6 = UInt64(try socket.read() << 8)
+            let b0 = UInt64(try socket.read()) << 54
+            let b1 = UInt64(try socket.read()) << 48
+            let b2 = UInt64(try socket.read()) << 40
+            let b3 = UInt64(try socket.read()) << 32
+            let b4 = UInt64(try socket.read()) << 24
+            let b5 = UInt64(try socket.read()) << 16
+            let b6 = UInt64(try socket.read()) << 8
             let b7 = UInt64(try socket.read())
             len = UInt64(littleEndian: b0 | b1 | b2 | b3 | b4 | b5 | b6 | b7)
         }
