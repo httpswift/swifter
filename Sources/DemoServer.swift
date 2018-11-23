@@ -154,8 +154,12 @@ public func demoServer(_ publicDir: String) -> HttpServer {
         return HttpResponse.raw(200, "OK", ["XXX-Custom-Header": "value"], { try $0.write([UInt8]("test".utf8)) })
     }
     
-    server["/redirect"] = { r in
+    server["/redirect/permanently"] = { r in
         return .movedPermanently("http://www.google.com")
+    }
+    
+    server["/redirect/temporarily"] = { r in
+        return .movedTemporarily("http://www.google.com")
     }
 
     server["/long"] = { r in
