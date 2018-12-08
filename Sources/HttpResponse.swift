@@ -27,7 +27,7 @@ public enum HttpResponseBody {
         case json
     }
 
-    static func json<Body: Encodable>(_ body: Body) throws -> HttpResponseBody {
+    static func json(_ body: Encodable) throws -> HttpResponseBody {
         let encoder = JSONEncoder()
 
         let data = try encoder.encode(object)
@@ -128,8 +128,7 @@ public enum HttpResponse {
             }
         case .ok(let body):
             switch body {
-            case .rawData(_, let type): 
-                if case .json = type {
+            case .rawData(_, let type) where type == .json:
                     headers["Content-Type"] = "application/json"
                 }
             case .html: 
