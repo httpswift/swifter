@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class Process {
+public class SwifterProcess {
     
     public static var pid: Int {
         return Int(getpid())
@@ -30,7 +30,7 @@ public class Process {
         if !signalsObserved {
             [SIGTERM, SIGHUP, SIGSTOP, SIGINT].forEach { item in
                 signal(item) {
-                    signum in Process.signalsWatchers.forEach { $0(signum) }
+                    signum in SwifterProcess.signalsWatchers.forEach { $0(signum) }
                 }
             }
             signalsObserved = true
