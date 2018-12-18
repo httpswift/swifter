@@ -22,6 +22,16 @@ let server = HttpServer()
 server["/hello"] = { .ok(.html("You asked for \($0)"))  }
 server.start()
 ```
+
+### How to load HTML by string?
+```swift
+let server = HttpServer()
+server[path] = { request in
+    return HttpResponse.ok(.text("<html string>"))
+}
+server.start()
+```
+
 ### How to share files?
 ```swift
 let server = HttpServer()
