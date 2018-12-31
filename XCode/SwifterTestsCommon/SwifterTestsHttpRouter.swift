@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import Swifter
 
 class SwifterTestsHttpRouter: XCTestCase {
     
@@ -105,7 +106,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         XCTAssertEqual(router.route(nil, path: "/a/b/")?.0[":var"], "")
     }
     
-    func testHttpRouterPercentEnocedPathSegments() {
+    func testHttpRouterPercentEncodedPathSegments() {
         
         let router = HttpRouter()
         
@@ -117,4 +118,39 @@ class SwifterTestsHttpRouter: XCTestCase {
         XCTAssertNotNil(router.route(nil, path: "/a/%3C%3E/%5E"))
     }
     
+    func testHttpRouterHandlesOverlappingPaths() {
+        
+        let router = HttpRouter()
+        let request = HttpRequest()
+        
+        let staticRouteExpectation = expectation(description: "Static Route")
+        var foundStaticRoute = false
+        router.register("GET", path: "a/b") { _ in
+            foundStaticRoute = true
+            staticRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let variableRouteExpectation = expectation(description: "Variable Route")
+        var foundVariableRoute = false
+        router.register("GET", path: "a/:id/c") { _ in
+            foundVariableRoute = true
+            variableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let staticRouteResult = router.route("GET", path: "a/b")
+        let staticRouterHandler = staticRouteResult?.1
+        XCTAssertNotNil(staticRouteResult)
+        _ = staticRouterHandler?(request)
+        
+        let variableRouteResult = router.route("GET", path: "a/b/c")
+        let variableRouterHandler = variableRouteResult?.1
+        XCTAssertNotNil(variableRouteResult)
+        _ = variableRouterHandler?(request)
+        
+        waitForExpectations(timeout: 10, handler: nil)
+        XCTAssertTrue(foundStaticRoute)
+        XCTAssertTrue(foundVariableRoute)
+    }
 }
