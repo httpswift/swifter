@@ -64,11 +64,9 @@ public class HttpParser {
                 return c + [(name, value)]
         }
     }
-    
+
     private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
-        var body = [UInt8]()
-        for _ in 0..<size { body.append(try socket.read()) }
-        return body
+        return try socket.read(length: size)
     }
     
     private func readHeaders(_ socket: Socket) throws -> [String: String] {

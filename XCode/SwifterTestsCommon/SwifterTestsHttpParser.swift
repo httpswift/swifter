@@ -6,29 +6,46 @@
 //
 
 import XCTest
-import Swifter
+@testable import Swifter
 
 class SwifterTestsHttpParser: XCTestCase {
     
+    /// A specialized Socket which creates a linked socket pair with a pipe, and
+    /// immediately writes in fixed data. This enables tests to static fixture
+    /// data into the regular Socket flow.
     class TestSocket: Socket {
-        var content = [UInt8]()
-        var offset = 0
-        
         init(_ content: String) {
-            super.init(socketFileDescriptor: -1)
-            self.content.append(contentsOf: [UInt8](content.utf8))
-        }
-        
-        override func read() throws -> UInt8 {
-            if offset < content.count {
-                let value = self.content[offset]
-                offset = offset + 1
-                return value
+            /// Create an array to hold the read and write sockets that pipe creates
+            var fds = [Int32](repeating: 0, count: 2)
+            fds.withUnsafeMutableBufferPointer { ptr in
+                let rv = pipe(ptr.baseAddress!)
+                guard rv >= 0 else { fatalError("Pipe error!") }
             }
-            throw SocketError.recvFailed("")
+
+            // Extract the read and write handles into friendly variables
+            let fdRead = fds[0]
+            let fdWrite = fds[1]
+
+            // Set non-blocking I/O on both sockets. This is required!
+            _ = fcntl(fdWrite, F_SETFL, O_NONBLOCK)
+            _ = fcntl(fdRead, F_SETFL, O_NONBLOCK)
+
+            // Push the content bytes into the write socket.
+            _ = content.withCString { stringPointer in
+                // Count will be either >=0 to indicate bytes written, or -1
+                // if the bytes will be written later (non-blocking).
+                let count = write(fdWrite, stringPointer, content.lengthOfBytes(using: .utf8) + 1)
+                guard count != -1 || errno == EAGAIN else { fatalError("Write error!") }
+            }
+
+            // Close the write socket immediately. The OS will add an EOF byte
+            // and the read socket will remain open.
+            Darwin.close(fdWrite) // the super instance will close fdRead in deinit!
+
+            super.init(socketFileDescriptor: fdRead)
         }
     }
-    
+
     func testParser() {
         let parser = HttpParser()
         
@@ -88,6 +105,43 @@ class SwifterTestsHttpParser: XCTestCase {
         do {
             let _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 10\r\n\n"))
             XCTAssert(false, "Parser should throw an error if request' body is too short.")
+        } catch { }
+
+        do { // test payload less than 1 read segmant
+            let contentLength = Socket.kBufferLength - 128
+            let bodyString = [String](repeating: "A", count: contentLength).joined(separator: "")
+
+            let payload = "GET / HTTP/1.0\nContent-Length: \(contentLength)\n\n".appending(bodyString)
+            let request = try parser.readHttpRequest(TestSocket(payload))
+
+            XCTAssert(bodyString.lengthOfBytes(using: .utf8) == contentLength, "Has correct request size")
+
+            let unicodeBytes = bodyString.utf8.map { return $0 }
+            XCTAssert(request.body == unicodeBytes, "Request body must be correct")
+        } catch { }
+
+        do { // test payload equal to 1 read segmant
+            let contentLength = Socket.kBufferLength
+            let bodyString = [String](repeating: "B", count: contentLength).joined(separator: "")
+            let payload = "GET / HTTP/1.0\nContent-Length: \(contentLength)\n\n".appending(bodyString)
+            let request = try parser.readHttpRequest(TestSocket(payload))
+
+            XCTAssert(bodyString.lengthOfBytes(using: .utf8) == contentLength, "Has correct request size")
+
+            let unicodeBytes = bodyString.utf8.map { return $0 }
+            XCTAssert(request.body == unicodeBytes, "Request body must be correct")
+        } catch { }
+
+        do { // test very large multi-segment payload
+            let contentLength = Socket.kBufferLength * 4
+            let bodyString = [String](repeating: "C", count: contentLength).joined(separator: "")
+            let payload = "GET / HTTP/1.0\nContent-Length: \(contentLength)\n\n".appending(bodyString)
+            let request = try parser.readHttpRequest(TestSocket(payload))
+
+            XCTAssert(bodyString.lengthOfBytes(using: .utf8) == contentLength, "Has correct request size")
+
+            let unicodeBytes = bodyString.utf8.map { return $0 }
+            XCTAssert(request.body == unicodeBytes, "Request body must be correct")
         } catch { }
         
         var r = try? parser.readHttpRequest(TestSocket("GET /open?link=https://www.youtube.com/watch?v=D2cUBG4PnOA HTTP/1.0\nContent-Length: 10\n\n1234567890"))
