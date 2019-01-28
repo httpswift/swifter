@@ -112,21 +112,65 @@ open class Socket: Hashable, Equatable {
         }
     }
     
+    /// Read a single byte off the socket. This method is optimized for reading
+    /// a single byte. For reading multiple bytes, use read(length:), which will
+    /// pre-allocate heap space and read directly into it.
+    ///
+    /// - Returns: A single byte
+    /// - Throws: SocketError.recvFailed if unable to read from the socket
     open func read() throws -> UInt8 {
-        var buffer = [UInt8](repeating: 0, count: 1)
-        #if os(Linux)
-            let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), Int32(MSG_NOSIGNAL))
-        #else
-            let next = recv(self.socketFileDescriptor as Int32, &buffer, Int(buffer.count), 0)
-        #endif
-        if next <= 0 {
+        var byte: UInt8 = 0
+        let count = Darwin.read(self.socketFileDescriptor as Int32, &byte, 1)
+        guard count > 0 else {
             throw SocketError.recvFailed(Errno.description())
         }
-        return buffer[0]
+        return byte
+    }
+
+    /// Read up to `length` bytes from this socket
+    ///
+    /// - Parameter length: The maximum bytes to read
+    /// - Returns: A buffer containing the bytes read
+    /// - Throws: SocketError.recvFailed if unable to read bytes from the socket
+    open func read(length: Int) throws -> [UInt8] {
+        var buffer = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: length)
+
+        let bytesRead = try read(into: &buffer, length: length)
+
+        let rv = [UInt8](buffer[0..<bytesRead])
+        buffer.deallocate()
+        return rv
+    }
+
+    static let kBufferLength = 1024
+
+    /// Read up to `length` bytes from this socket into an existing buffer
+    ///
+    /// - Parameter into: The buffer to read into (must be at least length bytes in size)
+    /// - Parameter length: The maximum bytes to read
+    /// - Returns: The number of bytes read
+    /// - Throws: SocketError.recvFailed if unable to read bytes from the socket
+    func read(into buffer: inout UnsafeMutableBufferPointer<UInt8>, length: Int) throws -> Int {
+        var offset = 0
+        guard let baseAddress = buffer.baseAddress else { return 0 }
+
+        while offset < length {
+            // Compute next read length in bytes. The bytes read is never more than kBufferLength at once.
+            let readLength = offset + Socket.kBufferLength < length ? Socket.kBufferLength : length - offset
+
+            let bytesRead = Darwin.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
+            guard bytesRead > 0 else {
+                throw SocketError.recvFailed(Errno.description())
+            }
+
+            offset += bytesRead
+        }
+
+        return offset
     }
     
-    private static let CR = UInt8(13)
-    private static let NL = UInt8(10)
+    private static let CR: UInt8 = 13
+    private static let NL: UInt8 = 10
     
     public func readLine() throws -> String {
         var characters: String = ""
