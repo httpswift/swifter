@@ -40,8 +40,12 @@ class SwifterTestsHttpParser: XCTestCase {
 
             // Close the write socket immediately. The OS will add an EOF byte
             // and the read socket will remain open.
+            #if os(Linux)
+            Glibc.close(fdWrite)
+            #else
             Darwin.close(fdWrite) // the super instance will close fdRead in deinit!
-
+            #endif
+            
             super.init(socketFileDescriptor: fdRead)
         }
     }

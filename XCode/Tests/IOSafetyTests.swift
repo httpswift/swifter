@@ -7,7 +7,7 @@
 //
 
 import XCTest
-import Swifter
+@testable import Swifter
 
 class IOSafetyTests: XCTestCase {
     var server: HttpServer!

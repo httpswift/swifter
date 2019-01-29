@@ -1,0 +1,55 @@
+version: 2
+
+jobs:
+  macos:
+    environment:
+      TEST_REPORTS: /tmp/test-results
+      LANG: en_US.UTF-8
+    macos:
+      xcode: 10.1.0
+    steps:
+      - checkout
+      - run: 
+         name: Create Test Result Directory
+         command: mkdir -p $TEST_REPORTS
+      - run: 
+         name: Run Unit Test - macOS
+         command: |
+            cd XCode
+            set -o pipefail && xcodebuild test -scheme SwifterMac -sdk macosx -destination "arch=x86_64" | xcpretty -c -r html --output $TEST_REPORTS/macOS.html
+      - run: 
+         name: Run Unit Test - iOS
+         command: |
+            cd XCode
+            set -o pipefail && xcodebuild test -scheme SwifteriOS -sdk iphonesimulator -destination "name=iPhone 8" | xcpretty -c -r html --output $TEST_REPORTS/iOS.html
+      - run: 
+         name: Run Unit Test - tvOS
+         command: |
+            cd XCode
+            set -o pipefail && xcodebuild test -scheme SwiftertvOS -sdk appletvsimulator -destination "name=Apple TV 4K (at 1080p)" | xcpretty -c -r html --output $TEST_REPORTS/tvOS.html
+      - run:
+          name: Run Unit Test - Swift Package Manager
+          command: |
+             cd XCode
+             swift build && swift test
+      - store_artifacts:
+          path: /tmp/test-results
+
+  linux:
+    docker:
+      - image: swift:4.2
+    steps:
+      - checkout
+      - run: 
+          name: Compile code
+          command: swift build
+      - run: 
+          name: Run Unit Tests
+          command: swift test
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - linux
+      - macos

@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import Swifter
+@testable import Swifter
 
 class SwifterTestsWebSocketSession: XCTestCase {
     

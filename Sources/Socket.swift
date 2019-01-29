@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public enum SocketError: Error {
     case socketCreationFailed(String)
     case socketSettingReUseAddrFailed(String)
@@ -120,7 +119,13 @@ open class Socket: Hashable, Equatable {
     /// - Throws: SocketError.recvFailed if unable to read from the socket
     open func read() throws -> UInt8 {
         var byte: UInt8 = 0
-        let count = Darwin.read(self.socketFileDescriptor as Int32, &byte, 1)
+
+        #if os(Linux)
+	    let count = Glibc.read(self.socketFileDescriptor as Int32, &byte, 1)
+	    #else
+	    let count = Darwin.read(self.socketFileDescriptor as Int32, &byte, 1)
+	    #endif
+        
         guard count > 0 else {
             throw SocketError.recvFailed(Errno.description())
         }
@@ -158,7 +163,12 @@ open class Socket: Hashable, Equatable {
             // Compute next read length in bytes. The bytes read is never more than kBufferLength at once.
             let readLength = offset + Socket.kBufferLength < length ? Socket.kBufferLength : length - offset
 
-            let bytesRead = Darwin.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
+            #if os(Linux)
+            let bytesRead = Glibc.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
+	        #else
+	        let bytesRead = Darwin.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
+	        #endif
+            
             guard bytesRead > 0 else {
                 throw SocketError.recvFailed(Errno.description())
             }
