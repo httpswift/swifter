@@ -33,10 +33,16 @@ public class HttpParser {
     }
     
     private func extractQueryParams(_ url: String) -> [(String, String)] {
-        guard let questionMark = url.index(of: "?") else {
+        #if compiler(>=5.0)
+        guard let questionMarkIndex = url.firstIndex(of: "?") else {
             return []
         }
-        let queryStart = url.index(after: questionMark)
+        #else
+        guard let questionMarkIndex = url.index(of: "?") else {
+            return []
+        }
+        #endif
+        let queryStart = url.index(after: questionMarkIndex)
 
         guard url.endIndex > queryStart else { return [] }
 
@@ -48,9 +54,15 @@ public class HttpParser {
 
         return query.components(separatedBy: "&")
             .reduce([(String, String)]()) { (c, s) -> [(String, String)] in
+                #if compiler(>=5.0)
+                guard let nameEndIndex = s.firstIndex(of: "=") else {
+                    return c
+                }
+                #else
                 guard let nameEndIndex = s.index(of: "=") else {
                     return c
                 }
+                #endif
                 guard let name = String(s[s.startIndex..<nameEndIndex]).removingPercentEncoding else {
                     return c
                 }

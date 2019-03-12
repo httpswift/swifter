@@ -282,11 +282,9 @@ public class WebSocketSession: Hashable, Equatable  {
         }
         return frm
     }
-    
-    public var hashValue: Int {
-        get {
-            return socket.hashValue
-        }
+        
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(socket)
     }
 }
 
