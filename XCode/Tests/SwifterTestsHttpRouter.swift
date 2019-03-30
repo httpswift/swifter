@@ -153,4 +153,39 @@ class SwifterTestsHttpRouter: XCTestCase {
         XCTAssertTrue(foundStaticRoute)
         XCTAssertTrue(foundVariableRoute)
     }
+    
+    func testHttpRouterHandlesOverlappingPathsInDynamicRoutes() {
+        let router = HttpRouter()
+        let request = HttpRequest()
+        
+        let firstVariableRouteExpectation = expectation(description: "First Variable Route")
+        var foundFirstVariableRoute = false
+        router.register("GET", path: "a/:id") { request in
+            foundFirstVariableRoute = true
+            firstVariableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let secondVariableRouteExpectation = expectation(description: "Second Variable Route")
+        var foundSecondVariableRoute = false
+        router.register("GET", path: "a/:id/c") { _ in
+            foundSecondVariableRoute = true
+            secondVariableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let firstRouteResult = router.route("GET", path: "a/b")
+        let firstRouterHandler = firstRouteResult?.1
+        XCTAssertNotNil(firstRouteResult)
+        _ = firstRouterHandler?(request)
+        
+        let secondRouteResult = router.route("GET", path: "a/b/c")
+        let secondRouterHandler = secondRouteResult?.1
+        XCTAssertNotNil(secondRouteResult)
+        _ = secondRouterHandler?(request)
+        
+        waitForExpectations(timeout: 10, handler: nil)
+        XCTAssertTrue(foundFirstVariableRoute)
+        XCTAssertTrue(foundSecondVariableRoute)
+    }
 }

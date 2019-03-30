@@ -7,14 +7,19 @@
 
 import Foundation
 
-
 open class HttpRouter {
     
-    public init() {
-    }
+    public init() {}
     
     private class Node {
+        
+        /// The children nodes that form the route
         var nodes = [String: Node]()
+        
+        /// Define whether or not this node is the end of a route
+        var isEndOfRoute: Bool = false
+        
+        /// The closure to handle the route
         var handler: ((HttpRequest) -> HttpResponse)? = nil
     }
     
@@ -69,15 +74,20 @@ open class HttpRouter {
     }
     
     private func inflate(_ node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {
-        if let pathSegment = generator.next() {
-            if let _ = node.nodes[pathSegment] {
-                return inflate(&node.nodes[pathSegment]!, generator: &generator)
+        
+        var currentNode = node
+        
+        while let pathSegment = generator.next() {
+            if let nextNode = currentNode.nodes[pathSegment] {
+                currentNode = nextNode
+            } else {
+                currentNode.nodes[pathSegment] = Node()
+                currentNode = currentNode.nodes[pathSegment]!
             }
-            var nextNode = Node()
-            node.nodes[pathSegment] = nextNode
-            return inflate(&nextNode, generator: &generator)
         }
-        return node
+        
+        currentNode.isEndOfRoute = true
+        return currentNode
     }
     
     private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
@@ -103,7 +113,7 @@ open class HttpRouter {
             var currentIndex = index + 1
             let variableNodes = node.nodes.filter { $0.0.first == ":" }
             if let variableNode = variableNodes.first {
-                if variableNode.1.nodes.count == 0 {
+                if currentIndex == count && variableNode.1.isEndOfRoute {
                     // if it's the last element of the pattern and it's a variable, stop the search and
                     // append a tail as a value for the variable.
                     let tail = generator.joined(separator: "/")
