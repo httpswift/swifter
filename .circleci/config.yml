@@ -6,7 +6,7 @@ jobs:
       TEST_REPORTS: /tmp/test-results
       LANG: en_US.UTF-8
     macos:
-      xcode: 10.1.0
+      xcode: 10.2.0
     steps:
       - checkout
       - run: 
