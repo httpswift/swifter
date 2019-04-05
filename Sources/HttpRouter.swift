@@ -93,7 +93,10 @@ open class HttpRouter {
     private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
         
         var matchedRoutes = [Node]()
-        findHandler(&node, params: &params, generator: &generator, matchedNodes: &matchedRoutes, index: 0, count: generator.reversed().count)
+        let pattern = generator.map { $0 }
+        let numberOfElements = pattern.count
+        
+        findHandler(&node, params: &params, pattern: pattern , matchedNodes: &matchedRoutes, index: 0, count: numberOfElements)
         return matchedRoutes.first?.handler
     }
     
@@ -102,13 +105,13 @@ open class HttpRouter {
     /// - Parameters:
     ///   - node: The root node of the tree representing all the routes
     ///   - params: The parameters of the match
-    ///   - generator: The IndexingIterator to iterate through the pattern to match
+    ///   - pattern: The pattern or route to find in the routes tree
     ///   - matchedNodes: An array with the nodes matching the route
     ///   - index: The index of current position in the generator
     ///   - count: The number of elements if the route to match
-    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>, matchedNodes: inout [Node], index: Int, count: Int) {
+    private func findHandler(_ node: inout Node, params: inout [String: String], pattern: [String], matchedNodes: inout [Node], index: Int, count: Int) {
     
-        if let pathToken = generator.next()?.removingPercentEncoding {
+        if index < count, let pathToken = pattern[index].removingPercentEncoding {
             
             var currentIndex = index + 1
             let variableNodes = node.nodes.filter { $0.0.first == ":" }
@@ -116,7 +119,7 @@ open class HttpRouter {
                 if currentIndex == count && variableNode.1.isEndOfRoute {
                     // if it's the last element of the pattern and it's a variable, stop the search and
                     // append a tail as a value for the variable.
-                    let tail = generator.joined(separator: "/")
+                    let tail = pattern[currentIndex..<count].joined(separator: "/")
                     if tail.count > 0 {
                         params[variableNode.0] = pathToken + "/" + tail
                     } else {
@@ -127,37 +130,31 @@ open class HttpRouter {
                     return
                 }
                 params[variableNode.0] = pathToken
-                findHandler(&node.nodes[variableNode.0]!, params: &params, generator: &generator, matchedNodes: &matchedNodes, index: currentIndex, count: count)
+                findHandler(&node.nodes[variableNode.0]!, params: &params, pattern: pattern, matchedNodes: &matchedNodes, index: currentIndex, count: count)
             }
             
             if var node = node.nodes[pathToken] {
-                findHandler(&node, params: &params, generator: &generator, matchedNodes: &matchedNodes, index: currentIndex, count: count)
+                findHandler(&node, params: &params, pattern: pattern, matchedNodes: &matchedNodes, index: currentIndex, count: count)
             }
             
             if var node = node.nodes["*"] {
-                findHandler(&node, params: &params, generator: &generator, matchedNodes: &matchedNodes, index: currentIndex, count: count)
+                findHandler(&node, params: &params, pattern: pattern, matchedNodes: &matchedNodes, index: currentIndex, count: count)
             }
             
             if let startStarNode = node.nodes["**"] {
                 let startStarNodeKeys = startStarNode.nodes.keys
-                while let pathToken = generator.next() {
+                currentIndex += 1
+                while currentIndex < count, let pathToken = pattern[currentIndex].removingPercentEncoding {
                     currentIndex += 1
                     if startStarNodeKeys.contains(pathToken) {
-                        findHandler(&startStarNode.nodes[pathToken]!, params: &params, generator: &generator, matchedNodes: &matchedNodes, index: currentIndex, count: count)
+                        findHandler(&startStarNode.nodes[pathToken]!, params: &params, pattern: pattern, matchedNodes: &matchedNodes, index: currentIndex, count: count)
                     }
                 }
             }
-        } else if let variableNode = node.nodes.filter({ $0.0.first == ":" }).first {
-            // if it's the last element of the requested URL, check if there is a pattern with variable tail.
-            if variableNode.value.nodes.isEmpty {
-                params[variableNode.0] = ""
-                matchedNodes.append(variableNode.value)
-                return
-            }
         }
         
-        // if it's the last element and the path to match is done then it's a pattern matching
-        if node.nodes.isEmpty && index == count {
+        if node.isEndOfRoute && index == count {
+            // if it's the last element and the path to match is done then it's a pattern matching
             matchedNodes.append(node)
             return
         }

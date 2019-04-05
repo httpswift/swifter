@@ -103,7 +103,7 @@ class SwifterTestsHttpRouter: XCTestCase {
         
         XCTAssertEqual(router.route(nil, path: "/a/b/value1")?.0[":var"], "value1")
         
-        XCTAssertEqual(router.route(nil, path: "/a/b/")?.0[":var"], "")
+        XCTAssertEqual(router.route(nil, path: "/a/b/")?.0[":var"], nil)
     }
     
     func testHttpRouterPercentEncodedPathSegments() {
@@ -180,6 +180,90 @@ class SwifterTestsHttpRouter: XCTestCase {
         _ = firstRouterHandler?(request)
         
         let secondRouteResult = router.route("GET", path: "a/b/c")
+        let secondRouterHandler = secondRouteResult?.1
+        XCTAssertNotNil(secondRouteResult)
+        _ = secondRouterHandler?(request)
+        
+        waitForExpectations(timeout: 10, handler: nil)
+        XCTAssertTrue(foundFirstVariableRoute)
+        XCTAssertTrue(foundSecondVariableRoute)
+    }
+    
+    func testHttpRouterShouldHandleOverlappingRoutesInTrail() {
+        let router = HttpRouter()
+        let request = HttpRequest()
+        
+        let firstVariableRouteExpectation = expectation(description: "First Variable Route")
+        var foundFirstVariableRoute = false
+        router.register("GET", path: "/a/:id") { request in
+            foundFirstVariableRoute = true
+            firstVariableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let secondVariableRouteExpectation = expectation(description: "Second Variable Route")
+        var foundSecondVariableRoute = false
+        router.register("GET", path: "/a") { _ in
+            foundSecondVariableRoute = true
+            secondVariableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let thirdVariableRouteExpectation = expectation(description: "Third Variable Route")
+        var foundThirdVariableRoute = false
+        router.register("GET", path: "/a/:id/b") { request in
+            foundThirdVariableRoute = true
+            thirdVariableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let firstRouteResult = router.route("GET", path: "/a")
+        let firstRouterHandler = firstRouteResult?.1
+        XCTAssertNotNil(firstRouteResult)
+        _ = firstRouterHandler?(request)
+        
+        let secondRouteResult = router.route("GET", path: "/a/b")
+        let secondRouterHandler = secondRouteResult?.1
+        XCTAssertNotNil(secondRouteResult)
+        _ = secondRouterHandler?(request)
+        
+        let thirdRouteResult = router.route("GET", path: "/a/b/b")
+        let thirdRouterHandler = thirdRouteResult?.1
+        XCTAssertNotNil(thirdRouteResult)
+        _ = thirdRouterHandler?(request)
+        
+        waitForExpectations(timeout: 10, handler: nil)
+        XCTAssertTrue(foundFirstVariableRoute)
+        XCTAssertTrue(foundSecondVariableRoute)
+        XCTAssertTrue(foundThirdVariableRoute)
+    }
+    
+    func testHttpRouterHandlesOverlappingPathsInDynamicRoutesInTheMiddle() {
+        let router = HttpRouter()
+        let request = HttpRequest()
+        
+        let firstVariableRouteExpectation = expectation(description: "First Variable Route")
+        var foundFirstVariableRoute = false
+        router.register("GET", path: "/a/b/c/d/e") { request in
+            foundFirstVariableRoute = true
+            firstVariableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let secondVariableRouteExpectation = expectation(description: "Second Variable Route")
+        var foundSecondVariableRoute = false
+        router.register("GET", path: "/a/:id/f/g") { _ in
+            foundSecondVariableRoute = true
+            secondVariableRouteExpectation.fulfill()
+            return HttpResponse.accepted
+        }
+        
+        let firstRouteResult = router.route("GET", path: "/a/b/c/d/e")
+        let firstRouterHandler = firstRouteResult?.1
+        XCTAssertNotNil(firstRouteResult)
+        _ = firstRouterHandler?(request)
+        
+        let secondRouteResult = router.route("GET", path: "/a/b/f/g")
         let secondRouterHandler = secondRouteResult?.1
         XCTAssertNotNil(secondRouteResult)
         _ = secondRouterHandler?(request)
