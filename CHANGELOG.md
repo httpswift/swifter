@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file. Changes not
 
 # [Unreleased]
 
+## Added
+- A new `CHANGELOG.md` to keep track of changes in the project. ([#385](https://github.com/httpswift/swifter/pull/385)) by [@Vkt0r](https://github.com/Vkt0r)
+
 ## Fixed
 - An issue in the `HttpRouter` causing issues to handle routes with overlapping in the tail. ([#379](https://github.com/httpswift/swifter/pull/359), [#382](https://github.com/httpswift/swifter/pull/382)) by [@Vkt0r](https://github.com/Vkt0r)
 
