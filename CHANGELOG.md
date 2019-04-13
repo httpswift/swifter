@@ -24,6 +24,10 @@ All notable changes to this project will be documented in this file. Changes not
 ## Fixed
 - An issue in the `HttpRouter` causing issues to handle routes with overlapping in the tail. ([#379](https://github.com/httpswift/swifter/pull/359), [#382](https://github.com/httpswift/swifter/pull/382)) by [@Vkt0r](https://github.com/Vkt0r)
 
+## Changed
+- Performance: Batch reads of websocket payloads rather than reading byte-by-byte. ([#387](https://github.com/httpswift/swifter/pull/387)) by [@lynaghk](https://github.com/lynaghk)
+
+
 # [1.4.6] 
 ## Added
  -  The `.movedTemporarily` case (HTTP 307) to possibles HTTP responses. ([#352](https://github.com/httpswift/swifter/pull/352)) by [@csch](https://github.com/csch)
