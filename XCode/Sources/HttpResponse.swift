@@ -21,8 +21,8 @@ public protocol HttpResponseBodyWriter {
 }
 
 public enum HttpResponseBody {
-
-    case json(AnyObject)
+    
+    case json(Any)
     case html(String)
     case text(String)
     case data(Data)
@@ -32,20 +32,13 @@ public enum HttpResponseBody {
         do {
             switch self {
             case .json(let object):
-                #if os(Linux)
-                    let data = [UInt8]("Not ready for Linux.".utf8)
-                    return (data.count, {
-                        try $0.write(data)
-                    })
-                #else
-                    guard JSONSerialization.isValidJSONObject(object) else {
-                        throw SerializationError.invalidObject
-                    }
-                    let data = try JSONSerialization.data(withJSONObject: object)
-                    return (data.count, {
-                        try $0.write(data)
-                    })
-                #endif
+              guard JSONSerialization.isValidJSONObject(object) else {
+                throw SerializationError.invalidObject
+              }
+              let data = try JSONSerialization.data(withJSONObject: object)
+              return (data.count, {
+                try $0.write(data)
+              })
             case .text(let body):
                 let data = [UInt8](body.utf8)
                 return (data.count, {

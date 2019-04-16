@@ -26,6 +26,9 @@
 		043660EB21FED52000497989 /* MimeTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D4511204E9988000A0726 /* MimeTypesTests.swift */; };
 		047F1F02226AB9AD00909B95 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B912F49220507D00062C360 /* XCTestManifests.swift */; };
 		0858E7F81D68BC2600491CD1 /* PingServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F61D68BC2600491CD1 /* PingServer.swift */; };
+		0C1F3CAD2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F3CAC2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift */; };
+		0C1F3CAE2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F3CAC2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift */; };
+		0C1F3CAF2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1F3CAC2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift */; };
 		2659FC1A1DADC077003F3930 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
 		269B47881D3AAAE20042D137 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6EF1D2C44F30030FC98 /* HttpResponse.swift */; };
 		269B47891D3AAAE20042D137 /* Scopes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6F41D2C44F30030FC98 /* Scopes.swift */; };
@@ -167,6 +170,7 @@
 		043660DE21FED3A300497989 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOSafetyTests.swift; sourceTree = "<group>"; };
 		0858E7F61D68BC2600491CD1 /* PingServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PingServer.swift; sourceTree = "<group>"; };
+		0C1F3CAC2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = SwifterTestsHttpResponseBody.swift; sourceTree = "<group>"; tabWidth = 4; };
 		269B47A11D3AAAE20042D137 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		269B47A41D3AAC4F0042D137 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftertvOS.h; sourceTree = "<group>"; };
@@ -420,6 +424,7 @@
 				7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */,
 				0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */,
 				6A0D4511204E9988000A0726 /* MimeTypesTests.swift */,
+				0C1F3CAC2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift */,
 				7B55EC94226E0E4F00042D23 /* ServerThreadingTests.swift */,
 			);
 			path = Tests;
@@ -773,6 +778,7 @@
 				047F1F02226AB9AD00909B95 /* XCTestManifests.swift in Sources */,
 				043660CE21FED35500497989 /* SwifterTestsHttpParser.swift in Sources */,
 				043660D521FED36C00497989 /* MimeTypesTests.swift in Sources */,
+				0C1F3CAE2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */,
 				7B55EC96226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -789,6 +795,7 @@
 				7B55EC97226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,
 				043660E621FED51400497989 /* SwifterTestsHttpParser.swift in Sources */,
 				043660EB21FED52000497989 /* MimeTypesTests.swift in Sources */,
+				0C1F3CAF2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -902,6 +909,7 @@
 				043660D421FED36900497989 /* IOSafetyTests.swift in Sources */,
 				7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */,
 				7B11AD4B21C9A8A6002F8820 /* SwifterTestsHttpRouter.swift in Sources */,
+				0C1F3CAD2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */,
 				7B55EC95226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

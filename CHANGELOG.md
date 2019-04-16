@@ -37,6 +37,7 @@ All notable changes to this project will be documented in this file. Changes not
 - Refactor: Use Foundation API for Base64 encoding. ([#403](https://github.com/httpswift/swifter/pull/403)) by [@mazyod](https://github.com/mazyod)
 - Refactor: Use `URLComponents` for `HttpRequest` path and query parameters parsing [#404](https://github.com/httpswift/swifter/pull/404)) by [@mazyod](https://github.com/mazyod)
 - `HttpResponse` functions `statusCode()` and `reasonPhrase` changed to computed variables instead of functions, and made public (No impact on existing usage as it was previously internal). ([#410](https://github.com/httpswift/swifter/pull/410)) by [@apocolipse](https://github.com/apocolipse)
+- Adjusted the associated type of enum case `HttpResponseBody.json` from `AnyObject` to `Any` to allow Swift dictionaries/arrays without converting to their Objective-C counterparts. ([#393](https://github.com/httpswift/swifter/pull/393)) by [@edwinveger](https://github.com/edwinveger)
 
 
 ## Removed
