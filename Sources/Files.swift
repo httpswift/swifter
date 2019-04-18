@@ -37,7 +37,23 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
         if let file = try? (directoryPath + String.pathSeparator + fileRelativePath.value).openForReading() {
             let mimeType = fileRelativePath.value.mimeType();
             
-            return .raw(200, "OK", ["Content-Type": mimeType], { writer in
+            let filePath = directoryPath + String.pathSeparator + fileRelativePath.value
+            var fileSize : UInt64 = 0
+            
+            var responseHeader : [String : String]
+            
+            do {
+                let attr = try FileManager.default.attributesOfItem(atPath: filePath)
+                fileSize = attr[FileAttributeKey.size] as! UInt64
+                
+                let dict = attr as NSDictionary
+                fileSize = dict.fileSize()
+                responseHeader = ["Content-Type": mimeType, "Content-Length": String(fileSize)]
+            } catch {
+                responseHeader = ["Content-Type": mimeType]
+            }
+            
+            return .raw(200, "OK", responseHeader, { writer in
                 try? writer.write(file)
                 file.close()
             })
