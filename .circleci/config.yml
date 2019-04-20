@@ -1,6 +1,29 @@
 version: 2
 
 jobs:
+  danger:
+    macos:
+      xcode: 10.2.0
+    steps:
+      - checkout
+      - run:
+          name: Set Ruby Version
+          command: echo "ruby-2.4" > ~/.ruby-version
+      - restore_cache:
+            key: 1-gems-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Install Ruby Dependencies
+          command: bundle check || bundle install
+          environment:
+            BUNDLE_JOBS: 4
+            BUNDLE_RETRY: 3
+      - save_cache:
+            key: 1-gems-{{ checksum "Gemfile.lock" }}
+            paths:
+              - vendor/bundle
+      - run:
+          name: Danger
+          command: bundle exec danger
   macos:
     environment:
       TEST_REPORTS: /tmp/test-results
@@ -51,5 +74,10 @@ workflows:
   version: 2
   tests:
     jobs:
-      - linux
-      - macos
+      - danger
+      - linux:
+          requires:
+            - danger
+      - macos:
+          requires:
+            - danger
