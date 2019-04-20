@@ -115,22 +115,22 @@ internal let mimeTypes = [
     "avi": "video/x-msvideo"
 ]
 
-internal func MimeType(ext: String?) -> String {
-    if ext != nil && mimeTypes.contains(where: { $0.0 == ext!.lowercased() }) {
-        return mimeTypes[ext!.lowercased()]!
+internal func matchMimeType(extens: String?) -> String {
+    if extens != nil && mimeTypes.contains(where: { $0.0 == extens!.lowercased() }) {
+        return mimeTypes[extens!.lowercased()]!
     }
     return DEFAULT_MIME_TYPE
 }
 
 extension NSURL {
     public func mimeType() -> String {
-        return MimeType(ext: self.pathExtension)
+        return matchMimeType(extens: self.pathExtension)
     }
 }
 
 extension NSString {
     public func mimeType() -> String {
-        return MimeType(ext: self.pathExtension)
+        return matchMimeType(extens: self.pathExtension)
     }
 }
 
@@ -139,5 +139,3 @@ extension String {
         return (NSString(string: self)).mimeType()
     }
 }
-
-

@@ -37,4 +37,3 @@ class MimeTypeTests: XCTestCase {
     }
   
 }
-

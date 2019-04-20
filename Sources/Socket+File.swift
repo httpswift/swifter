@@ -8,6 +8,7 @@
 import Foundation
 
 #if os(iOS) || os(tvOS) || os (Linux)
+// swiftlint:disable type_name function_parameter_count
     struct sf_hdtr { }
     
     private func sendfileImpl(_ source: UnsafeMutablePointer<FILE>, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>, _: UnsafeMutablePointer<sf_hdtr>, _: Int32) -> Int32 {
@@ -27,7 +28,7 @@ import Foundation
                 guard writeResult > 0 else {
                     return Int32(writeResult)
                 }
-                writeCounter = writeCounter + writeResult
+                writeCounter += writeResult
             }
         }
     }
@@ -35,7 +36,7 @@ import Foundation
 
 extension Socket {
     
-    public func writeFile(_ file: String.File) throws -> Void {
+    public func writeFile(_ file: String.File) throws {
         var offset: off_t = 0
         var sf: sf_hdtr = sf_hdtr()
         
@@ -49,5 +50,4 @@ extension Socket {
             throw SocketError.writeFailed("sendfile: " + Errno.description())
         }
     }
-    
 }

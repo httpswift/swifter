@@ -5,333 +5,335 @@
 //  Copyright © 2014-2016 Damian Kołakowski. All rights reserved.
 //
 
+// swiftlint:disable file_length
 import Foundation
 
 public func scopes(_ scope: @escaping Closure) -> ((HttpRequest) -> HttpResponse) {
-    return { r in
-        ScopesBuffer[Process.tid] = ""
+    return { _ in
+        scopesBuffer[Process.tid] = ""
         scope()
         return .raw(200, "OK", ["Content-Type": "text/html"], {
-            try? $0.write([UInt8](("<!DOCTYPE html>"  + (ScopesBuffer[Process.tid] ?? "")).utf8))
+            try? $0.write([UInt8](("<!DOCTYPE html>"  + (scopesBuffer[Process.tid] ?? "")).utf8))
         })
     }
 }
 
 public typealias Closure = () -> Void
 
-public var idd: String? = nil
-public var dir: String? = nil
-public var rel: String? = nil
-public var rev: String? = nil
-public var alt: String? = nil
-public var forr: String? = nil
-public var src: String? = nil
-public var type: String? = nil
-public var href: String? = nil
-public var text: String? = nil
-public var abbr: String? = nil
-public var size: String? = nil
-public var face: String? = nil
-public var char: String? = nil
-public var cite: String? = nil
-public var span: String? = nil
-public var data: String? = nil
-public var axis: String? = nil
-public var Name: String? = nil
-public var name: String? = nil
-public var code: String? = nil
-public var link: String? = nil
-public var lang: String? = nil
-public var cols: String? = nil
-public var rows: String? = nil
-public var ismap: String? = nil
-public var shape: String? = nil
-public var style: String? = nil
-public var alink: String? = nil
-public var width: String? = nil
-public var rules: String? = nil
-public var align: String? = nil
-public var frame: String? = nil
-public var vlink: String? = nil
-public var deferr: String? = nil
-public var color: String? = nil
-public var media: String? = nil
-public var title: String? = nil
-public var scope: String? = nil
-public var classs: String? = nil
-public var value: String? = nil
-public var clear: String? = nil
-public var start: String? = nil
-public var label: String? = nil
-public var action: String? = nil
-public var height: String? = nil
-public var method: String? = nil
-public var acceptt: String? = nil
-public var object: String? = nil
-public var scheme: String? = nil
-public var coords: String? = nil
-public var usemap: String? = nil
-public var onblur: String? = nil
-public var nohref: String? = nil
-public var nowrap: String? = nil
-public var hspace: String? = nil
-public var border: String? = nil
-public var valign: String? = nil
-public var vspace: String? = nil
-public var onload: String? = nil
-public var target: String? = nil
-public var prompt: String? = nil
-public var onfocus: String? = nil
-public var enctype: String? = nil
-public var onclick: String? = nil
-public var onkeyup: String? = nil
-public var profile: String? = nil
-public var version: String? = nil
-public var onreset: String? = nil
-public var charset: String? = nil
-public var standby: String? = nil
-public var colspan: String? = nil
-public var charoff: String? = nil
-public var classid: String? = nil
-public var compact: String? = nil
-public var declare: String? = nil
-public var rowspan: String? = nil
-public var checked: String? = nil
-public var archive: String? = nil
-public var bgcolor: String? = nil
-public var content: String? = nil
-public var noshade: String? = nil
-public var summary: String? = nil
-public var headers: String? = nil
-public var onselect: String? = nil
-public var readonly: String? = nil
-public var tabindex: String? = nil
-public var onchange: String? = nil
-public var noresize: String? = nil
-public var disabled: String? = nil
-public var longdesc: String? = nil
-public var codebase: String? = nil
-public var language: String? = nil
-public var datetime: String? = nil
-public var selected: String? = nil
-public var hreflang: String? = nil
-public var onsubmit: String? = nil
-public var multiple: String? = nil
-public var onunload: String? = nil
-public var codetype: String? = nil
-public var scrolling: String? = nil
-public var onkeydown: String? = nil
-public var maxlength: String? = nil
-public var valuetype: String? = nil
-public var accesskey: String? = nil
-public var onmouseup: String? = nil
-public var autofocus: String? = nil
-public var onkeypress: String? = nil
-public var ondblclick: String? = nil
-public var onmouseout: String? = nil
-public var httpEquiv: String? = nil
-public var background: String? = nil
-public var onmousemove: String? = nil
-public var onmouseover: String? = nil
-public var cellpadding: String? = nil
-public var onmousedown: String? = nil
-public var frameborder: String? = nil
-public var marginwidth: String? = nil
-public var cellspacing: String? = nil
-public var placeholder: String? = nil
-public var marginheight: String? = nil
-public var acceptCharset: String? = nil
+public var idd: String?
+public var dir: String?
+public var rel: String?
+public var rev: String?
+public var alt: String?
+public var forr: String?
+public var src: String?
+public var type: String?
+public var href: String?
+public var text: String?
+public var abbr: String?
+public var size: String?
+public var face: String?
+public var char: String?
+public var cite: String?
+public var span: String?
+public var data: String?
+public var axis: String?
+public var Name: String?
+public var name: String?
+public var code: String?
+public var link: String?
+public var lang: String?
+public var cols: String?
+public var rows: String?
+public var ismap: String?
+public var shape: String?
+public var style: String?
+public var alink: String?
+public var width: String?
+public var rules: String?
+public var align: String?
+public var frame: String?
+public var vlink: String?
+public var deferr: String?
+public var color: String?
+public var media: String?
+public var title: String?
+public var scope: String?
+public var classs: String?
+public var value: String?
+public var clear: String?
+public var start: String?
+public var label: String?
+public var action: String?
+public var height: String?
+public var method: String?
+public var acceptt: String?
+public var object: String?
+public var scheme: String?
+public var coords: String?
+public var usemap: String?
+public var onblur: String?
+public var nohref: String?
+public var nowrap: String?
+public var hspace: String?
+public var border: String?
+public var valign: String?
+public var vspace: String?
+public var onload: String?
+public var target: String?
+public var prompt: String?
+public var onfocus: String?
+public var enctype: String?
+public var onclick: String?
+public var onkeyup: String?
+public var profile: String?
+public var version: String?
+public var onreset: String?
+public var charset: String?
+public var standby: String?
+public var colspan: String?
+public var charoff: String?
+public var classid: String?
+public var compact: String?
+public var declare: String?
+public var rowspan: String?
+public var checked: String?
+public var archive: String?
+public var bgcolor: String?
+public var content: String?
+public var noshade: String?
+public var summary: String?
+public var headers: String?
+public var onselect: String?
+public var readonly: String?
+public var tabindex: String?
+public var onchange: String?
+public var noresize: String?
+public var disabled: String?
+public var longdesc: String?
+public var codebase: String?
+public var language: String?
+public var datetime: String?
+public var selected: String?
+public var hreflang: String?
+public var onsubmit: String?
+public var multiple: String?
+public var onunload: String?
+public var codetype: String?
+public var scrolling: String?
+public var onkeydown: String?
+public var maxlength: String?
+public var valuetype: String?
+public var accesskey: String?
+public var onmouseup: String?
+public var autofocus: String?
+public var onkeypress: String?
+public var ondblclick: String?
+public var onmouseout: String?
+public var httpEquiv: String?
+public var background: String?
+public var onmousemove: String?
+public var onmouseover: String?
+public var cellpadding: String?
+public var onmousedown: String?
+public var frameborder: String?
+public var marginwidth: String?
+public var cellspacing: String?
+public var placeholder: String?
+public var marginheight: String?
+public var acceptCharset: String?
 
-public var inner: String? = nil
+public var inner: String?
 
-public func a(_ c: Closure) { element("a", c) }
-public func b(_ c: Closure) { element("b", c) }
-public func i(_ c: Closure) { element("i", c) }
-public func p(_ c: Closure) { element("p", c) }
-public func q(_ c: Closure) { element("q", c) }
-public func s(_ c: Closure) { element("s", c) }
-public func u(_ c: Closure) { element("u", c) }
+public func a(_ closure: Closure) { element("a", closure) }
+public func b(_ closure: Closure) { element("b", closure) }
+public func i(_ closure: Closure) { element("i", closure) }
+public func p(_ closure: Closure) { element("p", closure) }
+public func q(_ closure: Closure) { element("q", closure) }
+public func s(_ closure: Closure) { element("s", closure) }
+public func u(_ closure: Closure) { element("u", closure) }
 
-public func br(_ c: Closure) { element("br", c) }
-public func dd(_ c: Closure) { element("dd", c) }
-public func dl(_ c: Closure) { element("dl", c) }
-public func dt(_ c: Closure) { element("dt", c) }
-public func em(_ c: Closure) { element("em", c) }
-public func hr(_ c: Closure) { element("hr", c) }
-public func li(_ c: Closure) { element("li", c) }
-public func ol(_ c: Closure) { element("ol", c) }
-public func rp(_ c: Closure) { element("rp", c) }
-public func rt(_ c: Closure) { element("rt", c) }
-public func td(_ c: Closure) { element("td", c) }
-public func th(_ c: Closure) { element("th", c) }
-public func tr(_ c: Closure) { element("tr", c) }
-public func tt(_ c: Closure) { element("tt", c) }
-public func ul(_ c: Closure) { element("ul", c) }
+public func br(_ closure: Closure) { element("br", closure) }
+public func dd(_ closure: Closure) { element("dd", closure) }
+public func dl(_ closure: Closure) { element("dl", closure) }
+public func dt(_ closure: Closure) { element("dt", closure) }
+public func em(_ closure: Closure) { element("em", closure) }
+public func hr(_ closure: Closure) { element("hr", closure) }
+public func li(_ closure: Closure) { element("li", closure) }
+public func ol(_ closure: Closure) { element("ol", closure) }
+public func rp(_ closure: Closure) { element("rp", closure) }
+public func rt(_ closure: Closure) { element("rt", closure) }
+public func td(_ closure: Closure) { element("td", closure) }
+public func th(_ closure: Closure) { element("th", closure) }
+public func tr(_ closure: Closure) { element("tr", closure) }
+public func tt(_ closure: Closure) { element("tt", closure) }
+public func ul(_ closure: Closure) { element("ul", closure) }
 
-public func ul<T: Sequence>(_ collection: T, _ c: @escaping (T.Iterator.Element) -> Void) {
+public func ul<T: Sequence>(_ collection: T, _ closure: @escaping (T.Iterator.Element) -> Void) {
     element("ul", {
         for item in collection {
-            c(item)
+            closure(item)
         }
     })
 }
 
-public func h1(_ c: Closure) { element("h1", c) }
-public func h2(_ c: Closure) { element("h2", c) }
-public func h3(_ c: Closure) { element("h3", c) }
-public func h4(_ c: Closure) { element("h4", c) }
-public func h5(_ c: Closure) { element("h5", c) }
-public func h6(_ c: Closure) { element("h6", c) }
+public func h1(_ closure: Closure) { element("h1", closure) }
+public func h2(_ closure: Closure) { element("h2", closure) }
+public func h3(_ closure: Closure) { element("h3", closure) }
+public func h4(_ closure: Closure) { element("h4", closure) }
+public func h5(_ closure: Closure) { element("h5", closure) }
+public func h6(_ closure: Closure) { element("h6", closure) }
 
-public func bdi(_ c: Closure) { element("bdi", c) }
-public func bdo(_ c: Closure) { element("bdo", c) }
-public func big(_ c: Closure) { element("big", c) }
-public func col(_ c: Closure) { element("col", c) }
-public func del(_ c: Closure) { element("del", c) }
-public func dfn(_ c: Closure) { element("dfn", c) }
-public func dir(_ c: Closure) { element("dir", c) }
-public func div(_ c: Closure) { element("div", c) }
-public func img(_ c: Closure) { element("img", c) }
-public func ins(_ c: Closure) { element("ins", c) }
-public func kbd(_ c: Closure) { element("kbd", c) }
-public func map(_ c: Closure) { element("map", c) }
-public func nav(_ c: Closure) { element("nav", c) }
-public func pre(_ c: Closure) { element("pre", c) }
-public func rtc(_ c: Closure) { element("rtc", c) }
-public func sub(_ c: Closure) { element("sub", c) }
-public func sup(_ c: Closure) { element("sup", c) }
+public func bdi(_ closure: Closure) { element("bdi", closure) }
+public func bdo(_ closure: Closure) { element("bdo", closure) }
+public func big(_ closure: Closure) { element("big", closure) }
+public func col(_ closure: Closure) { element("col", closure) }
+public func del(_ closure: Closure) { element("del", closure) }
+public func dfn(_ closure: Closure) { element("dfn", closure) }
+public func dir(_ closure: Closure) { element("dir", closure) }
+public func div(_ closure: Closure) { element("div", closure) }
+public func img(_ closure: Closure) { element("img", closure) }
+public func ins(_ closure: Closure) { element("ins", closure) }
+public func kbd(_ closure: Closure) { element("kbd", closure) }
+public func map(_ closure: Closure) { element("map", closure) }
+public func nav(_ closure: Closure) { element("nav", closure) }
+public func pre(_ closure: Closure) { element("pre", closure) }
+public func rtc(_ closure: Closure) { element("rtc", closure) }
+public func sub(_ closure: Closure) { element("sub", closure) }
+public func sup(_ closure: Closure) { element("sup", closure) }
 
-public func varr(_ c: Closure) { element("var", c) }
-public func wbr(_ c: Closure) { element("wbr", c) }
-public func xmp(_ c: Closure) { element("xmp", c) }
+public func varr(_ closure: Closure) { element("var", closure) }
+public func wbr(_ closure: Closure) { element("wbr", closure) }
+public func xmp(_ closure: Closure) { element("xmp", closure) }
 
-public func abbr(_ c: Closure) { element("abbr", c) }
-public func area(_ c: Closure) { element("area", c) }
-public func base(_ c: Closure) { element("base", c) }
-public func body(_ c: Closure) { element("body", c) }
-public func cite(_ c: Closure) { element("cite", c) }
-public func code(_ c: Closure) { element("code", c) }
-public func data(_ c: Closure) { element("data", c) }
-public func font(_ c: Closure) { element("font", c) }
-public func form(_ c: Closure) { element("form", c) }
-public func head(_ c: Closure) { element("head", c) }
-public func html(_ c: Closure) { element("html", c) }
-public func link(_ c: Closure) { element("link", c) }
-public func main(_ c: Closure) { element("main", c) }
-public func mark(_ c: Closure) { element("mark", c) }
-public func menu(_ c: Closure) { element("menu", c) }
-public func meta(_ c: Closure) { element("meta", c) }
-public func nobr(_ c: Closure) { element("nobr", c) }
-public func ruby(_ c: Closure) { element("ruby", c) }
-public func samp(_ c: Closure) { element("samp", c) }
-public func span(_ c: Closure) { element("span", c) }
-public func time(_ c: Closure) { element("time", c) }
+public func abbr(_ closure: Closure) { element("abbr", closure) }
+public func area(_ closure: Closure) { element("area", closure) }
+public func base(_ closure: Closure) { element("base", closure) }
+public func body(_ closure: Closure) { element("body", closure) }
+public func cite(_ closure: Closure) { element("cite", closure) }
+public func code(_ closure: Closure) { element("code", closure) }
+public func data(_ closure: Closure) { element("data", closure) }
+public func font(_ closure: Closure) { element("font", closure) }
+public func form(_ closure: Closure) { element("form", closure) }
+public func head(_ closure: Closure) { element("head", closure) }
+public func html(_ closure: Closure) { element("html", closure) }
+public func link(_ closure: Closure) { element("link", closure) }
+public func main(_ closure: Closure) { element("main", closure) }
+public func mark(_ closure: Closure) { element("mark", closure) }
+public func menu(_ closure: Closure) { element("menu", closure) }
+public func meta(_ closure: Closure) { element("meta", closure) }
+public func nobr(_ closure: Closure) { element("nobr", closure) }
+public func ruby(_ closure: Closure) { element("ruby", closure) }
+public func samp(_ closure: Closure) { element("samp", closure) }
+public func span(_ closure: Closure) { element("span", closure) }
+public func time(_ closure: Closure) { element("time", closure) }
 
-public func aside(_ c: Closure) { element("aside", c) }
-public func audio(_ c: Closure) { element("audio", c) }
-public func blink(_ c: Closure) { element("blink", c) }
-public func embed(_ c: Closure) { element("embed", c) }
-public func frame(_ c: Closure) { element("frame", c) }
-public func image(_ c: Closure) { element("image", c) }
-public func input(_ c: Closure) { element("input", c) }
-public func label(_ c: Closure) { element("label", c) }
-public func meter(_ c: Closure) { element("meter", c) }
-public func param(_ c: Closure) { element("param", c) }
-public func small(_ c: Closure) { element("small", c) }
-public func style(_ c: Closure) { element("style", c) }
-public func table(_ c: Closure) { element("table", c) }
+public func aside(_ closure: Closure) { element("aside", closure) }
+public func audio(_ closure: Closure) { element("audio", closure) }
+public func blink(_ closure: Closure) { element("blink", closure) }
+public func embed(_ closure: Closure) { element("embed", closure) }
+public func frame(_ closure: Closure) { element("frame", closure) }
+public func image(_ closure: Closure) { element("image", closure) }
+public func input(_ closure: Closure) { element("input", closure) }
+public func label(_ closure: Closure) { element("label", closure) }
+public func meter(_ closure: Closure) { element("meter", closure) }
+public func param(_ closure: Closure) { element("param", closure) }
+public func small(_ closure: Closure) { element("small", closure) }
+public func style(_ closure: Closure) { element("style", closure) }
+public func table(_ closure: Closure) { element("table", closure) }
 
-public func table<T: Sequence>(_ collection: T, c: @escaping (T.Iterator.Element) -> Void) {
+public func table<T: Sequence>(_ collection: T, closure: @escaping (T.Iterator.Element) -> Void) {
     element("table", {
         for item in collection {
-            c(item)
+            closure(item)
         }
     })
 }
 
-public func tbody(_ c: Closure) { element("tbody", c) }
+public func tbody(_ closure: Closure) { element("tbody", closure) }
 
-public func tbody<T: Sequence>(_ collection: T, c: @escaping (T.Iterator.Element) -> Void) {
+public func tbody<T: Sequence>(_ collection: T, closure: @escaping (T.Iterator.Element) -> Void) {
     element("tbody", {
         for item in collection {
-            c(item)
+            closure(item)
         }
     })
 }
 
-public func tfoot(_ c: Closure) { element("tfoot", c) }
-public func thead(_ c: Closure) { element("thead", c) }
-public func title(_ c: Closure) { element("title", c) }
-public func track(_ c: Closure) { element("track", c) }
-public func video(_ c: Closure) { element("video", c) }
+public func tfoot(_ closure: Closure) { element("tfoot", closure) }
+public func thead(_ closure: Closure) { element("thead", closure) }
+public func title(_ closure: Closure) { element("title", closure) }
+public func track(_ closure: Closure) { element("track", closure) }
+public func video(_ closure: Closure) { element("video", closure) }
 
-public func applet(_ c: Closure) { element("applet", c) }
-public func button(_ c: Closure) { element("button", c) }
-public func canvas(_ c: Closure) { element("canvas", c) }
-public func center(_ c: Closure) { element("center", c) }
-public func dialog(_ c: Closure) { element("dialog", c) }
-public func figure(_ c: Closure) { element("figure", c) }
-public func footer(_ c: Closure) { element("footer", c) }
-public func header(_ c: Closure) { element("header", c) }
-public func hgroup(_ c: Closure) { element("hgroup", c) }
-public func iframe(_ c: Closure) { element("iframe", c) }
-public func keygen(_ c: Closure) { element("keygen", c) }
-public func legend(_ c: Closure) { element("legend", c) }
-public func object(_ c: Closure) { element("object", c) }
-public func option(_ c: Closure) { element("option", c) }
-public func output(_ c: Closure) { element("output", c) }
-public func script(_ c: Closure) { element("script", c) }
-public func select(_ c: Closure) { element("select", c) }
-public func shadow(_ c: Closure) { element("shadow", c) }
-public func source(_ c: Closure) { element("source", c) }
-public func spacer(_ c: Closure) { element("spacer", c) }
-public func strike(_ c: Closure) { element("strike", c) }
-public func strong(_ c: Closure) { element("strong", c) }
+public func applet(_ closure: Closure) { element("applet", closure) }
+public func button(_ closure: Closure) { element("button", closure) }
+public func canvas(_ closure: Closure) { element("canvas", closure) }
+public func center(_ closure: Closure) { element("center", closure) }
+public func dialog(_ closure: Closure) { element("dialog", closure) }
+public func figure(_ closure: Closure) { element("figure", closure) }
+public func footer(_ closure: Closure) { element("footer", closure) }
+public func header(_ closure: Closure) { element("header", closure) }
+public func hgroup(_ closure: Closure) { element("hgroup", closure) }
+public func iframe(_ closure: Closure) { element("iframe", closure) }
+public func keygen(_ closure: Closure) { element("keygen", closure) }
+public func legend(_ closure: Closure) { element("legend", closure) }
+public func object(_ closure: Closure) { element("object", closure) }
+public func option(_ closure: Closure) { element("option", closure) }
+public func output(_ closure: Closure) { element("output", closure) }
+public func script(_ closure: Closure) { element("script", closure) }
+public func select(_ closure: Closure) { element("select", closure) }
+public func shadow(_ closure: Closure) { element("shadow", closure) }
+public func source(_ closure: Closure) { element("source", closure) }
+public func spacer(_ closure: Closure) { element("spacer", closure) }
+public func strike(_ closure: Closure) { element("strike", closure) }
+public func strong(_ closure: Closure) { element("strong", closure) }
 
-public func acronym(_ c: Closure) { element("acronym", c) }
-public func address(_ c: Closure) { element("address", c) }
-public func article(_ c: Closure) { element("article", c) }
-public func bgsound(_ c: Closure) { element("bgsound", c) }
-public func caption(_ c: Closure) { element("caption", c) }
-public func command(_ c: Closure) { element("command", c) }
-public func content(_ c: Closure) { element("content", c) }
-public func details(_ c: Closure) { element("details", c) }
-public func elementt(_ c: Closure) { element("element", c) }
-public func isindex(_ c: Closure) { element("isindex", c) }
-public func listing(_ c: Closure) { element("listing", c) }
-public func marquee(_ c: Closure) { element("marquee", c) }
-public func noembed(_ c: Closure) { element("noembed", c) }
-public func picture(_ c: Closure) { element("picture", c) }
-public func section(_ c: Closure) { element("section", c) }
-public func summary(_ c: Closure) { element("summary", c) }
+public func acronym(_ closure: Closure) { element("acronym", closure) }
+public func address(_ closure: Closure) { element("address", closure) }
+public func article(_ closure: Closure) { element("article", closure) }
+public func bgsound(_ closure: Closure) { element("bgsound", closure) }
+public func caption(_ closure: Closure) { element("caption", closure) }
+public func command(_ closure: Closure) { element("command", closure) }
+public func content(_ closure: Closure) { element("content", closure) }
+public func details(_ closure: Closure) { element("details", closure) }
+public func elementt(_ closure: Closure) { element("element", closure) }
+public func isindex(_ closure: Closure) { element("isindex", closure) }
+public func listing(_ closure: Closure) { element("listing", closure) }
+public func marquee(_ closure: Closure) { element("marquee", closure) }
+public func noembed(_ closure: Closure) { element("noembed", closure) }
+public func picture(_ closure: Closure) { element("picture", closure) }
+public func section(_ closure: Closure) { element("section", closure) }
+public func summary(_ closure: Closure) { element("summary", closure) }
 
-public func basefont(_ c: Closure) { element("basefont", c) }
-public func colgroup(_ c: Closure) { element("colgroup", c) }
-public func datalist(_ c: Closure) { element("datalist", c) }
-public func fieldset(_ c: Closure) { element("fieldset", c) }
-public func frameset(_ c: Closure) { element("frameset", c) }
-public func menuitem(_ c: Closure) { element("menuitem", c) }
-public func multicol(_ c: Closure) { element("multicol", c) }
-public func noframes(_ c: Closure) { element("noframes", c) }
-public func noscript(_ c: Closure) { element("noscript", c) }
-public func optgroup(_ c: Closure) { element("optgroup", c) }
-public func progress(_ c: Closure) { element("progress", c) }
-public func template(_ c: Closure) { element("template", c) }
-public func textarea(_ c: Closure) { element("textarea", c) }
+public func basefont(_ closure: Closure) { element("basefont", closure) }
+public func colgroup(_ closure: Closure) { element("colgroup", closure) }
+public func datalist(_ closure: Closure) { element("datalist", closure) }
+public func fieldset(_ closure: Closure) { element("fieldset", closure) }
+public func frameset(_ closure: Closure) { element("frameset", closure) }
+public func menuitem(_ closure: Closure) { element("menuitem", closure) }
+public func multicol(_ closure: Closure) { element("multicol", closure) }
+public func noframes(_ closure: Closure) { element("noframes", closure) }
+public func noscript(_ closure: Closure) { element("noscript", closure) }
+public func optgroup(_ closure: Closure) { element("optgroup", closure) }
+public func progress(_ closure: Closure) { element("progress", closure) }
+public func template(_ closure: Closure) { element("template", closure) }
+public func textarea(_ closure: Closure) { element("textarea", closure) }
 
-public func plaintext(_ c: Closure) { element("plaintext", c) }
-public func javascript(_ c: Closure) { element("script", ["type": "text/javascript"], c) }
-public func blockquote(_ c: Closure) { element("blockquote", c) }
-public func figcaption(_ c: Closure) { element("figcaption", c) }
+public func plaintext(_ closure: Closure) { element("plaintext", closure) }
+public func javascript(_ closure: Closure) { element("script", ["type": "text/javascript"], closure) }
+public func blockquote(_ closure: Closure) { element("blockquote", closure) }
+public func figcaption(_ closure: Closure) { element("figcaption", closure) }
 
-public func stylesheet(_ c: Closure) { element("link", ["rel": "stylesheet", "type": "text/css"], c) }
+public func stylesheet(_ closure: Closure) { element("link", ["rel": "stylesheet", "type": "text/css"], closure) }
 
-public func element(_ node: String, _ c: Closure) { evaluate(node, [:], c) }
-public func element(_ node: String, _ attrs: [String: String?] = [:], _ c: Closure) { evaluate(node, attrs, c) }
+public func element(_ node: String, _ closure: Closure) { evaluate(node, [:], closure) }
+public func element(_ node: String, _ attrs: [String: String?] = [:], _ closure: Closure) { evaluate(node, attrs, closure) }
 
-var ScopesBuffer = [UInt64: String]()
+var scopesBuffer = [UInt64: String]()
 
-private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Closure) {
+// swiftlint:disable cyclomatic_complexity function_body_length
+private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closure: Closure) {
     
     // Push the attributes.
     
@@ -583,19 +585,19 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     acceptCharset = nil
     inner = nil
     
-    ScopesBuffer[Process.tid] = (ScopesBuffer[Process.tid] ?? "") + "<" + node
+    scopesBuffer[Process.tid] = (scopesBuffer[Process.tid] ?? "") + "<" + node
     
     // Save the current output before the nested scope evalutation.
     
-    var output = ScopesBuffer[Process.tid] ?? ""
+    var output = scopesBuffer[Process.tid] ?? ""
     
     // Clear the output buffer for the evalutation.
     
-    ScopesBuffer[Process.tid] = ""
+    scopesBuffer[Process.tid] = ""
     
     // Evaluate the nested scope.
     
-    c()
+    closure()
     
     // Render attributes set by the evalutation.
     
@@ -727,7 +729,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
         mergedAttributes.updateValue(item.element.1, forKey: item.element.0)
     }
     
-    output = output + mergedAttributes.reduce("") { result, item in
+    output += mergedAttributes.reduce("") { result, item in
         if let value = item.value {
             return result + " \(item.key)=\"\(value)\""
         } else {
@@ -736,10 +738,10 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ c: Clo
     }
     
     if let inner = inner {
-        ScopesBuffer[Process.tid] = output + ">" + (inner) + "</" + node + ">"
+        scopesBuffer[Process.tid] = output + ">" + (inner) + "</" + node + ">"
     } else {
-        let current = ScopesBuffer[Process.tid]  ?? ""
-        ScopesBuffer[Process.tid] = output + ">" + current + "</" + node + ">"
+        let current = scopesBuffer[Process.tid]  ?? ""
+        scopesBuffer[Process.tid] = output + ">" + current + "</" + node + ">"
     }
     
     // Pop the attributes.

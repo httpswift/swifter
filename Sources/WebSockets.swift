@@ -14,21 +14,22 @@ public func websocket(_ text: @escaping (WebSocketSession, String) -> Void,
     return websocket(text: text, binary: binary, pong: pong)
 }
 
+// swiftlint:disable function_body_length
 public func websocket(
     text: ((WebSocketSession, String) -> Void)? = nil,
     binary: ((WebSocketSession, [UInt8]) -> Void)? = nil,
     pong: ((WebSocketSession, [UInt8]) -> Void)? = nil,
     connected: ((WebSocketSession) -> Void)? = nil,
     disconnected: ((WebSocketSession) -> Void)? = nil) -> ((HttpRequest) -> HttpResponse) {
-    return { r in
-        guard r.hasTokenForHeader("upgrade", token: "websocket") else {
-            return .badRequest(.text("Invalid value of 'Upgrade' header: \(r.headers["upgrade"] ?? "unknown")"))
+    return { request in
+        guard request.hasTokenForHeader("upgrade", token: "websocket") else {
+            return .badRequest(.text("Invalid value of 'Upgrade' header: \(request.headers["upgrade"] ?? "unknown")"))
         }
-        guard r.hasTokenForHeader("connection", token: "upgrade") else {
-            return .badRequest(.text("Invalid value of 'Connection' header: \(r.headers["connection"] ?? "unknown")"))
+        guard request.hasTokenForHeader("connection", token: "upgrade") else {
+            return .badRequest(.text("Invalid value of 'Connection' header: \(request.headers["connection"] ?? "unknown")"))
         }
-        guard let secWebSocketKey = r.headers["sec-websocket-key"] else {
-            return .badRequest(.text("Invalid value of 'Sec-Websocket-Key' header: \(r.headers["sec-websocket-key"] ?? "unknown")"))
+        guard let secWebSocketKey = request.headers["sec-websocket-key"] else {
+            return .badRequest(.text("Invalid value of 'Sec-Websocket-Key' header: \(request.headers["sec-websocket-key"] ?? "unknown")"))
         }
         let protocolSessionClosure: ((Socket) -> Void) = { socket in
             let session = WebSocketSession(socket)
@@ -102,7 +103,6 @@ public func websocket(
                     if let handlePong = pong {
                        handlePong(session, frame.payload)
                     }
-                    break
                 }
             }
             
@@ -147,7 +147,7 @@ public func websocket(
     }
 }
 
-public class WebSocketSession: Hashable, Equatable  {
+public class WebSocketSession: Hashable, Equatable {
     
     public enum WsError: Error { case unknownOpCode(String), unMaskedFrame(String), protocolError(String), invalidUTF8(String) }
     public enum OpCode: UInt8 { case `continue` = 0x00, close = 0x08, ping = 0x09, pong = 0x0A, text = 0x01, binary = 0x02 }
@@ -173,15 +173,15 @@ public class WebSocketSession: Hashable, Equatable  {
         socket.close()
     }
     
-    public func writeText(_ text: String) -> Void {
+    public func writeText(_ text: String) {
         self.writeFrame(ArraySlice(text.utf8), OpCode.text)
     }
 
-    public func writeBinary(_ binary: [UInt8]) -> Void {
+    public func writeBinary(_ binary: [UInt8]) {
         self.writeBinary(ArraySlice(binary))
     }
     
-    public func writeBinary(_ binary: ArraySlice<UInt8>) -> Void {
+    public func writeBinary(_ binary: ArraySlice<UInt8>) {
         self.writeFrame(binary, OpCode.binary)
     }
     
@@ -206,25 +206,26 @@ public class WebSocketSession: Hashable, Equatable  {
         var encodedBytes = [UInt8]()
         switch len {
         case 0...125:
-            encodedBytes.append(encodedLngth | UInt8(len));
+            encodedBytes.append(encodedLngth | UInt8(len))
         case 126...UInt64(UINT16_MAX):
-            encodedBytes.append(encodedLngth | 0x7E);
-            encodedBytes.append(UInt8(len >> 8 & 0xFF));
-            encodedBytes.append(UInt8(len >> 0 & 0xFF));
+            encodedBytes.append(encodedLngth | 0x7E)
+            encodedBytes.append(UInt8(len >> 8 & 0xFF))
+            encodedBytes.append(UInt8(len >> 0 & 0xFF))
         default:
-            encodedBytes.append(encodedLngth | 0x7F);
-            encodedBytes.append(UInt8(len >> 56 & 0xFF));
-            encodedBytes.append(UInt8(len >> 48 & 0xFF));
-            encodedBytes.append(UInt8(len >> 40 & 0xFF));
-            encodedBytes.append(UInt8(len >> 32 & 0xFF));
-            encodedBytes.append(UInt8(len >> 24 & 0xFF));
-            encodedBytes.append(UInt8(len >> 16 & 0xFF));
-            encodedBytes.append(UInt8(len >> 08 & 0xFF));
-            encodedBytes.append(UInt8(len >> 00 & 0xFF));
+            encodedBytes.append(encodedLngth | 0x7F)
+            encodedBytes.append(UInt8(len >> 56 & 0xFF))
+            encodedBytes.append(UInt8(len >> 48 & 0xFF))
+            encodedBytes.append(UInt8(len >> 40 & 0xFF))
+            encodedBytes.append(UInt8(len >> 32 & 0xFF))
+            encodedBytes.append(UInt8(len >> 24 & 0xFF))
+            encodedBytes.append(UInt8(len >> 16 & 0xFF))
+            encodedBytes.append(UInt8(len >> 08 & 0xFF))
+            encodedBytes.append(UInt8(len >> 00 & 0xFF))
         }
         return encodedBytes
     }
     
+    // swiftlint:disable function_body_length
     public func readFrame() throws -> Frame {
         let frm = Frame()
         let fst = try socket.read()
@@ -280,8 +281,8 @@ public class WebSocketSession: Hashable, Equatable  {
         let mask = [try socket.read(), try socket.read(), try socket.read(), try socket.read()]
         //Read payload all at once, then apply mask (calling `socket.read` byte-by-byte is super slow).
         frm.payload = try socket.read(length: Int(len))
-        for i in 0..<len {
-            frm.payload[Int(i)] ^= mask[Int(i % 4)]
+        for index in 0..<len {
+            frm.payload[Int(index)] ^= mask[Int(index % 4)]
         }
         return frm
     }
@@ -291,6 +292,6 @@ public class WebSocketSession: Hashable, Equatable  {
     }
 }
 
-public func ==(webSocketSession1: WebSocketSession, webSocketSession2: WebSocketSession) -> Bool {
+public func == (webSocketSession1: WebSocketSession, webSocketSession2: WebSocketSession) -> Bool {
     return webSocketSession1.socket == webSocketSession2.socket
 }

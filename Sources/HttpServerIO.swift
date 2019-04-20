@@ -14,7 +14,7 @@ public protocol HttpServerIODelegate: class {
 
 public class HttpServerIO {
 
-    public weak var delegate : HttpServerIODelegate?
+    public weak var delegate: HttpServerIODelegate?
 
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
@@ -36,13 +36,12 @@ public class HttpServerIO {
             #if !os(Linux)
             OSAtomicCompareAndSwapInt(self.state.rawValue, state.rawValue, &stateValue)
             #else
-            //TODO - hehe :)
             self.stateValue = state.rawValue
             #endif
         }
     }
 
-    public var operating: Bool { get { return self.state == .running } }
+    public var operating: Bool { return self.state == .running }
 
     /// String representation of the IPv4 address to receive requests from.
     /// It's only used when the server is started with `forceIPv4` option set to true.
@@ -199,6 +198,6 @@ public class HttpServerIO {
             try writeClosure(context)
         }
 
-        return keepAlive && content.length != -1;
+        return keepAlive && content.length != -1
     }
 }

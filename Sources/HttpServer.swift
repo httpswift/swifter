@@ -29,8 +29,8 @@ public class HttpServer: HttpServerIO {
         self.put    = MethodRoute(method: "PUT", router: router)
     }
     
-    public var DELETE, PATCH, HEAD, POST, GET, PUT : MethodRoute
-    public var delete, patch, head, post, get, put : MethodRoute
+    public var DELETE, PATCH, HEAD, POST, GET, PUT: MethodRoute
+    public var delete, patch, head, post, get, put: MethodRoute
     
     public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
         set {
@@ -40,14 +40,14 @@ public class HttpServer: HttpServerIO {
     }
     
     public var routes: [String] {
-        return router.routes();
+        return router.routes()
     }
     
     public var notFoundHandler: ((HttpRequest) -> HttpResponse)?
     
-    public var middleware = Array<(HttpRequest) -> HttpResponse?>()
+    public var middleware = [(HttpRequest) -> HttpResponse?]()
 
-    override public func dispatch(_ request: HttpRequest) -> ([String:String], (HttpRequest) -> HttpResponse) {
+    override public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
         for layer in middleware {
             if let response = layer(request) {
                 return ([:], { _ in response })

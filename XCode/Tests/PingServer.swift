@@ -20,7 +20,7 @@ extension HttpServer {
     }
 }
 
-let defaultLocalhost = URL(string:"http://localhost:8080")!
+let defaultLocalhost = URL(string: "http://localhost:8080")!
 
 // Client
 extension URLSession {
@@ -61,7 +61,7 @@ extension URLSession {
     }
     
     func signalIfPongReceived(_ semaphore: DispatchSemaphore, hostURL: URL) {
-        pingTask(hostURL: hostURL) { data, response, error in
+        pingTask(hostURL: hostURL) { _, response, _ in
             if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
                 semaphore.signal()
             } else {

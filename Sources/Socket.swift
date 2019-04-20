@@ -21,12 +21,12 @@ public enum SocketError: Error {
     case getSockNameFailed(String)
 }
 
+// swiftlint: disable identifier_name
 open class Socket: Hashable, Equatable {
         
     let socketFileDescriptor: Int32
     private var shutdown = false
 
-    
     public init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
     }
@@ -111,14 +111,14 @@ open class Socket: Hashable, Equatable {
         var sent = 0
         while sent < length {
             #if os(Linux)
-                let s = send(self.socketFileDescriptor, pointer + sent, Int(length - sent), Int32(MSG_NOSIGNAL))
+                let result = send(self.socketFileDescriptor, pointer + sent, Int(length - sent), Int32(MSG_NOSIGNAL))
             #else
-                let s = write(self.socketFileDescriptor, pointer + sent, Int(length - sent))
+                let result = write(self.socketFileDescriptor, pointer + sent, Int(length - sent))
             #endif
-            if s <= 0 {
+            if result <= 0 {
                 throw SocketError.writeFailed(Errno.description())
             }
-            sent += s
+            sent += result
         }
     }
     
@@ -195,11 +195,11 @@ open class Socket: Hashable, Equatable {
     
     public func readLine() throws -> String {
         var characters: String = ""
-        var n: UInt8 = 0
+        var index: UInt8 = 0
         repeat {
-            n = try self.read()
-            if n > Socket.CR { characters.append(Character(UnicodeScalar(n))) }
-        } while n != Socket.NL
+            index = try self.read()
+            if index > Socket.CR { characters.append(Character(UnicodeScalar(index))) }
+        } while index != Socket.NL
         return characters
     }
     
@@ -228,9 +228,9 @@ open class Socket: Hashable, Equatable {
     
     public class func close(_ socket: Int32) {
         #if os(Linux)
-            let _ = Glibc.close(socket)
+            _ = Glibc.close(socket)
         #else
-            let _ = Darwin.close(socket)
+            _ = Darwin.close(socket)
         #endif
     }
 }

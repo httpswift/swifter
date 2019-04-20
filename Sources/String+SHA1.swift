@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+// swiftlint:disable identifier_name function_body_length
 public struct SHA1 {
     
     public static func hash(_ input: [UInt8]) -> [UInt8] {
@@ -51,15 +51,15 @@ public struct SHA1 {
             
             // break chunk into sixteen 32-bit big-endian words w[i], 0 ≤ i ≤ 15
             
-            for i in 0...15 {
-                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>(OpaquePointer($0.baseAddress! + (i*4))).pointee})
+            for index in 0...15 {
+                let value = chunk.withUnsafeBufferPointer({ UnsafePointer<UInt32>(OpaquePointer($0.baseAddress! + (index*4))).pointee})
                 words.append(value.bigEndian)
             }
             
             // Extend the sixteen 32-bit words into eighty 32-bit words:
             
-            for i in 16...79 {
-                let value: UInt32 = ((words[i-3]) ^ (words[i-8]) ^ (words[i-14]) ^ (words[i-16]))
+            for index in 16...79 {
+                let value: UInt32 = ((words[index-3]) ^ (words[index-8]) ^ (words[index-14]) ^ (words[index-16]))
                 words.append(rotateLeft(value, 1))
             }
             

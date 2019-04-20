@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension String {
     
     public enum FileError: Error {
@@ -22,7 +21,7 @@ extension String {
             self.pointer = pointer
         }
         
-        public func close() -> Void {
+        public func close() {
             fclose(pointer)
         }
         
@@ -47,7 +46,7 @@ extension String {
             throw FileError.error(0)
         }
         
-        public func write(_ data: [UInt8]) throws -> Void {
+        public func write(_ data: [UInt8]) throws {
             if data.count <= 0 {
                 return
             }
@@ -89,7 +88,7 @@ extension String {
     
     public func exists() throws -> Bool {
         return try self.withStat {
-            if let _ = $0 {
+            if $0 != nil {
                 return true
             }
             return false
