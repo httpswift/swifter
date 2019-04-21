@@ -13,7 +13,7 @@ let package = Package(
   dependencies: [],
 
   targets: [
-    .target(name: "Swifter", dependencies: [], path: "Sources"),
+    .target(name: "Swifter", dependencies: [], path: "XCode/Sources"),
     .target(name: "Example", dependencies: ["Swifter"], path: "Example"),
     .testTarget(name: "SwifterTests", dependencies: ["Swifter"], path: "XCode/Tests")
   ]
