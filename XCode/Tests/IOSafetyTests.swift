@@ -36,8 +36,8 @@ class IOSafetyTests: XCTestCase {
                     }
                 }
                 server.stop()
-            } catch let e {
-                XCTFail("\(cpt): \(e)")
+            } catch let error {
+                XCTFail("\(cpt): \(error)")
             }
         }
     }

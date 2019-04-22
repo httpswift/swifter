@@ -44,7 +44,7 @@ public class HttpRequest {
                 return (name.replacingOccurrences(of: "+", with: " "),
                         value.replacingOccurrences(of: "+", with: " "))
             }
-            return ("","")
+            return ("", "")
         }
     }
     
@@ -86,7 +86,7 @@ public class HttpRequest {
         guard let contentType = contentTypeHeaderTokens.first, contentType == "multipart/form-data" else {
             return []
         }
-        var boundary: String? = nil
+        var boundary: String?
         contentTypeHeaderTokens.forEach({
             let tokens = $0.components(separatedBy: "=")
             if let key = tokens.first, key == "boundary" && tokens.count == 2 {
@@ -142,13 +142,14 @@ public class HttpRequest {
         return String(bytes: temp, encoding: String.Encoding.utf8)
     }
     
+    // swiftlint:disable identifier_name
     static let CR = UInt8(13)
     static let NL = UInt8(10)
     
     private func nextMultiPartBody(_ generator: inout IndexingIterator<[UInt8]>, boundary: String) -> [UInt8]? {
         var body = [UInt8]()
         let boundaryArray = [UInt8](boundary.utf8)
-        var matchOffset = 0;
+        var matchOffset = 0
         while let x = generator.next() {
             matchOffset = ( x == boundaryArray[matchOffset] ? matchOffset + 1 : 0 )
             body.append(x)

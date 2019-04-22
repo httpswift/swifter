@@ -9,6 +9,7 @@ import Foundation
 
 extension Socket {
 
+    // swiftlint:disable function_body_length
     /// - Parameters:
     ///   - listenAddress: String representation of the address the socket should accept
     ///       connections from. It should be in IPv4 format if forceIPv4 == true,
@@ -40,14 +41,14 @@ extension Socket {
                 sin_family: sa_family_t(AF_INET),
                 sin_port: port.bigEndian,
                 sin_addr: in_addr(s_addr: in_addr_t(0)),
-                sin_zero:(0, 0, 0, 0, 0, 0, 0, 0))
+                sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
             #else
             var addr = sockaddr_in(
                 sin_len: UInt8(MemoryLayout<sockaddr_in>.stride),
                 sin_family: UInt8(AF_INET),
                 sin_port: port.bigEndian,
                 sin_addr: in_addr(s_addr: in_addr_t(0)),
-                sin_zero:(0, 0, 0, 0, 0, 0, 0, 0))
+                sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
             #endif
             if let address = listenAddress {
               if address.withCString({ cstring in inet_pton(AF_INET, cstring, &addr.sin_addr) }) == 1 {

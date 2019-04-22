@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 extension String {
     
     private static let CODES = [UInt8]("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".utf8)
@@ -20,25 +19,25 @@ extension String {
         var tmp: UInt8
         for index in stride(from: 0, to: data.count, by: 3) {
             let byte = data[index]
-            tmp = (byte & 0xFC) >> 2;
+            tmp = (byte & 0xFC) >> 2
             result.append(CODES[Int(tmp)])
-            tmp = (byte & 0x03) << 4;
+            tmp = (byte & 0x03) << 4
             if index + 1 < data.count {
-                tmp |= (data[index + 1] & 0xF0) >> 4;
-                result.append(CODES[Int(tmp)]);
-                tmp = (data[index + 1] & 0x0F) << 2;
-                if (index + 2 < data.count)  {
-                    tmp |= (data[index + 2] & 0xC0) >> 6;
-                    result.append(CODES[Int(tmp)]);
-                    tmp = data[index + 2] & 0x3F;
-                    result.append(CODES[Int(tmp)]);
-                } else  {
-                    result.append(CODES[Int(tmp)]);
-                    result.append(contentsOf: [UInt8]("=".utf8));
+                tmp |= (data[index + 1] & 0xF0) >> 4
+                result.append(CODES[Int(tmp)])
+                tmp = (data[index + 1] & 0x0F) << 2
+                if index + 2 < data.count {
+                    tmp |= (data[index + 2] & 0xC0) >> 6
+                    result.append(CODES[Int(tmp)])
+                    tmp = data[index + 2] & 0x3F
+                    result.append(CODES[Int(tmp)])
+                } else {
+                    result.append(CODES[Int(tmp)])
+                    result.append(contentsOf: [UInt8]("=".utf8))
                 }
             } else {
-                result.append(CODES[Int(tmp)]);
-                result.append(contentsOf: [UInt8]("==".utf8));
+                result.append(CODES[Int(tmp)])
+                result.append(contentsOf: [UInt8]("==".utf8))
             }
         }
         return String(bytes: result, encoding: .utf8)

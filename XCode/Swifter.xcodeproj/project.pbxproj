@@ -24,6 +24,7 @@
 		043660E921FED51B00497989 /* SwifterTestsWebSocketSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */; };
 		043660EA21FED51E00497989 /* IOSafetyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */; };
 		043660EB21FED52000497989 /* MimeTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D4511204E9988000A0726 /* MimeTypesTests.swift */; };
+		047F1F02226AB9AD00909B95 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B912F49220507D00062C360 /* XCTestManifests.swift */; };
 		0858E7F81D68BC2600491CD1 /* PingServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0858E7F61D68BC2600491CD1 /* PingServer.swift */; };
 		2659FC1A1DADC077003F3930 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
 		269B47881D3AAAE20042D137 /* HttpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6EF1D2C44F30030FC98 /* HttpResponse.swift */; };
@@ -344,8 +345,7 @@
 				7C377E161D964B6A009C6148 /* String+File.swift */,
 				6AE2FF702048011A00302EC4 /* MimeTypes.swift */,
 			);
-			name = Sources;
-			path = ../Sources;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		7C839B6519422CFF003A6950 = {
@@ -526,6 +526,7 @@
 				7AE893E31C05127900A29F63 /* Frameworks */,
 				7AE893E41C05127900A29F63 /* Headers */,
 				7AE893E51C05127900A29F63 /* Resources */,
+				047F1F00226AB51800909B95 /* Swiftlint */,
 			);
 			buildRules = (
 			);
@@ -734,6 +735,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		047F1F00226AB51800909B95 /* Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Swiftlint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n    swiftlint lint --config ../.swiftlint.yml\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		043660BE21FED34100497989 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -744,7 +766,7 @@
 				043660D221FED36800497989 /* IOSafetyTests.swift in Sources */,
 				043660D021FED35B00497989 /* SwifterTestsStringExtensions.swift in Sources */,
 				043660CD21FED35200497989 /* SwifterTestsHttpRouter.swift in Sources */,
-				542604AE226A33540065B874 /* XCTestManifests.swift in Sources */,
+				047F1F02226AB9AD00909B95 /* XCTestManifests.swift in Sources */,
 				043660CE21FED35500497989 /* SwifterTestsHttpParser.swift in Sources */,
 				043660D521FED36C00497989 /* MimeTypesTests.swift in Sources */,
 			);
