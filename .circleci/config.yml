@@ -1,7 +1,8 @@
 version: 2
 
 jobs:
-  danger:
+
+  Danger:
     macos:
       xcode: 10.2.0
     steps:
@@ -24,7 +25,8 @@ jobs:
       - run:
           name: Danger
           command: bundle exec danger
-  macos:
+
+  Test OS X Platform:
     environment:
       TEST_REPORTS: /tmp/test-results
       LANG: en_US.UTF-8
@@ -58,14 +60,11 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
 
-  linux:
+  Test Linux Platform:
     docker:
-      - image: swift:4.2
+      - image: swift:5.0
     steps:
       - checkout
-      - run: 
-          name: Compile code
-          command: swift build
       - run: 
           name: Run Unit Tests
           command: swift test
@@ -74,10 +73,10 @@ workflows:
   version: 2
   tests:
     jobs:
-      - danger
-      - linux:
+      - Danger
+      - Test Linux Platform:
           requires:
-            - danger
-      - macos:
+            - Danger
+      - Test OS X Platform:
           requires:
-            - danger
+            - Danger

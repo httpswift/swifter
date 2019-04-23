@@ -24,6 +24,9 @@ open class HttpRouter {
     }
     
     private var rootNode = Node()
+    
+    /// The Queue to handle the thread safe access to the routes
+    private let queue = DispatchQueue(label: "swifter.httpserverio.httprouter")
 
     public func routes() -> [String] {
         var routes = [String]()
@@ -56,21 +59,26 @@ open class HttpRouter {
     }
     
     public func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) -> HttpResponse)? {
-        if let method = method {
-            let pathSegments = (method + "/" + stripQuery(path)).split("/")
+        
+        return queue.sync {
+            if let method = method {
+                let pathSegments = (method + "/" + stripQuery(path)).split("/")
+                var pathSegmentsGenerator = pathSegments.makeIterator()
+                var params = [String: String]()
+                if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
+                    return (params, handler)
+                }
+            }
+            
+            let pathSegments = ("*/" + stripQuery(path)).split("/")
             var pathSegmentsGenerator = pathSegments.makeIterator()
             var params = [String: String]()
             if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
                 return (params, handler)
             }
+            
+            return nil
         }
-        let pathSegments = ("*/" + stripQuery(path)).split("/")
-        var pathSegmentsGenerator = pathSegments.makeIterator()
-        var params = [String: String]()
-        if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
-            return (params, handler)
-        }
-        return nil
     }
     
     private func inflate(_ node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {

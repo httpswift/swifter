@@ -85,7 +85,9 @@ public class HttpServerIO {
                     strongSelf.queue.async {
                         strongSelf.sockets.insert(socket)
                     }
+                    
                     strongSelf.handleConnection(socket)
+                    
                     strongSelf.queue.async {
                         strongSelf.sockets.remove(socket)
                     }
