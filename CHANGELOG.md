@@ -31,6 +31,7 @@ All notable changes to this project will be documented in this file. Changes not
 ## Changed
 - Performance: Batch reads of websocket payloads rather than reading byte-by-byte. ([#387](https://github.com/httpswift/swifter/pull/387)) by [@lynaghk](https://github.com/lynaghk)
 - Podspec source_files updated to match source file directory changes. ([#400](https://github.com/httpswift/swifter/pull/400)) by [@welsonpan](https://github.com/welsonpan)
+- Refactor: Use Foundation API for Base64 encoding. ([#403](https://github.com/httpswift/swifter/pull/403)) by [@mazyod](https://github.com/mazyod)
 
 # [1.4.6] 
 ## Added
