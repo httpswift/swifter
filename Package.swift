@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.0
 
 import PackageDescription
 
@@ -13,8 +13,25 @@ let package = Package(
   dependencies: [],
 
   targets: [
-    .target(name: "Swifter", dependencies: [], path: "XCode/Sources"),
-    .target(name: "Example", dependencies: ["Swifter"], path: "Example"),
-    .testTarget(name: "SwifterTests", dependencies: ["Swifter"], path: "XCode/Tests")
+    .target(
+      name: "Swifter", 
+      dependencies: [], 
+      path: "XCode/Sources"
+      ),
+
+    .target(
+      name: "Example", 
+      dependencies: [
+        "Swifter"
+      ], 
+      path: "Example"),
+
+    .testTarget(
+      name: "SwifterTests", 
+      dependencies: [
+        "Swifter"
+      ], 
+      path: "XCode/Tests"
+    )
   ]
 )

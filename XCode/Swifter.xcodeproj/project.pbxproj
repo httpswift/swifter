@@ -45,7 +45,6 @@
 		269B47981D3AAAE20042D137 /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
 		269B47991D3AAAE20042D137 /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6F61D2C44F30030FC98 /* String+BASE64.swift */; };
 		269B47A71D3AAC4F0042D137 /* SwiftertvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		542604AE226A33540065B874 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B912F49220507D00062C360 /* XCTestManifests.swift */; };
 		6A0D4512204E9988000A0726 /* MimeTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A0D4511204E9988000A0726 /* MimeTypesTests.swift */; };
 		6AE2FF722048013000302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
 		6AE2FF732048013000302EC4 /* MimeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE2FF702048011A00302EC4 /* MimeTypes.swift */; };
@@ -55,6 +54,9 @@
 		7AE893FE1C0512C400A29F63 /* SwifterMac.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE893FD1C0512C400A29F63 /* SwifterMac.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */; };
 		7B11AD4B21C9A8A6002F8820 /* SwifterTestsHttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB8C5F1D97B8CC008B9712 /* SwifterTestsHttpRouter.swift */; };
+		7B55EC95226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B55EC94226E0E4F00042D23 /* ServerThreadingTests.swift */; };
+		7B55EC96226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B55EC94226E0E4F00042D23 /* ServerThreadingTests.swift */; };
+		7B55EC97226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B55EC94226E0E4F00042D23 /* ServerThreadingTests.swift */; };
 		7B74CFA82163C40F001BE07B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB80C1BE2A1D400C8A977 /* AppDelegate.swift */; };
 		7C377E181D964B96009C6148 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
 		7C377E191D964B9F009C6148 /* String+File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C377E161D964B6A009C6148 /* String+File.swift */; };
@@ -177,6 +179,7 @@
 		7AE893FD1C0512C400A29F63 /* SwifterMac.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwifterMac.h; sourceTree = "<group>"; };
 		7AE893FF1C0512C400A29F63 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE8940C1C05151100A29F63 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		7B55EC94226E0E4F00042D23 /* ServerThreadingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerThreadingTests.swift; sourceTree = "<group>"; };
 		7B912F49220507D00062C360 /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
 		7B912F4B220507DB0062C360 /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
 		7C377E161D964B6A009C6148 /* String+File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+File.swift"; sourceTree = "<group>"; };
@@ -417,6 +420,7 @@
 				7C4785E81C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift */,
 				0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */,
 				6A0D4511204E9988000A0726 /* MimeTypesTests.swift */,
+				7B55EC94226E0E4F00042D23 /* ServerThreadingTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -769,6 +773,7 @@
 				047F1F02226AB9AD00909B95 /* XCTestManifests.swift in Sources */,
 				043660CE21FED35500497989 /* SwifterTestsHttpParser.swift in Sources */,
 				043660D521FED36C00497989 /* MimeTypesTests.swift in Sources */,
+				7B55EC96226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -781,6 +786,7 @@
 				043660EA21FED51E00497989 /* IOSafetyTests.swift in Sources */,
 				043660E821FED51900497989 /* SwifterTestsStringExtensions.swift in Sources */,
 				043660E521FED51100497989 /* SwifterTestsHttpRouter.swift in Sources */,
+				7B55EC97226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,
 				043660E621FED51400497989 /* SwifterTestsHttpParser.swift in Sources */,
 				043660EB21FED52000497989 /* MimeTypesTests.swift in Sources */,
 			);
@@ -896,6 +902,7 @@
 				043660D421FED36900497989 /* IOSafetyTests.swift in Sources */,
 				7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */,
 				7B11AD4B21C9A8A6002F8820 /* SwifterTestsHttpRouter.swift in Sources */,
+				7B55EC95226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1278,7 +1285,7 @@
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=500";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1333,7 +1340,7 @@
 				OTHER_SWIFT_FLAGS = "-Xfrontend -warn-long-function-bodies=500";
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};

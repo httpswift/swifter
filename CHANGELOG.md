@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file. Changes not
 - Added [Danger](https://danger.systems/ruby/) and Swiftlint to the project. ([#398](https://github.com/httpswift/swifter/pull/398)) by [@Vkt0r](https://github.com/Vkt0r)
 
 ## Fixed
+- An issue causing a crash regarding a thread race condition. ([#399](https://github.com/httpswift/swifter/pull/399)) by [@Vkt0r](https://github.com/Vkt0r)
 - An issue in the `HttpRouter` causing issues to handle routes with overlapping in the tail. ([#379](https://github.com/httpswift/swifter/pull/359), [#382](https://github.com/httpswift/swifter/pull/382)) by [@Vkt0r](https://github.com/Vkt0r)
 
 - Fixes build errors by excluding XC(UI)Test files from regular targets [#397](https://github.com/httpswift/swifter/pull/397)) by [@ChristianSteffens](https://github.com/ChristianSteffens)
