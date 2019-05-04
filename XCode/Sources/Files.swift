@@ -34,10 +34,18 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
                 }
             }
         }
-        if let file = try? (directoryPath + String.pathSeparator + fileRelativePath.value).openForReading() {
+        let filePath = directoryPath + String.pathSeparator + fileRelativePath.value
+        
+        if let file = try? filePath.openForReading() {
             let mimeType = fileRelativePath.value.mimeType()
+            var responseHeader: [String: String] = ["Content-Type": mimeType]
             
-            return .raw(200, "OK", ["Content-Type": mimeType], { writer in
+            if let attr = try? FileManager.default.attributesOfItem(atPath: filePath),
+                let fileSize = attr[FileAttributeKey.size] as? UInt64 {
+                responseHeader["Content-Length"] = String(fileSize)
+            }
+            
+            return .raw(200, "OK", responseHeader, { writer in
                 try? writer.write(file)
                 file.close()
             })

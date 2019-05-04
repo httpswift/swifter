@@ -28,6 +28,7 @@ All notable changes to this project will be documented in this file. Changes not
 
 - Fixes build errors by excluding XC(UI)Test files from regular targets [#397](https://github.com/httpswift/swifter/pull/397)) by [@ChristianSteffens](https://github.com/ChristianSteffens)
 - Fixes `HttpRequest.path` value to be parsed without query parameters [#404](https://github.com/httpswift/swifter/pull/404)) by [@mazyod](https://github.com/mazyod)
+- Fixes the issue of missing `Content-Length` header item when `shareFilesFromDirectory` is being used to share files [#406](https://github.com/httpswift/swifter/pull/406) by [@nichbar](https://github.com/nichbar)
 
 ## Changed
 - Performance: Batch reads of websocket payloads rather than reading byte-by-byte. ([#387](https://github.com/httpswift/swifter/pull/387)) by [@lynaghk](https://github.com/lynaghk)
