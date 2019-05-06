@@ -36,7 +36,7 @@ All notable changes to this project will be documented in this file. Changes not
 - Refactor: Use `URLComponents` for `HttpRequest` path and query parameters parsing [#404](https://github.com/httpswift/swifter/pull/404)) by [@mazyod](https://github.com/mazyod)
 
 ## Removed
-- Dropped macOS 10.9 support [#404](https://github.com/httpswift/swifter/pull/404)) by [@mazyod](https://github.com/mazyod)
+- Dropped macOS 10.9 support [#404](https://github.com/httpswift/swifter/pull/404)), [#408](https://github.com/httpswift/swifter/pull/408)) by [@mazyod](https://github.com/mazyod), [@Vkt0r](https://github.com/Vkt0r)
 
 # [1.4.6] 
 ## Added
