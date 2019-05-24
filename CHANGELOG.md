@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. Changes not
 ## Added
 - A new `CHANGELOG.md` to keep track of changes in the project. ([#385](https://github.com/httpswift/swifter/pull/385)) by [@Vkt0r](https://github.com/Vkt0r)
 - Added [Danger](https://danger.systems/ruby/) and Swiftlint to the project. ([#398](https://github.com/httpswift/swifter/pull/398)) by [@Vkt0r](https://github.com/Vkt0r)
+- Added the following to `Scopes`: `manifest`, `ontouchstart`, `dataText`. ([#410](https://github.com/httpswift/swifter/pull/410)) by [@apocolipse](https://github.com/apocolipse)
 
 ## Fixed
 - An issue causing a crash regarding a thread race condition. ([#399](https://github.com/httpswift/swifter/pull/399)) by [@Vkt0r](https://github.com/Vkt0r)
@@ -35,6 +36,8 @@ All notable changes to this project will be documented in this file. Changes not
 - Podspec source_files updated to match source file directory changes. ([#400](https://github.com/httpswift/swifter/pull/400)) by [@welsonpan](https://github.com/welsonpan)
 - Refactor: Use Foundation API for Base64 encoding. ([#403](https://github.com/httpswift/swifter/pull/403)) by [@mazyod](https://github.com/mazyod)
 - Refactor: Use `URLComponents` for `HttpRequest` path and query parameters parsing [#404](https://github.com/httpswift/swifter/pull/404)) by [@mazyod](https://github.com/mazyod)
+- `HttpResponse` functions `statusCode()` and `reasonPhrase` changed to computed variables instead of functions, and made public (No impact on existing usage as it was previously internal). ([#410](https://github.com/httpswift/swifter/pull/410)) by [@apocolipse](https://github.com/apocolipse)
+
 
 ## Removed
 - Dropped macOS 10.9 support [#404](https://github.com/httpswift/swifter/pull/404)), [#408](https://github.com/httpswift/swifter/pull/408)) by [@mazyod](https://github.com/mazyod), [@Vkt0r](https://github.com/Vkt0r)

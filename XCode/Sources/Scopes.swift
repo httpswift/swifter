@@ -60,6 +60,7 @@ public var media: String?
 public var title: String?
 public var scope: String?
 public var classs: String?
+public var manifest: String?
 public var value: String?
 public var clear: String?
 public var start: String?
@@ -85,6 +86,7 @@ public var prompt: String?
 public var onfocus: String?
 public var enctype: String?
 public var onclick: String?
+public var ontouchstart: String?
 public var onkeyup: String?
 public var profile: String?
 public var version: String?
@@ -131,6 +133,7 @@ public var onkeypress: String?
 public var ondblclick: String?
 public var onmouseout: String?
 public var httpEquiv: String?
+public var dataText: String?
 public var background: String?
 public var onmousemove: String?
 public var onmouseover: String?
@@ -334,9 +337,9 @@ var scopesBuffer = [UInt64: String]()
 
 // swiftlint:disable cyclomatic_complexity function_body_length
 private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closure: Closure) {
-    
+
     // Push the attributes.
-    
+
     let stackid = idd
     let stackdir = dir
     let stackrel = rel
@@ -377,6 +380,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     let stacktitle = title
     let stackscope = scope
     let stackclass = classs
+    let stackmanifest = manifest
     let stackvalue = value
     let stackclear = clear
     let stackstart = start
@@ -402,6 +406,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     let stackonfocus = onfocus
     let stackenctype = enctype
     let stackonclick = onclick
+    let stackontouchstart = ontouchstart
     let stackonkeyup = onkeyup
     let stackprofile = profile
     let stackversion = version
@@ -447,6 +452,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     let stackondblclick = ondblclick
     let stackonmouseout = onmouseout
     let stackhttpEquiv = httpEquiv
+    let stackdataText = dataText
     let stackbackground = background
     let stackonmousemove = onmousemove
     let stackonmouseover = onmouseover
@@ -459,9 +465,9 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     let stackmarginheight = marginheight
     let stackacceptCharset = acceptCharset
     let stackinner = inner
-    
+
     // Reset the values before a nested scope evalutation.
-    
+
     idd = nil
     dir = nil
     rel = nil
@@ -502,6 +508,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     title = nil
     scope = nil
     classs = nil
+    manifest = nil
     value = nil
     clear = nil
     start = nil
@@ -527,6 +534,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     onfocus = nil
     enctype = nil
     onclick = nil
+    ontouchstart = nil
     onkeyup = nil
     profile = nil
     version = nil
@@ -572,6 +580,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     ondblclick = nil
     onmouseout = nil
     httpEquiv = nil
+    dataText = nil
     background = nil
     onmousemove = nil
     onmouseover = nil
@@ -584,25 +593,25 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     marginheight = nil
     acceptCharset = nil
     inner = nil
-    
+
     scopesBuffer[Process.tid] = (scopesBuffer[Process.tid] ?? "") + "<" + node
-    
+
     // Save the current output before the nested scope evalutation.
-    
+
     var output = scopesBuffer[Process.tid] ?? ""
-    
+
     // Clear the output buffer for the evalutation.
-    
+
     scopesBuffer[Process.tid] = ""
-    
+
     // Evaluate the nested scope.
-    
+
     closure()
-    
+
     // Render attributes set by the evalutation.
-    
+
     var mergedAttributes = [String: String?]()
-    
+
     if let idd = idd { mergedAttributes["id"] = idd }
     if let dir = dir { mergedAttributes["dir"] = dir }
     if let rel = rel { mergedAttributes["rel"] = rel }
@@ -643,6 +652,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     if let title = title { mergedAttributes["title"] = title }
     if let scope = scope { mergedAttributes["scope"] = scope }
     if let classs = classs { mergedAttributes["class"] = classs }
+    if let manifest = manifest { mergedAttributes["manifest"] = manifest }
     if let value = value { mergedAttributes["value"] = value }
     if let clear = clear { mergedAttributes["clear"] = clear }
     if let start = start { mergedAttributes["start"] = start }
@@ -668,6 +678,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     if let onfocus = onfocus { mergedAttributes["onfocus"] = onfocus }
     if let enctype = enctype { mergedAttributes["enctype"] = enctype }
     if let onclick = onclick { mergedAttributes["onclick"] = onclick }
+    if let ontouchstart = ontouchstart { mergedAttributes["ontouchstart"] = ontouchstart }
     if let onkeyup = onkeyup { mergedAttributes["onkeyup"] = onkeyup }
     if let profile = profile { mergedAttributes["profile"] = profile }
     if let version = version { mergedAttributes["version"] = version }
@@ -713,6 +724,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     if let ondblclick = ondblclick { mergedAttributes["ondblclick"] = ondblclick }
     if let onmouseout = onmouseout { mergedAttributes["onmouseout"] = onmouseout }
     if let httpEquiv = httpEquiv { mergedAttributes["http-equiv"] = httpEquiv }
+    if let dataText = dataText { mergedAttributes["data-text"] = dataText }
     if let background = background { mergedAttributes["background"] = background }
     if let onmousemove = onmousemove { mergedAttributes["onmousemove"] = onmousemove }
     if let onmouseover = onmouseover { mergedAttributes["onmouseover"] = onmouseover }
@@ -724,11 +736,11 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     if let placeholder = placeholder { mergedAttributes["placeholder"] = placeholder }
     if let marginheight = marginheight { mergedAttributes["marginheight"] = marginheight }
     if let acceptCharset = acceptCharset { mergedAttributes["accept-charset"] = acceptCharset }
-    
+
     for item in attrs.enumerated() {
         mergedAttributes.updateValue(item.element.1, forKey: item.element.0)
     }
-    
+
     output += mergedAttributes.reduce("") { result, item in
         if let value = item.value {
             return result + " \(item.key)=\"\(value)\""
@@ -736,16 +748,16 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
             return result
         }
     }
-    
+
     if let inner = inner {
         scopesBuffer[Process.tid] = output + ">" + (inner) + "</" + node + ">"
     } else {
         let current = scopesBuffer[Process.tid]  ?? ""
         scopesBuffer[Process.tid] = output + ">" + current + "</" + node + ">"
     }
-    
+
     // Pop the attributes.
-    
+
     idd = stackid
     dir = stackdir
     rel = stackrel
@@ -786,6 +798,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     title = stacktitle
     scope = stackscope
     classs = stackclass
+    manifest = stackmanifest
     value = stackvalue
     clear = stackclear
     start = stackstart
@@ -811,6 +824,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     onfocus = stackonfocus
     enctype = stackenctype
     onclick = stackonclick
+    ontouchstart = stackontouchstart
     onkeyup = stackonkeyup
     profile = stackprofile
     version = stackversion
@@ -856,6 +870,7 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     ondblclick = stackondblclick
     onmouseout = stackonmouseout
     httpEquiv = stackhttpEquiv
+    dataText = stackdataText
     background = stackbackground
     onmousemove = stackonmousemove
     onmouseover = stackonmouseover
@@ -867,6 +882,6 @@ private func evaluate(_ node: String, _ attrs: [String: String?] = [:], _ closur
     cellspacing = stackcellspacing
     marginheight = stackmarginheight
     acceptCharset = stackacceptCharset
-    
+
     inner = stackinner
 }
