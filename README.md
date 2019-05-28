@@ -19,7 +19,7 @@ Tiny http server engine written in [Swift](https://developer.apple.com/swift/) p
 ### How to start?
 ```swift
 let server = HttpServer()
-server["/hello"] = { .ok(.html("You asked for \($0)"))  }
+server["/hello"] = { .ok(.htmlBody("You asked for \($0)"))  }
 server.start()
 ```
 
