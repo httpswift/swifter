@@ -18,6 +18,10 @@ All notable changes to this project will be documented in this file. Changes not
 
 # [Unreleased]
 
+* Nothing yet.
+
+# [1.4.7] 
+
 ## Added
 - A new `CHANGELOG.md` to keep track of changes in the project. ([#385](https://github.com/httpswift/swifter/pull/385)) by [@Vkt0r](https://github.com/Vkt0r)
 - Added [Danger](https://danger.systems/ruby/) and Swiftlint to the project. ([#398](https://github.com/httpswift/swifter/pull/398)) by [@Vkt0r](https://github.com/Vkt0r)
@@ -43,7 +47,7 @@ All notable changes to this project will be documented in this file. Changes not
 - Include the `CHANGELOG.md` and `README.md` in the Xcode-Project for easy access / changes.
 
 ## Removed
-- Dropped macOS 10.9 support [#404](https://github.com/httpswift/swifter/pull/404)), [#408](https://github.com/httpswift/swifter/pull/408)) by [@mazyod](https://github.com/mazyod), [@Vkt0r](https://github.com/Vkt0r)
+- Dropped macOS 10.9 support ([#404](https://github.com/httpswift/swifter/pull/404), [#408](https://github.com/httpswift/swifter/pull/408)) by [@mazyod](https://github.com/mazyod), [@Vkt0r](https://github.com/Vkt0r)
 
 # [1.4.6] 
 ## Added
@@ -63,3 +67,4 @@ All notable changes to this project will be documented in this file. Changes not
 
 [Unreleased]: https://github.com/httpswift/swifter/compare/1.4.6...HEAD
 [1.4.6]: https://github.com/httpswift/swifter/compare/1.4.5...1.4.6
+[1.4.7]: https://github.com/httpswift/swifter/compare/1.4.6...1.4.7
