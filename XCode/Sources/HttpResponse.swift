@@ -24,6 +24,7 @@ public enum HttpResponseBody {
     
     case json(Any)
     case html(String)
+    case htmlBody(String)
     case text(String)
     case data(Data)
     case custom(Any, (Any) throws -> String)
@@ -44,7 +45,12 @@ public enum HttpResponseBody {
                 return (data.count, {
                     try $0.write(data)
                 })
-            case .html(let body):
+            case .html(let html):
+                let data = [UInt8](html.utf8)
+                return (data.count, {
+                    try $0.write(data)
+                })
+            case .htmlBody(let body):
                 let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
                 let data = [UInt8](serialised.utf8)
                 return (data.count, {
