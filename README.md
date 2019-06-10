@@ -72,12 +72,12 @@ server.start()
 ```ruby
 use_frameworks!
 
-pod 'Swifter', '~> 1.4.6'
+pod 'Swifter', '~> 1.4.7'
 ```
 
 ### Carthage? Also yes.
 ```
-github "httpswift/swifter" ~> 1.4.6
+github "httpswift/swifter" ~> 1.4.7
 ```
 
 ### Swift Package Manager.
@@ -87,7 +87,7 @@ import PackageDescription
 let package = Package(
     name: "MyServer",
     dependencies: [
-        .package(url: "https://github.com/httpswift/swifter.git", .upToNextMajor(from: "1.4.6"))
+        .package(url: "https://github.com/httpswift/swifter.git", .upToNextMajor(from: "1.4.7"))
     ]
 )
 ```
