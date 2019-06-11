@@ -13,7 +13,6 @@ identifier_name:
 disabled_rules:
   - line_length
   - statement_position
-  - trailing_whitespace
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - LinuxMain.swift

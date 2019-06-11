@@ -8,9 +8,9 @@ import UIKit
 import Swifter
 
 class ViewController: UIViewController {
-    
+
     private var server: HttpServer?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         do {
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
             print("Server start error: \(error)")
         }
     }
-    
+
     @IBAction func likedThis(_ sender: UIButton) {
         self.server?.stop()
         self.server = nil

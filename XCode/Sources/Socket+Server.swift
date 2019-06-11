@@ -102,7 +102,7 @@ extension Socket {
         }
         return Socket(socketFileDescriptor: socketFileDescriptor)
     }
-    
+
     public func acceptClientSocket() throws -> Socket {
         var addr = sockaddr()
         var len: socklen_t = 0
