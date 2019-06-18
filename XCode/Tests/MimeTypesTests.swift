@@ -15,11 +15,11 @@ class MimeTypeTests: XCTestCase {
         XCTAssertNotNil(NSURL.mimeType, "Type NSURL is extended with mimeType")
         XCTAssertNotNil(NSString.mimeType, "Type NSString is extended with mimeType")
     }
-    
+
     func testDefaultValue() {
         XCTAssertEqual("file.null".mimeType(), "application/octet-stream")
     }
-    
+
     func testCorrectTypes() {
         XCTAssertEqual("file.html".mimeType(), "text/html")
         XCTAssertEqual("file.css".mimeType(), "text/css")
@@ -27,7 +27,7 @@ class MimeTypeTests: XCTestCase {
         XCTAssertEqual("file.pptx".mimeType(), "application/vnd.openxmlformats-officedocument.presentationml.presentation")
         XCTAssertEqual("file.war".mimeType(), "application/java-archive")
     }
-    
+
     func testCaseInsensitivity() {
         XCTAssertEqual("file.HTML".mimeType(), "text/html")
         XCTAssertEqual("file.cSs".mimeType(), "text/css")
@@ -35,5 +35,5 @@ class MimeTypeTests: XCTestCase {
         XCTAssertEqual("file.PPTX".mimeType(), "application/vnd.openxmlformats-officedocument.presentationml.presentation")
         XCTAssertEqual("FILE.WAR".mimeType(), "application/java-archive")
     }
-  
+
 }

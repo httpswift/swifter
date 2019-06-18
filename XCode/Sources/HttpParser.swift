@@ -12,9 +12,9 @@ enum HttpParserError: Error {
 }
 
 public class HttpParser {
-    
+
     public init() { }
-    
+
     public func readHttpRequest(_ socket: Socket) throws -> HttpRequest {
         let statusLine = try socket.readLine()
         let statusLineTokens = statusLine.components(separatedBy: " ")
@@ -36,7 +36,7 @@ public class HttpParser {
     private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
         return try socket.read(length: size)
     }
-    
+
     private func readHeaders(_ socket: Socket) throws -> [String: String] {
         var headers = [String: String]()
         while case let headerLine = try socket.readLine(), !headerLine.isEmpty {
@@ -47,7 +47,7 @@ public class HttpParser {
         }
         return headers
     }
-    
+
     func supportsKeepAlive(_ headers: [String: String]) -> Bool {
         if let value = headers["connection"] {
             return "keep-alive" == value.trimmingCharacters(in: .whitespaces)

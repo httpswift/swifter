@@ -35,7 +35,7 @@ public func websocket(
             let session = WebSocketSession(socket)
             var fragmentedOpCode = WebSocketSession.OpCode.close
             var payload = [UInt8]() // Used for fragmented frames.
-            
+
             func handleTextPayload(_ frame: WebSocketSession.Frame) throws {
                 if let handleText = text {
                     if frame.fin {
@@ -55,7 +55,7 @@ public func websocket(
                     }
                 }
             }
-            
+
             func handleBinaryPayload(_ frame: WebSocketSession.Frame) throws {
                 if let handleBinary = binary {
                     if frame.fin {
@@ -69,7 +69,7 @@ public func websocket(
                     }
                 }
             }
-            
+
             func handleOperationCode(_ frame: WebSocketSession.Frame) throws {
                 switch frame.opcode {
                 case .continue:
@@ -105,16 +105,16 @@ public func websocket(
                     }
                 }
             }
-            
+
             func read() throws {
                 while true {
                     let frame = try session.readFrame()
                     try handleOperationCode(frame)
                 }
             }
-            
+
             connected?(session)
-            
+
             do {
                 try read()
             } catch let error {
@@ -136,7 +136,7 @@ public func websocket(
                 // If an error occurs, send the close handshake.
                 session.writeCloseFrame()
             }
-            
+
             disconnected?(session)
         }
         let secWebSocketAccept = String.toBase64((secWebSocketKey + "258EAFA5-E914-47DA-95CA-C5AB0DC85B11").sha1())
@@ -146,11 +146,11 @@ public func websocket(
 }
 
 public class WebSocketSession: Hashable, Equatable {
-    
+
     public enum WsError: Error { case unknownOpCode(String), unMaskedFrame(String), protocolError(String), invalidUTF8(String) }
     public enum OpCode: UInt8 { case `continue` = 0x00, close = 0x08, ping = 0x09, pong = 0x0A, text = 0x01, binary = 0x02 }
     public enum Control: Error { case close }
-    
+
     public class Frame {
         public var opcode = OpCode.close
         public var fin = false
@@ -161,16 +161,16 @@ public class WebSocketSession: Hashable, Equatable {
     }
 
     public let socket: Socket
-    
+
     public init(_ socket: Socket) {
         self.socket = socket
     }
-    
+
     deinit {
         writeCloseFrame()
         socket.close()
     }
-    
+
     public func writeText(_ text: String) {
         self.writeFrame(ArraySlice(text.utf8), OpCode.text)
     }
@@ -178,11 +178,11 @@ public class WebSocketSession: Hashable, Equatable {
     public func writeBinary(_ binary: [UInt8]) {
         self.writeBinary(ArraySlice(binary))
     }
-    
+
     public func writeBinary(_ binary: ArraySlice<UInt8>) {
         self.writeFrame(binary, OpCode.binary)
     }
-    
+
     public func writeFrame(_ data: ArraySlice<UInt8>, _ op: OpCode, _ fin: Bool = true) {
         let finAndOpCode = UInt8(fin ? 0x80 : 0x00) | op.rawValue
         let maskAndLngth = encodeLengthAndMaskFlag(UInt64(data.count), false)
@@ -194,11 +194,11 @@ public class WebSocketSession: Hashable, Equatable {
             print(error)
         }
     }
-    
+
     public func writeCloseFrame() {
         writeFrame(ArraySlice("".utf8), .close)
     }
-    
+
     private func encodeLengthAndMaskFlag(_ len: UInt64, _ masked: Bool) -> [UInt8] {
         let encodedLngth = UInt8(masked ? 0x80 : 0x00)
         var encodedBytes = [UInt8]()
@@ -222,7 +222,7 @@ public class WebSocketSession: Hashable, Equatable {
         }
         return encodedBytes
     }
-    
+
     // swiftlint:disable function_body_length
     public func readFrame() throws -> Frame {
         let frm = Frame()
@@ -284,7 +284,7 @@ public class WebSocketSession: Hashable, Equatable {
         }
         return frm
     }
-        
+
     public func hash(into hasher: inout Hasher) {
         hasher.combine(socket)
     }
