@@ -22,6 +22,10 @@ All notable changes to this project will be documented in this file. Changes not
 
 - Add the `trailing_whitespace` rule in Swiftlint and autocorrect all the source files. ([#416](https://github.com/httpswift/swifter/pull/416)) by [@Vkt0r](https://github.com/Vkt0r)
 
+## Changed
+
+- Use the machine executor (https://circleci.com/docs/2.0/executor-types/#using-machine) which gives us 8GB of RAM and avoid the issues with the Linux Docker image. ([#422](https://github.com/httpswift/swifter/pull/422)) by [@Vkt0r](https://github.com/Vkt0r)
+
 # [1.4.7] 
 
 ## Added

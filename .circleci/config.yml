@@ -61,13 +61,16 @@ jobs:
           path: /tmp/test-results
 
   Test Linux Platform:
-    docker:
-      - image: swift:5.0
+    machine: 
+      docker_layer_caching: true
     steps:
       - checkout
-      - run: 
+      - run:
+          name: Build Docker Image
+          command: docker build --tag swift5.0 .
+      - run:
           name: Run Unit Tests
-          command: swift test
+          command: docker run --rm swift5.0
 
 workflows:
   version: 2
