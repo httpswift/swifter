@@ -25,6 +25,8 @@ All notable changes to this project will be documented in this file. Changes not
 ## Changed
 
 - Set the version of the HTTP Server based in the project version in the **Info.plist** for macOS, iOS and tvOS platforms. ([#416](https://github.com/httpswift/swifter/pull/416)) by [@Vkt0r](https://github.com/Vkt0r)
+- Update `HttpParser` so it percent-encodes the URL components before initializing `URLComponents`
+- Update `SwifterTestsHttpParser` with a test for parsing bracketed query strings
 
 # [1.4.7] 
 

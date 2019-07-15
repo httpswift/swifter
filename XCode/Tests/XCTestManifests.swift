@@ -97,6 +97,7 @@ extension SwifterTestsWebSocketSession {
 
 public func __allTests() -> [XCTestCaseEntry] {
     return [
+        testCase(IOSafetyTests.__allTests__IOSafetyTests),
         testCase(MimeTypeTests.__allTests__MimeTypeTests),
         testCase(ServerThreadingTests.__allTests__ServerThreadingTests),
         testCase(SwifterTestsHttpParser.__allTests__SwifterTestsHttpParser),

@@ -166,7 +166,7 @@ class SwifterTestsHttpParser: XCTestCase {
         XCTAssertEqual(resp?.headers["header1"], "1", "Parser should extract multiple headers from the request.")
         XCTAssertEqual(resp?.headers["header2"], "2", "Parser should extract multiple headers from the request.")
 
-        resp = try? parser.readHttpRequest(TestSocket("GET https://www.example.com/some/path?subscript_query[]=1&subscript_query[]=2 HTTP/1.0\nContent-Length: 10\n\n1234567890"))
+        resp = try? parser.readHttpRequest(TestSocket("GET /some/path?subscript_query[]=1&subscript_query[]=2 HTTP/1.0\nContent-Length: 10\n\n1234567890"))
         let queryPairs = resp?.queryParams ?? []
         XCTAssertEqual(queryPairs.count, 2)
         XCTAssertEqual(queryPairs.first?.0, "subscript_query[]")
