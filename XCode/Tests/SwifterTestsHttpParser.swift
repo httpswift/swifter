@@ -165,5 +165,17 @@ class SwifterTestsHttpParser: XCTestCase {
         resp = try? parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nHeader1: 1\nHeader2: 2\nContent-Length: 0\n\n"))
         XCTAssertEqual(resp?.headers["header1"], "1", "Parser should extract multiple headers from the request.")
         XCTAssertEqual(resp?.headers["header2"], "2", "Parser should extract multiple headers from the request.")
+
+        resp = try? parser.readHttpRequest(TestSocket("GET /some/path?subscript_query[]=1&subscript_query[]=2 HTTP/1.0\nContent-Length: 10\n\n1234567890"))
+        let queryPairs = resp?.queryParams ?? []
+        XCTAssertEqual(queryPairs.count, 2)
+        XCTAssertEqual(queryPairs.first?.0, "subscript_query[]")
+        XCTAssertEqual(queryPairs.first?.1, "1")
+        XCTAssertEqual(queryPairs.last?.0, "subscript_query[]")
+        XCTAssertEqual(queryPairs.last?.1, "2")
+        XCTAssertEqual(resp?.method, "GET", "Parser should extract HTTP method name from the status line.")
+        XCTAssertEqual(resp?.path, "/some/path", "Parser should extract HTTP path value from the status line.")
+        XCTAssertEqual(resp?.headers["content-length"], "10", "Parser should extract Content-Length header value.")
+
     }
 }

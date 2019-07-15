@@ -23,7 +23,8 @@ public class HttpParser {
         }
         let request = HttpRequest()
         request.method = statusLineTokens[0]
-        let urlComponents = URLComponents(string: statusLineTokens[1])
+        let encodedPath = statusLineTokens[1].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? statusLineTokens[1]
+        let urlComponents = URLComponents(string: encodedPath)
         request.path = urlComponents?.path ?? ""
         request.queryParams = urlComponents?.queryItems?.map { ($0.name, $0.value ?? "") } ?? []
         request.headers = try readHeaders(socket)
