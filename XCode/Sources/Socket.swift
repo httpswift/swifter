@@ -47,6 +47,12 @@ open class Socket: Hashable, Equatable {
         Socket.close(self.socketFileDescriptor)
     }
 
+    #if !os(Linux)
+    public func startTlsSession(with certificate: CFArray) {
+        // TODO: TLS session init and setup
+    }
+    #endif
+
     public func port() throws -> in_port_t {
         var addr = sockaddr_in()
         return try withUnsafePointer(to: &addr) { pointer in

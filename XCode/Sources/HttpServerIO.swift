@@ -53,6 +53,11 @@ public class HttpServerIO {
     /// Otherwise, `listenAddressIPv4` will be used.
     public var listenAddressIPv6: String?
 
+    #if !os(Linux)
+    /// SSL certificate to use in TLS session
+    public var sslCertificate: CFArray?
+    #endif
+
     private let queue = DispatchQueue(label: "swifter.httpserverio.clientsockets")
 
     public func port() throws -> Int {
@@ -116,6 +121,19 @@ public class HttpServerIO {
     }
 
     private func handleConnection(_ socket: Socket) {
+        defer {
+            socket.close()
+        }
+        #if !os(Linux)
+        if let cert = sslCertificate {
+            do {
+                try socket.startTlsSession(with: cert)
+            } catch {
+                print("Failed to start TLS session: \(error)")
+                return
+            }
+        }
+        #endif
         let parser = HttpParser()
         while self.operating, let request = try? parser.readHttpRequest(socket) {
             let request = request
@@ -139,7 +157,6 @@ public class HttpServerIO {
             }
             if !keepConnection { break }
         }
-        socket.close()
     }
 
     private struct InnerWriteContext: HttpResponseBodyWriter {
