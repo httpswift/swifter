@@ -45,6 +45,14 @@ open class TlsSession {
         SSLClose(context)
         fdPtr.deallocate()
     }
+
+    open func handshake() throws {
+        var status: OSStatus = -1
+        repeat {
+            status = SSLHandshake(context)
+        } while status == errSSLWouldBlock
+        try ensureNoErr(status)
+    }
 }
 
 private func sslWrite(connection: SSLConnectionRef, data: UnsafeRawPointer, dataLength: UnsafeMutablePointer<Int>) -> OSStatus {

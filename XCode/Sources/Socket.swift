@@ -59,7 +59,7 @@ open class Socket: Hashable, Equatable {
     #if !os(Linux)
     public func startTlsSession(with certificate: CFArray) throws {
         tls = try TlsSession(fd: socketFileDescriptor, certificate: certificate)
-        // TODO: perform handshake
+        try tls?.handshake()
     }
     #endif
 
