@@ -28,6 +28,9 @@ public enum SocketError: Error {
 open class Socket: Hashable, Equatable {
 
     let socketFileDescriptor: Int32
+    #if !os(Linux)
+    private var tls: TlsSession?
+    #endif
     private var shutdown = false
 
     public init(socketFileDescriptor: Int32) {
@@ -46,13 +49,17 @@ open class Socket: Hashable, Equatable {
         if shutdown {
             return
         }
+        #if !os(Linux)
+        tls?.close()
+        #endif
         shutdown = true
         Socket.close(self.socketFileDescriptor)
     }
 
     #if !os(Linux)
-    public func startTlsSession(with certificate: CFArray) {
-        // TODO: TLS session init and setup
+    public func startTlsSession(with certificate: CFArray) throws {
+        tls = try TlsSession(fd: socketFileDescriptor, certificate: certificate)
+        // TODO: perform handshake
     }
     #endif
 
