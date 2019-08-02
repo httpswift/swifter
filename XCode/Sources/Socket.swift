@@ -10,6 +10,9 @@ import Foundation
 public enum SocketError: Error {
     case socketCreationFailed(String)
     case socketSettingReUseAddrFailed(String)
+    #if !os(Linux)
+    case tlsSessionFailed(String)
+    #endif
     case bindFailed(String)
     case listenFailed(String)
     case writeFailed(String)

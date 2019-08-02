@@ -13,4 +13,13 @@ public class Errno {
         // https://forums.developer.apple.com/thread/113919
         return String(cString: strerror(errno))
     }
+
+    #if !os(Linux)
+    public class func sslError(from status: OSStatus) -> Error {
+        guard let msg = SecCopyErrorMessageString(status, nil) else {
+            return SocketError.tlsSessionFailed("<\(status): message is not provided>")
+        }
+        return SocketError.tlsSessionFailed(msg as NSString as String)
+    }
+    #endif
 }
