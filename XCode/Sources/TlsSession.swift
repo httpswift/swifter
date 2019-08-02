@@ -53,6 +53,34 @@ open class TlsSession {
         } while status == errSSLWouldBlock
         try ensureNoErr(status)
     }
+
+    /// Write up to `length` bytes to TLS session from a buffer `pointer` points to.
+    ///
+    /// - Returns: The number of bytes written
+    /// - Throws: SocketError.tlsSessionFailed if unable to write to the session
+    open func writeBuffer(_ pointer: UnsafeRawPointer, length: Int) throws -> Int {
+        var written = 0
+        try ensureNoErr(SSLWrite(context, pointer, length, &written))
+        return written
+    }
+
+    /// Read a single byte off the TLS session.
+    ///
+    /// - Throws: SocketError.tlsSessionFailed if unable to read from the session
+    open func readByte(_ byte: UnsafeMutablePointer<UInt8>) throws {
+        _ = try read(into: byte, length: 1)
+    }
+
+    /// Read up to `length` bytes from TLS session into an existing buffer
+    ///
+    /// - Parameter into: The buffer to read into (must be at least length bytes in size)
+    /// - Returns: The number of bytes read
+    /// - Throws: SocketError.tlsSessionFailed if unable to read from the session
+    open func read(into buffer: UnsafeMutablePointer<UInt8>, length: Int) throws -> Int {
+        var received = 0
+        try ensureNoErr(SSLRead(context, buffer, length, &received))
+        return received
+    }
 }
 
 private func sslWrite(connection: SSLConnectionRef, data: UnsafeRawPointer, dataLength: UnsafeMutablePointer<Int>) -> OSStatus {
