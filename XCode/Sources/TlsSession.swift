@@ -15,6 +15,14 @@ private func ensureNoErr(_ status: OSStatus) throws {
 }
 
 public enum TLS {
+    /// Imports .p12 certificate file constructing structure to be used in TLS session.
+    ///
+    /// See [SecPKCS12Import](https://developer.apple.com/documentation/security/1396915-secpkcs12import).
+    /// Apple docs contain a misleading information that it does not import items to Keychain even though
+    /// it does.
+    ///
+    /// - Parameter _data: .p12 certificate file content
+    /// - Parameter password: password used when importing certificate
     public static func loadP12Certificate(_ _data: Data, _ password: String) throws -> CFArray {
         let data = _data as NSData
         let options = [kSecImportExportPassphrase: password]
