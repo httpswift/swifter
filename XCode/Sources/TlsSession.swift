@@ -21,17 +21,22 @@ public enum TLS {
     /// Apple docs contain a misleading information that it does not import items to Keychain even though
     /// it does.
     ///
-    /// - Parameter _data: .p12 certificate file content
+    /// - Parameter data: .p12 certificate file content
     /// - Parameter password: password used when importing certificate
-    public static func loadP12Certificate(_ _data: Data, _ password: String) throws -> CFArray {
-        let data = _data as NSData
-        let options = [kSecImportExportPassphrase: password]
-        var items: CFArray!
-        try ensureNoErr(SecPKCS12Import(data, options as NSDictionary, &items))
-        let dictionary = (items! as [AnyObject])[0]
-        let secIdentity = dictionary[kSecImportItemIdentity] as! SecIdentity
-        let chain = dictionary[kSecImportItemCertChain] as! [SecCertificate]
-        let certs = [secIdentity] + chain.dropFirst().map { $0 as Any }
+    public static func loadP12Certificate(_ data: Data, _ password: String) throws -> CFArray {
+        let options = [kSecImportExportPassphrase as String: password]
+        var items: CFArray?
+        try ensureNoErr(SecPKCS12Import(data as CFData, options as NSDictionary, &items))
+        guard
+            let dictionary = (items as? [[String: Any]])?.first,
+            let chain = dictionary[kSecImportItemCertChain as String] as? [SecCertificate]
+        else {
+            throw SocketError.tlsSessionFailed("Could not retrieve p12 data from given certificate")
+        }
+        // must be force casted, will be fixed in swift 5 https://bugs.swift.org/browse/SR-7015
+        let secIdentity = dictionary[kSecImportItemIdentity as String] as! SecIdentity
+        let chainWithoutIdentity = chain.dropFirst()
+        let certs = [secIdentity] + chainWithoutIdentity.map { $0 as Any }
         return certs as CFArray
     }
 }
@@ -42,7 +47,10 @@ open class TlsSession {
     private var fdPtr = UnsafeMutablePointer<Int32>.allocate(capacity: 1)
 
     init(fd: Int32, certificate: CFArray) throws {
-        context = SSLCreateContext(nil, .serverSide, .streamType)!
+        guard let newContext = SSLCreateContext(nil, .serverSide, .streamType) else {
+            throw SocketError.tlsSessionFailed("Could not create new SSL context")
+        }
+        context = newContext
         fdPtr.pointee = fd
         try ensureNoErr(SSLSetIOFuncs(context, sslRead, sslWrite))
         try ensureNoErr(SSLSetConnection(context, fdPtr))
