@@ -21,7 +21,7 @@ public protocol HttpResponseBodyWriter {
 }
 
 public enum HttpResponseBody {
-
+    
     case json(Any)
     case html(String)
     case htmlBody(String)
@@ -83,7 +83,8 @@ public enum HttpResponse {
     case ok(HttpResponseBody), created, accepted
     case movedPermanently(String)
     case movedTemporarily(String)
-    case badRequest(HttpResponseBody?), unauthorized, forbidden, notFound
+    case badRequest(HttpResponseBody?), unauthorized, forbidden, notFound, notAcceptable
+    case tooManyRequests
     case internalServerError
     case raw(Int, String, [String:String]?, ((HttpResponseBodyWriter) throws -> Void)? )
 
@@ -99,6 +100,8 @@ public enum HttpResponse {
         case .unauthorized            : return 401
         case .forbidden               : return 403
         case .notFound                : return 404
+        case .notAcceptable           : return 406
+        case .tooManyRequests         : return 429
         case .internalServerError     : return 500
         case .raw(let code, _, _, _)  : return code
         }
@@ -116,6 +119,8 @@ public enum HttpResponse {
         case .unauthorized             : return "Unauthorized"
         case .forbidden                : return "Forbidden"
         case .notFound                 : return "Not Found"
+        case .notAcceptable            : return "Not Acceptable"
+        case .tooManyRequests          : return "Too Many Requests"
         case .internalServerError      : return "Internal Server Error"
         case .raw(_, let phrase, _, _) : return phrase
         }
@@ -170,7 +175,7 @@ public enum HttpResponse {
     Makes it possible to compare handler responses with '==', but
 	ignores any associated values. This should generally be what
 	you want. E.g.:
-
+ 
     let resp = handler(updatedRequest)
         if resp == .NotFound {
         print("Client requested not found: \(request.url)")
