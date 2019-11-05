@@ -34,7 +34,9 @@ public enum TLS {
             throw SocketError.tlsSessionFailed("Could not retrieve p12 data from given certificate")
         }
         // must be force casted, will be fixed in swift 5 https://bugs.swift.org/browse/SR-7015
+        // swiftlint:disable force_cast
         let secIdentity = dictionary[kSecImportItemIdentity as String] as! SecIdentity
+        // swiftlint:enable force_cast
         let chainWithoutIdentity = chain.dropFirst()
         let certs = [secIdentity] + chainWithoutIdentity.map { $0 as Any }
         return certs as CFArray
