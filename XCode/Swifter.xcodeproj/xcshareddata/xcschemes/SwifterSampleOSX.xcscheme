@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7AE893FA1C0512C400A29F63"
-               BuildableName = "Swifter.framework"
-               BlueprintName = "SwifterMac"
+               BlueprintIdentifier = "7CA4813A19A2EA8D0030B30D"
+               BuildableName = "SwifterSampleOSX"
+               BlueprintName = "SwifterSampleOSX"
                ReferencedContainer = "container:Swifter.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -27,26 +27,7 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7AE893FA1C0512C400A29F63"
-            BuildableName = "Swifter.framework"
-            BlueprintName = "SwifterMac"
-            ReferencedContainer = "container:Swifter.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "043660C121FED34100497989"
-               BuildableName = "SwiftermacOSTests.xctest"
-               BlueprintName = "SwiftermacOSTests"
-               ReferencedContainer = "container:Swifter.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
@@ -59,15 +40,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7AE893FA1C0512C400A29F63"
-            BuildableName = "Swifter.framework"
-            BlueprintName = "SwifterMac"
+            BlueprintIdentifier = "7CA4813A19A2EA8D0030B30D"
+            BuildableName = "SwifterSampleOSX"
+            BlueprintName = "SwifterSampleOSX"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -75,15 +57,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "7AE893FA1C0512C400A29F63"
-            BuildableName = "Swifter.framework"
-            BlueprintName = "SwifterMac"
+            BlueprintIdentifier = "7CA4813A19A2EA8D0030B30D"
+            BuildableName = "SwifterSampleOSX"
+            BlueprintName = "SwifterSampleOSX"
             ReferencedContainer = "container:Swifter.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
