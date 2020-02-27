@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class HttpServer: HttpServerIO {
+open class HttpServer: HttpServerIO {
 
     public static let VERSION: String = {
 
@@ -56,7 +56,7 @@ public class HttpServer: HttpServerIO {
 
     public var middleware = [(HttpRequest) -> HttpResponse?]()
 
-    override public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
+    override open func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
         for layer in middleware {
             if let response = layer(request) {
                 return ([:], { _ in response })
