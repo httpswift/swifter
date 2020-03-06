@@ -26,7 +26,7 @@ swiftlint.config_file = '.swiftlint.yml'
 swiftlint.lint_files
 
 # Warn when new tests are added but the XCTestManifests wasn't updated to run on Linux
-tests_added_or_modified = git.modified_files.grep(/XCode\/Tests/).empty? || git.added_files.grep(/XCode\/Tests/).empty?
+tests_added_or_modified = !git.modified_files.grep(/XCode\/Tests/).empty? || !git.added_files.grep(/XCode\/Tests/).empty?
 xc_manifest_updated = !git.modified_files.grep(/XCode\/Tests\/XCTestManifests.swift/).empty?
 if tests_added_or_modified && !xc_manifest_updated
   warn("It seems like you've added new tests to the library. If that's the case, please update the [XCTestManifests.swift](https://github.com/httpswift/swifter/blob/stable/XCode/Tests/XCTestManifests.swift) file running in your terminal the command `swift test --generate-linuxmain`.")

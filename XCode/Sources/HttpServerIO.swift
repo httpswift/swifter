@@ -12,7 +12,7 @@ public protocol HttpServerIODelegate: class {
     func socketConnectionReceived(_ socket: Socket)
 }
 
-public class HttpServerIO {
+open class HttpServerIO {
 
     public weak var delegate: HttpServerIODelegate?
 
@@ -111,7 +111,7 @@ public class HttpServerIO {
         self.state = .stopped
     }
 
-    public func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
+    open func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
         return ([:], { _ in HttpResponse.notFound })
     }
 
