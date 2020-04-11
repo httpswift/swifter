@@ -5,7 +5,7 @@ on:
         - stable
 
 jobs:
-  Tests:
+  Test-Linux-Platform:
     runs-on: ubuntu-latest
     container: swift:5.1
     steps:

@@ -5,7 +5,7 @@ on:
         - stable
 
 jobs:
-  Danger:
+  Test-OS-X-Platform:
     runs-on: macos-latest
     env:
       TEST_REPORTS: /tmp/test-results
