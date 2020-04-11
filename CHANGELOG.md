@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file. Changes not
 - Use `swift_version` CocoaPods DSL. ([#425](https://github.com/httpswift/swifter/pull/425)) by [@dnkoutso](https://github.com/dnkoutso)
 - Fix compiler warnings in Socket+File.swift for iOS, tvOS, and Linux platforms by using `withUnsafeBytes` rather than `&` to get a scoped UnsafeRawPointer ([#445](https://github.com/httpswift/swifter/pull/445)) by [@kbongort](https://github.com/kbongort).
 - Fix tests on linux by importing FoundationNetworking for NSURLSession APIs. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@kbongort](https://github.com/kbongort)
+- Replace CircleCI for continuous integration in favor of Github Actions. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@Vkt0r](https://github.com/Vkt0r)
 
 # [1.4.7] 
 
