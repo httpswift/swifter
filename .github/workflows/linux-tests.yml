@@ -1,0 +1,14 @@
+name: Test Linux Platform
+on:
+  pull_request:
+    branches:
+        - stable
+
+jobs:
+  Tests:
+    runs-on: ubuntu-latest
+    container: swift:5.1
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Unit Tests
+        run: swift test
