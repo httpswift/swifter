@@ -14,7 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create Test Result Directory
-        run: mkdir -p $TEST_REPORTS
+        run: |
+            mkdir -p tmp/test-results/
       - name: Run Unit Test - macOS
         run: |
             cd XCode
@@ -35,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
             name: test-results
-            path: o/tmp/test-results
+            path: tmp/test-results
