@@ -34,15 +34,20 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
                 }
             }
         }
-        let filePath = directoryPath + String.pathSeparator + fileRelativePath.value
+        let dirPath = directoryPath + String.pathSeparator
+        let filePath = dirPath + fileRelativePath.value
 
         if let file = try? filePath.openForReading() {
             let mimeType = fileRelativePath.value.mimeType()
             var responseHeader: [String: String] = ["Content-Type": mimeType]
 
-            if let attr = try? FileManager.default.attributesOfItem(atPath: filePath),
-                let fileSize = attr[FileAttributeKey.size] as? UInt64 {
-                responseHeader["Content-Length"] = String(fileSize)
+            let tuple = fileSize(atPath: filePath, relativeTo: dirPath)
+            if tuple.err {
+              file.close()
+              return .notFound
+            }
+            if let fileSize = tuple.size {
+              responseHeader["Content-Length"] = String(fileSize)
             }
 
             return .raw(200, "OK", responseHeader, { writer in
@@ -52,6 +57,25 @@ public func shareFilesFromDirectory(_ directoryPath: String, defaults: [String] 
         }
         return .notFound
     }
+}
+
+private func fileSize(atPath filePath: String, relativeTo dirPath: String) -> (err: Bool, size: UInt64?) {
+  guard let attr = try? FileManager.default.attributesOfItem(atPath: filePath),
+        let type = attr[FileAttributeKey.type] as? FileAttributeType else {
+    return (false, nil)
+  }
+
+  if type != .typeSymbolicLink {
+    let fileSize = attr[FileAttributeKey.size] as? UInt64
+    return (false, fileSize)
+  }
+
+  guard let p = try? FileManager.default.destinationOfSymbolicLink(atPath: filePath) else {
+    return (true, nil)    // .notFound
+  }
+
+  let filePath = dirPath + p
+  return fileSize(atPath: filePath, relativeTo: dirPath)
 }
 
 public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
