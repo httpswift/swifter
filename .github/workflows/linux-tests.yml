@@ -7,7 +7,9 @@ on:
 jobs:
   Test-Linux-Platform:
     runs-on: ubuntu-latest
-    container: swift:5.1
+    container:
+      image: swift:5.2
+      options: --cap-add=SYS_PTRACE --security-opt seccomp=unconfined --security-opt apparmor=unconfined
     steps:
       - uses: actions/checkout@v2
       - name: Run Unit Tests
