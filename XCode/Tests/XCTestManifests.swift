@@ -27,8 +27,8 @@ extension ServerThreadingTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__ServerThreadingTests = [
+        ("testShouldHandleTheRequestInDifferentTimeIntervals", testShouldHandleTheRequestInDifferentTimeIntervals),
         ("testShouldHandleTheSameRequestConcurrently", testShouldHandleTheSameRequestConcurrently),
-        ("testShouldHandleTheSameRequestWithDifferentTimeIntervals", testShouldHandleTheSameRequestWithDifferentTimeIntervals),
     ]
 }
 

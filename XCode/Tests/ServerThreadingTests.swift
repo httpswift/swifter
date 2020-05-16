@@ -29,7 +29,7 @@ class ServerThreadingTests: XCTestCase {
         super.tearDown()
     }
 
-    func testShouldHandleTheSameRequestWithDifferentTimeIntervals() {
+    func testShouldHandleTheRequestInDifferentTimeIntervals() {
 
         let path = "/a/:b/c"
         let queue = DispatchQueue(label: "com.swifter.threading")
