@@ -1,0 +1,32 @@
+name: Danger
+on:
+  pull_request:
+    branches:
+        - stable
+
+jobs:
+  Danger:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Bundle Dependencies
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: 1-gems-{{ checksum "Gemfile.lock" }}
+          restore-keys: 1-gems-
+      - name: Set Ruby Version
+        uses: actions/setup-ruby@v1
+        with:
+            ruby-version: 2.6
+      - name: Install Ruby Dependencies
+        run: |
+            bundle config path vendor/bundle
+            bundle check || bundle install
+        env:
+          BUNDLE_JOBS: 4
+          BUNDLE_RETRY: 3
+      - name: Running Danger
+        run: bundle exec danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
