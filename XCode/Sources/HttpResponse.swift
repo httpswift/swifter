@@ -26,7 +26,7 @@ public enum HttpResponseBody {
     case html(String)
     case htmlBody(String)
     case text(String)
-    case data(Data)
+    case data(Data, contentType: String? = nil)
     case custom(Any, (Any) throws -> String)
 
     func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
@@ -56,7 +56,7 @@ public enum HttpResponseBody {
                 return (data.count, {
                     try $0.write(data)
                 })
-            case .data(let data):
+            case .data(let data, _):
                 return (data.count, {
                     try $0.write(data)
                 })
@@ -132,6 +132,7 @@ public enum HttpResponse {
             switch body {
             case .json: headers["Content-Type"] = "application/json"
             case .html: headers["Content-Type"] = "text/html"
+            case .data(_, let contentType): headers["Content-Type"] = contentType
             default:break
             }
         case .movedPermanently(let location):
