@@ -31,7 +31,7 @@ class SwifterTestsHttpParser: XCTestCase {
             _ = fcntl(fdRead, F_SETFL, O_NONBLOCK)
 
             // Push the content bytes into the write socket.
-            _ = content.withCString { stringPointer in
+            content.withCString { stringPointer in
                 // Count will be either >=0 to indicate bytes written, or -1
                 // if the bytes will be written later (non-blocking).
                 let count = write(fdWrite, stringPointer, content.lengthOfBytes(using: .utf8) + 1)
