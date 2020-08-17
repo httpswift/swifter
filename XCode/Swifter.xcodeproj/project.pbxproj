@@ -1038,6 +1038,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -1067,6 +1068,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = appletvos;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 12.1;
@@ -1093,6 +1095,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
@@ -1122,6 +1125,7 @@
 				PRODUCT_NAME = Swifter;
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "appletvos appletvsimulator";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 9.0;
