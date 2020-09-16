@@ -18,11 +18,16 @@ All notable changes to this project will be documented in this file. Changes not
 
 # [Unreleased]
 
+## Removed
+
+- Support for the iOS 8 deployment target. ([#462](https://github.com/httpswift/swifter/pull/462)) by [@Vkt0r](https://github.com/Vkt0r)
+
 ## Added
 
 - Add the `trailing_whitespace` rule in Swiftlint and autocorrect all the source files. ([#421](https://github.com/httpswift/swifter/pull/421)) by [@Vkt0r](https://github.com/Vkt0r)
 - Update the project for Xcode 11.1. ([#438](https://github.com/httpswift/swifter/pull/438)) by [@Vkt0r](https://github.com/Vkt0r)
 - Add optional 'Content-Type' to Data HttpResponse. ([#450](https://github.com/httpswift/swifter/pull/450)) by [@SoftwareEngineerChris](https://github.com/SoftwareEngineerChris)
+- Support Xcode 12 and Swift 5+. ([#462](https://github.com/httpswift/swifter/pull/462)) by [@Vkt0r](https://github.com/Vkt0r)
 
 ## Changed
 
