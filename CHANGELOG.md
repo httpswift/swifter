@@ -40,6 +40,9 @@ All notable changes to this project will be documented in this file. Changes not
 - Fix tests on linux by importing FoundationNetworking for NSURLSession APIs. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@kbongort](https://github.com/kbongort)
 - Replace CircleCI for continuous integration in favor of Github Actions. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@Vkt0r](https://github.com/Vkt0r)
 
+## Fixed
+- Fix an issue causing a crash when the `Content-Lenght` was negative. ([#457](https://github.com/httpswift/swifter/pull/457)) by [@Vkt0r](https://github.com/Vkt0r)
+
 # [1.4.7] 
 
 ## Added
