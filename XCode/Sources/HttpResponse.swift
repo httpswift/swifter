@@ -85,7 +85,7 @@ public enum HttpResponse {
     case movedTemporarily(String)
     case badRequest(HttpResponseBody?), unauthorized, forbidden, notFound
     case internalServerError
-    case raw(Int, String, [String:String]?, ((HttpResponseBodyWriter) throws -> Void)? )
+    case raw(Int, String, [String: String]?, ((HttpResponseBodyWriter) throws -> Void)? )
 
     public var statusCode: Int {
         switch self {
