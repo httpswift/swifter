@@ -39,6 +39,7 @@ All notable changes to this project will be documented in this file. Changes not
 - Fix compiler warnings in Socket+File.swift for iOS, tvOS, and Linux platforms by using `withUnsafeBytes` rather than `&` to get a scoped UnsafeRawPointer ([#445](https://github.com/httpswift/swifter/pull/445)) by [@kbongort](https://github.com/kbongort).
 - Fix tests on linux by importing FoundationNetworking for NSURLSession APIs. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@kbongort](https://github.com/kbongort)
 - Replace CircleCI for continuous integration in favor of Github Actions. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@Vkt0r](https://github.com/Vkt0r)
+- Fix `SUPPORTED_PLATFORMS` for tvOS. This helps Carthage to build only the specified platform when the option `--platform` is used. ([#464](https://github.com/httpswift/swifter/pull/464)) by [@jasminlapalme](https://github.com/jasminlapalme)
 
 # [1.4.7] 
 
