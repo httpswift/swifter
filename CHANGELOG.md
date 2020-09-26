@@ -18,6 +18,21 @@ All notable changes to this project will be documented in this file. Changes not
 
 # [Unreleased]
 
+# [1.5.0]
+
+## Added
+- Add two new cases to the responses (`notAcceptable`, `tooManyRequests`). ([#437](https://github.com/httpswift/swifter/pull/437)) by [@KKuzmichev](https://github.com/KKuzmichev)
+
+## Fixed
+- Fix an issue causing a crash when the `Content-Lenght` was negative. ([#457](https://github.com/httpswift/swifter/pull/457)) by [@Vkt0r](https://github.com/Vkt0r)
+
+## Changed
+
+- Fix `SUPPORTED_PLATFORMS` for tvOS. This helps Carthage to build only the specified platform when the option `--platform` is used. ([#464](https://github.com/httpswift/swifter/pull/464)) by [@jasminlapalme](https://github.com/jasminlapalme)
+
+
+# [1.5.0-rc.1]
+
 ## Removed
 
 - Support for the iOS 8 deployment target. ([#462](https://github.com/httpswift/swifter/pull/462)) by [@Vkt0r](https://github.com/Vkt0r)
@@ -39,10 +54,6 @@ All notable changes to this project will be documented in this file. Changes not
 - Fix compiler warnings in Socket+File.swift for iOS, tvOS, and Linux platforms by using `withUnsafeBytes` rather than `&` to get a scoped UnsafeRawPointer ([#445](https://github.com/httpswift/swifter/pull/445)) by [@kbongort](https://github.com/kbongort).
 - Fix tests on linux by importing FoundationNetworking for NSURLSession APIs. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@kbongort](https://github.com/kbongort)
 - Replace CircleCI for continuous integration in favor of Github Actions. ([#446](https://github.com/httpswift/swifter/pull/446)) by [@Vkt0r](https://github.com/Vkt0r)
-- Fix `SUPPORTED_PLATFORMS` for tvOS. This helps Carthage to build only the specified platform when the option `--platform` is used. ([#464](https://github.com/httpswift/swifter/pull/464)) by [@jasminlapalme](https://github.com/jasminlapalme)
-
-## Fixed
-- Fix an issue causing a crash when the `Content-Lenght` was negative. ([#457](https://github.com/httpswift/swifter/pull/457)) by [@Vkt0r](https://github.com/Vkt0r)
 
 # [1.4.7] 
 
@@ -89,6 +100,8 @@ All notable changes to this project will be documented in this file. Changes not
 - An issue in the `HttpRouter` causing issues to handle routes with overlapping. ([#359](https://github.com/httpswift/swifter/pull/359)) by [@Vkt0r](https://github.com/Vkt0r)
 
 
-[Unreleased]: https://github.com/httpswift/swifter/compare/1.4.6...HEAD
+[Unreleased]: https://github.com/httpswift/swifter/compare/1.5.0...HEAD
 [1.4.6]: https://github.com/httpswift/swifter/compare/1.4.5...1.4.6
 [1.4.7]: https://github.com/httpswift/swifter/compare/1.4.6...1.4.7
+[1.5.0-rc.1]: https://github.com/httpswift/swifter/compare/1.4.7...1.5.0-rc.1
+[1.5.0]: https://github.com/httpswift/swifter/compare/1.5.0-rc.1...1.5.0
