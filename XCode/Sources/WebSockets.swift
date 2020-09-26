@@ -233,7 +233,7 @@ public class WebSocketSession: Hashable, Equatable {
         frm.rsv3 = fst & 0x10
         guard frm.rsv1 == 0 && frm.rsv2 == 0 && frm.rsv3 == 0
             else {
-            throw WsError.protocolError("Reserved frame bit has not been negocitated.")
+            throw WsError.protocolError("Reserved frame bit has not been negociated.")
         }
         let opc = fst & 0x0F
         guard let opcode = OpCode(rawValue: opc) else {

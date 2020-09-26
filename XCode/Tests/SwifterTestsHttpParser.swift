@@ -102,6 +102,14 @@ class SwifterTestsHttpParser: XCTestCase {
         }
 
         do {
+            _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\r\nContent-Length: -1\r\n\r\n"))
+        } catch let error {
+            let error = error as? HttpParserError
+            XCTAssertNotNil(error)
+            XCTAssertEqual(error!, HttpParserError.negativeContentLength)
+        }
+
+        do {
             _ = try parser.readHttpRequest(TestSocket("GET / HTTP/1.0\nContent-Length: 5\n\n12345"))
         } catch {
             XCTAssert(false, "Parser should not throw any errors if there is a valid 'Content-Length' header.")
