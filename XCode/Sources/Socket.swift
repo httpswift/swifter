@@ -24,8 +24,13 @@ public enum SocketError: Error {
 // swiftlint: disable identifier_name
 open class Socket: Hashable, Equatable {
 
-    let socketFileDescriptor: Int32
-    private var shutdown = false
+    public let socketFileDescriptor: Int32
+    private var shutdown = false {
+        didSet {
+            if shutdown { didClose?() }
+        }
+    }
+    public var didClose: (() -> ())?
 
     public init(socketFileDescriptor: Int32) {
         self.socketFileDescriptor = socketFileDescriptor
