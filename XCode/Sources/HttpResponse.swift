@@ -136,7 +136,8 @@ public enum HttpResponse {
         case .ok(let body):
             switch body {
             case .json: headers["Content-Type"] = "application/json"
-            case .html: headers["Content-Type"] = "text/html"
+            case .html, .htmlBody: headers["Content-Type"] = "text/html"
+            case .text: headers["Content-Type"] = "text/plain"
             case .data(_, let contentType): headers["Content-Type"] = contentType
             default:break
             }
