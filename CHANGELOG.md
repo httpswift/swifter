@@ -18,6 +18,9 @@ All notable changes to this project will be documented in this file. Changes not
 
 # [Unreleased]
 
+## Added
+- Adds response body to any http response. ([#xxx](https://github.com/httpswift/swifter/pull/xxx) by [@mtgto](https://github.com/mtgto)
+
 # [1.5.0]
 
 ## Added
