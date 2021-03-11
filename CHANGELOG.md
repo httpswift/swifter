@@ -18,6 +18,10 @@ All notable changes to this project will be documented in this file. Changes not
 
 # [Unreleased]
 
+## Fixed
+
+- Fix misspell `serialise`. ([#473](https://github.com/httpswift/swifter/pull/473)) by [@mtgto](https://github.com/mtgto)
+
 # [1.5.0]
 
 ## Added
