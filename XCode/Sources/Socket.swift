@@ -10,6 +10,9 @@ import Foundation
 public enum SocketError: Error {
     case socketCreationFailed(String)
     case socketSettingReUseAddrFailed(String)
+    #if !os(Linux)
+    case tlsSessionFailed(String)
+    #endif
     case bindFailed(String)
     case listenFailed(String)
     case writeFailed(String)
@@ -25,6 +28,9 @@ public enum SocketError: Error {
 open class Socket: Hashable, Equatable {
 
     let socketFileDescriptor: Int32
+    #if !os(Linux)
+    private var tls: TlsSession?
+    #endif
     private var shutdown = false
 
     public init(socketFileDescriptor: Int32) {
@@ -43,9 +49,19 @@ open class Socket: Hashable, Equatable {
         if shutdown {
             return
         }
+        #if !os(Linux)
+        tls?.close()
+        #endif
         shutdown = true
         Socket.close(self.socketFileDescriptor)
     }
+
+    #if !os(Linux)
+    public func startTlsSession(with certificate: CFArray) throws {
+        tls = try TlsSession(fd: socketFileDescriptor, certificate: certificate)
+        try tls?.handshake()
+    }
+    #endif
 
     public func port() throws -> in_port_t {
         var addr = sockaddr_in()
@@ -110,6 +126,13 @@ open class Socket: Hashable, Equatable {
     private func writeBuffer(_ pointer: UnsafeRawPointer, length: Int) throws {
         var sent = 0
         while sent < length {
+            #if !os(Linux)
+            if let ssl = tls {
+                sent += try ssl.writeBuffer(pointer + sent, length: Int(length - sent))
+                continue
+            }
+            #endif
+
             #if os(Linux)
                 let result = send(self.socketFileDescriptor, pointer + sent, Int(length - sent), Int32(MSG_NOSIGNAL))
             #else
@@ -130,6 +153,13 @@ open class Socket: Hashable, Equatable {
     /// - Throws: SocketError.recvFailed if unable to read from the socket
     open func read() throws -> UInt8 {
         var byte: UInt8 = 0
+
+        #if !os(Linux)
+        if let ssl = tls {
+            try ssl.readByte(&byte)
+            return byte
+        }
+        #endif
 
         #if os(Linux)
 	    let count = Glibc.read(self.socketFileDescriptor as Int32, &byte, 1)
@@ -173,6 +203,13 @@ open class Socket: Hashable, Equatable {
         while offset < length {
             // Compute next read length in bytes. The bytes read is never more than kBufferLength at once.
             let readLength = offset + Socket.kBufferLength < length ? Socket.kBufferLength : length - offset
+
+            #if !os(Linux)
+            if let ssl = tls {
+                offset += try ssl.read(into: baseAddress + offset, length: readLength)
+                continue
+            }
+            #endif
 
             #if os(Linux)
             let bytesRead = Glibc.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)

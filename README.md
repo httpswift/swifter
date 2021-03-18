@@ -68,6 +68,13 @@ server["/websocket-echo"] = websocket(text: { session, text in
 })
 server.start()
 ```
+### How to TLS/SSL?
+Currently only supported on Darwin OS
+```swift
+let server = HttpServer()
+server.sslCertificate = TLS.loadP12Certificate(certificateData, certificatePassword)
+server.start()
+```
 ### CocoaPods? Yes.
 ```ruby
 use_frameworks!

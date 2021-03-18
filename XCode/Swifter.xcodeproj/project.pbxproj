@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		039CE04222F32BA600C9788F /* TlsSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039CE04122F32BA600C9788F /* TlsSession.swift */; };
+		039CE04322F32BA600C9788F /* TlsSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039CE04122F32BA600C9788F /* TlsSession.swift */; };
+		039CE04422F32BA600C9788F /* TlsSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 039CE04122F32BA600C9788F /* TlsSession.swift */; };
 		043660C721FED34100497989 /* Swifter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE893FB1C0512C400A29F63 /* Swifter.framework */; };
 		043660CD21FED35200497989 /* SwifterTestsHttpRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB8C5F1D97B8CC008B9712 /* SwifterTestsHttpRouter.swift */; };
 		043660CE21FED35500497989 /* SwifterTestsHttpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCD876D1C660B250068099B /* SwifterTestsHttpParser.swift */; };
@@ -164,6 +167,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		039CE04122F32BA600C9788F /* TlsSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TlsSession.swift; sourceTree = "<group>"; };
 		043660C221FED34100497989 /* SwiftermacOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftermacOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		043660C621FED34100497989 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		043660DA21FED3A300497989 /* SwiftertvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftertvOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -353,6 +357,7 @@
 				7C76B2A11D369C9D00D35BFB /* Errno.swift */,
 				7C377E161D964B6A009C6148 /* String+File.swift */,
 				6AE2FF702048011A00302EC4 /* MimeTypes.swift */,
+				039CE04122F32BA600C9788F /* TlsSession.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -818,6 +823,7 @@
 				269B47901D3AAAE20042D137 /* DemoServer.swift in Sources */,
 				269B47921D3AAAE20042D137 /* Socket+File.swift in Sources */,
 				269B47931D3AAAE20042D137 /* Socket.swift in Sources */,
+				039CE04422F32BA600C9788F /* TlsSession.swift in Sources */,
 				269B47941D3AAAE20042D137 /* HttpServerIO.swift in Sources */,
 				269B47951D3AAAE20042D137 /* Files.swift in Sources */,
 				2659FC1A1DADC077003F3930 /* String+File.swift in Sources */,
@@ -845,6 +851,7 @@
 				7C76B7151D2C45760030FC98 /* HttpRequest.swift in Sources */,
 				7C76B70D1D2C456A0030FC98 /* DemoServer.swift in Sources */,
 				7C76B29F1D369BEC00D35BFB /* Socket+File.swift in Sources */,
+				039CE04222F32BA600C9788F /* TlsSession.swift in Sources */,
 				7C76B7231D2C45890030FC98 /* Socket.swift in Sources */,
 				7C76B71D1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
 				7C76B7111D2C45710030FC98 /* Files.swift in Sources */,
@@ -872,6 +879,7 @@
 				7C76B7161D2C45760030FC98 /* HttpRequest.swift in Sources */,
 				7C76B70E1D2C456B0030FC98 /* DemoServer.swift in Sources */,
 				7C76B2A01D369BEC00D35BFB /* Socket+File.swift in Sources */,
+				039CE04322F32BA600C9788F /* TlsSession.swift in Sources */,
 				7C76B7241D2C458A0030FC98 /* Socket.swift in Sources */,
 				7C76B71E1D2C45820030FC98 /* HttpServerIO.swift in Sources */,
 				7C76B7121D2C45710030FC98 /* Files.swift in Sources */,
