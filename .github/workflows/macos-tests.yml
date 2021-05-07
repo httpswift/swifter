@@ -21,19 +21,19 @@ jobs:
             mkdir -p tmp/test-results/
       - name: Run Unit Test - macOS
         run: |
-            cd XCode
+            cd Xcode
             set -o pipefail && xcodebuild test -scheme SwifterMac -sdk macosx -destination "arch=x86_64" | xcpretty -c -r html --output $TEST_REPORTS/macOS.html
       - name: Run Unit Test - iOS
         run: |
-            cd XCode
+            cd Xcode
             set -o pipefail && xcodebuild test -scheme SwifteriOS -sdk iphonesimulator -destination "name=iPhone 8" | xcpretty -c -r html --output $TEST_REPORTS/iOS.html
       - name: Run Unit Test - tvOS
         run: |
-            cd XCode
+            cd Xcode
             set -o pipefail && xcodebuild test -scheme SwiftertvOS -sdk appletvsimulator -destination "name=Apple TV 4K (at 1080p)" | xcpretty -c -r html --output $TEST_REPORTS/tvOS.html
       - name: Run Unit Test - Swift Package Manager
         run: |
-            cd XCode
+            cd Xcode
             swift build && swift test
       - name: Archive Test results
         uses: actions/upload-artifact@v1
