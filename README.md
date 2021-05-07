@@ -9,7 +9,7 @@
 Tiny http server engine written in [Swift](https://developer.apple.com/swift/) programming language.
 
 ### Branches
-`* stable` - lands on CocoaPods and others. Supports the latest non-beta XCode and SPM. Stable.
+`* stable` - lands on CocoaPods and others. Supports the latest non-beta Xcode and SPM. Stable.
 
 `* master` - stable branch plus experimental web-framework layer.
 

@@ -26,10 +26,10 @@ swiftlint.config_file = '.swiftlint.yml'
 swiftlint.lint_files
 
 # Warn when new tests are added but the XCTestManifests wasn't updated to run on Linux
-tests_added_or_modified = !git.modified_files.grep(/XCode\/Tests/).empty? || !git.added_files.grep(/XCode\/Tests/).empty?
-xc_manifest_updated = !git.modified_files.grep(/XCode\/Tests\/XCTestManifests.swift/).empty?
+tests_added_or_modified = !git.modified_files.grep(/Xcode\/Tests/).empty? || !git.added_files.grep(/Xcode\/Tests/).empty?
+xc_manifest_updated = !git.modified_files.grep(/Xcode\/Tests\/XCTestManifests.swift/).empty?
 if tests_added_or_modified && !xc_manifest_updated
-  warn("It seems like you've added new tests to the library. If that's the case, please update the [XCTestManifests.swift](https://github.com/httpswift/swifter/blob/stable/XCode/Tests/XCTestManifests.swift) file running in your terminal the command `swift test --generate-linuxmain`.")
+  warn("It seems like you've added new tests to the library. If that's the case, please update the [XCTestManifests.swift](https://github.com/httpswift/swifter/blob/stable/Xcode/Tests/XCTestManifests.swift) file running in your terminal the command `swift test --generate-linuxmain`.")
 
   # This is a temporary warning to remove the entry for the failed test until we solve the issue in Linux
   warn("If you ran the command `swift test --generate-linuxmain` in your terminal, please remove the line `testCase(IOSafetyTests.__allTests__IOSafetyTests),` from `public func __allTests() -> [XCTestCaseEntry]` in the bottom of the file. For more reference see [#366](https://github.com/httpswift/swifter/issues/366).")
