@@ -22,6 +22,11 @@ All notable changes to this project will be documented in this file. Changes not
 
 - Set `Content-Type` to HttpBody and Text HttpResponse. ([#474](https://github.com/httpswift/swifter/pull/474)) by [@mtgto](https://github.com/mtgto)
 
+## Fixed
+
+* Fix misspell `serialise`. ([#473](https://github.com/httpswift/swifter/pull/473)) by [@mtgto](https://github.com/mtgto)
+* Fix an issue causing Danger was not working properly. ([#486](https://github.com/httpswift/swifter/pull/486)) by [@Vkt0r](https://github.com/Vkt0r)
+
 # [1.5.0]
 
 ## Added

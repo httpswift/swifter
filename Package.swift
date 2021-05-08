@@ -16,7 +16,7 @@ let package = Package(
     .target(
       name: "Swifter", 
       dependencies: [], 
-      path: "XCode/Sources"
+      path: "Xcode/Sources"
       ),
 
     .target(
@@ -31,7 +31,7 @@ let package = Package(
       dependencies: [
         "Swifter"
       ], 
-      path: "XCode/Tests"
+      path: "Xcode/Tests"
     )
   ]
 )
