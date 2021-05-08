@@ -51,8 +51,8 @@ public enum HttpResponseBody {
                     try $0.write(data)
                 })
             case .htmlBody(let body):
-                let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
-                let data = [UInt8](serialised.utf8)
+                let serialized = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
+                let data = [UInt8](serialized.utf8)
                 return (data.count, {
                     try $0.write(data)
                 })
@@ -61,14 +61,14 @@ public enum HttpResponseBody {
                     try $0.write(data)
                 })
             case .custom(let object, let closure):
-                let serialised = try closure(object)
-                let data = [UInt8](serialised.utf8)
+                let serialized = try closure(object)
+                let data = [UInt8](serialized.utf8)
                 return (data.count, {
                     try $0.write(data)
                 })
             }
         } catch {
-            let data = [UInt8]("Serialisation error: \(error)".utf8)
+            let data = [UInt8]("Serialization error: \(error)".utf8)
             return (data.count, {
                 try $0.write(data)
             })
