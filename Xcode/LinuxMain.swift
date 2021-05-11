@@ -1,5 +1,4 @@
 import XCTest
-
 import SwifterTests
 
 var tests = [XCTestCaseEntry]()
