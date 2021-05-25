@@ -32,6 +32,7 @@ All notable changes to this project will be documented in this file. Changes not
 - Fix misspell `serialise`. ([#473](https://github.com/httpswift/swifter/pull/473)) by [@mtgto](https://github.com/mtgto)
 - Fix an issue causing Danger was not working properly. ([#486](https://github.com/httpswift/swifter/pull/486)) by [@Vkt0r](https://github.com/Vkt0r)
 - Set Swift version to 5.0 in podspec. ([#475](https://github.com/httpswift/swifter/pull/475)) by [@p-krasnobrovkin-tcs](https://github.com/p-krasnobrovkin-tcs)
+- Improved performance of data reading. ([#487](https://github.com/httpswift/swifter/pull/487)) by [@till0xff](https://github.com/till0xff)
 
 ## Changed
 
