@@ -1,3 +1,9 @@
 steps:
+  - label: ":package: Ruby dependencies"
+    command: |
+        cat ~/.zshrc
+        source ~/.zshrc
+        ls -la && gem install xcpretty
+
   - label: ":hammer: Unit Tests"
     command: set -o pipefail && xcodebuild test -scheme SwifterMac -sdk macosx -destination "arch=x86_64" | xcpretty -c -r html
