@@ -1,9 +1,16 @@
 steps:
   - label: ":package: Ruby dependencies"
     command: |
-        cat ~/.zshrc
         source ~/.zshrc
-        ls -la && gem install xcpretty
+        gem install xcpretty
 
   - label: ":hammer: Unit Tests"
-    command: set -o pipefail && xcodebuild test -scheme SwifterMac -sdk macosx -destination "arch=x86_64" | xcpretty -c -r html
+    command: |
+        source ~/.zshrc
+        cd Xcode
+        xcodebuild \
+                -configuration Debug \
+                -scheme SwifteriOS \
+                -sdk iphonesimulator \
+                -destination 'platform=iOS Simulator,name=iPhone 12,OS=14.4' \
+                clean build test | xcpretty --color --report junit
