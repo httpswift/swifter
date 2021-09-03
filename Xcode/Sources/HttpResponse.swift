@@ -80,7 +80,7 @@ public enum HttpResponseBody {
 public enum HttpResponse {
 
     case switchProtocols([String: String], (Socket) -> Void)
-    case ok(HttpResponseBody, [String: String]), created, accepted
+    case ok(HttpResponseBody, [String: String] = [:]), created, accepted
     case movedPermanently(String)
     case movedTemporarily(String)
     case badRequest(HttpResponseBody?), unauthorized, forbidden, notFound, notAcceptable

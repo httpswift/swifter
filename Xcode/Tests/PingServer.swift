@@ -17,7 +17,7 @@ extension HttpServer {
     class func pingServer() -> HttpServer {
         let server = HttpServer()
         server.GET["/ping"] = { request in
-            return HttpResponse.ok(.text("pong!"), [:])
+            return HttpResponse.ok(.text("pong!"))
         }
         return server
     }

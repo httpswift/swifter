@@ -35,7 +35,7 @@ class ServerThreadingTests: XCTestCase {
         let queue = DispatchQueue(label: "com.swifter.threading")
         let hostURL: URL
 
-        server.GET[path] = { .ok(.htmlBody("You asked for " + $0.path), [:]) }
+        server.GET[path] = { .ok(.htmlBody("You asked for " + $0.path)) }
 
         do {
 
@@ -73,7 +73,7 @@ class ServerThreadingTests: XCTestCase {
     func testShouldHandleTheSameRequestConcurrently() {
 
         let path = "/a/:b/c"
-        server.GET[path] = { .ok(.htmlBody("You asked for " + $0.path), [:]) }
+        server.GET[path] = { .ok(.htmlBody("You asked for " + $0.path)) }
 
         var requestExpectation: XCTestExpectation? = expectation(description: "Should handle the request concurrently")
 

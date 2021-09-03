@@ -26,7 +26,7 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterSlashRoot() {
 
         router.register(nil, path: "/", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNotNil(router.route(nil, path: "/"))
@@ -35,7 +35,7 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterSimplePathSegments() {
 
         router.register(nil, path: "/a/b/c/d", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNil(router.route(nil, path: "/"))
@@ -48,7 +48,7 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterSinglePathSegmentWildcard() {
 
         router.register(nil, path: "/a/*/c/d", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNil(router.route(nil, path: "/"))
@@ -62,7 +62,7 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterVariables() {
 
         router.register(nil, path: "/a/:arg1/:arg2/b/c/d/:arg3", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNil(router.route(nil, path: "/"))
@@ -76,7 +76,7 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterMultiplePathSegmentWildcards() {
 
         router.register(nil, path: "/a/**/e/f/g", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNil(router.route(nil, path: "/"))
@@ -88,7 +88,7 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterMultiplePathSegmentWildcardTail() {
 
         router.register(nil, path: "/a/b/**", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNil(router.route(nil, path: "/"))
@@ -100,11 +100,11 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterEmptyTail() {
 
         router.register(nil, path: "/a/b/", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         router.register(nil, path: "/a/b/:var", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNil(router.route(nil, path: "/"))
@@ -120,7 +120,7 @@ class SwifterTestsHttpRouter: XCTestCase {
     func testHttpRouterPercentEncodedPathSegments() {
 
         router.register(nil, path: "/a/<>/^", handler: { _ in
-            return .ok(.htmlBody("OK"), [:])
+            return .ok(.htmlBody("OK"))
         })
 
         XCTAssertNil(router.route(nil, path: "/"))
