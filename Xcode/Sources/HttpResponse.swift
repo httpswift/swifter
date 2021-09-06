@@ -161,7 +161,7 @@ public enum HttpResponse {
 
     func content() -> (length: Int, write: ((HttpResponseBodyWriter) throws -> Void)?) {
         switch self {
-        case .ok(let body, _)             : return body.content()
+        case .ok(let body, _)          : return body.content()
         case .badRequest(let body)     : return body?.content() ?? (-1, nil)
         case .raw(_, _, _, let writer) : return (-1, writer)
         default                        : return (-1, nil)
