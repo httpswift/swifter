@@ -42,10 +42,10 @@ open class HttpServer: HttpServerIO {
     public var delete, patch, head, post, get, put: MethodRoute
 
     public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
+        get { return nil }
         set {
             router.register(nil, path: path, handler: newValue)
         }
-        get { return nil }
     }
 
     public var routes: [String] {
@@ -75,10 +75,10 @@ open class HttpServer: HttpServerIO {
         public let method: String
         public let router: HttpRouter
         public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
+            get { return nil }
             set {
                 router.register(method, path: path, handler: newValue)
             }
-            get { return nil }
         }
     }
 }

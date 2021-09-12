@@ -16,7 +16,7 @@ import FoundationNetworking
 extension HttpServer {
     class func pingServer() -> HttpServer {
         let server = HttpServer()
-        server.GET["/ping"] = { request in
+        server.GET["/ping"] = { _ in
             return HttpResponse.ok(.text("pong!"))
         }
         return server
