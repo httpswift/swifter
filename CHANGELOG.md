@@ -27,6 +27,10 @@ All notable changes to this project will be documented in this file. Changes not
 * Fix misspell `serialise`. ([#473](https://github.com/httpswift/swifter/pull/473)) by [@mtgto](https://github.com/mtgto)
 * Fix an issue causing Danger was not working properly. ([#486](https://github.com/httpswift/swifter/pull/486)) by [@Vkt0r](https://github.com/Vkt0r)
 
+## Changed
+
+- Rename `Example` product to `SwifterExample` ([#492](https://github.com/httpswift/swifter/pull/492) by [@fortmarek](https://github.com/fortmarek))
+
 # [1.5.0]
 
 ## Added
