@@ -19,6 +19,7 @@ All notable changes to this project will be documented in this file. Changes not
 # [Unreleased]
 
 ## Added
+- Add custom headers into .ok HttpResponse. ([#500](https://github.com/httpswift/swifter/pull/500) by [@yuri-qualtie](https://github.com/yuri-qualtie)
 - Add support for using `**` as a catch-all at the end of a route. ([#479](https://github.com/httpswift/swifter/pull/479)) by [@michaelenger](https://github.com/michaelenger)
 - Set `Content-Type` to HttpBody and Text HttpResponse. ([#474](https://github.com/httpswift/swifter/pull/474)) by [@mtgto](https://github.com/mtgto)
 
