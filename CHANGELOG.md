@@ -22,7 +22,7 @@ All notable changes to this project will be documented in this file. Changes not
 
 - Set `Content-Type` to HttpBody and Text HttpResponse. ([#474](https://github.com/httpswift/swifter/pull/474)) by [@mtgto](https://github.com/mtgto)
 
-- The `shareFile` function now sets `Content-Type` and `Content-Length` headers like `shareFilesFromDirectory. ([#493](https://github.com/httpswift/swifter/pull/493)) by [@jcrate](https://github.com/jcrate)
+- The `shareFile` function now sets `Content-Type` and `Content-Length` headers like `shareFilesFromDirectory`. ([#493](https://github.com/httpswift/swifter/pull/493)) by [@jcrate](https://github.com/jcrate)
 
 ## Fixed
 
