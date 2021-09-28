@@ -20,12 +20,20 @@ All notable changes to this project will be documented in this file. Changes not
 
 ## Added
 
+- Add custom headers into .ok HttpResponse. ([#500](https://github.com/httpswift/swifter/pull/500) by [@yuri-qualtie](https://github.com/yuri-qualtie)
+- Add support for using `**` as a catch-all at the end of a route. ([#479](https://github.com/httpswift/swifter/pull/479)) by [@michaelenger](https://github.com/michaelenger)
+- Set `Content-Type` to HttpBody and Text HttpResponse. ([#474](https://github.com/httpswift/swifter/pull/474)) by [@mtgto](https://github.com/mtgto)
+- The `shareFile` function now sets `Content-Type` and `Content-Length` headers like `shareFilesFromDirectory`. ([#493](https://github.com/httpswift/swifter/pull/493)) by [@jcrate](https://github.com/jcrate)
 - Adds response body to any http response. ([#476](https://github.com/httpswift/swifter/pull/476) by [@mtgto](https://github.com/mtgto)
 
 ## Fixed
 
 * Fix misspell `serialise`. ([#473](https://github.com/httpswift/swifter/pull/473)) by [@mtgto](https://github.com/mtgto)
 * Fix an issue causing Danger was not working properly. ([#486](https://github.com/httpswift/swifter/pull/486)) by [@Vkt0r](https://github.com/Vkt0r)
+
+## Changed
+
+- Rename `Example` product to `SwifterExample` ([#492](https://github.com/httpswift/swifter/pull/492) by [@fortmarek](https://github.com/fortmarek))
 
 # [1.5.0]
 

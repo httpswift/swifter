@@ -10,6 +10,7 @@ import Swifter
 do {
     let server = demoServer(try String.File.currentWorkingDirectory())
     server["/testAfterBaseRoute"] = { request in
+        print("Received request: \(request)")
         return .ok(.htmlBody("ok !"))
     }
 
