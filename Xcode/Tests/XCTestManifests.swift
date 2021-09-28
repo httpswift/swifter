@@ -63,6 +63,7 @@ extension SwifterTestsHttpRouter {
         ("testHttpRouterHandlesOverlappingPathsInDynamicRoutes", testHttpRouterHandlesOverlappingPathsInDynamicRoutes),
         ("testHttpRouterHandlesOverlappingPathsInDynamicRoutesInTheMiddle", testHttpRouterHandlesOverlappingPathsInDynamicRoutesInTheMiddle),
         ("testHttpRouterMultiplePathSegmentWildcards", testHttpRouterMultiplePathSegmentWildcards),
+        ("testHttpRouterMultiplePathSegmentWildcardTail", testHttpRouterMultiplePathSegmentWildcardTail),
         ("testHttpRouterPercentEncodedPathSegments", testHttpRouterPercentEncodedPathSegments),
         ("testHttpRouterShouldHandleOverlappingRoutesInTrail", testHttpRouterShouldHandleOverlappingRoutesInTrail),
         ("testHttpRouterSimplePathSegments", testHttpRouterSimplePathSegments),
