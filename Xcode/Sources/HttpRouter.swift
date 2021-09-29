@@ -158,7 +158,6 @@ open class HttpRouter {
                 }
 
                 let startStarNodeKeys = startStarNode.nodes.keys
-                currentIndex += 1
                 while currentIndex < count, let pathToken = pattern[currentIndex].removingPercentEncoding {
                     currentIndex += 1
                     if startStarNodeKeys.contains(pathToken) {
