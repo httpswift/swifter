@@ -82,6 +82,7 @@ public enum HttpResponse {
     case switchProtocols([String: String], (Socket) -> Void)
     case ok(HttpResponseBody, [String: String] = [:]), created, accepted
     case movedPermanently(String)
+    case found(String)
     case movedTemporarily(String)
     case badRequest(HttpResponseBody?), unauthorized(HttpResponseBody?), forbidden(HttpResponseBody?), notFound(HttpResponseBody? = nil), notAcceptable(HttpResponseBody?), tooManyRequests(HttpResponseBody?), internalServerError(HttpResponseBody?)
     case raw(Int, String, [String: String]?, ((HttpResponseBodyWriter) throws -> Void)? )
@@ -93,6 +94,7 @@ public enum HttpResponse {
         case .created                 : return 201
         case .accepted                : return 202
         case .movedPermanently        : return 301
+        case .found                   : return 302
         case .movedTemporarily        : return 307
         case .badRequest              : return 400
         case .unauthorized            : return 401
@@ -112,6 +114,7 @@ public enum HttpResponse {
         case .created                  : return "Created"
         case .accepted                 : return "Accepted"
         case .movedPermanently         : return "Moved Permanently"
+        case .found                    : return "Found"
         case .movedTemporarily         : return "Moved Temporarily"
         case .badRequest               : return "Bad Request"
         case .unauthorized             : return "Unauthorized"
@@ -143,6 +146,8 @@ public enum HttpResponse {
             default:break
             }
         case .movedPermanently(let location):
+            headers["Location"] = location
+        case .found(let location):
             headers["Location"] = location
         case .movedTemporarily(let location):
             headers["Location"] = location
