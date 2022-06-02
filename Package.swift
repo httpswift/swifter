@@ -18,8 +18,9 @@ let package = Package(
     .target(
       name: "Swifter", 
       dependencies: [], 
-      path: "Xcode/Sources"
-      ),
+      path: "Xcode/Sources",
+      exclude: ["Xcode/Sources/DemoServer.swift"]
+    ),
 
     .executableTarget(
       name: "SwifterExample",
