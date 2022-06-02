@@ -20,7 +20,7 @@ open class HttpRouter {
         var isEndOfRoute: Bool = false
 
         /// The closure to handle the route
-        var handler: ((HttpRequest) -> HttpResponse)?
+        var handler: ((HttpRequest) async -> HttpResponse)?
     }
 
     private var rootNode = Node()
@@ -47,7 +47,7 @@ open class HttpRouter {
         return result
     }
 
-    public func register(_ method: String?, path: String, handler: ((HttpRequest) -> HttpResponse)?) {
+    public func register(_ method: String?, path: String, handler: ((HttpRequest) async -> HttpResponse)?) {
         var pathSegments = stripQuery(path).split("/")
         if let method = method {
             pathSegments.insert(method, at: 0)
@@ -58,7 +58,7 @@ open class HttpRouter {
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
 
-    public func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) -> HttpResponse)? {
+    public func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) async -> HttpResponse)? {
 
         return queue.sync {
             if let method = method {
@@ -98,7 +98,7 @@ open class HttpRouter {
         return currentNode
     }
 
-    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
+    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) async -> HttpResponse)? {
 
         var matchedRoutes = [Node]()
         let pattern = generator.map { $0 }

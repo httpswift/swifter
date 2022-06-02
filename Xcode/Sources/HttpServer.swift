@@ -41,7 +41,7 @@ open class HttpServer: HttpServerIO {
     public var DELETE, PATCH, HEAD, POST, GET, PUT: MethodRoute
     public var delete, patch, head, post, get, put: MethodRoute
 
-    public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
+    public subscript(path: String) -> ((HttpRequest) async -> HttpResponse)? {
         get { return nil }
         set {
             router.register(nil, path: path, handler: newValue)
@@ -56,7 +56,7 @@ open class HttpServer: HttpServerIO {
 
     public var middleware = [(HttpRequest) -> HttpResponse?]()
 
-    override open func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
+    override open func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) async -> HttpResponse) {
         for layer in middleware {
             if let response = layer(request) {
                 return ([:], { _ in response })
@@ -74,7 +74,7 @@ open class HttpServer: HttpServerIO {
     public struct MethodRoute {
         public let method: String
         public let router: HttpRouter
-        public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
+        public subscript(path: String) -> ((HttpRequest) async -> HttpResponse)? {
             get { return nil }
             set {
                 router.register(method, path: path, handler: newValue)
