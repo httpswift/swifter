@@ -81,7 +81,7 @@ public func directoryBrowser(_ dir: String) -> ((HttpRequest) -> HttpResponse) {
                                 tr {
                                     td {
                                         a {
-                                            href = request.path + "/" + file
+                                            href = request.path + "%2F" + file
                                             inner = file
                                         }
                                     }
