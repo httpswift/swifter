@@ -55,7 +55,7 @@ class FilesTests: XCTestCase {
         let closure = shareFile(temporaryDirectoryURL.appendingPathComponent("does_not_exist").path)
         let result = closure(request)
 
-        XCTAssert(result == .notFound)
+        XCTAssert(result == .notFound())
     }
 
     func testShareFilesFromDirectory() {
@@ -77,7 +77,7 @@ class FilesTests: XCTestCase {
         let closure = shareFilesFromDirectory(temporaryDirectoryURL.path)
         let result = closure(request)
 
-        XCTAssert(result == .notFound)
+        XCTAssert(result == .notFound())
     }
     
     func testDirectoryBrowser() {
@@ -95,6 +95,6 @@ class FilesTests: XCTestCase {
         let closure = directoryBrowser(temporaryDirectoryURL.path)
         let result = closure(request)
 
-        XCTAssert(result == .notFound)
+        XCTAssert(result == .notFound())
     }
 }
