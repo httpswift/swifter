@@ -74,18 +74,20 @@ open class HttpServer: HttpServerIO {
     public struct MethodRoute {
         public let method: String
         public let router: HttpRouter
-        public subscript(path: String) -> ((HttpRequest) async -> HttpResponse)? {
+        public subscript(paths: String...) -> ((HttpRequest) async -> HttpResponse)? {
             get { return nil }
             set {
-                router.register(method, path: path, handler: newValue)
+                paths.forEach { router.register(method, path: $0, handler: newValue) }
             }
         }
-        public subscript<T: Controller>(path: String) -> ((T) -> () async -> HttpResponse)? {
+        public subscript<T: Controller>(paths: String...) -> ((T) -> () async -> HttpResponse)? {
             get { nil }
             set {
                 guard let newValue = newValue else { return }
-                router.register(method, path: path) { request in
-                    await newValue(T(request: request))()
+                paths.forEach { path in
+                    router.register(method, path: path) { request in
+                        await newValue(T(request: request))()
+                    }
                 }
             }
         }
