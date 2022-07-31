@@ -125,20 +125,21 @@ open class HttpRouter {
             var currentIndex = index + 1
             let variableNodes = node.nodes.filter { $0.0.first == ":" }
             if let variableNode = variableNodes.first {
+                let paramName = String(variableNode.0.dropFirst())
                 if currentIndex == count && variableNode.1.isEndOfRoute {
                     // if it's the last element of the pattern and it's a variable, stop the search and
                     // append a tail as a value for the variable.
                     let tail = pattern[currentIndex..<count].joined(separator: "/")
                     if tail.count > 0 {
-                        params[variableNode.0] = pathToken + "/" + tail
+                        params[paramName] = pathToken + "/" + tail
                     } else {
-                        params[variableNode.0] = pathToken
+                        params[paramName] = pathToken
                     }
 
                     matchedNodes.append(variableNode.value)
                     return
                 }
-                params[variableNode.0] = pathToken
+                params[paramName] = pathToken
                 findHandler(&node.nodes[variableNode.0]!, params: &params, pattern: pattern, matchedNodes: &matchedNodes, index: currentIndex, count: count)
             }
 
