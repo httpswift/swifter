@@ -20,7 +20,7 @@ open class HttpRouter {
         var isEndOfRoute: Bool = false
 
         /// The closure to handle the route
-        var handler: ((HttpRequest) -> HttpResponse)?
+        var handler: ((HttpRequest) async -> HttpResponse)?
     }
 
     private var rootNode = Node()
@@ -47,7 +47,7 @@ open class HttpRouter {
         return result
     }
 
-    public func register(_ method: String?, path: String, handler: ((HttpRequest) -> HttpResponse)?) {
+    public func register(_ method: String?, path: String, handler: ((HttpRequest) async -> HttpResponse)?) {
         var pathSegments = stripQuery(path).split("/")
         if let method = method {
             pathSegments.insert(method, at: 0)
@@ -58,7 +58,7 @@ open class HttpRouter {
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
 
-    public func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) -> HttpResponse)? {
+    public func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) async -> HttpResponse)? {
 
         return queue.sync {
             if let method = method {
@@ -98,7 +98,7 @@ open class HttpRouter {
         return currentNode
     }
 
-    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
+    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) async -> HttpResponse)? {
 
         var matchedRoutes = [Node]()
         let pattern = generator.map { $0 }
@@ -125,20 +125,21 @@ open class HttpRouter {
             var currentIndex = index + 1
             let variableNodes = node.nodes.filter { $0.0.first == ":" }
             if let variableNode = variableNodes.first {
+                let paramName = String(variableNode.0.dropFirst())
                 if currentIndex == count && variableNode.1.isEndOfRoute {
                     // if it's the last element of the pattern and it's a variable, stop the search and
                     // append a tail as a value for the variable.
                     let tail = pattern[currentIndex..<count].joined(separator: "/")
                     if tail.count > 0 {
-                        params[variableNode.0] = pathToken + "/" + tail
+                        params[paramName] = pathToken + "/" + tail
                     } else {
-                        params[variableNode.0] = pathToken
+                        params[paramName] = pathToken
                     }
 
                     matchedNodes.append(variableNode.value)
                     return
                 }
-                params[variableNode.0] = pathToken
+                params[paramName] = pathToken
                 findHandler(&node.nodes[variableNode.0]!, params: &params, pattern: pattern, matchedNodes: &matchedNodes, index: currentIndex, count: count)
             }
 
