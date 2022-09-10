@@ -21,10 +21,9 @@ SwifterLite is used in StarPlayrX and future IPTVee works by Todd Bruss
 let server = HttpServer()
 server.get["/ping"] = { request in
     return HttpResponse.ok(.text("pong"))
-
+}
 let port = 8080
 try? server.start(port, forceIPv4: true)
-}
 ```
 
 ### Data Route
