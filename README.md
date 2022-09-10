@@ -5,7 +5,7 @@
 
 ### What is Swifter Lite?
 
-Unofficial fork of Swifter written in [Swift](https://developer.apple.com/swift/) programming language, designed to be an REST API embedded web server for iOS macOS and tvOS.
+Unofficial fork of Swifter written in [Swift](https://developer.apple.com/swift/) programming language, designed to be an embedded REST API server for iOS macOS and tvOS.
 
 ### Branches
 `* 1.5.1-Lite`
