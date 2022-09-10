@@ -7,6 +7,8 @@
 
 import Foundation
 
+public typealias httpReq = ((HttpRequest) -> HttpResponse)
+
 public class HttpRequest {
     
     public var path: String

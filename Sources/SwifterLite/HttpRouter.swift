@@ -20,7 +20,7 @@ open class HttpRouter {
         var isEndOfRoute: Bool = false
         
         /// The closure to handle the route
-        var handler: ((HttpRequest) -> HttpResponse)?
+        var handler: httpReq?
     }
     
     private var rootNode = Node()
@@ -45,7 +45,7 @@ open class HttpRouter {
         return result
     }
     
-    public func register(_ method: String?, path: String, handler: ((HttpRequest) -> HttpResponse)?) {
+    public func register(_ method: String?, path: String, handler: httpReq?) {
         var pathSegments = stripQuery(path).split("/")
         if let method = method {
             pathSegments.insert(method, at: 0)
@@ -95,7 +95,7 @@ open class HttpRouter {
         return currentNode
     }
     
-    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> ((HttpRequest) -> HttpResponse)? {
+    private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> httpReq? {
         var matchedRoutes = [Node]()
         let pattern = generator.map { $0 }
         let numberOfElements = pattern.count

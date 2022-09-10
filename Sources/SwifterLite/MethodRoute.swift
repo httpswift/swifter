@@ -15,7 +15,7 @@ public struct MethodRoute {
     
     public let method: String
     public let router: HttpRouter
-    public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
+    public subscript(path: String) -> httpReq? {
         get { nil }
         set {
             router.register(method, path: path, handler: newValue)

@@ -26,9 +26,9 @@ server.start()
 import PackageDescription
 
 let package = Package(
-    name: "SwifterLite",
+    name: "RestApiServer",
     dependencies: [
-        .package(url: "https://github.com/StarPlayrX/Swifter-Lite.git", .upToNextMajor(from: "1.5.1"))
-    ]
+        .package(url: "https://github.com/StarPlayrX/Swifter-Lite", branch: "1.5.1"),
+    ],
 )
 ```

@@ -17,7 +17,7 @@ open class HttpServer: HttpServerIO {
     private let router = HttpRouter()
     public var post, get: MethodRoute
     
-    public subscript(path: String) -> ((HttpRequest) -> HttpResponse)? {
+    public subscript(path: String) -> httpReq? {
         get { return nil }
         set { router.register(nil, path: path, handler: newValue) }
     }
