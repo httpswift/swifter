@@ -7,7 +7,7 @@
 
 Unofficial fork of Swifter written in [Swift](https://developer.apple.com/swift/) programming language, designed to be an embedded REST API server for iOS macOS and tvOS.
 
-Supports data, json, text, streaming bytes, audio and video streaming over HLS, HTTP 1.1 protocol over localhost, ipv4
+Supports data, json, text, bytes, audio and video streaming over HLS, over HTTP 1.1 protocol via http://localhost, ipv4 tcp/ip
 
 Currently used in StarPlayrX and future IPTVee works by Todd Bruss
 
