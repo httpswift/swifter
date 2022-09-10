@@ -16,11 +16,11 @@ Currently used in StarPlayrX and future IPTVee works by Todd Bruss
 
 #### To Do REST API examples to be expanded
 
-### How to load HTML by string?
+### How return a string
 ```swift
 let server = HttpServer()
-server[path] = { request in
-    return HttpResponse.ok(.text("<html string>"))
+server.get["/star"] = { request in
+    return HttpResponse.ok(.text("player"))
 }
 server.start()
 ```
