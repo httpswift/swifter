@@ -5,10 +5,14 @@
 
 ### What is Swifter Lite?
 
-Unofficial fork of Swifter written in [Swift](https://developer.apple.com/swift/) programming language, designed to be an REST API embedded web server for iOS macOS and tvOS.
+Unofficial fork of Swifter written in [Swift](https://developer.apple.com/swift/) programming language, designed to be an embedded REST API server for iOS macOS and tvOS. This fork focuses on speed and reliability with the ability to stream audio and video seamlessly an any Apple device. It can also create a REST api middleware to use as an abstraction layer to any proprietary api that might not be supported natively or directly.
+
+Supports data, json, text, bytes, audio and video streaming over HLS, over HTTP 1.1 protocol via http://localhost, ipv4 tcp/ip
+
+Currently used in StarPlayrX and future IPTVee works by Todd Bruss
 
 ### Branches
-`* 1.5.1-Lite`
+`1.5.1`
 
 #### To Do REST API examples to be expanded
 
