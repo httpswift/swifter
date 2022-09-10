@@ -36,7 +36,7 @@ let data = Data("commanderData".utf8)
 server.get["/commander/data"] = dataRoute(data: data)
 ```
 
-### Swift Package Manager.
+### Swift Package Manager
 ```swift
 import PackageDescription
 
