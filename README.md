@@ -26,6 +26,9 @@ server.start()
 func dataRoute(_ data: Data) -> httpReq {{ request in
     return HttpResponse.ok(.data(data, contentType: "application/octet-stream"))
 }}
+
+let data = Data("commanderData".utf8)
+server.get["/commander/data"] = dataRoute(data: data)
 ```
 
 ### Swift Package Manager.
