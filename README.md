@@ -1,4 +1,4 @@
-![Platform](https://img.shields.io/badge/%20&%20OSX%20&%20tvOS-4BC51D.svg?style=flat)
+![Platform](https://img.shields.io/badge/Platform-iOS%20&%20macOS%20&%20tvOS-4BC51D.svg?style=flat)
 ![Swift](https://img.shields.io/badge/Swift-4.x,_5.0-4BC51D.svg?style=flat)
 ![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
 [![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)](https://cocoapods.org/pods/Swifter)
