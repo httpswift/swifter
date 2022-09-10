@@ -12,7 +12,7 @@ Supports data, json, text, streaming bytes, audio and video streaming over HLS, 
 Currently used in StarPlayrX and future IPTVee works by Todd Bruss
 
 ### Branches
-`* 1.5.1-Lite`
+`1.5.1`
 
 #### To Do REST API examples to be expanded
 
