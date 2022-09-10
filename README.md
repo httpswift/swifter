@@ -16,13 +16,15 @@ Currently used in StarPlayrX and future IPTVee works by Todd Bruss
 
 #### To Do REST API examples to be expanded
 
-### How to load HTML by string?
+### How to start server with one route and select its port
 ```swift
 let server = HttpServer()
-server[path] = { request in
-    return HttpResponse.ok(.text("<html string>"))
+server["/ping"] = { request in
+    return HttpResponse.ok(.text("pong"))
 }
-server.start()
+
+let port = 8008
+try? server.start(port, forceIPv4: true)
 ```
 
 ### Data Route
