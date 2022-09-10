@@ -21,6 +21,13 @@ server[path] = { request in
 server.start()
 ```
 
+### Data Route
+```swift
+func dataRoute(_ data: Data) -> httpReq {{ request in
+    return HttpResponse.ok(.data(data, contentType: "application/octet-stream"))
+}}
+```
+
 ### Swift Package Manager.
 ```swift
 import PackageDescription
