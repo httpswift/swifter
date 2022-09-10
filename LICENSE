@@ -1,5 +1,6 @@
-Copyright (c) 2014, Damian Kołakowski
-All rights reserved.
+Swifter
+Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
+https://github.com/httpswift/swifter
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -25,3 +26,12 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+SwifterLite
+Copyright (c) 2022 Todd Bruss. All rights reserved.
+https://github.com/StarPlayrX/Swifter-Lite
+
+This software package is a fork of Swifter. 
+It is designed to be a lean REST API embedded web server for macOS, iOS and tvOS. 
+It is not affiliated in any way with Swifter nor its organization.
+SwifterLite is not endorsed nor promoted by Swifter.
