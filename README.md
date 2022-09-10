@@ -1,8 +1,7 @@
 ![Platform](https://img.shields.io/badge/Platform-iOS%20&%20macOS%20&%20tvOS-4BC51D.svg?style=flat)
-![Swift](https://img.shields.io/badge/Swift-4.x,_5.0-4BC51D.svg?style=flat)
-![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%20&%20WebSockets-4BC51D.svg?style=flat)
-[![CocoaPods](https://img.shields.io/cocoapods/v/Swifter.svg?style=flat)](https://cocoapods.org/pods/Swifter)
-[![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+![Swift](https://img.shields.io/badge/Swift-5.1-4BC51D.svg?style=flat)
+![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%-4BC51D.svg?style=flat)
+
 
 ### What is Swifter Lite?
 
