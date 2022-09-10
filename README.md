@@ -1,6 +1,6 @@
 ![Platform](https://img.shields.io/badge/Platform-iOS%20&%20macOS%20&%20tvOS-4BC51D.svg?style=flat)
 ![Swift](https://img.shields.io/badge/Swift-5.1-4BC51D.svg?style=flat)
-![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1%-4BC51D.svg?style=flat)
+![Protocols](https://img.shields.io/badge/Protocols-HTTP%201.1-4BC51D.svg?style=flat)
 
 
 ### What is Swifter Lite?
