@@ -16,14 +16,13 @@ Currently used in StarPlayrX and future IPTVee works by Todd Bruss
 
 #### To Do REST API examples to be expanded
 
-### How to start server with one route and select its port
+### How to start server with 1 route and select its port
 ```swift
 let server = HttpServer()
-server["/ping"] = { request in
+server.get["/ping"] = { request in
     return HttpResponse.ok(.text("pong"))
-}
 
-let port = 8008
+let port = 8080
 try? server.start(port, forceIPv4: true)
 ```
 
