@@ -10,7 +10,7 @@ Unofficial fork of Swifter written in [Swift](https://developer.apple.com/swift/
 ### Branches
 `* 1.5.1-Lite`
 
-#### To Do REST API Examples to be expanded
+#### To Do REST API examples to be expanded
 
 ### How to load HTML by string?
 ```swift
