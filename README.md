@@ -26,7 +26,7 @@ server.start()
 import PackageDescription
 
 let package = Package(
-    name: "MyServer",
+    name: "SwifterLite",
     dependencies: [
         .package(url: "https://github.com/StarPlayrX/Swifter-Lite.git", .upToNextMajor(from: "1.5.1"))
     ]
