@@ -24,6 +24,7 @@ server.get["/ping"] = { request in
 
 let port = 8080
 try? server.start(port, forceIPv4: true)
+}
 ```
 
 ### Data Route
