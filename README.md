@@ -7,9 +7,9 @@
 
 Unofficial fork of Swifter written in [Swift](https://developer.apple.com/swift/) programming language, designed to be an embedded REST API server for iOS macOS and tvOS. This fork focuses on speed and reliability with the ability to stream audio and video seamlessly on or to any Apple device. SwifterLite can also create a REST api middleware layer and use abstraction to any proprietary api that might not be supported natively, directly or is easier keeping it separated in case of changes.
 
-Supports data, json, text, bytes, audio and video streaming over HLS, over HTTP 1.1 protocol via http://localhost, ipv4 tcp/ip
+Supports data, json, text, bytes, audio and video streaming over HLS, over HTTP 1.1 protocol via http://localhost, ipv4 tcp ip
 
-Currently used in StarPlayrX and future IPTVee works by Todd Bruss
+SwifterLite is used in StarPlayrX and future IPTVee works by Todd Bruss
 
 ### Branches
 `1.5.1`
