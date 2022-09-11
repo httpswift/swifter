@@ -12,11 +12,13 @@ open class HttpServer: HttpServerIO {
         self.post = MethodRoute(method: "POST", router: router)
         self.get  = MethodRoute(method: "GET",  router: router)
     }
-    public static let version = Bundle(for: HttpServer.self).infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.5.1"
+    public static let version = "1.5.1"
     
     private let router = HttpRouter()
-    public var post, get: MethodRoute
     
+    public var post: MethodRoute
+    public var get : MethodRoute
+
     public subscript(path: String) -> httpReq? {
         get { return nil }
         set { router.register(nil, path: path, handler: newValue) }
@@ -30,7 +32,7 @@ open class HttpServer: HttpServerIO {
         guard
             let result = router.route(request.method, path: request.path)
         else {
-            return ([:], { _ in HttpResponse.notFound(nil) })
+            return ([:], { request in HttpResponse.notFound(nil) })
         }
             
         return result

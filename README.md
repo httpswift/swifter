@@ -19,7 +19,7 @@ SwifterLite is used in StarPlayrX and future IPTVee works by Todd Bruss
 ### How to start server with 1 route and select its port
 ```swift
 let server = HttpServer()
-server.get["/ping"] = { request in
+server.get["/api/v3/ping"] = { request in
     return HttpResponse.ok(.text("pong"))
 }
 let port = 8080
