@@ -37,8 +37,10 @@ public enum HttpResponse {
                 headers.updateValue(value, forKey: key)
             }
             switch body {
-            case .json: headers["Content-Type"] = "application/json"
-            case .text: headers["Content-Type"] = "text/plain"
+            //case .json: headers["Content-Type"] = "application/json"
+            //case .ping: headers["Content-Type"] = "text/plain"
+            case .json(_, let contentType): headers["Content-Type"] = contentType
+            case .ping(_, let contentType): headers["Content-Type"] = contentType
             case .data(_, let contentType): headers["Content-Type"] = contentType
             default:break
             }
