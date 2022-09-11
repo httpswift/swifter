@@ -95,15 +95,19 @@ open class HttpServerIO {
     }
     
     public func stop() {
-        guard self.operating else { return }
+        guard
+            self.operating
+        else {
+            return
+        }
+        
         self.state = .stopping
-        // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
+
         for socket in self.sockets {
             socket.close()
         }
-        self.queue.sync {
-            self.sockets.removeAll(keepingCapacity: false)
-        }
+        
+        self.sockets.removeAll(keepingCapacity: false)
         socket.close()
         self.state = .stopped
     }
@@ -157,10 +161,10 @@ open class HttpServerIO {
         
         var responseHeader = String()
         
-        responseHeader.append("HTTP/1.1 \(response.statusCode) \(response.reasonPhrase)\r\n")
+        responseHeader.append("HTTP/2.0 \(response.statusCode) \(response.reasonPhrase)\r\n")
         
         let content = response.content()
-        
+
         if content.length >= 0 {
             responseHeader.append("Content-Length: \(content.length)\r\n")
         }

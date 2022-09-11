@@ -24,41 +24,49 @@ open class HttpRouter {
     }
     
     private var rootNode = Node()
-        private let queue = DispatchQueue(label: "swifter.lite.queue")
+    private let queue = DispatchQueue.main
     
     public func routes() -> [String] {
         var routes = [String]()
-        for (_, child) in rootNode.nodes {
-            routes.append(contentsOf: routesForNode(child))
+        for node in rootNode.nodes {
+            routes.append(contentsOf: routesForNode(node.value, prefix: ""))
         }
         return routes
     }
     
-    private func routesForNode(_ node: Node, prefix: String = "") -> [String] {
+    private func routesForNode(_ node: Node, prefix: String) -> [String] {
         var result = [String]()
-        if node.handler != nil {
+        
+        guard
+            node.handler != nil
+        else {
+            return []
+        }
+        
+        if !prefix.isEmpty {
             result.append(prefix)
         }
+
         for (key, child) in node.nodes {
-            result.append(contentsOf: routesForNode(child, prefix: prefix + "/" + key))
+            result.append(contentsOf: routesForNode(child, prefix: "\(prefix)/\(key)"))
         }
         return result
     }
     
     public func register(_ method: String?, path: String, handler: httpReq?) {
-        var pathSegments = stripQuery(path).split("/")
-        if let method = method {
-            pathSegments.insert(method, at: 0)
-        } else {
-            pathSegments.insert("*", at: 0)
+        guard
+            let method = method
+        else {
+            return
         }
+        
+        var pathSegments = stripQuery(path).split("/")
+        pathSegments.insert(method, at: 0)
         var pathSegmentsGenerator = pathSegments.makeIterator()
-        inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
+        inflate(rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
     public func route(_ method: String?, path: String) -> dispatchHttpReq? {
-        //return queue.sync (do not see the benefit running this in sync off main thread
-          
         guard
             let method = method
         else {
@@ -78,7 +86,7 @@ open class HttpRouter {
         return (params, handler)
     }
     
-    private func inflate(_ node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {
+    private func inflate(_ node: Node, generator: inout IndexingIterator<[String]>) -> Node {
         var currentNode = node
         
         while let pathSegment = generator.next() {
