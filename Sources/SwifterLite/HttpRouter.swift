@@ -24,7 +24,7 @@ open class HttpRouter {
     }
     
     private var rootNode = Node()
-        private let queue = DispatchQueue(label: "swifter.embedded.lite.queue")
+        private let queue = DispatchQueue(label: "swifter.lite.queue")
     
     public func routes() -> [String] {
         var routes = [String]()
@@ -56,27 +56,26 @@ open class HttpRouter {
         inflate(&rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
-    public func route(_ method: String?, path: String) -> ([String: String], (HttpRequest) -> HttpResponse)? {
-        //FixMe - test async
-        return queue.sync {
-            if let method = method {
-                let pathSegments = (method + "/" + stripQuery(path)).split("/")
-                var pathSegmentsGenerator = pathSegments.makeIterator()
-                var params = [String: String]()
-                if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
-                    return (params, handler)
-                }
-            }
-            
-            let pathSegments = ("*/" + stripQuery(path)).split("/")
-            var pathSegmentsGenerator = pathSegments.makeIterator()
-            var params = [String: String]()
-            if let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator) {
-                return (params, handler)
-            }
-            
+    public func route(_ method: String?, path: String) -> dispatchHttpReq? {
+        //return queue.sync (do not see the benefit running this in sync off main thread
+          
+        guard
+            let method = method
+        else {
             return nil
         }
+
+        let pathSegments = (method + "/" + stripQuery(path)).split("/")
+        var pathSegmentsGenerator = pathSegments.makeIterator()
+        var params = [String: String]()
+        
+        guard
+            let handler = findHandler(&rootNode, params: &params, generator: &pathSegmentsGenerator)
+        else {
+            return nil
+        }
+        
+        return (params, handler)
     }
     
     private func inflate(_ node: inout Node, generator: inout IndexingIterator<[String]>) -> Node {

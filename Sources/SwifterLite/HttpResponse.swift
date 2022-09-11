@@ -11,7 +11,7 @@ public enum HttpResponse {
     
     case ok(HttpResponseBody, [String: String] = [:])
     case notFound(HttpResponseBody? = nil)
-    case raw(Int, String, [String: String]?, ((HttpResponseBodyWriter) throws -> Void)? )
+    case raw(Int, String, [String: String]?, ((HttpResponseBodyWriter) throws -> Void)?)
     
     public var statusCode: Int {
         switch self {
@@ -30,7 +30,7 @@ public enum HttpResponse {
     }
     
     public func headers() -> [String: String] {
-        var headers = ["Server": "Swifter Embedded Lite \(HttpServer.version)"]
+        var headers = ["Server": "SwifterLite \(HttpServer.version)"]
         switch self {
         case .ok(let body, let customHeaders):
             for (key, value) in customHeaders {

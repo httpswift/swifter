@@ -12,7 +12,7 @@ open class HttpServer: HttpServerIO {
         self.post = MethodRoute(method: "POST", router: router)
         self.get  = MethodRoute(method: "GET",  router: router)
     }
-    public static let version = Bundle(for: HttpServer.self).infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.3.1"
+    public static let version = Bundle(for: HttpServer.self).infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.5.1"
     
     private let router = HttpRouter()
     public var post, get: MethodRoute
@@ -26,11 +26,13 @@ open class HttpServer: HttpServerIO {
         router.routes()
     }
         
-    override open func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
-        if let result = router.route(request.method, path: request.path) {
-            return result
-        } else {
+    override open func dispatch(_ request: HttpRequest) -> dispatchHttpReq {
+        guard
+            let result = router.route(request.method, path: request.path)
+        else {
             return ([:], { _ in HttpResponse.notFound(nil) })
         }
+            
+        return result
     }
 }

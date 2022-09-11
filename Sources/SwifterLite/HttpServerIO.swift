@@ -50,8 +50,9 @@ open class HttpServerIO {
     public var listenAddressIPv4: String?
     public var listenAddressIPv6: String?
     
-    private let queue = DispatchQueue(label: "swifter.embedded.lite.socketqueue")
-    
+    //private let queue = DispatchQueue(label: "swifter.lite.socket")
+    private let queue = DispatchQueue.main
+
     public func port() throws -> Int {
        Int(try socket.port())
     }
@@ -101,13 +102,13 @@ open class HttpServerIO {
             socket.close()
         }
         self.queue.sync {
-            self.sockets.removeAll(keepingCapacity: true)
+            self.sockets.removeAll(keepingCapacity: false)
         }
         socket.close()
         self.state = .stopped
     }
     
-    open func dispatch(_ request: HttpRequest) -> ([String: String], (HttpRequest) -> HttpResponse) {
+    open func dispatch(_ request: HttpRequest) -> dispatchHttpReq {
         ([:], { _ in HttpResponse.notFound(nil) })
     }
     

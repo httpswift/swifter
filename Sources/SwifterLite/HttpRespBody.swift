@@ -12,13 +12,15 @@ public enum HttpResponseBody {
     case json(Any)
     case text(String)
     case data(Data, contentType: String? = nil)
-    case custom(Any, (Any) throws -> String)
-    
+    case bytes([UInt8], contentType: String? = nil)
+
     func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
         do {
             switch self {
             case .json(let object):
-                guard JSONSerialization.isValidJSONObject(object) else {
+                guard
+                    JSONSerialization.isValidJSONObject(object)
+                else {
                     throw SerializationError.invalidObject
                 }
                 let data = try JSONSerialization.data(withJSONObject: object)
@@ -30,16 +32,13 @@ public enum HttpResponseBody {
                 return (data.count, {
                     try $0.write(bytes: data)
                 })
-                
             case .data(let data, _):
                 return (data.count, {
                     try $0.write(data: data)
                 })
-            case .custom(let object, let closure):
-                let serialized = try closure(object)
-                let data = [UInt8](serialized.utf8)
-                return (data.count, {
-                    try $0.write(bytes: data)
+            case .bytes(let bytes, _):
+                return (bytes.count, {
+                    try $0.write(bytes: bytes)
                 })
             }
         } catch {
