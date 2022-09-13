@@ -26,13 +26,9 @@ public class HttpParser {
             let urlComponents = URLComponents(string: encodedPath)
             request.path = urlComponents?.path ?? ""
             request.queryParams = urlComponents?.queryItems?.map { ($0.name, $0.value ?? "") } ?? []
-            request.headers = try readHeaders(socket)
-            if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
-                if contentLengthValue > 0 {
-                    request.body = try readBody(socket, size: contentLengthValue)
-                } else {
-                    request.body = [UInt8]()
-                }
+            request.headers = readHeaders(socket)
+            if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength),  contentLengthValue > 0  {
+                request.body = try readBody(socket, size: contentLengthValue)
             }
             return request
         }

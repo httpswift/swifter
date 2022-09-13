@@ -94,7 +94,7 @@ open class HttpServerIO {
                     self?.queue.async {
                         self?.sockets.insert(socket)
                     }
-                    
+                   
                     self?.handleConnection(socket)
                     
                     self?.queue.async {
