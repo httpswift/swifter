@@ -19,15 +19,4 @@ extension Socket {
             return Int(OSHostByteOrder()) != OSLittleEndian ? sin_port.littleEndian : sin_port.bigEndian
         }
     }
-    
-    public func isIPv4() throws -> Bool {
-        var addr = sockaddr_in()
-        return try withUnsafePointer(to: &addr) { pointer in
-            var len = socklen_t(MemoryLayout<sockaddr_in>.size)
-            if getsockname(socketFileDescriptor, UnsafeMutablePointer(OpaquePointer(pointer)), &len) != 0 {
-                throw SocketError.getSockNameFailed(ErrNumString.description())
-            }
-            return Int32(pointer.pointee.sin_family) == AF_INET
-        }
-    }
 }
