@@ -19,7 +19,6 @@ open class HttpServerIO {
         self.sockets = sockets
         self.stateValue = stateValue
         self.listenAddressIPv4 = listenAddressIPv4
-        self.listenAddressIPv6 = listenAddressIPv6
     }
         
     public weak var delegate: HttpServerIODelegate?
@@ -48,8 +47,7 @@ open class HttpServerIO {
     }
     
     public var operating: Bool { self.state == .running }
-    public var listenAddressIPv4: String?
-    public var listenAddressIPv6: String?
+    public var listenAddressIPv4: String? = "127.0.0.1"
     
     //private let queue = DispatchQueue(label: "swifter.lite.socket")
     private let queue = DispatchQueue.main
@@ -77,8 +75,7 @@ open class HttpServerIO {
         stop()
         
         self.state = .starting
-        let address = forceIPv4 ? listenAddressIPv4 : listenAddressIPv6
-        self.socket = try Socket.tcpSocketForListen(port, forceIPv4, SOMAXCONN, address)
+        self.socket = try Socket.tcpSocketForListen(port, forceIPv4, SOMAXCONN, listenAddressIPv4)
         self.state = .running
         
         DispatchQueue.global(qos: priority).async { [self] in

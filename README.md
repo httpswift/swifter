@@ -23,7 +23,7 @@ server.get["/api/v3/ping"] = { request in
     return HttpResponse.ok(.text("pong"))
 }
 let port = 8080
-try? server.start(port, forceIPv4: true)
+try? server.start(port)
 ```
 
 ### Data Route
