@@ -25,7 +25,8 @@ open class HttpServerIO {
     public weak var delegate: HttpServerIODelegate?
     private var socket = Socket(socketFileDescriptor: -1)
     private var sockets = Set<Socket>()
-    
+    private var serverAddress = "127.0.0.1"
+
     public enum HttpServerIOState: Int32 {
         case starting
         case running
@@ -46,7 +47,7 @@ open class HttpServerIO {
         }
     }
     
-    public var operating: Bool { return self.state == .running }
+    public var operating: Bool { self.state == .running }
     public var listenAddressIPv4: String?
     public var listenAddressIPv6: String?
     
@@ -66,31 +67,36 @@ open class HttpServerIO {
     }
     
     public func start(_ port: in_port_t, forceIPv4: Bool = true, priority: DispatchQoS.QoSClass = DispatchQoS.QoSClass.userInteractive) throws {
-        guard !self.operating else { return }
+        
+        guard
+            !self.operating
+        else {
+            return
+        }
+        
         stop()
+        
         self.state = .starting
         let address = forceIPv4 ? listenAddressIPv4 : listenAddressIPv6
         self.socket = try Socket.tcpSocketForListen(port, forceIPv4, SOMAXCONN, address)
         self.state = .running
-        DispatchQueue.global(qos: priority).async { [weak self] in
-            guard let strongSelf = self else { return }
-            guard strongSelf.operating else { return }
-            while let socket = try? strongSelf.socket.acceptClientSocket() {
+        
+        DispatchQueue.global(qos: priority).async { [self] in
+            while let socket = try? self.socket.acceptClientSocket() {
                 DispatchQueue.global(qos: priority).async { [weak self] in
-                    guard let strongSelf = self else { return }
-                    guard strongSelf.operating else { return }
-                    strongSelf.queue.async {
-                        strongSelf.sockets.insert(socket)
+                    
+                    guard
+                        self?.operating != nil
+                    else {
+                        return
                     }
                     
-                    strongSelf.handleConnection(socket)
-                    
-                    strongSelf.queue.async {
-                        strongSelf.sockets.remove(socket)
-                    }
+                    self?.sockets.insert(socket)
+                    self?.handleConnection(socket)
+                    self?.sockets.remove(socket)
                 }
             }
-            strongSelf.stop()
+            self.stop()
         }
     }
     
@@ -119,21 +125,13 @@ open class HttpServerIO {
     private func handleConnection(_ socket: Socket) {
         let parser = HttpParser()
         while self.operating, let request = try? parser.readHttpRequest(socket) {
-            let request = request
-            request.address = "127.0.0.1"
             let (params, handler) = self.dispatch(request)
             request.params = params
             let response = handler(request)
-            var keepConnection = true
-            do {
-                if self.operating {
-                    keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
-                }
-            } catch {
-                //print("Failed to send response: \(error)")
-            }
-
+            
+            guard let keepConnection = try? self.respond(socket, response: response, keepAlive: true) else { break }
             if !keepConnection { break }
+    
         }
         socket.close()
     }
@@ -150,6 +148,7 @@ open class HttpServerIO {
         }
     }
     
+    @discardableResult
     private func respond(_ socket: Socket, response: HttpResponse, keepAlive: Bool) throws -> Bool {
         guard self.operating else { return false }
         
