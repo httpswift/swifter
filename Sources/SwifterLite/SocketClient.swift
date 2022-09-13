@@ -18,7 +18,7 @@ extension Socket {
                 throw SocketError.acceptFailed(ErrNumString.description())
             }
             
-            //Socket.setNoSigPipe(clientSocket)
+            Socket.setNoSigPipe(clientSocket)
             
             return Socket(socketFileDescriptor: clientSocket)
         }

@@ -15,14 +15,14 @@ extension Socket {
     /// - Returns: A single byte
     /// - Throws: SocketError.recvFailed if unable to read from the socket
     open func read() throws -> UInt8 {
-        try autoreleasepool {
-            var byte: UInt8 = 0
-            let count = Darwin.read(self.socketFileDescriptor, &byte, 1)
-            guard count > 0 else {
-                throw SocketError.recvFailed(ErrNumString.description())
-            }
-            return byte
+        var byte: UInt8 = 0
+        
+        let count = Darwin.read(self.socketFileDescriptor as Int32, &byte, 1)
+        
+        guard count > 0 else {
+            throw SocketError.recvFailed(ErrNumString.description())
         }
+        return byte
     }
     
     /// Read up to `length` bytes from this socket
@@ -31,10 +31,8 @@ extension Socket {
     /// - Returns: A buffer containing the bytes read
     /// - Throws: SocketError.recvFailed if unable to read bytes from the socket
     open func read(length: Int) throws -> [UInt8] {
-        try autoreleasepool {
-            return try [UInt8](unsafeUninitializedCapacity: length) { buffer, bytesRead in
-                bytesRead = try read(into: &buffer, length: length)
-            }
+        return try [UInt8](unsafeUninitializedCapacity: length) { buffer, bytesRead in
+            bytesRead = try read(into: &buffer, length: length)
         }
     }
     
@@ -45,35 +43,33 @@ extension Socket {
     /// - Returns: The number of bytes read
     /// - Throws: SocketError.recvFailed if unable to read bytes from the socket
     func read(into buffer: inout UnsafeMutableBufferPointer<UInt8>, length: Int) throws -> Int {
-        try autoreleasepool {
-            var offset = 0
-            guard let baseAddress = buffer.baseAddress else { return offset }
-            while offset < length {
-                // Compute next read length in bytes. The bytes read is never more than kBufferLength at once.
-                let readLength = offset + Socket.kBufferLength < length ? Socket.kBufferLength : length - offset
-                let bytesRead = Darwin.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
-                
-                guard bytesRead > 0 else {
-                    throw SocketError.recvFailed(ErrNumString.description())
-                }
-                
-                offset += bytesRead
+        var offset = 0
+        guard let baseAddress = buffer.baseAddress else { return 0 }
+        
+        while offset < length {
+            // Compute next read length in bytes. The bytes read is never more than kBufferLength at once.
+            let readLength = offset + Socket.kBufferLength < length ? Socket.kBufferLength : length - offset
+            let bytesRead = Darwin.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
+            
+            guard bytesRead > 0 else {
+                throw SocketError.recvFailed(ErrNumString.description())
             }
-            return offset
+            
+            offset += bytesRead
         }
+        
+        return offset
     }
 
     public func readLine() throws -> String {
-        try autoreleasepool {
-            var characters: String = ""
-            var index: UInt8 = 0
-
-            repeat {
-                index = try self.read()
-                if index > Socket.CR { characters.append(Character(UnicodeScalar(index))) }
-            } while index != Socket.NL
-            
-            return characters
-        }
+        var characters: String = ""
+        var index: UInt8 = 0
+        
+        repeat {
+            index = try self.read()
+            if index > Socket.CR { characters.append(Character(UnicodeScalar(index))) }
+        } while index != Socket.NL
+        
+        return characters
     }
 }

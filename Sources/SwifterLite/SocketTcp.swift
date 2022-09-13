@@ -27,20 +27,34 @@ extension Socket {
             Socket.close(socketFileDescriptor)
             throw SocketError.socketSettingReUseAddrFailed(details)
         }
-        //Socket.setNoSigPipe(socketFileDescriptor)
+        Socket.setNoSigPipe(socketFileDescriptor)
         
         var bindResult: Int32 = -1
-     
-        var addr = sockaddr_in (
-            sin_len: UInt8(MemoryLayout<sockaddr_in>.stride),
-            sin_family: UInt8(AF_INET),
-            sin_port: port.bigEndian,
-            sin_addr: in_addr(s_addr: in_addr_t(0)),
-            sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
-        )
+        if forceIPv4 {
+            var addr = sockaddr_in (
+                sin_len: UInt8(MemoryLayout<sockaddr_in>.stride),
+                sin_family: UInt8(AF_INET),
+                sin_port: port.bigEndian,
+                sin_addr: in_addr(s_addr: in_addr_t(0)),
+                sin_zero: (0, 0, 0, 0, 0, 0, 0, 0)
+            )
 
-        bindResult = withUnsafePointer(to: &addr) {
-            bind(socketFileDescriptor, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in>.size))
+            bindResult = withUnsafePointer(to: &addr) {
+                bind(socketFileDescriptor, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in>.size))
+            }
+        } else {
+            var addr = sockaddr_in6 (
+                sin6_len: UInt8(MemoryLayout<sockaddr_in6>.stride),
+                sin6_family: UInt8(AF_INET6),
+                sin6_port: port.bigEndian,
+                sin6_flowinfo: 0,
+                sin6_addr: in6addr_any,
+                sin6_scope_id: 0
+            )
+
+            bindResult = withUnsafePointer(to: &addr) {
+                bind(socketFileDescriptor, UnsafePointer<sockaddr>(OpaquePointer($0)), socklen_t(MemoryLayout<sockaddr_in6>.size))
+            }
         }
         
         if bindResult == -1 {

@@ -17,7 +17,7 @@ public class HttpRequest {
     public var method: String
     public var headers: [String: String]
     public var body: [UInt8]
-    public var address: String? = "127.0.0.1"
+    public var address: String?
     public var params: [String: String]
     
     internal init
