@@ -14,46 +14,43 @@ enum HttpParserError: Error, Equatable {
 
 public class HttpParser {
     public func readHttpRequest(_ socket: Socket) throws -> HttpRequest {
-        let statusLine = try socket.readLine()
-        let statusLineTokens = statusLine.components(separatedBy: " ")
-        if statusLineTokens.count < 3 {
-            throw HttpParserError.invalidStatusLine(statusLine)
-        }
-        let request = HttpRequest()
-        request.method = statusLineTokens[0]
-        let encodedPath = statusLineTokens[1].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? statusLineTokens[1]
-        let urlComponents = URLComponents(string: encodedPath)
-        request.path = urlComponents?.path ?? ""
-        request.queryParams = urlComponents?.queryItems?.map { ($0.name, $0.value ?? "") } ?? []
-        request.headers = try readHeaders(socket)
-        if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
-            // Prevent a buffer overflow and runtime error trying to create an `UnsafeMutableBufferPointer` with
-            // a negative length
-            guard contentLengthValue >= 0 else {
-                throw HttpParserError.negativeContentLength
+        try autoreleasepool {
+            let statusLine = try socket.readLine()
+            let statusLineTokens = statusLine.components(separatedBy: " ")
+            if statusLineTokens.count < 3 {
+                throw HttpParserError.invalidStatusLine(statusLine)
             }
-            request.body = try readBody(socket, size: contentLengthValue)
+            let request = HttpRequest()
+            request.method = statusLineTokens[0]
+            let encodedPath = statusLineTokens[1].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? statusLineTokens[1]
+            let urlComponents = URLComponents(string: encodedPath)
+            request.path = urlComponents?.path ?? ""
+            request.queryParams = urlComponents?.queryItems?.map { ($0.name, $0.value ?? "") } ?? []
+            request.headers = try readHeaders(socket)
+            if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
+                if contentLengthValue > 0 {
+                    request.body = try readBody(socket, size: contentLengthValue)
+                } else {
+                    request.body = [UInt8]()
+                }
+            }
+            return request
         }
-        return request
     }
     
     private func readBody(_ socket: Socket, size: Int) throws -> [UInt8] {
-        try socket.read(length: size)
+        try autoreleasepool { try socket.read(length: size) }
     }
     
-    private func readHeaders(_ socket: Socket) throws -> [String: String] {
-        var headers = [String: String]()
-        while case let headerLine = try socket.readLine(), !headerLine.isEmpty {
-            let headerTokens = headerLine.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true).map(String.init)
-            if let name = headerTokens.first, let value = headerTokens.last {
-                headers[name.lowercased()] = value.trimmingCharacters(in: .whitespaces)
+    private func readHeaders(_ socket: Socket) -> [String: String] {
+        autoreleasepool {
+            var headers = [String: String]()
+            while  let headerLine = try? socket.readLine(), !headerLine.isEmpty {
+                let headerTokens = headerLine.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: true).map(String.init)
+                headers[headerTokens[0].lowercased()] = headerTokens[1].trimmingCharacters(in: .whitespaces)
+                
             }
+            return headers
         }
-        return headers
-    }
-    
-    func supportsKeepAlive(_ headers: [String: String]) -> Bool {
-        guard let value = headers["connection"] else { return false }
-        return "keep-alive" == value.trimmingCharacters(in: .whitespaces)
     }
 }

@@ -60,7 +60,7 @@ open class HttpRouter {
             return
         }
         
-        var pathSegments = stripQuery(path).split("/")
+        var pathSegments = Array(path.components(separatedBy: "/").dropFirst())
         pathSegments.insert(method, at: 0)
         var pathSegmentsGenerator = pathSegments.makeIterator()
         inflate(rootNode, generator: &pathSegmentsGenerator).handler = handler
@@ -72,8 +72,9 @@ open class HttpRouter {
         else {
             return nil
         }
-
-        let pathSegments = (method + "/" + stripQuery(path)).split("/")
+        
+        var pathSegments = [method]
+        pathSegments.append(contentsOf: Array(path.components(separatedBy: "/").dropFirst()))
         var pathSegmentsGenerator = pathSegments.makeIterator()
         var params = [String: String]()
         
@@ -87,19 +88,19 @@ open class HttpRouter {
     }
     
     private func inflate(_ node: Node, generator: inout IndexingIterator<[String]>) -> Node {
-        var currentNode = node
+        var node = node
         
         while let pathSegment = generator.next() {
-            if let nextNode = currentNode.nodes[pathSegment] {
-                currentNode = nextNode
+            if let nextNode = node.nodes[pathSegment] {
+                node = nextNode
             } else {
-                currentNode.nodes[pathSegment] = Node()
-                currentNode = currentNode.nodes[pathSegment] ?? currentNode
+                node.nodes[pathSegment] = Node()
+                node = node.nodes[pathSegment] ?? node
             }
         }
         
-        currentNode.isEndOfRoute = true
-        return currentNode
+        node.isEndOfRoute = true
+        return node
     }
     
     private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> httpReq? {
@@ -136,19 +137,11 @@ open class HttpRouter {
         } else if node.isEndOfRoute && index == count {
             matchedNodes.append(node)
         }
-        
-    }
-    
-    private func stripQuery(_ path: String) -> String {
-        if let stripped = path.components(separatedBy: "?").first {
-            return stripped
-        }
-        return path
     }
 }
 
 extension String {
     func split(_ separator: Character) -> [String] {
-        return self.split { $0 == separator }.map(String.init)
+        self.split { $0 == separator }.map(String.init)
     }
 }

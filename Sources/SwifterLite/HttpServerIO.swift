@@ -120,11 +120,11 @@ open class HttpServerIO {
         let parser = HttpParser()
         while self.operating, let request = try? parser.readHttpRequest(socket) {
             let request = request
-            request.address = try? socket.peername()
+            request.address = "127.0.0.1"
             let (params, handler) = self.dispatch(request)
             request.params = params
             let response = handler(request)
-            var keepConnection = parser.supportsKeepAlive(request.headers)
+            var keepConnection = true
             do {
                 if self.operating {
                     keepConnection = try self.respond(socket, response: response, keepAlive: keepConnection)
@@ -132,13 +132,7 @@ open class HttpServerIO {
             } catch {
                 //print("Failed to send response: \(error)")
             }
-            
-//            if let session = response.socketSession() {
-//                delegate?.socketConnectionReceived(socket)
-//                session(socket)
-//                break
-//            }
-            
+
             if !keepConnection { break }
         }
         socket.close()
@@ -161,7 +155,7 @@ open class HttpServerIO {
         
         var responseHeader = String()
         
-        responseHeader.append("HTTP/2.0 \(response.statusCode) \(response.reasonPhrase)\r\n")
+        responseHeader.append("HTTP/1.1 \(response.statusCode) \(response.reasonPhrase)\r\n")
         
         let content = response.content()
 
@@ -179,7 +173,7 @@ open class HttpServerIO {
         
         responseHeader.append("\r\n")
         
-        try socket.writeUTF8(responseHeader)
+        try socket.writeUtf8(responseHeader)
         
         if let writeClosure = content.write {
             let context = InnerWriteContext(socket: socket)

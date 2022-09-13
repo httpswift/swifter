@@ -27,7 +27,7 @@ extension Socket {
             Socket.close(socketFileDescriptor)
             throw SocketError.socketSettingReUseAddrFailed(details)
         }
-        Socket.setNoSigPipe(socketFileDescriptor)
+        //Socket.setNoSigPipe(socketFileDescriptor)
         
         var bindResult: Int32 = -1
         if forceIPv4 {
