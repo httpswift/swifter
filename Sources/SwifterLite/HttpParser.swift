@@ -26,12 +26,7 @@ public class HttpParser {
         request.path = urlComponents?.path ?? ""
         request.queryParams = urlComponents?.queryItems?.map { ($0.name, $0.value ?? "") } ?? []
         request.headers = try readHeaders(socket)
-        if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength) {
-            // Prevent a buffer overflow and runtime error trying to create an `UnsafeMutableBufferPointer` with
-            // a negative length
-            guard contentLengthValue >= 0 else {
-                throw HttpParserError.negativeContentLength
-            }
+        if let contentLength = request.headers["content-length"], let contentLengthValue = Int(contentLength), contentLengthValue >= 0 {
             request.body = try readBody(socket, size: contentLengthValue)
         }
         return request

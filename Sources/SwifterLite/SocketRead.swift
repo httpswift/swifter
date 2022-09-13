@@ -60,16 +60,16 @@ extension Socket {
         
         return offset
     }
-
+    
     public func readLine() throws -> String {
-        var characters: String = ""
+        var string: String = ""
         var index: UInt8 = 0
         
         repeat {
             index = try self.read()
-            if index > Socket.CR { characters.append(Character(UnicodeScalar(index))) }
+            if index > Socket.CR { string.append(Character(UnicodeScalar(index))) }
         } while index != Socket.NL
         
-        return characters
+        return string
     }
 }
