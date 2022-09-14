@@ -26,7 +26,7 @@ public enum HttpResponseBody {
                 })
             case .byts(let bytes, _):
                 return (bytes.count, {
-                    try $0.write(bytes: bytes)
+                    try $0.write(byts: bytes)
                 })
             case .json(let object, _):
                 guard
@@ -41,13 +41,13 @@ public enum HttpResponseBody {
             case .ping(let body, _):
                 let data = [UInt8](body.utf8)
                 return (data.count, {
-                    try $0.write(bytes: data)
+                    try $0.write(byts: data)
                 })
             }
         } catch {
             let data = [UInt8]("Serialization error: \(error)".utf8)
             return (data.count, {
-                try $0.write(bytes: data)
+                try $0.write(byts: data)
             })
         }
     }

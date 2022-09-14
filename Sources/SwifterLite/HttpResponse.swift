@@ -63,7 +63,3 @@ public enum HttpResponse {
         }
     }
 }
-
-//func == (inLeft: HttpResponse, inRight: HttpResponse) -> Bool {
-//    inLeft.statusCode == inRight.statusCode
-//}

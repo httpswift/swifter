@@ -58,37 +58,41 @@ open class HttpServerIO {
     }
     
     public func start(_ port: in_port_t, priority: DispatchQoS.QoSClass = .userInteractive) throws {
-        self.socket = try Socket.tcpSocketForListen(port, SOMAXCONN, nil)
-        self.state = .running
-        DispatchQueue.global(qos: priority).async { [self] in
-            while let socket = try? socket.acceptClientSocket() {
-                DispatchQueue.global(qos: priority).async { [self] in
-                    
-                    queue.async {
-                        self.sockets.insert(socket)
-                    }
-                    
-                    handleConnection(socket)
-                    
-                    queue.async {
-                        self.sockets.remove(socket)
+        try autoreleasepool {
+            self.socket = try Socket.tcpSocketForListen(port, SOMAXCONN, nil)
+            self.state = .running
+            DispatchQueue.global(qos: priority).async { [self] in
+                while let socket = try? socket.acceptClientSocket() {
+                    DispatchQueue.global(qos: priority).async { [self] in
+                        
+                        queue.async {
+                            self.sockets.insert(socket)
+                        }
+                        
+                        handleConnection(socket)
+                        
+                        queue.async {
+                            self.sockets.remove(socket)
+                        }
                     }
                 }
+                stop()
             }
-            stop()
         }
     }
     
     public func stop() {
-        self.state = .stopping
+        try autoreleasepool {
+            self.state = .stopping
 
-        for socket in self.sockets {
+            for socket in self.sockets {
+                socket.close()
+            }
+            
+            self.sockets.removeAll(keepingCapacity: false)
             socket.close()
+            self.state = .stopped
         }
-        
-        self.sockets.removeAll(keepingCapacity: false)
-        socket.close()
-        self.state = .stopped
     }
     
     open func dispatch(_ request: HttpRequest) -> dispatchHttpReq {
@@ -121,7 +125,7 @@ open class HttpServerIO {
     private struct InnerWriteContext: HttpResponseBodyWriter {
         let socket: Socket
     
-        func write(bytes data: [UInt8]) throws {
+        func write(byts data: [UInt8]) throws {
             try socket.writeUInt8(data)
         }
         
