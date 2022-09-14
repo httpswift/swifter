@@ -4,6 +4,9 @@
 //
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
+//  SwifterLite
+//  Copyright (c) 2022 Todd Bruss. All rights reserved.
+//
 
 import Foundation
 
@@ -13,13 +16,8 @@ open class HttpRouter {
     }
 
     internal class Node {
-        /// The children nodes that form the route
         var nodes = [String: Node]()
-        
-        /// Define whether or not this node is the end of a route
         var isEndOfRoute: Bool = false
-        
-        /// The closure to handle the route
         var handler: httpReq?
     }
     
@@ -37,12 +35,6 @@ open class HttpRouter {
     private func routesForNode(_ node: Node, prefix: String) -> [String] {
         var result = [String]()
         
-        guard
-            node.handler != nil
-        else {
-            return []
-        }
-        
         if !prefix.isEmpty {
             result.append(prefix)
         }
@@ -53,27 +45,15 @@ open class HttpRouter {
         return result
     }
     
-    public func register(_ method: String?, path: String, handler: httpReq?) {
-        guard
-            let method = method
-        else {
-            return
-        }
-        
-        var pathSegments = stripQuery(path).split("/")
+    public func register(_ method: String, path: String, handler: httpReq?) {
+        var pathSegments = path.split("/")
         pathSegments.insert(method, at: 0)
         var pathSegmentsGenerator = pathSegments.makeIterator()
         inflate(rootNode, generator: &pathSegmentsGenerator).handler = handler
     }
     
-    public func route(_ method: String?, path: String) -> dispatchHttpReq? {
-        guard
-            let method = method
-        else {
-            return nil
-        }
-
-        let pathSegments = (method + "/" + stripQuery(path)).split("/")
+    public func route(_ method: String, path: String) -> dispatchHttpReq? {
+        let pathSegments = "\(method)/\(path)".split("/")
         var pathSegmentsGenerator = pathSegments.makeIterator()
         var params = [String: String]()
         
@@ -87,19 +67,21 @@ open class HttpRouter {
     }
     
     private func inflate(_ node: Node, generator: inout IndexingIterator<[String]>) -> Node {
-        var currentNode = node
-        
-        while let pathSegment = generator.next() {
-            if let nextNode = currentNode.nodes[pathSegment] {
-                currentNode = nextNode
-            } else {
-                currentNode.nodes[pathSegment] = Node()
-                currentNode = currentNode.nodes[pathSegment] ?? currentNode
+        autoreleasepool {
+            var node = node
+            
+            while let pathSegment = generator.next() {
+                if let nextNode = node.nodes[pathSegment] {
+                    node = nextNode
+                } else {
+                    node.nodes[pathSegment] = Node()
+                    node = node.nodes[pathSegment] ?? node
+                }
             }
+            
+            node.isEndOfRoute = true
+            return node
         }
-        
-        currentNode.isEndOfRoute = true
-        return currentNode
     }
     
     private func findHandler(_ node: inout Node, params: inout [String: String], generator: inout IndexingIterator<[String]>) -> httpReq? {
@@ -137,13 +119,6 @@ open class HttpRouter {
             matchedNodes.append(node)
         }
         
-    }
-    
-    private func stripQuery(_ path: String) -> String {
-        if let stripped = path.components(separatedBy: "?").first {
-            return stripped
-        }
-        return path
     }
 }
 

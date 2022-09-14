@@ -4,15 +4,18 @@
 //
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
+//  SwifterLite
+//  Copyright (c) 2022 Todd Bruss. All rights reserved.
+//
 
 import Foundation
 
 public enum HttpResponseBody {
     
-    case json(Any,      contentType: String? = "application/json")
-    case ping(String,   contentType: String? = "text/plain")
-    case data(Data,     contentType: String? = nil)
-    case bytes([UInt8], contentType: String? = nil)
+    case json(Any,     contentType: String? = "application/json")
+    case ping(String,  contentType: String? = "text/plain")
+    case data(Data,    contentType: String? = nil)
+    case byts([UInt8], contentType: String? = nil)
 
     func content() -> (Int, ((HttpResponseBodyWriter) throws -> Void)?) {
         do {
@@ -21,7 +24,7 @@ public enum HttpResponseBody {
                 return (data.count, {
                     try $0.write(data: data)
                 })
-            case .bytes(let bytes, _):
+            case .byts(let bytes, _):
                 return (bytes.count, {
                     try $0.write(bytes: bytes)
                 })

@@ -4,11 +4,13 @@
 //
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
+//  SwifterLite
+//  Copyright (c) 2022 Todd Bruss. All rights reserved.
+//
 
 import Foundation
 
 public enum HttpResponse {
-    
     case ok(HttpResponseBody, [String: String] = [:])
     case notFound(HttpResponseBody? = nil)
     case raw(Int, String, [String: String]?, ((HttpResponseBodyWriter) throws -> Void)?)
@@ -37,12 +39,10 @@ public enum HttpResponse {
                 headers.updateValue(value, forKey: key)
             }
             switch body {
-            //case .json: headers["Content-Type"] = "application/json"
-            //case .ping: headers["Content-Type"] = "text/plain"
             case .json(_, let contentType): headers["Content-Type"] = contentType
             case .ping(_, let contentType): headers["Content-Type"] = contentType
             case .data(_, let contentType): headers["Content-Type"] = contentType
-            default:break
+            case .byts(_, let contentType): headers["Content-Type"] = contentType
             }
         case .raw(_, _, let rawHeaders, _):
             if let rawHeaders = rawHeaders {

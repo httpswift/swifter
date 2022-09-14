@@ -4,6 +4,9 @@
 //
 //  Copyright (c) 2014-2016 Damian Kołakowski. All rights reserved.
 //
+//  SwifterLite
+//  Copyright (c) 2022 Todd Bruss. All rights reserved.
+//
 
 import Foundation
 
@@ -18,11 +21,6 @@ open class HttpServer: HttpServerIO {
     
     public var post: MethodRoute
     public var get : MethodRoute
-
-    public subscript(path: String) -> httpReq? {
-        get { return nil }
-        set { router.register(nil, path: path, handler: newValue) }
-    }
     
     public var routes: [String] {
         router.routes()
