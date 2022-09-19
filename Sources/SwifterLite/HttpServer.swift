@@ -15,7 +15,7 @@ open class HttpServer: HttpServerIO {
         self.post = MethodRoute(method: "POST", router: router)
         self.get  = MethodRoute(method: "GET",  router: router)
     }
-    public static let version = "1.5.1"
+    public static let version = "horse"
     
     private let router = HttpRouter()
     

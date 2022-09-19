@@ -48,7 +48,7 @@ let package = Package(
             targets: ["YourServerName"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/StarPlayrX/Swifter-Lite", branch: "1.5.1")
+        .package(url: "https://github.com/StarPlayrX/Swifter-Lite", branch: "horse")
     ],
     targets: [
         .target(
