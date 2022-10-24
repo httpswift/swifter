@@ -55,6 +55,7 @@ internal let mimeTypes = [
     "wmlc": "application/vnd.wap.wmlc",
     "kml": "application/vnd.google-earth.kml+xml",
     "kmz": "application/vnd.google-earth.kmz",
+    "wasm": "application/wasm",
     "7z": "application/x-7z-compressed",
     "cco": "application/x-cocoa",
     "jardiff": "application/x-java-archive-diff",
