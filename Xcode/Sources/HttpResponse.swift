@@ -51,8 +51,8 @@ public enum HttpResponseBody {
                     try $0.write(data)
                 })
             case .htmlBody(let body):
-                let serialised = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
-                let data = [UInt8](serialised.utf8)
+                let serialized = "<html><meta charset=\"UTF-8\"><body>\(body)</body></html>"
+                let data = [UInt8](serialized.utf8)
                 return (data.count, {
                     try $0.write(data)
                 })
@@ -61,14 +61,14 @@ public enum HttpResponseBody {
                     try $0.write(data)
                 })
             case .custom(let object, let closure):
-                let serialised = try closure(object)
-                let data = [UInt8](serialised.utf8)
+                let serialized = try closure(object)
+                let data = [UInt8](serialized.utf8)
                 return (data.count, {
                     try $0.write(data)
                 })
             }
         } catch {
-            let data = [UInt8]("Serialisation error: \(error)".utf8)
+            let data = [UInt8]("Serialization error: \(error)".utf8)
             return (data.count, {
                 try $0.write(data)
             })
@@ -80,12 +80,10 @@ public enum HttpResponseBody {
 public enum HttpResponse {
 
     case switchProtocols([String: String], (Socket) -> Void)
-    case ok(HttpResponseBody), created, accepted
+    case ok(HttpResponseBody, [String: String] = [:]), created, accepted
     case movedPermanently(String)
     case movedTemporarily(String)
-    case badRequest(HttpResponseBody?), unauthorized, forbidden, notFound, notAcceptable
-    case tooManyRequests
-    case internalServerError
+    case badRequest(HttpResponseBody?), unauthorized(HttpResponseBody?), forbidden(HttpResponseBody?), notFound(HttpResponseBody? = nil), notAcceptable(HttpResponseBody?), tooManyRequests(HttpResponseBody?), internalServerError(HttpResponseBody?)
     case raw(Int, String, [String: String]?, ((HttpResponseBodyWriter) throws -> Void)? )
 
     public var statusCode: Int {
@@ -133,10 +131,14 @@ public enum HttpResponse {
             for (key, value) in switchHeaders {
                 headers[key] = value
             }
-        case .ok(let body):
+        case .ok(let body, let customHeaders):
+            for (key, value) in customHeaders {
+                headers.updateValue(value, forKey: key)
+            }
             switch body {
             case .json: headers["Content-Type"] = "application/json"
-            case .html: headers["Content-Type"] = "text/html"
+            case .html, .htmlBody: headers["Content-Type"] = "text/html"
+            case .text: headers["Content-Type"] = "text/plain"
             case .data(_, let contentType): headers["Content-Type"] = contentType
             default:break
             }
@@ -157,8 +159,8 @@ public enum HttpResponse {
 
     func content() -> (length: Int, write: ((HttpResponseBodyWriter) throws -> Void)?) {
         switch self {
-        case .ok(let body)             : return body.content()
-        case .badRequest(let body)     : return body?.content() ?? (-1, nil)
+        case .ok(let body, _)          : return body.content()
+        case .badRequest(let body), .unauthorized(let body), .forbidden(let body), .notFound(let body), .tooManyRequests(let body), .internalServerError(let body) : return body?.content() ?? (-1, nil)
         case .raw(_, _, _, let writer) : return (-1, writer)
         default                        : return (-1, nil)
         }

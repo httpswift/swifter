@@ -50,7 +50,7 @@ class SwifterTestsHttpParser: XCTestCase {
         }
     }
 
-    // swiftlint:disable function_body_length
+    // swiftlint:disable function_body_length cyclomatic_complexity
     func testParser() {
         let parser = HttpParser()
 
