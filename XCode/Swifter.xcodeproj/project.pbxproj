@@ -110,6 +110,9 @@
 		7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80D1BE2A1D400C8A977 /* Main.storyboard */; };
 		7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */; };
 		7CDAB8161BE2A1D400C8A977 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAB8111BE2A1D400C8A977 /* ViewController.swift */; };
+		AB83D32D2919F84500D4D434 /* ServerRawResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB83D32C2919F84500D4D434 /* ServerRawResponseTests.swift */; };
+		AB83D32E2919F84500D4D434 /* ServerRawResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB83D32C2919F84500D4D434 /* ServerRawResponseTests.swift */; };
+		AB83D32F2919F84500D4D434 /* ServerRawResponseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB83D32C2919F84500D4D434 /* ServerRawResponseTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -222,6 +225,7 @@
 		7CDAB80F1BE2A1D400C8A977 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7CDAB8101BE2A1D400C8A977 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7CDAB8111BE2A1D400C8A977 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		AB83D32C2919F84500D4D434 /* ServerRawResponseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServerRawResponseTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -429,6 +433,7 @@
 				0858E7F31D68BB2600491CD1 /* IOSafetyTests.swift */,
 				6A0D4511204E9988000A0726 /* MimeTypesTests.swift */,
 				0C1F3CAC2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift */,
+				AB83D32C2919F84500D4D434 /* ServerRawResponseTests.swift */,
 				7B55EC94226E0E4F00042D23 /* ServerThreadingTests.swift */,
 			);
 			path = Tests;
@@ -781,6 +786,7 @@
 				043660CD21FED35200497989 /* SwifterTestsHttpRouter.swift in Sources */,
 				047F1F02226AB9AD00909B95 /* XCTestManifests.swift in Sources */,
 				043660CE21FED35500497989 /* SwifterTestsHttpParser.swift in Sources */,
+				AB83D32E2919F84500D4D434 /* ServerRawResponseTests.swift in Sources */,
 				043660D521FED36C00497989 /* MimeTypesTests.swift in Sources */,
 				0C1F3CAE2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */,
 				7B55EC96226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,
@@ -793,6 +799,7 @@
 			files = (
 				043660E721FED51600497989 /* PingServer.swift in Sources */,
 				043660E921FED51B00497989 /* SwifterTestsWebSocketSession.swift in Sources */,
+				AB83D32F2919F84500D4D434 /* ServerRawResponseTests.swift in Sources */,
 				043660EA21FED51E00497989 /* IOSafetyTests.swift in Sources */,
 				043660E821FED51900497989 /* SwifterTestsStringExtensions.swift in Sources */,
 				043660E521FED51100497989 /* SwifterTestsHttpRouter.swift in Sources */,
@@ -912,6 +919,7 @@
 				7C4785E91C71D15600A9FE73 /* SwifterTestsWebSocketSession.swift in Sources */,
 				043660D421FED36900497989 /* IOSafetyTests.swift in Sources */,
 				7CCD87721C660B250068099B /* SwifterTestsStringExtensions.swift in Sources */,
+				AB83D32D2919F84500D4D434 /* ServerRawResponseTests.swift in Sources */,
 				7B11AD4B21C9A8A6002F8820 /* SwifterTestsHttpRouter.swift in Sources */,
 				0C1F3CAD2265FC470076B6F5 /* SwifterTestsHttpResponseBody.swift in Sources */,
 				7B55EC95226E0E4F00042D23 /* ServerThreadingTests.swift in Sources */,

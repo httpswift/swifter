@@ -130,6 +130,16 @@ open class HttpServerIO {
                 }
             } catch {
                 print("Failed to send response: \(error)")
+                /*
+                    The bodyWriter threw an exception, this could be because the socket is closed, in
+                    which case we fail when we attempt to read from the socket again, or it could be
+                    because the bodyWriter was unable to finish writing the body, session will be out
+                    of sync. If we kept the connection alive, then the client will be waiting for the
+                    remainder of the body until it gives up, and we'll never get the next request.
+
+                    Ideal action is to possibly abruptly close the connection.
+                 */
+                break
             }
             if let session = response.socketSession() {
                 delegate?.socketConnectionReceived(socket)
