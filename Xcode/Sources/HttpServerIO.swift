@@ -100,11 +100,11 @@ open class HttpServerIO {
     public func stop() {
         guard self.operating else { return }
         self.state = .stopping
-        // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
-        for socket in self.sockets {
-            socket.close()
-        }
         self.queue.sync {
+            // Shutdown connected peers because they can live in 'keep-alive' or 'websocket' loops.
+            for socket in self.sockets {
+                socket.close()
+            }
             self.sockets.removeAll(keepingCapacity: true)
         }
         socket.close()
