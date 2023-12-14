@@ -7,11 +7,15 @@
 
 import Foundation
 
-#if os(iOS) || os(tvOS) || os (Linux)
+#if os(Windows)
+import WinSDK
+#endif
+
+#if os(iOS) || os(tvOS) || os (Linux) || os(Windows)
 // swiftlint:disable type_name function_parameter_count
     struct sf_hdtr { }
 
-    private func sendfileImpl(_ source: UnsafeMutablePointer<FILE>, _ target: Int32, _: off_t, _: UnsafeMutablePointer<off_t>, _: UnsafeMutablePointer<sf_hdtr>, _: Int32) -> Int32 {
+    private func sendfileImpl(_ source: UnsafeMutablePointer<FILE>, _ target: PlatformSocketFD, _: off_t, _: UnsafeMutablePointer<off_t>, _: UnsafeMutablePointer<sf_hdtr>, _: Int32) -> Int32 {
         var buffer = [UInt8](repeating: 0, count: 1024)
         while true {
             let readResult = fread(&buffer, 1, buffer.count, source)
@@ -25,6 +29,8 @@ import Foundation
                   let len = readResult - writeCounter
                   #if os(Linux)
                   return send(target, start, len, Int32(MSG_NOSIGNAL))
+                  #elseif os(Windows)
+                  return Int(send(target, start, Int32(len), 0))
                   #else
                   return write(target, start, len)
                   #endif
@@ -44,7 +50,7 @@ extension Socket {
         var offset: off_t = 0
         var sf: sf_hdtr = sf_hdtr()
 
-        #if os(iOS) || os(tvOS) || os (Linux)
+        #if os(iOS) || os(tvOS) || os (Linux) || os(Windows)
         let result = sendfileImpl(file.pointer, self.socketFileDescriptor, 0, &offset, &sf, 0)
         #else
         let result = sendfile(fileno(file.pointer), self.socketFileDescriptor, 0, &offset, &sf, 0)

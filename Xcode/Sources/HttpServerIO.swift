@@ -8,6 +8,11 @@
 import Foundation
 import Dispatch
 
+#if os(Windows)
+import WinSDK
+public typealias in_port_t = UInt16
+#endif
+
 public protocol HttpServerIODelegate: AnyObject {
     func socketConnectionReceived(_ socket: Socket)
 }
@@ -16,7 +21,7 @@ open class HttpServerIO {
 
     public weak var delegate: HttpServerIODelegate?
 
-    private var socket = Socket(socketFileDescriptor: -1)
+    private var socket = Socket(socketFileDescriptor: invalidPlatformSocketFD)
     private var sockets = Set<Socket>()
 
     public enum HttpServerIOState: Int32 {
@@ -33,7 +38,7 @@ open class HttpServerIO {
             return HttpServerIOState(rawValue: stateValue)!
         }
         set(state) {
-            #if !os(Linux)
+            #if !os(Linux) && !os(Windows)
             OSAtomicCompareAndSwapInt(self.state.rawValue, state.rawValue, &stateValue)
             #else
             self.stateValue = state.rawValue

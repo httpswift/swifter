@@ -7,6 +7,18 @@
 
 import Foundation
 
+#if os(Windows)
+import WinSDK
+#endif
+
+#if os(Windows)
+public typealias PlatformSocketFD = SOCKET
+public let invalidPlatformSocketFD = INVALID_SOCKET
+#else
+public typealias PlatformSocketFD = Int32
+public let invalidPlatformSocketFD = Int32(-1)
+#endif
+
 public enum SocketError: Error {
     case socketCreationFailed(String)
     case socketSettingReUseAddrFailed(String)
@@ -23,11 +35,10 @@ public enum SocketError: Error {
 
 // swiftlint: disable identifier_name
 open class Socket: Hashable, Equatable {
-
-    let socketFileDescriptor: Int32
+    let socketFileDescriptor: PlatformSocketFD
     private var shutdown = false
 
-    public init(socketFileDescriptor: Int32) {
+    public init(socketFileDescriptor: PlatformSocketFD) {
         self.socketFileDescriptor = socketFileDescriptor
     }
 
@@ -55,7 +66,7 @@ open class Socket: Hashable, Equatable {
                 throw SocketError.getSockNameFailed(Errno.description())
             }
             let sin_port = pointer.pointee.sin_port
-            #if os(Linux)
+            #if os(Linux) || os(Windows)
                 return ntohs(sin_port)
             #else
                 return Int(OSHostByteOrder()) != OSLittleEndian ? sin_port.littleEndian : sin_port.bigEndian
@@ -112,6 +123,8 @@ open class Socket: Hashable, Equatable {
         while sent < length {
             #if os(Linux)
                 let result = send(self.socketFileDescriptor, pointer + sent, Int(length - sent), Int32(MSG_NOSIGNAL))
+            #elseif os(Windows)
+                let result = Int(send(self.socketFileDescriptor, pointer + sent, Int32(length - sent), 0))
             #else
                 let result = write(self.socketFileDescriptor, pointer + sent, Int(length - sent))
             #endif
@@ -133,6 +146,8 @@ open class Socket: Hashable, Equatable {
 
         #if os(Linux)
 	    let count = Glibc.read(self.socketFileDescriptor as Int32, &byte, 1)
+        #elseif os(Windows)
+        let count = recv(self.socketFileDescriptor, &byte, 1, 0)
 	    #else
 	    let count = Darwin.read(self.socketFileDescriptor as Int32, &byte, 1)
 	    #endif
@@ -172,6 +187,8 @@ open class Socket: Hashable, Equatable {
 
             #if os(Linux)
             let bytesRead = Glibc.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
+            #elseif os(Windows)
+            let bytesRead = Int(recv(self.socketFileDescriptor, baseAddress + offset, Int32(readLength), 0))
 	        #else
 	        let bytesRead = Darwin.read(self.socketFileDescriptor as Int32, baseAddress + offset, readLength)
 	        #endif
@@ -205,14 +222,19 @@ open class Socket: Hashable, Equatable {
             throw SocketError.getPeerNameFailed(Errno.description())
         }
         var hostBuffer = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-        if getnameinfo(&addr, len, &hostBuffer, socklen_t(hostBuffer.count), nil, 0, NI_NUMERICHOST) != 0 {
+        #if os(Windows)
+        let hostBufferSize = DWORD(hostBuffer.count)
+        #else
+        let hostBufferSize = socklen_t(hostBuffer.count)
+        #endif
+        if getnameinfo(&addr, len, &hostBuffer, hostBufferSize, nil, 0, NI_NUMERICHOST) != 0 {
             throw SocketError.getNameInfoFailed(Errno.description())
         }
         return String(cString: hostBuffer)
     }
 
-    public class func setNoSigPipe(_ socket: Int32) {
-        #if os(Linux)
+    public class func setNoSigPipe(_ socket: PlatformSocketFD) {
+        #if os(Linux) || os(Windows)
             // There is no SO_NOSIGPIPE in Linux (nor some other systems). You can instead use the MSG_NOSIGNAL flag when calling send(),
             // or use signal(SIGPIPE, SIG_IGN) to make your entire application ignore SIGPIPE.
         #else
@@ -222,9 +244,11 @@ open class Socket: Hashable, Equatable {
         #endif
     }
 
-    public class func close(_ socket: Int32) {
+    public class func close(_ socket: PlatformSocketFD) {
         #if os(Linux)
             _ = Glibc.close(socket)
+        #elseif os(Windows)
+            _ = closesocket(socket)
         #else
             _ = Darwin.close(socket)
         #endif

@@ -7,6 +7,10 @@
 
 import Foundation
 
+#if os(Windows)
+import WinSDK
+#endif
+
 extension String {
 
     public enum FileError: Error {
@@ -25,7 +29,7 @@ extension String {
             fclose(pointer)
         }
 
-        public func seek(_ offset: Int) -> Bool {
+        public func seek(_ offset: Int32) -> Bool {
             return (fseek(pointer, offset, SEEK_SET) == 0)
         }
 
@@ -98,13 +102,21 @@ extension String {
     public func directory() throws -> Bool {
         return try self.withStat {
             if let stat = $0 {
+                #if os(Windows)
+                // Need to disambiguate here.
+                return Int32(stat.st_mode) & ucrt.S_IFMT == ucrt.S_IFDIR
+                #else
                 return stat.st_mode & S_IFMT == S_IFDIR
+                #endif
             }
             return false
         }
     }
 
     public func files() throws -> [String] {
+        #if os(Windows)
+        fatalError("Not implemented")
+        #else
         guard let dir = self.withCString({ opendir($0) }) else {
             throw FileError.error(errno)
         }
@@ -130,6 +142,7 @@ extension String {
             }
         }
         return results
+        #endif
     }
 
     private func withStat<T>(_ closure: ((stat?) throws -> T)) throws -> T {
