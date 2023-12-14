@@ -114,14 +114,33 @@ extension String {
     }
 
     public func files() throws -> [String] {
+        var results = [String]()
         #if os(Windows)
-        fatalError("Not implemented")
+        var data = WIN32_FIND_DATAW()
+        let handle = self.withCString(encodedAs: UTF16.self) {
+            return FindFirstFileW($0, &data)
+        }
+        guard handle != INVALID_HANDLE_VALUE else {
+            throw FileError.error(Int32(GetLastError()))
+        }
+        defer { FindClose(handle) }
+        let appendToResults = {
+            let fileName = withUnsafePointer(to: &data.cFileName) { (ptr) -> String in
+                ptr.withMemoryRebound(to: unichar.self, capacity: Int(MAX_PATH * 2)) {
+                    String(utf16CodeUnits: $0, count: wcslen($0))
+                }
+            }
+            results.append(fileName)
+        }
+        appendToResults()
+        while FindNextFileW(handle, &data) {
+            appendToResults()
+        }
         #else
         guard let dir = self.withCString({ opendir($0) }) else {
             throw FileError.error(errno)
         }
         defer { closedir(dir) }
-        var results = [String]()
         while let ent = readdir(dir) {
             var name = ent.pointee.d_name
             let fileName = withUnsafePointer(to: &name) { (ptr) -> String? in
@@ -141,8 +160,8 @@ extension String {
                 results.append(fileName)
             }
         }
-        return results
         #endif
+        return results
     }
 
     private func withStat<T>(_ closure: ((stat?) throws -> T)) throws -> T {
