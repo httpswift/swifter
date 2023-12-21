@@ -7,6 +7,10 @@
 
 import Foundation
 
+#if os(Windows)
+import WinSDK
+#endif
+
 extension Socket {
 
     // swiftlint:disable function_body_length
@@ -15,14 +19,13 @@ extension Socket {
     ///       connections from. It should be in IPv4 format if forceIPv4 == true,
     ///       otherwise - in IPv6.
     public class func tcpSocketForListen(_ port: in_port_t, _ forceIPv4: Bool = false, _ maxPendingConnection: Int32 = SOMAXCONN, _ listenAddress: String? = nil) throws -> Socket {
-
         #if os(Linux)
             let socketFileDescriptor = socket(forceIPv4 ? AF_INET : AF_INET6, Int32(SOCK_STREAM.rawValue), 0)
         #else
             let socketFileDescriptor = socket(forceIPv4 ? AF_INET : AF_INET6, SOCK_STREAM, 0)
         #endif
 
-        if socketFileDescriptor == -1 {
+        if socketFileDescriptor == invalidPlatformSocketFD {
             throw SocketError.socketCreationFailed(Errno.description())
         }
 
@@ -41,6 +44,12 @@ extension Socket {
                 sin_family: sa_family_t(AF_INET),
                 sin_port: port.bigEndian,
                 sin_addr: in_addr(s_addr: in_addr_t(0)),
+                sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
+            #elseif os(Windows)
+            var addr = sockaddr_in(
+                sin_family: ADDRESS_FAMILY(AF_INET),
+                sin_port: port.bigEndian,
+                sin_addr: .init(),
                 sin_zero: (0, 0, 0, 0, 0, 0, 0, 0))
             #else
             var addr = sockaddr_in(
@@ -68,6 +77,13 @@ extension Socket {
                 sin6_flowinfo: 0,
                 sin6_addr: in6addr_any,
                 sin6_scope_id: 0)
+            #elseif os(Windows)
+            var addr = sockaddr_in6(
+                sin6_family: ADDRESS_FAMILY(AF_INET6),
+                sin6_port: port.bigEndian,
+                sin6_flowinfo: 0,
+                sin6_addr: in6addr_any,
+                sockaddr_in6.__Unnamed_union___Anonymous_field4())
             #else
             var addr = sockaddr_in6(
                 sin6_len: UInt8(MemoryLayout<sockaddr_in6>.stride),
@@ -104,10 +120,8 @@ extension Socket {
     }
 
     public func acceptClientSocket() throws -> Socket {
-        var addr = sockaddr()
-        var len: socklen_t = 0
-        let clientSocket = accept(self.socketFileDescriptor, &addr, &len)
-        if clientSocket == -1 {
+        let clientSocket = accept(self.socketFileDescriptor, nil, nil)
+        if clientSocket == invalidPlatformSocketFD {
             throw SocketError.acceptFailed(Errno.description())
         }
         Socket.setNoSigPipe(clientSocket)
