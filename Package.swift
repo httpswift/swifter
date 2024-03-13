@@ -16,7 +16,10 @@ let package = Package(
     .target(
       name: "Swifter", 
       dependencies: [], 
-      path: "Xcode/Sources"
+      path: "Xcode/Sources",
+      resources: [
+        .process("PrivacyInfo.xcprivacy")
+      ] 
       ),
 
     .target(
