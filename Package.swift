@@ -1,4 +1,4 @@
-// swift-tools-version:5.0
+// swift-tools-version:5.3
 
 import PackageDescription
 
@@ -14,12 +14,12 @@ let package = Package(
 
   targets: [
     .target(
-      name: "Swifter", 
-      dependencies: [], 
+      name: "Swifter",
+      dependencies: [],
       path: "Xcode/Sources",
       resources: [
         .process("PrivacyInfo.xcprivacy")
-      ] 
+      ]
       ),
 
     .target(
