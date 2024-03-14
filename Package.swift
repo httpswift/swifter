@@ -18,7 +18,7 @@ let package = Package(
       dependencies: [],
       path: "Xcode/Sources",
       resources: [
-        .process("../Resources/PrivacyInfo.xcprivacy")
+        .copy("../Resources/PrivacyInfo.xcprivacy")
       ]
       ),
 
