@@ -12,6 +12,6 @@ Pod::Spec.new do |s|
   s.source                = { :git => "https://github.com/httpswift/swifter.git", :tag => "1.5.0" }
   s.source_files          = 'Xcode/Sources/*.{swift}'
   s.swift_version         = '5.0'
-  s.resource_bundles      = {'Swifter' => ['Xcode/PrivacyInfo.xcprivacy']}
+  s.resource_bundles      = {'Swifter' => ['Xcode/Resources/PrivacyInfo.xcprivacy']}
 
 end
