@@ -48,7 +48,8 @@
 		269B47981D3AAAE20042D137 /* Errno.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B2A11D369C9D00D35BFB /* Errno.swift */; };
 		269B47991D3AAAE20042D137 /* String+BASE64.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C76B6F61D2C44F30030FC98 /* String+BASE64.swift */; };
 		269B47A71D3AAC4F0042D137 /* SwiftertvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		37E4A86E2BA1407000971516 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 37E4A86D2BA1407000971516 /* PrivacyInfo.xcprivacy */; };
+		3768D9FA2BA7884700A70E4E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3768D9F92BA7884700A70E4E /* PrivacyInfo.xcprivacy */; };
+		3768D9FB2BA7884700A70E4E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3768D9F92BA7884700A70E4E /* PrivacyInfo.xcprivacy */; };
 		39BFCFFA26E4F0A000A6D7BF /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BFCFF926E4F0A000A6D7BF /* FilesTests.swift */; };
 		39BFCFFB26E4F0A000A6D7BF /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BFCFF926E4F0A000A6D7BF /* FilesTests.swift */; };
 		39BFCFFC26E4F0A000A6D7BF /* FilesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39BFCFF926E4F0A000A6D7BF /* FilesTests.swift */; };
@@ -178,7 +179,7 @@
 		269B47A11D3AAAE20042D137 /* Swifter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Swifter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		269B47A41D3AAC4F0042D137 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		269B47A51D3AAC4F0042D137 /* SwiftertvOS.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftertvOS.h; sourceTree = "<group>"; };
-		37E4A86D2BA1407000971516 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		3768D9F92BA7884700A70E4E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		39BFCFF926E4F0A000A6D7BF /* FilesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilesTests.swift; sourceTree = "<group>"; };
 		540CA839228F275B00A3AF9B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		540CA83A228F275B00A3AF9B /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
@@ -366,7 +367,6 @@
 		7C839B6519422CFF003A6950 = {
 			isa = PBXGroup;
 			children = (
-				37E4A86D2BA1407000971516 /* PrivacyInfo.xcprivacy */,
 				540CA83A228F275B00A3AF9B /* CHANGELOG.md */,
 				540CA839228F275B00A3AF9B /* README.md */,
 				7B912F4B220507DB0062C360 /* LinuxMain.swift */,
@@ -411,6 +411,7 @@
 		7CA4815619A2EF2B0030B30D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3768D9F92BA7884700A70E4E /* PrivacyInfo.xcprivacy */,
 				7CB102DF1A17381D00CBA3B4 /* logo.png */,
 			);
 			path = Resources;
@@ -726,7 +727,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37E4A86E2BA1407000971516 /* PrivacyInfo.xcprivacy in Resources */,
+				3768D9FB2BA7884700A70E4E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -744,6 +745,7 @@
 				7AE8940D1C05151100A29F63 /* Launch Screen.storyboard in Resources */,
 				7CB102E01A17381D00CBA3B4 /* logo.png in Resources */,
 				7CDAB8141BE2A1D400C8A977 /* Images.xcassets in Resources */,
+				3768D9FA2BA7884700A70E4E /* PrivacyInfo.xcprivacy in Resources */,
 				7CDAB8131BE2A1D400C8A977 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1164,7 +1166,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = SwifteriOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.5.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
@@ -1193,7 +1195,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = SwifteriOS/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MARKETING_VERSION = 1.5.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
